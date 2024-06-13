@@ -1,49 +1,78 @@
-import React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
+import React, { useState } from 'react';
+import { updateTransformerData } from '../services/api'; 
 
-const TransformerForm = ({ open, onClose, transformer, onSave, handleChange }) => {
+const TransformerForm = ({ transformer, onSave }) => {
+    const [formData, setFormData] = useState({
+        max_capacity_kw: transformer.max_capacity_kw || '',
+        export_efficiency: transformer.export_efficiency || '',
+        allow_export: transformer.allow_export || false,
+    });
+
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData({
+            ...formData,
+            [name]: type === 'checkbox' ? checked : value,
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Validation logic
+        if (isNaN(formData.max_capacity_kw) || isNaN(formData.export_efficiency)) {
+            alert('Max Capacity and Export Efficiency must be numbers');
+            return;
+        }
+
+        try {
+            const updatedTransformer = await updateTransformerData(transformer.id, formData);
+            console.log(updatedTransformer)
+
+         
+            onSave(updatedTransformer);
+
+        } catch (error) {
+            console.error('Error updating transformer data:', error);
+        }
+    };
+
     return (
-        <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Edit Transformer Properties</DialogTitle>
-
-            <DialogContent>
-                <TextField
-                    label="Peak Value"
-                    name="peak_value"
-                    type="number"
-                    value={transformer.peak_value}
-                    onChange={handleChange}
-                    fullWidth 
-                />
-                <FormControlLabel
-                    control={<Checkbox name="reverse_allowed" checked={transformer.reverse_allowed} onChange={handleChange} />}
-                    label="Reverse Allowed"
-                />
-                {transformer.reverse_allowed && (
-                    <TextField
-                        label="Reverse Efficiency"
-                        name="reverse_efficiency"
-                        type="number"
-                        value={transformer.reverse_efficiency}
+        <div>
+            <h2>Transformer Details</h2>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>Max Capacity (kW):</label>
+                    <input
+                        type="text"
+                        name="max_capacity_kw"
+                        value={formData.max_capacity_kw}
                         onChange={handleChange}
-                        fullWidth
                     />
-                )}
-                <TextField
-                    label="Max Houses"
-                    name="max_houses"
-                    type="number"
-                    value={transformer.max_houses}
-                    onChange={handleChange}
-                    fullWidth
-                />
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={onSave}>Save</Button>
-            </DialogActions>
-        </Dialog>
+                </div>
+                <div>
+                    <label>Export Efficiency:</label>
+                    <input
+                        type="text"
+                        name="export_efficiency"
+                        value={formData.export_efficiency}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label>Allow Export:</label>
+                    <input
+                        type="checkbox"
+                        name="allow_export"
+                        checked={formData.allow_export}
+                        onChange={handleChange}
+                    />
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
     );
 };
 
 export default TransformerForm;
+

@@ -1,53 +1,72 @@
-import React, { useRef, useEffect } from 'react';
+
+import React, { useRef, useEffect,useState } from 'react';
 import * as d3 from 'd3';
+import { fetchTransformerDetails } from '../services/api'; 
 
-const NetworkGraph = ({ transformers, onNodeClick }) => {
+
+const NetworkGraph = ({ data, onTransformerEdit }) => {
     const svgRef = useRef(null);
-
+    
     useEffect(() => {
         renderGraph();
-    }, [transformers]);
+    }, [data]);
+
+    const handleDoubleClick = async (event, d) => {
+        if (!d || !d.id) {
+            console.error('Node data is undefined or missing id:', d);
+            return;
+        }
+      
+        if (d.id.includes('Transformer')) {
+            console.log(d.ids)
+           
+            try {
+                const transformerDetails = await fetchTransformerDetails(d.ids);
+                console.log(transformerDetails)
+                onTransformerEdit(transformerDetails);
+            } catch (error) {
+                console.error('Error fetching transformer details:', error);
+            }
+        }
+    };
 
     const renderGraph = () => {
         const svg = d3.select(svgRef.current);
+
         const width = 1400;
         const height = 1000;
 
         svg.attr('width', width).attr('height', height);
 
-        const transformerNodes = transformers.map((transformer, index) => ({
-            ...transformer,
-            x: (index + 1) * (width / (transformers.length + 1)),
-            y: 100,
-        }));
+        const nodes = data.nodes;
+        const links = data.links;
 
-        let houseNodes = [];
-        let links = [];
+        const transformerScale = d3.scalePoint()
+            .domain(nodes.filter(node => node.id.includes('Transformer')).map(node => node.id))
+            .range([100, width - 100]);
 
-        transformerNodes.forEach((transformer, tIndex) => {
-            transformer.houses.forEach((house, hIndex) => {
-                houseNodes.push({
-                    ...house,
-                    x: transformer.x,
-                    y: 200 + hIndex * 50,
-                });
-                links.push({
-                    source: transformer.id,
-                    target: house.id,
-                });
-            });
+        nodes.forEach(node => {
+            if (node.id.includes('Transformer')) {
+                node.x = transformerScale(node.id);
+                node.y = 100;
+            }
         });
 
-        const nodes = [...transformerNodes, ...houseNodes];
+        nodes.filter(node => node.id.includes('House')).forEach(house => {
+            const transformerId = house.id.split('-')[1];
+            const transformer = nodes.find(node => node.id === `Transformer-${transformerId}`);
+            if (transformer) {
+                const houseIndex = nodes.filter(node => node.id.includes(`House-${transformerId}`)).findIndex(h => h.id === house.id);
+                house.x = transformer.x;
+                house.y = 200 + houseIndex * 50;
+            } else {
+                console.warn(`Transformer ${transformerId} not found for house ${house.id}`);
+            }
+        });
 
-        const link = svg.selectAll('.link').data(links, d => `${d.source}-${d.target}`);
-        link.exit().remove();
-        link.attr('x1', d => nodes.find(node => node.id === d.source).x)
-            .attr('y1', d => nodes.find(node => node.id === d.source).y)
-            .attr('x2', d => nodes.find(node => node.id === d.target).x)
-            .attr('y2', d => nodes.find(node => node.id === d.target).y);
-
-        link.enter()
+        const link = svg.selectAll('.link')
+            .data(links)
+            .enter()
             .append('line')
             .attr('class', 'link')
             .attr('stroke', '#999')
@@ -57,30 +76,20 @@ const NetworkGraph = ({ transformers, onNodeClick }) => {
             .attr('x2', d => nodes.find(node => node.id === d.target).x)
             .attr('y2', d => nodes.find(node => node.id === d.target).y);
 
-        const node = svg.selectAll('.node').data(nodes, d => d.id);
-        node.exit().remove();
-        node.attr('cx', d => d.x)
-            .attr('cy', d => d.y)
-            .attr('fill', d => d.type === 'transformer' ? '#3498db' : d.color);
-
-        node.enter()
+        const node = svg.selectAll('.node')
+            .data(nodes)
+            .enter()
             .append('circle')
             .attr('class', 'node')
-            .attr('r', d => d.type === 'transformer' ? 20 : 10)
-            .attr('fill', d => d.type === 'transformer' ? '#3498db' : d.color)
+            .attr('r', d => d.id.includes('Transformer') ? 20 : 10)
+            .attr('fill', d => d.id.includes('Transformer') ? '#3498db' : d.color)
             .attr('cx', d => d.x)
             .attr('cy', d => d.y)
-            .on('click', (event, d) => {
-                onNodeClick(d);
-            });
+            .on('dblclick', handleDoubleClick);
 
-        const label = svg.selectAll('.label').data(nodes, d => d.id);
-        label.exit().remove();
-        label.attr('x', d => d.x)
-            .attr('y', d => d.y - 25)
-            .text(d => d.label);
-
-        label.enter()
+        const label = svg.selectAll('.label')
+            .data(nodes)
+            .enter()
             .append('text')
             .attr('class', 'label')
             .attr('dy', -3)
@@ -90,7 +99,12 @@ const NetworkGraph = ({ transformers, onNodeClick }) => {
             .text(d => d.label);
     };
 
-    return <svg ref={svgRef}></svg>;
+    return (
+        <div>
+            <svg ref={svgRef}></svg>
+           
+        </div>
+    );
 };
 
 export default NetworkGraph;
