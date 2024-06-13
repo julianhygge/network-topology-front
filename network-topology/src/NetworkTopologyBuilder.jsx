@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button } from '@mui/material';
+import { TextField, } from '@mui/material';
 import NetworkGraph from './components/NetworkGraph';
 import HouseForm from './components/HouseForm';
 import TransformerForm from './components/TransformerForm';
@@ -13,8 +13,12 @@ const NetworkTopologyBuilder = () => {
     const [openTransformerForm, setOpenTransformerForm] = useState(false);
 
     const handleTransformerChange = (e) => {
-        const num = parseInt(e.target.value, 10);
+        let num = parseInt(e.target.value,10 );
+        if(isNaN(num)){
+            num=null;
+        }
         setNumTransformers(num);
+        
         const newTransformers = new Array(num).fill(0).map((_, i) => ({
             id: `t${i + 1}`,
             type: 'transformer',
@@ -30,7 +34,10 @@ const NetworkTopologyBuilder = () => {
     };
 
     const handleHouseChange = (index, e) => {
-        const numHouses = parseInt(e.target.value, 10);
+        let numHouses = parseInt(e.target.value, 10);
+        if(isNaN(numHouses)){
+            numHouses=0;
+        }
         setTransformers(prev => {
             const newTransformers = [...prev];
             const transformer = newTransformers[index];
@@ -106,7 +113,7 @@ const NetworkTopologyBuilder = () => {
                     <TextField
                         label="Enter number of transformers:"
                         type="number"
-                        value={numTransformers}
+                        value={numTransformers ||''}
                         onChange={handleTransformerChange}
                         min="1"
                         fullWidth
@@ -117,7 +124,7 @@ const NetworkTopologyBuilder = () => {
                         <TextField
                             label={`Enter number of houses for Transformer ${index + 1}:`}
                             type="number"
-                            value={transformer.houses.length}
+                            value={transformer.houses.length || ''}
                             onChange={(e) => handleHouseChange(index, e)}
                             min="0"
                             fullWidth
