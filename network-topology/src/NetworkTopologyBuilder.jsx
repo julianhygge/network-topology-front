@@ -3,13 +3,15 @@ import React, { useState, useEffect } from 'react';
 import SubstationSelector from './components/SubstationSelector';
 import NetworkGraph from './components/NetworkGraph';
 import TransformerForm from './components/TransformerForm'; 
-import { getSubstationById, updateSubstationTopology } from './services/api';
+import HouseForm from './components/HouseForm';
+import { getSubstationById, updateSubstationTopology } from './services/Substation';
 import './App.css';
 
 const NetworkTopologyBuilder = () => {
     const [selectedSubstationId, setSelectedSubstationId] = useState(null);
     const [substationData, setSubstationData] = useState(null);
     const [transformerDetails, setTransformerDetails] = useState(null);
+    const [houseDetails, setHouseDetails] = useState(null);
 
     useEffect(() => {
         if (selectedSubstationId) {
@@ -41,7 +43,6 @@ const NetworkTopologyBuilder = () => {
                             };
                             graphData.nodes.push(houseNode);
 
-                         
                             graphData.links.push({
                                 source: transformerNode.id,
                                 target: houseNode.id,
@@ -87,29 +88,76 @@ const NetworkTopologyBuilder = () => {
         setTransformerDetails(null);
     };
 
+    const handleHouseSave = (updatedHouse) => {
+        setSubstationData((prevData) => {
+            const updatedNodes = prevData.nodes.map((node) => {
+                if (node.ids === updatedHouse.id) {
+                    return {
+                        ...node,
+                        color: updatedHouse.is_complete ? 'green' : 'black',
+                    };
+                }
+                return node;
+            });
+            return {
+                ...prevData,
+                nodes: updatedNodes,
+            };
+        });
+        setHouseDetails(null);
+    };
+
     const handleTransformerEdit = (transformerDetails) => {
         setTransformerDetails(transformerDetails);
+        setHouseDetails(null); 
     };
+
+    const handleHouseEdit = (houseDetails) => {
+        setHouseDetails(houseDetails);
+        setTransformerDetails(null); 
+    };
+
     const handleCloseTransformerForm = () => {
         setTransformerDetails(null);
     };
+
+    const handleCloseHouseForm = () => {
+        setHouseDetails(null);
+    };
+
     return (
         <div>
             <SubstationSelector setSelectedSubstation={setSelectedSubstationId} />
             {substationData && (
                 <>
-                    <NetworkGraph data={substationData} onTransformerEdit={handleTransformerEdit} />
+                    <NetworkGraph 
+                        data={substationData} 
+                        onTransformerEdit={handleTransformerEdit} 
+                        onHouseEdit={handleHouseEdit}
+                    />
                     <button onClick={handleSaveTopology}>Save</button>
                 </>
             )}
             
-                 {transformerDetails && (
+            {transformerDetails && (
                 <div className="modal">
                     <div className="modal-content">
                         <span className="close" onClick={handleCloseTransformerForm}>close</span>
                         <TransformerForm
                             transformer={transformerDetails}
                             onSave={handleTransformerSave}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {houseDetails && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <span className="close" onClick={handleCloseHouseForm}>close</span>
+                        <HouseForm
+                            house={houseDetails}
+                            onSave={handleHouseSave}
                         />
                     </div>
                 </div>

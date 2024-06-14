@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { updateTransformerData } from '../services/api'; 
+import { updateTransformerData } from '../services/Tranformer'; 
 
 const TransformerForm = ({ transformer, onSave }) => {
     const [formData, setFormData] = useState({
@@ -19,7 +19,7 @@ const TransformerForm = ({ transformer, onSave }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validation logic
+
         if (isNaN(formData.max_capacity_kw) || isNaN(formData.export_efficiency)) {
             alert('Max Capacity and Export Efficiency must be numbers');
             return;

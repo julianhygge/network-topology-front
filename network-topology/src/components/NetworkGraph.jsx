@@ -1,10 +1,11 @@
 
-import React, { useRef, useEffect,useState } from 'react';
+import React, { useRef, useEffect} from 'react';
 import * as d3 from 'd3';
-import { fetchTransformerDetails } from '../services/api'; 
+import { fetchTransformerDetails } from '../services/Tranformer'; 
+import { fetchHouseDetails } from '../services/House';
 
 
-const NetworkGraph = ({ data, onTransformerEdit }) => {
+const NetworkGraph = ({ data, onTransformerEdit ,onHouseEdit}) => {
     const svgRef = useRef(null);
     
     useEffect(() => {
@@ -16,17 +17,17 @@ const NetworkGraph = ({ data, onTransformerEdit }) => {
             console.error('Node data is undefined or missing id:', d);
             return;
         }
-      
-        if (d.id.includes('Transformer')) {
-            console.log(d.ids)
-           
-            try {
+
+        try {
+            if (d.id.includes('Transformer')) {
                 const transformerDetails = await fetchTransformerDetails(d.ids);
-                console.log(transformerDetails)
                 onTransformerEdit(transformerDetails);
-            } catch (error) {
-                console.error('Error fetching transformer details:', error);
+            } else if (d.id.includes('House')) {
+                const houseDetails = await fetchHouseDetails(d.ids);
+                onHouseEdit(houseDetails);
             }
+        } catch (error) {
+            console.error('Error fetching details:', error);
         }
     };
 
@@ -82,7 +83,8 @@ const NetworkGraph = ({ data, onTransformerEdit }) => {
             .append('circle')
             .attr('class', 'node')
             .attr('r', d => d.id.includes('Transformer') ? 20 : 10)
-            .attr('fill', d => d.id.includes('Transformer') ? '#3498db' : d.color)
+            .attr('fill', d =>d.color)
+            
             .attr('cx', d => d.x)
             .attr('cy', d => d.y)
             .on('dblclick', handleDoubleClick);
