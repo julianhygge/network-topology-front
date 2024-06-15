@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import SubstationSelector from './components/SubstationSelector';
 import NetworkGraph from './components/NetworkGraph';
 import TransformerForm from './components/TransformerForm'; 
-import HouseForm from './components/HouseForm';
+import HouseForm from './components/HouseForm'; 
 import { getSubstationById, updateSubstationTopology } from './services/Substation';
 import './App.css';
 
@@ -12,6 +11,7 @@ const NetworkTopologyBuilder = () => {
     const [substationData, setSubstationData] = useState(null);
     const [transformerDetails, setTransformerDetails] = useState(null);
     const [houseDetails, setHouseDetails] = useState(null);
+    const [transformerCounter, setTransformerCounter] = useState(0);
 
     useEffect(() => {
         if (selectedSubstationId) {
@@ -52,6 +52,7 @@ const NetworkTopologyBuilder = () => {
 
                     console.log('Graph data being set:', graphData);
                     setSubstationData(graphData);
+                    setTransformerCounter(data.transformers.length);
                 } catch (error) {
                     console.error('Error fetching substation data:', error);
                 }
@@ -125,17 +126,83 @@ const NetworkTopologyBuilder = () => {
         setHouseDetails(null);
     };
 
+    const addTransformer = () => {
+        const newTransformer = {
+            ids: `temp-${transformerCounter}`,
+            id: `Transformer-${transformerCounter}`,
+            label: `Transformer-${transformerCounter}`,
+            color: 'grey',
+            houses_details: [],
+            is_complete: false,
+        };
+
+        setSubstationData((prevData) => ({
+            ...prevData,
+            nodes: [...prevData.nodes, newTransformer],
+        }));
+
+        setTransformerCounter(transformerCounter + 1);
+    };
+
+    const addHouse = (transformerId) => {
+        console.log(transformerId)
+        const transformerIndex = transformerId.split('-')[1];
+
+        const houseCount = substationData.nodes.filter(node => node.id.includes(`House-${transformerIndex}`)).length;
+        setSubstationData((prevData) => {
+            const newHouse = {
+                ids: `temp-house-`,
+                id: `House-${transformerIndex}-${houseCount}`,
+                label: `House-${transformerIndex}-${houseCount}`,
+                color: 'grey',
+                is_complete: false,
+            };
+
+            const updatedNodes = [...prevData.nodes, newHouse];
+            const updatedLinks = [...prevData.links, {
+                source: transformerId,
+                target: newHouse.id,
+            }];
+
+            return {
+                ...prevData,
+                nodes: updatedNodes,
+                links: updatedLinks,
+            };
+        });
+    };
+
+    const deleteNode = (nodeId) => {
+        setSubstationData((prevData) => {
+            const updatedNodes = prevData.nodes.filter(node => node.id !== nodeId);
+            const updatedLinks = prevData.links.filter(link => link.source !== nodeId && link.target !== nodeId);
+
+            return {
+                ...prevData,
+                nodes: updatedNodes,
+                links: updatedLinks,
+            };
+        });
+    };
+
     return (
         <div>
             <SubstationSelector setSelectedSubstation={setSelectedSubstationId} />
             {substationData && (
                 <>
-                    <NetworkGraph 
-                        data={substationData} 
-                        onTransformerEdit={handleTransformerEdit} 
+                <button className='button'onClick={handleSaveTopology}>Save</button>
+                    <div className="counter">
+                        <button onClick={addTransformer}>Add Transformer</button>
+                        <span>Transformers: {transformerCounter}</span>
+                    </div>
+                    <NetworkGraph
+                        data={substationData}
+                        onTransformerEdit={handleTransformerEdit}
                         onHouseEdit={handleHouseEdit}
+                        addHouse={addHouse}
+                        deleteNode={deleteNode}
                     />
-                    <button onClick={handleSaveTopology}>Save</button>
+                 
                 </>
             )}
             

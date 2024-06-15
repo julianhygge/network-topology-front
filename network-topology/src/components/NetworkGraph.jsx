@@ -1,13 +1,12 @@
 
-import React, { useRef, useEffect} from 'react';
+import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
-import { fetchTransformerDetails } from '../services/Tranformer'; 
+import { fetchTransformerDetails } from '../services/Tranformer';
 import { fetchHouseDetails } from '../services/House';
 
-
-const NetworkGraph = ({ data, onTransformerEdit ,onHouseEdit}) => {
+const NetworkGraph = ({ data, onTransformerEdit, onHouseEdit, addHouse, deleteNode,addTransformer }) => {
     const svgRef = useRef(null);
-    
+
     useEffect(() => {
         renderGraph();
     }, [data]);
@@ -65,6 +64,7 @@ const NetworkGraph = ({ data, onTransformerEdit ,onHouseEdit}) => {
             }
         });
 
+        svg.selectAll('*').remove(); 
         const link = svg.selectAll('.link')
             .data(links)
             .enter()
@@ -83,11 +83,14 @@ const NetworkGraph = ({ data, onTransformerEdit ,onHouseEdit}) => {
             .append('circle')
             .attr('class', 'node')
             .attr('r', d => d.id.includes('Transformer') ? 20 : 10)
-            .attr('fill', d =>d.color)
-            
+            .attr('fill', d => d.color)
             .attr('cx', d => d.x)
             .attr('cy', d => d.y)
-            .on('dblclick', handleDoubleClick);
+            .on('dblclick', handleDoubleClick)
+            .on('contextmenu', (event, d) => {
+                event.preventDefault();
+                deleteNode(d.id);
+            });
 
         const label = svg.selectAll('.label')
             .data(nodes)
@@ -99,12 +102,28 @@ const NetworkGraph = ({ data, onTransformerEdit ,onHouseEdit}) => {
             .attr('x', d => d.x)
             .attr('y', d => d.y - 25)
             .text(d => d.label);
-    };
+
+    const addHouseButtons = svg.selectAll('.add-house-button')
+    .data(nodes.filter(node => node.id.includes('Transformer')))
+    .enter()
+    .append('text')
+    .attr('class', 'add-house-button')
+    .attr('x', d => d.x)
+    .attr('y', d => d.y + 30)
+    .attr('text-anchor', 'middle')
+    .attr('fill', 'blue')
+    .style('cursor', 'pointer')
+    .text('+ House')
+    .on('click', (event, d) => {
+        const clickedTransformerId = d.id; 
+        addHouse(clickedTransformerId);
+    });
+     };
+
 
     return (
         <div>
             <svg ref={svgRef}></svg>
-           
         </div>
     );
 };
