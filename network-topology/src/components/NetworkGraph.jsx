@@ -87,10 +87,7 @@ const NetworkGraph = ({ data, onTransformerEdit, onHouseEdit, addHouse, deleteNo
             .attr('cx', d => d.x)
             .attr('cy', d => d.y)
             .on('dblclick', handleDoubleClick)
-            .on('contextmenu', (event, d) => {
-                event.preventDefault();
-                deleteNode(d.id);
-            });
+            
 
         const label = svg.selectAll('.label')
             .data(nodes)
@@ -115,8 +112,24 @@ const NetworkGraph = ({ data, onTransformerEdit, onHouseEdit, addHouse, deleteNo
     .style('cursor', 'pointer')
     .text('+ House')
     .on('click', (event, d) => {
+
         const clickedTransformerId = d.id; 
         addHouse(clickedTransformerId);
+    });
+    const deleteNodeButtons = svg.selectAll('.delete-node-button')
+    .data(nodes)
+    .enter()
+    .filter(node => node.id.includes('Transformer') || node.id.includes('House'))
+    .append('text')
+    .attr('class', 'delete-node-button')
+    .attr('x', d => d.x + 20)
+    .attr('y', d => d.y - 20)
+    .attr('text-anchor', 'middle')
+    .attr('fill', 'red')
+    .style('cursor', 'pointer')
+    .text('x')
+    .on('click', (event, d) => {
+        deleteNode(d.id);
     });
      };
 

@@ -34,31 +34,63 @@ export const getSubstationById = async (substationId) => {
 
 
 export const updateSubstationTopology = async (substationId, substationData) => {
-    console.log(substationData)
     if (!substationData) {
         throw new Error('Missing substation data');
     }
-    const transformers = substationData.nodes.filter(node => node.label.startsWith('Transformer')).map(transformer => ({
-        action: transformer.ids.startsWith('temp') ? 'add' : 'update',
-        id: transformer.ids.startsWith('temp') ? null : transformer.ids,
-        houses_details: substationData.links.filter(link => link.source === transformer.id).map(link => {
-            const house = substationData.nodes.find(node => node.id === link.target);
-            return {
-                action: house.ids.startsWith('temp') ? 'add' : 'update',
-                id: house.ids.startsWith('temp') ? null : house.ids,
-            };
-        }),
-    }));
-    console.log(transformers)
 
+    const transformers = substationData.nodes.filter(node => node.label.startsWith('Transformer')).map(transformer => {
+        // const transformerAction = transformer.ids.startsWith('temp') ? 'add' : 'update';
+        // const transformerId = transformer.ids.startsWith('temp') ? null : transformer.ids;
+        let transformerAction;
+        let transformerId = transformer.ids;
+
+        console.log(substationData.deletedNodes.includes(transformer.ids))
+
+        console.log('Transformer ID:', transformer.ids);
+        console.log('Deleted Nodes:', substationData.deletedNodes);
+
+
+        if (transformer.ids.startsWith('temp')) {
+            transformerAction = 'add';
+            transformerId = null; 
+        } else if ((substationData.deletedNodes.includes(transformer.ids))) {
+            transformerAction = 'delete'; 
+        } else {
+            transformerAction = 'update';
+        }
+  
+        const housesDetails = substationData.links
+            .filter(link => link.source === transformer.id)
+            .map(link => {
+                const house = substationData.nodes.find(node => node.id === link.target);
+                const houseAction = house.ids.startsWith('temp') ? 'add' : 'update';
+                return {
+                    action: houseAction,
+                    id: house.ids.startsWith('temp') ? null : house.ids,
+                };
+            });
+        const deletedHouses = substationData.deletedNodes
+            .filter(deletedId => {
+                return !housesDetails.some(house => house.id === deletedId);
+            })
+            .map(deletedId => ({
+                action: 'delete',
+                id: deletedId,
+            }));
+
+        return {
+            action: transformerAction,
+            id: transformerId,
+            houses_details: [...housesDetails, ...deletedHouses],
+        };
+    });
 
     const payload = {
         transformers,
     };
-    console.log(payload)
+
     const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc'
   
-
     const response = await fetch(`${API_URL}/substations/${substationId}`, {
         method: 'PUT',
         headers: {

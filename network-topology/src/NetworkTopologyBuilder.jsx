@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import SubstationSelector from './components/SubstationSelector';
 import NetworkGraph from './components/NetworkGraph';
-import TransformerForm from './components/TransformerForm'; 
-import HouseForm from './components/HouseForm'; 
+import TransformerForm from './components/TransformerForm';
+import HouseForm from './components/HouseForm';
 import { getSubstationById, updateSubstationTopology } from './services/Substation';
 import './App.css';
 
 const NetworkTopologyBuilder = () => {
     const [selectedSubstationId, setSelectedSubstationId] = useState(null);
-    const [substationData, setSubstationData] = useState(null);
+    const [substationData, setSubstationData] = useState({ nodes: [], links: [] });
     const [transformerDetails, setTransformerDetails] = useState(null);
     const [houseDetails, setHouseDetails] = useState(null);
     const [transformerCounter, setTransformerCounter] = useState(0);
+    const [deletedNodes, setDeletedNodes] = useState([]); 
 
     useEffect(() => {
         if (selectedSubstationId) {
@@ -31,6 +32,7 @@ const NetworkTopologyBuilder = () => {
                             id: `Transformer-${index}`,
                             label: `Transformer-${index}`,
                             color: transformer.is_complete ? 'green' : 'black',
+                            houses_details: transformer.houses_details || []
                         };
                         graphData.nodes.push(transformerNode);
 
@@ -64,7 +66,9 @@ const NetworkTopologyBuilder = () => {
 
     const handleSaveTopology = async () => {
         try {
-            await updateSubstationTopology(selectedSubstationId, substationData);
+            const updatedData = { ...substationData, deletedNodes }; 
+            await updateSubstationTopology(selectedSubstationId, updatedData);
+          //  window.location.reload();
         } catch (error) {
             console.error('Error saving substation topology:', error);
         }
@@ -110,12 +114,12 @@ const NetworkTopologyBuilder = () => {
 
     const handleTransformerEdit = (transformerDetails) => {
         setTransformerDetails(transformerDetails);
-        setHouseDetails(null); 
+        setHouseDetails(null);
     };
 
     const handleHouseEdit = (houseDetails) => {
         setHouseDetails(houseDetails);
-        setTransformerDetails(null); 
+        setTransformerDetails(null);
     };
 
     const handleCloseTransformerForm = () => {
@@ -145,13 +149,12 @@ const NetworkTopologyBuilder = () => {
     };
 
     const addHouse = (transformerId) => {
-        console.log(transformerId)
         const transformerIndex = transformerId.split('-')[1];
-
         const houseCount = substationData.nodes.filter(node => node.id.includes(`House-${transformerIndex}`)).length;
+
         setSubstationData((prevData) => {
             const newHouse = {
-                ids: `temp-house-`,
+                ids: `temp-house-${transformerIndex}-${houseCount}`,
                 id: `House-${transformerIndex}-${houseCount}`,
                 label: `House-${transformerIndex}-${houseCount}`,
                 color: 'grey',
@@ -173,15 +176,23 @@ const NetworkTopologyBuilder = () => {
     };
 
     const deleteNode = (nodeId) => {
+        console.log(nodeId)
         setSubstationData((prevData) => {
-            const updatedNodes = prevData.nodes.filter(node => node.id !== nodeId);
-            const updatedLinks = prevData.links.filter(link => link.source !== nodeId && link.target !== nodeId);
+            const nodeToDelete = prevData.nodes.find(node => node.id === nodeId);
 
-            return {
-                ...prevData,
-                nodes: updatedNodes,
-                links: updatedLinks,
-            };
+            if (nodeToDelete) {
+                setDeletedNodes((prevDeleted) => [...prevDeleted, nodeToDelete.ids]);
+
+                const updatedNodes = prevData.nodes.filter(node => node.id !== nodeId);
+                const updatedLinks = prevData.links.filter(link => link.source !== nodeId && link.target !== nodeId);
+
+                return {
+                    ...prevData,
+                    nodes: updatedNodes,
+                    links: updatedLinks,
+                };
+            }
+            return prevData;
         });
     };
 
@@ -190,7 +201,7 @@ const NetworkTopologyBuilder = () => {
             <SubstationSelector setSelectedSubstation={setSelectedSubstationId} />
             {substationData && (
                 <>
-                <button className='button'onClick={handleSaveTopology}>Save</button>
+                    <button className='button' onClick={handleSaveTopology}>Save</button>
                     <div className="counter">
                         <button onClick={addTransformer}>Add Transformer</button>
                         <span>Transformers: {transformerCounter}</span>
@@ -202,14 +213,12 @@ const NetworkTopologyBuilder = () => {
                         addHouse={addHouse}
                         deleteNode={deleteNode}
                     />
-                 
                 </>
             )}
-            
             {transformerDetails && (
                 <div className="modal">
                     <div className="modal-content">
-                        <span className="close" onClick={handleCloseTransformerForm}>close</span>
+                        <span className="close" onClick={handleCloseTransformerForm}>Close</span>
                         <TransformerForm
                             transformer={transformerDetails}
                             onSave={handleTransformerSave}
@@ -217,11 +226,10 @@ const NetworkTopologyBuilder = () => {
                     </div>
                 </div>
             )}
-
             {houseDetails && (
                 <div className="modal">
                     <div className="modal-content">
-                        <span className="close" onClick={handleCloseHouseForm}>close</span>
+                        <span className="close" onClick={handleCloseHouseForm}>Close</span>
                         <HouseForm
                             house={houseDetails}
                             onSave={handleHouseSave}
