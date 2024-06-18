@@ -213,51 +213,6 @@ const NetworkTopologyBuilder = () => {
       return prevData;
     });
   };
-  const deleteTransformer = (transformerId) => {
-    setSubstationData((prevData) => {
-      const transformerToDelete = prevData.nodes.find(
-        (node) => node.id === transformerId
-      );
-      if (transformerToDelete) {
-        const associatedHouses = prevData.links
-          .filter((link) => link.source === transformerId)
-          .map((link) => link.target);
-
-        setDeletedNodes((prevDeleted) => {
-          const updatedDeleted = [
-            ...prevDeleted,
-            transformerToDelete.ids,
-            ...associatedHouses
-              .map((houseId) => {
-                const houseNode = prevData.nodes.find(
-                  (node) => node.id === houseId
-                );
-                return houseNode ? houseNode.ids : null;
-              })
-              .filter((id) => id !== null),
-          ];
-          return updatedDeleted;
-        });
-
-        const updatedNodes = prevData.nodes.filter(
-          (node) =>
-            node.id !== transformerId && !associatedHouses.includes(node.id)
-        );
-        const updatedLinks = prevData.links.filter(
-          (link) =>
-            link.source !== transformerId &&
-            !associatedHouses.includes(link.target)
-        );
-
-        return {
-          ...prevData,
-          nodes: updatedNodes,
-          links: updatedLinks,
-        };
-      }
-      return prevData;
-    });
-  };
 
   return (
     <div>
@@ -277,7 +232,6 @@ const NetworkTopologyBuilder = () => {
             onHouseEdit={handleHouseEdit}
             addHouse={addHouse}
             deleteNode={deleteNode}
-            deleteTransformer={deleteTransformer}
           />
         </>
       )}

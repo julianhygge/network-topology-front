@@ -8,8 +8,7 @@ const NetworkGraph = ({
   onTransformerEdit,
   onHouseEdit,
   addHouse,
-  deleteNode,
-  deleteTransformer,
+  deleteNode
 }) => {
   const svgRef = useRef(null);
 
@@ -154,7 +153,6 @@ const NetworkGraph = ({
       .text("x")
       .on("click", (event, d) => {
         deleteNode(d.id);
-        deleteTransformer(d.id);
       });
   };
 
