@@ -43,7 +43,7 @@ const TransformerForm = ({ transformer, onSave }) => {
       <form onSubmit={handleSubmit}>
         <div>
           <label>Max Capacity (kW):</label>
-          <input
+          <input  className="border"
             type="text"
             name="max_capacity_kw"
             value={formData.max_capacity_kw}
@@ -52,7 +52,7 @@ const TransformerForm = ({ transformer, onSave }) => {
         </div>
         <div>
           <label>Export Efficiency:</label>
-          <input
+          <input  className="border"
             type="text"
             name="export_efficiency"
             value={formData.export_efficiency}
@@ -61,7 +61,7 @@ const TransformerForm = ({ transformer, onSave }) => {
         </div>
         <div>
           <label>Allow Export:</label>
-          <input
+          <input  className="border"
             type="checkbox"
             name="allow_export"
             checked={formData.allow_export}

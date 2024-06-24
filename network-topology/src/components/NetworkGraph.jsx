@@ -14,7 +14,7 @@ const NetworkGraph = ({
 
   useEffect(() => {
     renderGraph();
-  }, [data]);
+  },[data]);
 
   const handleDoubleClick = async (event, d) => {
     if (!d || !d.id) {

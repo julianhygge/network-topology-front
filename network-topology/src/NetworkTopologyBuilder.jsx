@@ -19,6 +19,7 @@ const NetworkTopologyBuilder = () => {
   const [houseDetails, setHouseDetails] = useState(null);
   const [transformerCounter, setTransformerCounter] = useState(0);
   const [deletedNodes, setDeletedNodes] = useState([]);
+  const [initialSubstationData, setInitialSubstationData] = useState(null);
 
   useEffect(() => {
     if (selectedSubstationId) {
@@ -61,6 +62,7 @@ const NetworkTopologyBuilder = () => {
           console.log("Graph data being set:", graphData);
           setSubstationData(graphData);
           setTransformerCounter(data.transformers.length);
+          setInitialSubstationData(graphData);
         } catch (error) {
           console.error("Error fetching substation data:", error);
         }
@@ -74,7 +76,43 @@ const NetworkTopologyBuilder = () => {
     try {
       const updatedData = { ...substationData, deletedNodes };
       await updateSubstationTopology(selectedSubstationId, updatedData);
-         window.location.reload();
+
+      const newData = await getSubstationById(selectedSubstationId);
+
+      const graphData = {
+        nodes: [],
+        links: [],
+      };
+
+      newData.transformers.forEach((transformer, index) => {
+        const transformerNode = {
+          ids: transformer.id,
+          id: `Transformer-${index}`,
+          label: `Transformer-${index}`,
+          color: transformer.is_complete ? "green" : "black",
+          houses_details: transformer.houses_details || [],
+        };
+        graphData.nodes.push(transformerNode);
+
+        transformer.houses_details.forEach((house, houseIndex) => {
+          const houseNode = {
+            ids: house.id,
+            id: `House-${index}-${houseIndex}`,
+            label: `House-${index}-${houseIndex}`,
+            color: house.is_complete ? "green" : "black",
+          };
+          graphData.nodes.push(houseNode);
+
+          graphData.links.push({
+            source: transformerNode.id,
+            target: houseNode.id,
+          });
+        });
+      });
+
+      setSubstationData(graphData);
+      setTransformerCounter(newData.transformers.length);
+      setDeletedNodes([]);
     } catch (error) {
       console.error("Error saving substation topology:", error);
     }
@@ -213,17 +251,26 @@ const NetworkTopologyBuilder = () => {
       return prevData;
     });
   };
+  const handleCancel = () => {
+    setSubstationData(initialSubstationData);
+    setDeletedNodes([]);
+    setTransformerDetails(null);
+    setHouseDetails(null);
+  };
 
   return (
     <div>
       <SubstationSelector setSelectedSubstation={setSelectedSubstationId} />
       {substationData && (
         <>
-          <button className="button" onClick={handleSaveTopology}>
+          <button className="ml-[700px] cursor-pointer border" onClick={handleSaveTopology}>
             Save
           </button>
+          <button className="ml-[700px] cursor-pointer border mt-5" onClick={handleCancel}>
+            Cancel
+          </button>
           <div className="counter">
-            <button onClick={addTransformer}>Add Transformer</button>
+            <button className="border" onClick={addTransformer}>Add Transformer</button>
             <span>Transformers: {transformerCounter}</span>
           </div>
           <NetworkGraph

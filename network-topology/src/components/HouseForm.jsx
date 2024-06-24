@@ -42,7 +42,7 @@ const HouseForm = ({ house, onSave }) => {
     <form onSubmit={handleSubmit}>
       <label>
         Load Profile:
-        <input
+        <input className="border"
           type="text"
           name="load_profile"
           value={formData.load_profile}
@@ -52,7 +52,7 @@ const HouseForm = ({ house, onSave }) => {
       <br />
       <label>
         Has Solar:
-        <input
+        <input  className="border"
           type="checkbox"
           name="has_solar"
           checked={formData.has_solar}
@@ -62,7 +62,7 @@ const HouseForm = ({ house, onSave }) => {
       <br />
       <label>
         Solar kW:
-        <input
+        <input  className="border"
           type="number"
           name="solar_kw"
           value={formData.solar_kw}
@@ -72,7 +72,7 @@ const HouseForm = ({ house, onSave }) => {
       <br />
       <label>
         House Type:
-        <input
+        <input  className="border"
           type="text"
           name="house_type"
           value={formData.house_type}
@@ -82,7 +82,7 @@ const HouseForm = ({ house, onSave }) => {
       <br />
       <label>
         Connection kW:
-        <input
+        <input  className="border"
           type="number"
           name="connection_kw"
           value={formData.connection_kw}
@@ -92,7 +92,7 @@ const HouseForm = ({ house, onSave }) => {
       <br />
       <label>
         Battery Type:
-        <input
+        <input  className="border"
           type="text"
           name="battery_type"
           value={formData.battery_type}
@@ -102,7 +102,7 @@ const HouseForm = ({ house, onSave }) => {
       <br />
       <label>
         Has Battery:
-        <input
+        <input  className="border"
           type="checkbox"
           name="has_battery"
           checked={formData.has_battery}
@@ -112,7 +112,7 @@ const HouseForm = ({ house, onSave }) => {
       <br />
       <label>
         Voluntary Storage:
-        <input
+        <input  className="border"
           type="checkbox"
           name="voluntary_storage"
           checked={formData.voluntary_storage}
@@ -122,7 +122,7 @@ const HouseForm = ({ house, onSave }) => {
       <br />
       <label>
         Battery Peak Charging Rate:
-        <input
+        <input  className="border"
           type="number"
           name="battery_peak_charging_rate"
           value={formData.battery_peak_charging_rate}
@@ -132,7 +132,7 @@ const HouseForm = ({ house, onSave }) => {
       <br />
       <label>
         Battery Peak Discharging Rate:
-        <input
+        <input  className="border"
           type="number"
           name="battery_peak_discharging_rate"
           value={formData.battery_peak_discharging_rate}
@@ -142,7 +142,7 @@ const HouseForm = ({ house, onSave }) => {
       <br />
       <label>
         Battery Total kWh:
-        <input
+        <input  className="border"
           type="number"
           name="battery_total_kwh"
           value={formData.battery_total_kwh}
@@ -150,7 +150,7 @@ const HouseForm = ({ house, onSave }) => {
         />
       </label>
       <br />
-      <button type="submit">Save</button>
+      <button  className="border"type="submit">Save</button>
     </form>
   );
 };
