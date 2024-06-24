@@ -63,6 +63,7 @@ const NetworkTopologyBuilder = () => {
           setSubstationData(graphData);
           setTransformerCounter(data.transformers.length);
           setInitialSubstationData(graphData);
+          
         } catch (error) {
           console.error("Error fetching substation data:", error);
         }
@@ -112,6 +113,7 @@ const NetworkTopologyBuilder = () => {
 
       setSubstationData(graphData);
       setTransformerCounter(newData.transformers.length);
+      setInitialSubstationData(graphData);
       setDeletedNodes([]);
     } catch (error) {
       console.error("Error saving substation topology:", error);
