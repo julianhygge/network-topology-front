@@ -68,7 +68,7 @@ const TransformerForm = ({ transformer, onSave }) => {
             onChange={handleChange}
           />
         </div>
-        <button type="submit">Save</button>
+        <button  className='border'type="submit">Save</button>
       </form>
     </div>
   );

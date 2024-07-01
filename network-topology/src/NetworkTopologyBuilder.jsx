@@ -27,51 +27,52 @@ const NetworkTopologyBuilder = () => {
         try {
           const data = await getSubstationById(selectedSubstationId);
           console.log("Fetched substation data:", data);
-
-          const graphData = {
-            nodes: [],
-            links: [],
+  
+          const buildGraphData = (nodes, parentId = null) => {
+            return nodes.reduce(
+              (acc, node) => {
+                const newNode = {
+                  ids: node.id,
+                  id: node.type === 'transformer' ? `Transformer-${node.id}` : `House-${node.id}`,
+                  label: node.type === 'transformer' ? `Transformer-${node.id}` : `House-${node.id}`,
+                  color: node.is_complete ? 'green' : 'black',
+                  type: node.type,
+                  children: node.children || []
+                };
+  
+                if (parentId) {
+                  acc.links.push({ source: parentId, target: newNode.id });
+                }
+  
+                acc.nodes.push(newNode);
+                if (node.children && node.children.length) {
+                  const childGraphData = buildGraphData(node.children, newNode.id);
+                  acc.nodes = acc.nodes.concat(childGraphData.nodes);
+                  acc.links = acc.links.concat(childGraphData.links);
+                }
+  
+                return acc;
+              },
+              { nodes: [], links: [] }
+            );
           };
-
-          data.transformers.forEach((transformer, index) => {
-            const transformerNode = {
-              ids: transformer.id,
-              id: `Transformer-${index}`,
-              label: `Transformer-${index}`,
-              color: transformer.is_complete ? "green" : "black",
-              houses_details: transformer.houses_details || [],
-            };
-            graphData.nodes.push(transformerNode);
-
-            transformer.houses_details.forEach((house, houseIndex) => {
-              const houseNode = {
-                ids: house.id,
-                id: `House-${index}-${houseIndex}`,
-                label: `House-${index}-${houseIndex}`,
-                color: house.is_complete ? "green" : "black",
-              };
-              graphData.nodes.push(houseNode);
-
-              graphData.links.push({
-                source: transformerNode.id,
-                target: houseNode.id,
-              });
-            });
-          });
-
+  
+          const graphData = buildGraphData(data.nodes);
+  
           console.log("Graph data being set:", graphData);
           setSubstationData(graphData);
-          setTransformerCounter(data.transformers.length);
+          setTransformerCounter(data.nodes.filter(node => node.type === 'transformer').length);
           setInitialSubstationData(graphData);
-          
+  
         } catch (error) {
           console.error("Error fetching substation data:", error);
         }
       };
-
+  
       fetchSubstationData();
     }
   }, [selectedSubstationId]);
+  
 
   const handleSaveTopology = async () => {
     try {
@@ -175,75 +176,94 @@ const NetworkTopologyBuilder = () => {
   const handleCloseHouseForm = () => {
     setHouseDetails(null);
   };
-
-  const addTransformer = () => {
+  const addTransformer = (parentTransformerId = null) => {
     const newTransformer = {
       ids: `temp-${transformerCounter}`,
       id: `Transformer-${transformerCounter}`,
       label: `Transformer-${transformerCounter}`,
       color: "grey",
-      houses_details: [],
+      children: [],
+      type: 'transformer',
       is_complete: false,
     };
-
-    setSubstationData((prevData) => ({
-      ...prevData,
-      nodes: [...prevData.nodes, newTransformer],
-    }));
-
-    setTransformerCounter(transformerCounter + 1);
-  };
-
-  const addHouse = (transformerId) => {
-    const transformerIndex = transformerId.split("-")[1];
-    const houseCount = substationData.nodes.filter((node) =>
-      node.id.includes(`House-${transformerIndex}`)
-    ).length;
-
+  
     setSubstationData((prevData) => {
-      const newHouse = {
-        ids: `temp-house-${transformerIndex}-${houseCount}`,
-        id: `House-${transformerIndex}-${houseCount}`,
-        label: `House-${transformerIndex}-${houseCount}`,
-        color: "grey",
-        is_complete: false,
-      };
-
-      const updatedNodes = [...prevData.nodes, newHouse];
-      const updatedLinks = [
-        ...prevData.links,
-        {
-          source: transformerId,
-          target: newHouse.id,
-        },
-      ];
-
+      const updatedNodes = [...prevData.nodes, newTransformer];
+      if (parentTransformerId) {
+        const parentNode = updatedNodes.find(node => node.id === parentTransformerId);
+        if (parentNode) {
+          parentNode.children.push(newTransformer);
+          updatedNodes[updatedNodes.indexOf(parentNode)] = parentNode;
+        }
+      }
       return {
         ...prevData,
         nodes: updatedNodes,
-        links: updatedLinks,
+      };
+    });
+  
+    setTransformerCounter(transformerCounter + 1);
+  };
+  
+  const addHouse = (transformerId) => {
+    setSubstationData((prevData) => {
+      const transformerNode = prevData.nodes.find(node => node.id === transformerId);
+      if (!transformerNode) {
+        return prevData;
+      }
+  
+      const houseCount = transformerNode.children.filter(node => node.type === 'house').length;
+  
+      const newHouse = {
+        ids: `temp-house-${transformerNode.ids}-${houseCount}`,
+        id: `House-${transformerNode.ids}-${houseCount}`,
+        label: `House-${transformerNode.ids}-${houseCount}`,
+        color: "grey",
+        type: 'house',
+        is_complete: false,
+      };
+  
+      transformerNode.children.push(newHouse);
+  
+      const updatedNodes = prevData.nodes.map(node =>
+        node.id === transformerId ? transformerNode : node
+      );
+  
+      return {
+        ...prevData,
+        nodes: updatedNodes,
+        links: [...prevData.links, { source: transformerId, target: newHouse.id }],
       };
     });
   };
-
+  
   const deleteNode = (nodeId) => {
-    console.log(nodeId);
     setSubstationData((prevData) => {
       const nodeToDelete = prevData.nodes.find((node) => node.id === nodeId);
-
+  
       if (nodeToDelete) {
         setDeletedNodes((prevDeleted) => {
           const updatedDeleted = [...prevDeleted, nodeToDelete.ids];
           return updatedDeleted;
         });
-
-        const updatedNodes = prevData.nodes.filter(
-          (node) => node.id !== nodeId
-        );
+  
+        const removeNodeRecursively = (nodes, nodeId) => {
+          return nodes.filter(node => {
+            if (node.id === nodeId) {
+              return false;
+            }
+            if (node.children) {
+              node.children = removeNodeRecursively(node.children, nodeId);
+            }
+            return true;
+          });
+        };
+  
+        const updatedNodes = removeNodeRecursively(prevData.nodes, nodeId);
         const updatedLinks = prevData.links.filter(
           (link) => link.source !== nodeId && link.target !== nodeId
         );
-
+  
         return {
           ...prevData,
           nodes: updatedNodes,
@@ -253,6 +273,7 @@ const NetworkTopologyBuilder = () => {
       return prevData;
     });
   };
+  
   const handleCancel = () => {
     setSubstationData(initialSubstationData);
     setDeletedNodes([]);
@@ -281,6 +302,7 @@ const NetworkTopologyBuilder = () => {
             onHouseEdit={handleHouseEdit}
             addHouse={addHouse}
             deleteNode={deleteNode}
+            addTransformer={addTransformer}
           />
         </>
       )}
