@@ -180,8 +180,8 @@ const NetworkGraph = ({
       });
 
     const bbox = graphGroup.node().getBBox();
-    const xOffset = (width - bbox.width) / 2 - bbox.x;
-    const yOffset = (height - bbox.height) / 2 - bbox.y;
+    const xOffset = 100;
+    const yOffset = 70;
 
     graphGroup.attr("transform", `translate(${xOffset}, ${yOffset})`);
   };
