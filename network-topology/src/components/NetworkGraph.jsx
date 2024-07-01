@@ -178,11 +178,8 @@ const NetworkGraph = ({
       .on("click", (event, d) => {
         deleteNode(d.id);
       });
-
-    const bbox = graphGroup.node().getBBox();
     const xOffset = 100;
     const yOffset = 70;
-
     graphGroup.attr("transform", `translate(${xOffset}, ${yOffset})`);
   };
 
