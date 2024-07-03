@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import { fetchTransformerDetails } from "../services/Tranformer";
@@ -9,7 +10,8 @@ const NetworkGraph = ({
   onHouseEdit,
   addHouse,
   addTransformer,
-  deleteNode
+  deleteNode,
+  deletedNodes,
 }) => {
   const svgRef = useRef(null);
 
@@ -39,12 +41,12 @@ const NetworkGraph = ({
   const assignPositions = (nodes, links) => {
     const nodeMap = {};
     nodes.forEach((node, index) => {
-      node.index = index + 1; 
+      node.index = index + 1;
       nodeMap[node.id] = node;
       node.children = [];
     });
 
-    links.forEach(link => {
+    links.forEach((link) => {
       const parent = nodeMap[link.source];
       const child = nodeMap[link.target];
       if (parent && child) {
@@ -69,13 +71,14 @@ const NetworkGraph = ({
     };
 
     nodes
-      .filter(node => !links.find(link => link.target === node.id))
+      .filter((node) => !links.find((link) => link.target === node.id))
       .forEach((rootNode, index) => {
         positionNodes(rootNode, 0, index * 200);
       });
   };
 
   const renderGraph = () => {
+    console.log("Rendering graph with data:", data);
     const svg = d3.select(svgRef.current);
     const width = 1400;
     const height = 1000;
@@ -99,10 +102,10 @@ const NetworkGraph = ({
       .attr("class", "link")
       .attr("stroke", "#999")
       .attr("stroke-width", 2)
-      .attr("x1", (d) => nodes.find((node) => node.id === d.source).x)
-      .attr("y1", (d) => nodes.find((node) => node.id === d.source).y)
-      .attr("x2", (d) => nodes.find((node) => node.id === d.target).x)
-      .attr("y2", (d) => nodes.find((node) => node.id === d.target).y);
+      .attr("x1", (d) => nodes.find((node) => node.id === d.source)?.x)
+      .attr("y1", (d) => nodes.find((node) => node.id === d.source)?.y)
+      .attr("x2", (d) => nodes.find((node) => node.id === d.target)?.x)
+      .attr("y2", (d) => nodes.find((node) => node.id === d.target)?.y);
 
     const node = graphGroup
       .selectAll(".node")
@@ -128,39 +131,39 @@ const NetworkGraph = ({
       .attr("y", (d) => d.y - 25)
       .text((d) => d.index);
 
-    // const addHouseButtons = graphGroup
-    //   .selectAll(".add-house-button")
-    //   .data(nodes.filter((node) => node.type === "transformer"))
-    //   .enter()
-    //   .append("text")
-    //   .attr("class", "add-house-button")
-    //   .attr("x", (d) => d.x - 30)
-    //   .attr("y", (d) => d.y + 30)
-    //   .attr("text-anchor", "middle")
-    //   .attr("fill", "blue")
-    //   .style("cursor", "pointer")
-    //   .text("+ House")
-    //   .on("click", (event, d) => {
-    //     const clickedTransformerId = d.id;
-    //     addHouse(clickedTransformerId);
-    //   });
+    const addHouseButtons = graphGroup
+      .selectAll(".add-house-button")
+      .data(nodes)
+      .enter()
+      .append("text")
+      .attr("class", "add-house-button")
+      .attr("x", (d) => d.x - 30)
+      .attr("y", (d) => d.y + 30)
+      .attr("text-anchor", "middle")
+      .attr("fill", "blue")
+      .style("cursor", "pointer")
+      .text((d) => (d.type === "transformer"  ? "+ H" : ""))
+      .on("click", (event, d) => {
+        const clickedNodeId = d.id;
+        addHouse(clickedNodeId);
+      });
 
-    // const addTransformerButtons = graphGroup
-    //   .selectAll(".add-transformer-button")
-    //   .data(nodes.filter((node) => node.type === "transformer"))
-    //   .enter()
-    //   .append("text")
-    //   .attr("class", "add-transformer-button")
-    //   .attr("x", (d) => d.x + 30)
-    //   .attr("y", (d) => d.y + 30)
-    //   .attr("text-anchor", "middle")
-    //   .attr("fill", "green")
-    //   .style("cursor", "pointer")
-    //   .text("+ Transformer")
-    //   .on("click", (event, d) => {
-    //     const clickedTransformerId = d.id;
-    //     addTransformer(clickedTransformerId);
-    //   });
+    const addTransformerButtons = graphGroup
+      .selectAll(".add-transformer-button")
+      .data(nodes)
+      .enter()
+      .append("text")
+      .attr("class", "add-transformer-button")
+      .attr("x", (d) => d.x + 30)
+      .attr("y", (d) => d.y + 30)
+      .attr("text-anchor", "middle")
+      .attr("fill", "green")
+      .style("cursor", "pointer")
+      .text((d) => (d.type === "transformer" ? "+ T" : ""))
+      .on("click", (event, d) => {
+        const clickedNodeId = d.id;
+        addTransformer(clickedNodeId);
+      });
 
     const deleteNodeButtons = graphGroup
       .selectAll(".delete-node-button")
@@ -178,16 +181,14 @@ const NetworkGraph = ({
       .on("click", (event, d) => {
         deleteNode(d.id);
       });
+
     const xOffset = 100;
     const yOffset = 70;
     graphGroup.attr("transform", `translate(${xOffset}, ${yOffset})`);
   };
+ 
 
-  return (
-    <div>
-      <svg ref={svgRef}></svg>
-    </div>
-  );
+  return <svg ref={svgRef}></svg>;
 };
 
 export default NetworkGraph;
