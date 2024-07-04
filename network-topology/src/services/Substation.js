@@ -35,34 +35,75 @@ export const getSubstationById = async (substationId) => {
 };
 
 export const updateSubstationTopology = async (substationId, substationData) => {
+
+  const createNodeMap = (nodes) => {
+    const nodeMap = {};
+    nodes.forEach((node) => {
+      nodeMap[node.id] = {
+        id: node.ids.startsWith("temp") ? undefined : node.ids,
+        type: node.type,
+        action: node.ids.startsWith("temp") ? "add" : "update",
+        children: []
+      };
+    });
+    return nodeMap;
+  };
+
+
+  const nodeMap = createNodeMap(substationData.nodes);
+
+
+  substationData.links.forEach((link) => {
+    const parentNode = nodeMap[link.source];
+    const childNode = nodeMap[link.target];
+
+    if (parentNode && childNode) {
+      parentNode.children.push(childNode);
+    }
+  });
+
+
+  const collectTopLevelNodes = (nodes, links) => {
+    const childIds = new Set(links.map(link => link.target));
+    return nodes.filter(node => !childIds.has(node.id));
+  };
+
+
+  const topLevelNodes = collectTopLevelNodes(substationData.nodes, substationData.links);
+
+
   const formatNode = (node) => {
     const formattedNode = {
-      id: node.ids.startsWith("temp") ? undefined : node.ids,
+      id: node.id,
       type: node.type,
-      action: node.ids.startsWith("temp") ? "add" : "update", // Corrected to check node.ids instead of node.id
+      action: node.action,
+      children: node.children.map(child => formatNode(child))
     };
 
-    if (node.children && node.children.length > 0) {
-      formattedNode.children = node.children.map((child) => formatNode(child));
+
+    if (formattedNode.children.length === 0) {
+      delete formattedNode.children;
     }
 
     return formattedNode;
   };
 
-  const formattedNodes = substationData.nodes.map((node) => formatNode(node));
+
+  const formattedNodes = topLevelNodes.map(node => formatNode(nodeMap[node.id]));
+
 
   const payload = {
     substation_id: substationId,
     nodes: [
       ...formattedNodes,
       ...substationData.deletedNodes.map((node) => ({
-        id:  node.id,
+        id: node.id,
         type: node.type,
         action: "delete",
       })),
     ],
   };
-
+ console.log(payload)
   try {
     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
 
@@ -85,3 +126,98 @@ export const updateSubstationTopology = async (substationId, substationData) => 
     throw error;
   }
 };
+// export const updateSubstationTopology = async (substationId, substationData) => {
+
+//   const createNodeMap = (nodes) => {
+//     const nodeMap = {};
+//     nodes.forEach((node) => {
+//       nodeMap[node.id] = {
+//         id: node.ids.startsWith("temp") ? undefined : node.ids,
+//         type: node.type,
+//         action: node.ids.startsWith("temp") ? "add" : "update",
+//         children: []
+//       };
+//     });
+//     return nodeMap;
+//   };
+
+
+//   const nodeMap = createNodeMap(substationData.nodes);
+
+
+//   substationData.links.forEach((link) => {
+//     const parentNode = nodeMap[link.source];
+//     const childNode = nodeMap[link.target];
+
+//     if (parentNode && childNode) {
+//       parentNode.children.push(childNode);
+//     }
+//   });
+
+
+//   const collectTopLevelNodes = (nodes, links) => {
+//     const childIds = new Set(links.map(link => link.target));
+//     return nodes.filter(node => !childIds.has(node.id));
+//   };
+
+
+//   const topLevelNodes = collectTopLevelNodes(substationData.nodes, substationData.links);
+
+
+//   const formatNode = (node, parentId = null) => {
+//     const formattedNode = {
+//       type: node.type,
+//       action: node.action,
+//     };
+
+//     if (node.action !== "add" || node.type === "transformer") {
+//       formattedNode.id = node.id;
+//     } else if (node.type === "transformer" && parentId) {
+//       formattedNode.id = parentId;
+//     }
+
+//     if (node.children.length > 0) {
+//       formattedNode.children = node.children.map(child => formatNode(child, node.id));
+//     }
+
+//     return formattedNode;
+//   };
+
+
+//   const formattedNodes = topLevelNodes.map(node => formatNode(nodeMap[node.id]));
+
+
+//   const payload = {
+//     substation_id: substationId,
+//     nodes: [
+//       ...formattedNodes,
+//       ...substationData.deletedNodes.map((node) => ({
+//         id: node.id,
+//         type: node.type,
+//         action: "delete",
+//       })),
+//     ],
+//   };
+// console.log(formattedNodes)
+//   try {
+//     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
+
+//     const response = await fetch(`${API_URL}/substations/${substationId}`, {
+//       method: "PUT",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//       body: JSON.stringify(payload),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Failed to update substation topology");
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     console.error("Error updating substation topology:", error);
+//     throw error;
+//   }
+// };
