@@ -3,6 +3,12 @@ import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import { fetchTransformerDetails } from "../services/Tranformer";
 import { fetchHouseDetails } from "../services/House";
+const GreyTransformerImg = "images/GreyTransformer.png";
+const GreyHouseImg = "images/GreyHouse.png";
+const GreenTransformerImg = "images/GreenTransformer.png";
+const GreenHouseImg = "images/GreenHouse.png";
+const BlackTransformerImg = "images/BlackTransformer.png";
+const BlackHouseImg = "images/BlackHouse.png";
 
 const NetworkGraph = ({
   data,
