@@ -124,6 +124,7 @@ const NetworkGraph = ({
       .attr("cx", (d) => d.x)
       .attr("cy", (d) => d.y)
       .on("dblclick", handleDoubleClick);
+      
 
     const label = graphGroup
       .selectAll(".label")
