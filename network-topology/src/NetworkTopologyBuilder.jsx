@@ -37,7 +37,7 @@ const NetworkTopologyBuilder = () => {
             const transformerNode = {
               ids: transformer.id,
               id: `Transformer-${index}`,
-              label: `Transformer-${index}`,
+              label: `T-${index}`,
               color: transformer.is_complete ? "green" : "black",
               houses_details: transformer.houses_details || [],
             };
@@ -47,7 +47,7 @@ const NetworkTopologyBuilder = () => {
               const houseNode = {
                 ids: house.id,
                 id: `House-${index}-${houseIndex}`,
-                label: `House-${index}-${houseIndex}`,
+                label: `H ${index}.${houseIndex}`,
                 color: house.is_complete ? "green" : "black",
               };
               graphData.nodes.push(houseNode);
