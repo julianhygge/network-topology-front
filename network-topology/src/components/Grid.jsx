@@ -16,7 +16,7 @@ const Grid = () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col pb-1 text-white bg-slate-50">
+      <div className="flex flex-col pb-1 text-white ">
         <main className="flex flex-col items-center mt-10 max-md:mt-10">
           <div className="flex flex-col items-center px-60 py-20 rounded-2xl shadow-2xl bg-cyan-900 bg-opacity-90 max-md:px-5">
             <img
