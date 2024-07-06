@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://hyggedev.ddns.net:8000/net-topology-api/v1";
+const API_URL = "https://hygge-test.ddns.net:8080/net-topology-api/v1";
 
 export const fetchHouseDetails = async (houseId) => {
   const token =
