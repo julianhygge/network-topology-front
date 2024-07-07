@@ -3,7 +3,7 @@ import React from 'react'
 export default function Navbar() {
   return (
     <div>
-        <header className="flex items-center gap-10 px-9 py-4 text-xl  font-medium  bg-cyan-900  max-md:flex-wrap max-md:px-5">
+        <header className="flex items-center gap-10 px-9 py-4 text-xl  font-medium   bg-navColor  max-md:flex-wrap max-md:px-5">
         <img
           loading="lazy"
           src="images/HyggeLogo.png"
