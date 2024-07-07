@@ -1,16 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
+import { getSubstations, generateSubstation } from "../services/Substation";
+import { useNavigate } from "react-router-dom";
 
 const Grid = () => {
   const [gridNumber, setGridNumber] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const Fetch = async () => {
+      try {
+        const data = await getSubstations();
+        console.log(data);
+        if (data.items.length > 0) {
+          navigate("/gridPage");
+        }
+      } catch (error) {
+        console.error("Error fetching substations:", error);
+      }
+    };
+    Fetch();
+  }, [navigate]);
 
   const handleInputChange = (event) => {
     setGridNumber(event.target.value);
   };
 
-  const handleSubmit = () => {
-    console.log("Number of grids:", gridNumber);
-   
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const payload = {
+        locality_id: "94522a0a-c8f1-40f8-a2e5-9aed2dc55555",
+        number_of_substations: parseInt(gridNumber, 10),
+      };
+
+      const response = await generateSubstation(payload);
+      if (response.status === 200) {
+        navigate("/gridPage");
+      }
+    } catch (error) {
+      console.error("Error generating substations:", error);
+    }
   };
 
   return (

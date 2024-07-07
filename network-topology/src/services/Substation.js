@@ -18,6 +18,25 @@ export const getSubstations = async () => {
   }
 };
 
+export const generateSubstation = async (payload) => {
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
+  try {
+    const response = await fetch(`${API_URL}/substations/generate`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    return response;
+  } catch (error) {
+    console.error("Error generating substation:", error.response);
+    throw error;
+  }
+};
+
 export const getSubstationById = async (substationId) => {
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
@@ -34,8 +53,10 @@ export const getSubstationById = async (substationId) => {
   }
 };
 
-export const updateSubstationTopology = async (substationId, substationData) => {
-
+export const updateSubstationTopology = async (
+  substationId,
+  substationData
+) => {
   const createNodeMap = (nodes) => {
     const nodeMap = {};
     nodes.forEach((node) => {
@@ -43,15 +64,13 @@ export const updateSubstationTopology = async (substationId, substationData) => 
         id: node.ids.startsWith("temp") ? undefined : node.ids,
         type: node.type,
         action: node.ids.startsWith("temp") ? "add" : "update",
-        children: []
+        children: [],
       };
     });
     return nodeMap;
   };
 
-
   const nodeMap = createNodeMap(substationData.nodes);
-
 
   substationData.links.forEach((link) => {
     const parentNode = nodeMap[link.source];
@@ -62,24 +81,23 @@ export const updateSubstationTopology = async (substationId, substationData) => 
     }
   });
 
-
   const collectTopLevelNodes = (nodes, links) => {
-    const childIds = new Set(links.map(link => link.target));
-    return nodes.filter(node => !childIds.has(node.id));
+    const childIds = new Set(links.map((link) => link.target));
+    return nodes.filter((node) => !childIds.has(node.id));
   };
 
-
-  const topLevelNodes = collectTopLevelNodes(substationData.nodes, substationData.links);
-
+  const topLevelNodes = collectTopLevelNodes(
+    substationData.nodes,
+    substationData.links
+  );
 
   const formatNode = (node) => {
     const formattedNode = {
       id: node.id,
       type: node.type,
       action: node.action,
-      children: node.children.map(child => formatNode(child))
+      children: node.children.map((child) => formatNode(child)),
     };
-
 
     if (formattedNode.children.length === 0) {
       delete formattedNode.children;
@@ -88,9 +106,9 @@ export const updateSubstationTopology = async (substationId, substationData) => 
     return formattedNode;
   };
 
-
-  const formattedNodes = topLevelNodes.map(node => formatNode(nodeMap[node.id]));
-
+  const formattedNodes = topLevelNodes.map((node) =>
+    formatNode(nodeMap[node.id])
+  );
 
   const payload = {
     substation_id: substationId,
@@ -103,9 +121,10 @@ export const updateSubstationTopology = async (substationId, substationData) => 
       })),
     ],
   };
- console.log(JSON.stringify(payload))
+  console.log(JSON.stringify(payload));
   try {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
 
     const response = await fetch(`${API_URL}/substations/${substationId}`, {
       method: "PUT",
