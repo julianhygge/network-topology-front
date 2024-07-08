@@ -11,7 +11,6 @@ const Grid = () => {
     const Fetch = async () => {
       try {
         const data = await getSubstations();
-        console.log(data);
         if (data.items.length > 0) {
           navigate("/gridPage");
         }
@@ -25,7 +24,6 @@ const Grid = () => {
   const handleInputChange = (event) => {
     setGridNumber(event.target.value);
   };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -35,14 +33,16 @@ const Grid = () => {
       };
 
       const response = await generateSubstation(payload);
-      if (response.status === 200) {
+
+      if (response.items && response.items.length > 0) {
         navigate("/gridPage");
+      } else {
+        console.error("Error generating substations:", response);
       }
     } catch (error) {
       console.error("Error generating substations:", error);
     }
   };
-
   return (
     <>
       <Navbar />

@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import { getSubstations, generateSubstation } from "../services/Substation";
+import TransForm from "./TransForm";
+import {
+  getSubstations,
+  generateSubstation,
+  updateSubstationTransformers,
+} from "../services/Substation";
 
 const GridPage = () => {
   const [substations, setSubstations] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [selectedSubstation, setSelectedSubstation] = useState(null);
 
   useEffect(() => {
     fetchSubstations();
@@ -25,13 +32,42 @@ const GridPage = () => {
         number_of_substations: 1,
       };
       const newSubstations = await generateSubstation(payload);
-      console.log(newSubstations);
-      setSubstations((prevSubstations) => [
-        ...prevSubstations,
-        ...newSubstations.items,
-      ]);
+
+      const uniqueSubstations = [
+        ...substations,
+        ...newSubstations.items.filter(
+          (newSub) =>
+            !substations.some((existingSub) => existingSub.id === newSub.id)
+        ),
+      ];
+      setSubstations(uniqueSubstations);
     } catch (error) {
       console.error("Failed to add substation:", error);
+    }
+  };
+
+  const handleShowForm = (substation) => {
+    setSelectedSubstation(substation);
+    setShowForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setSelectedSubstation(null);
+  };
+
+  const handleSubmitForm = async (numberOfTransformers) => {
+    try {
+      const payload = {
+        nodes: Array(numberOfTransformers).fill({
+          action: "add",
+          type: "transformer",
+        }),
+      };
+      await updateSubstationTransformers(selectedSubstation.id, payload);
+      handleCloseForm();
+    } catch (error) {
+      console.error("Failed to add transformers:", error);
     }
   };
 
@@ -58,7 +94,10 @@ const GridPage = () => {
                   {substation.name}
                 </div>
                 <div className="flex flex-col grow px-5 pt-20 pb-10 mx-auto w-full text-center text-white bg-white rounded-3xl border border-solid shadow-sm border-navColor max-md:mt-10">
-                  <button className="flex gap-5 items-start px-12 py-3 mt-60 bg-customGreen border border-green-500 border-solid shadow-sm rounded-[33px] max-md:px-5 max-md:mt-10 h-[60px]">
+                  <button
+                    onClick={() => handleShowForm(substation)}
+                    className="flex gap-5 items-start px-12 py-3 mt-60 bg-customGreen border border-green-500 border-solid shadow-sm rounded-[33px] max-md:px-5 max-md:mt-10 h-[60px]"
+                  >
                     <div className="flex-auto text-1xl font-medium tracking-normal mt-1">
                       <span>Add </span>Transformers
                     </div>
@@ -79,6 +118,12 @@ const GridPage = () => {
           </div>
         </div>
       </div>
+      <TransForm
+        show={showForm}
+        onClose={handleCloseForm}
+        onSubmit={handleSubmitForm}
+        substationName={selectedSubstation?.name}
+      />
     </div>
   );
 };
