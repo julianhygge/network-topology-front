@@ -7,6 +7,7 @@ module.exports = {
     extend: {
       colors: {
         customGreen: '#49AC82',
+        customYellow: '#FFBE21',
         navColor:"#204A56",
         backPage:"#F5F5F5"
       },

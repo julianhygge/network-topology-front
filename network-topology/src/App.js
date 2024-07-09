@@ -3,6 +3,7 @@ import './App.css';
 import NetworkTopologyBuilder from './NetworkTopologyBuilder';
 import Grid from "./components/Grid";
 import GridPage from "./components/GridPage";
+import TransformerPage from "./components/TransformerPage";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
 
      <Route path="/grid" element={<Grid/> }/>
      <Route path='/gridPage'element={<GridPage/>}/>
+     <Route path='/transformerPage'element={<TransformerPage/>}/>
      </Routes>
      </BrowserRouter>
   );
