@@ -1,15 +1,23 @@
 import React, {useState, useEffect}  from "react";
 import Navbar from "./Navbar";
 import { getSubstationById, updateSubstationTransformers} from "../services/Substation";
+import AddHousesForm from "./AddHousesForm";
 
 const TransformerPage = () => {
     const [substation, setSubstation] = useState(null);
     const [error, setError] = useState(null);
+    const [showForm, setShowForm] = useState(false);
+    const [selectedTransformer, setSelectedTransformer] = useState(null);
+    const [selectedTransformerIndex, setSelectedTransformerIndex] = useState(null);
     const substationId = "3d5265f7-7b08-4bab-9746-925ef1bb6ab0";
 
     useEffect(() => {
         fetchSubstationsById();
     },[])
+
+  //   useEffect(() => {
+  //     console.log(substation);
+  // },substation)
 
     const fetchSubstationsById = async() => {
         try {
@@ -39,6 +47,22 @@ const TransformerPage = () => {
         }
     }
 
+    const handleShowHouseAddForm = (transformerId, transformerIndex) => {
+      setSelectedTransformer(transformerId);
+      setSelectedTransformerIndex(transformerIndex);
+      setShowForm(true);
+    }
+
+    const handleCloseHouseAddForm = () => {
+      setSelectedTransformer(null);
+      setSelectedTransformerIndex(null);
+      setShowForm(false);
+    };
+
+    const handleSubmitAddHouseForm = async(numberOfHouses) => {
+
+    };
+
 
     return (
         <div className="bg-backPage min-h-screen">
@@ -56,7 +80,7 @@ const TransformerPage = () => {
                 .filter(node => node.type === "transformer")
                 .map((node, index) => (
                   <div key={node.id} className="flex flex-col items-center">
-                    <div className="text-2xl mb-2 text-gray-600">Transformer - {index+1}</div>
+                    <div className="text-2xl mb-2 text-gray-600">Transformer - {index + 1}</div>
                     <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-4 w-60 h-80 border border-black">
                       <div className="w-16 h-16 mb-4 mt-4">
                         <img src="/images/Star.png" alt="Star" className="w-full h-full" />
@@ -64,7 +88,7 @@ const TransformerPage = () => {
                       <button className="mb-2 w-full py-2 bg-customYellow text-gray-800 rounded-2xl shadow mt-4">
                         Add Properties
                       </button>
-                      <button className="w-full py-2 bg-customGreen text-white rounded-2xl shadow flex items-center justify-center mt-4">
+                      <button onClick={() => handleShowHouseAddForm(node.id, index + 1)} className="w-full py-2 bg-customGreen text-white rounded-2xl shadow flex items-center justify-center mt-4">
                         Add Houses <span className="ml-2 text-3xl mb-1">+</span>
                       </button>
                     </div>
@@ -80,6 +104,12 @@ const TransformerPage = () => {
               Loading...
             </div>
           )}
+          <AddHousesForm
+            show={showForm}
+            onClose={handleCloseHouseAddForm}
+            onSubmit={handleSubmitAddHouseForm}
+            transformerName={selectedTransformerIndex}
+          />
         </div>
       );
     };
