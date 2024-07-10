@@ -12,7 +12,6 @@ function App() {
      <Routes>
 
      <Route path='/' element={<NetworkTopologyBuilder/>}/>
-
      <Route path="/grid" element={<Grid/> }/>
      <Route path='/gridPage'element={<GridPage/>}/>
      </Routes>

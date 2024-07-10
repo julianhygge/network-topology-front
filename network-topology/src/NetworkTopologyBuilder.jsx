@@ -1,10 +1,11 @@
 import React, { useState, useEffect,} from "react";
-import SubstationSelector from "./components/SubstationSelector";
 import NetworkGraph from "./components/NetworkGraph";
 import TransformerForm from "./components/TransformerForm";
 import HouseForm from "./components/HouseForm";
 import { getSubstationById, updateSubstationTopology } from "./services/Substation";
+import GridSideBar from "./components/GridSideBar";
 import "./App.css";
+import Navbar from "./components/Navbar";
 
 const NetworkTopologyBuilder = () => {
   const [selectedSubstationId, setSelectedSubstationId] = useState(null);
@@ -285,18 +286,25 @@ const NetworkTopologyBuilder = () => {
   };
 
   return (
-    <div>
-      <SubstationSelector setSelectedSubstation={setSelectedSubstationId} />
+    <>
+  <Navbar />
+  <div className="flex">
+    <GridSideBar onGridSelect={setSelectedSubstationId} />
+    <div className="flex-1 p-4">
       {substationData && (
         <>
-          <button className="ml-[700px] cursor-pointer border" onClick={handleSaveTopology}>
-            Save
-          </button>
-          <button className="ml-[700px] cursor-pointer border mt-5" onClick={handleCancel}>
-            Cancel
-          </button>
-          <div className="counter">
-            <button className="border" onClick={() => addTransformer(null)}>Add Transformer</button>
+          <div className="flex gap-2 mb-4">
+            <button className="cursor-pointer border px-2 py-1" onClick={handleSaveTopology}>
+              Save
+            </button>
+            <button className="cursor-pointer border px-2 py-1" onClick={handleCancel}>
+              Cancel
+            </button>
+          </div>
+          <div className="flex items-center gap-2 mb-4">
+            <button className="cursor-pointer border px-2 py-1" onClick={() => addTransformer(null)}>
+              Add Transformer
+            </button>
             <span>Transformers: {transformerCounter}</span>
           </div>
           <NetworkGraph
@@ -306,27 +314,24 @@ const NetworkTopologyBuilder = () => {
             addHouse={addHouse}
             deleteNode={deleteNode}
             addTransformer={addTransformer}
-            deletedNodes={deletedNodes} 
+            deletedNodes={deletedNodes}
           />
         </>
       )}
       {transformerDetails && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={handleCloseTransformerForm}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-4 rounded">
+            <span className="cursor-pointer float-right" onClick={handleCloseTransformerForm}>
               Close
             </span>
-            <TransformerForm
-              transformer={transformerDetails}
-              onSave={handleTransformerSave}
-            />
+            <TransformerForm transformer={transformerDetails} onSave={handleTransformerSave} />
           </div>
         </div>
       )}
       {houseDetails && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={handleCloseHouseForm}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-4 rounded">
+            <span className="cursor-pointer float-right" onClick={handleCloseHouseForm}>
               Close
             </span>
             <HouseForm house={houseDetails} onSave={handleHouseSave} />
@@ -334,6 +339,9 @@ const NetworkTopologyBuilder = () => {
         </div>
       )}
     </div>
+  </div>
+</>
+
   );
 };
 

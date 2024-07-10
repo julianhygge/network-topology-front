@@ -80,24 +80,50 @@ const NetworkGraph = ({
         positionNodes(rootNode, 0, index * 200);
       });
   };
+  const getNodeImage = (d) => {
+    if (d.type === "transformer") {
+      switch (d.color) {
+        case "grey":
+          return GreyTransformerImg;
+        case "green":
+          return GreenTransformerImg;
+        case "black":
+          return BlackTransformerImg;
+        default:
+          return GreyTransformerImg;
+      }
+    } else if (d.type === "house") {
+      switch (d.color) {
+        case "grey":
+          return GreyHouseImg;
+        case "green":
+          return GreenHouseImg;
+        case "black":
+          return BlackHouseImg;
+        default:
+          return GreyHouseImg;
+      }
+    }
+    return null;
+  };
 
   const renderGraph = () => {
     console.log("Rendering graph with data:", data);
     const svg = d3.select(svgRef.current);
-    const width = 1400;
-    const height = 1000;
-
+    const width = 1250;
+    const height = 630;
+  
     svg.attr("width", width).attr("height", height);
-
+  
     const nodes = data.nodes;
     const links = data.links;
-
+  
     assignPositions(nodes, links);
-
+  
     svg.selectAll("*").remove();
-
+  
     const graphGroup = svg.append("g");
-
+  
     const link = graphGroup
       .selectAll(".link")
       .data(links)
@@ -110,20 +136,20 @@ const NetworkGraph = ({
       .attr("y1", (d) => nodes.find((node) => node.id === d.source)?.y)
       .attr("x2", (d) => nodes.find((node) => node.id === d.target)?.x)
       .attr("y2", (d) => nodes.find((node) => node.id === d.target)?.y);
-
+  
     const node = graphGroup
       .selectAll(".node")
       .data(nodes)
       .enter()
-      .append("circle")
+      .append("image")
       .attr("class", "node")
-      .attr("r", (d) => (d.type === "transformer" ? 20 : 10))
-      .attr("fill", (d) => d.color)
-      .attr("cx", (d) => d.x)
-      .attr("cy", (d) => d.y)
+      .attr("xlink:href", (d) => getNodeImage(d))
+      .attr("x", (d) => d.x - 20) 
+      .attr("y", (d) => d.y - 20) 
+      .attr("width", 40)
+      .attr("height", 40) 
       .on("dblclick", handleDoubleClick);
-      
-
+  
     const label = graphGroup
       .selectAll(".label")
       .data(nodes)
@@ -135,7 +161,7 @@ const NetworkGraph = ({
       .attr("x", (d) => d.x)
       .attr("y", (d) => d.y - 25)
       .text((d) => d.index);
-
+  
     const addHouseButtons = graphGroup
       .selectAll(".add-house-button")
       .data(nodes)
@@ -147,12 +173,12 @@ const NetworkGraph = ({
       .attr("text-anchor", "middle")
       .attr("fill", "blue")
       .style("cursor", "pointer")
-      .text((d) => (d.type === "transformer"  ? "+ H" : ""))
+      .text((d) => (d.type === "transformer" ? "+ H" : ""))
       .on("click", (event, d) => {
         const clickedNodeId = d.id;
         addHouse(clickedNodeId);
       });
-
+  
     const addTransformerButtons = graphGroup
       .selectAll(".add-transformer-button")
       .data(nodes)
@@ -169,7 +195,7 @@ const NetworkGraph = ({
         const clickedNodeId = d.id;
         addTransformer(clickedNodeId);
       });
-
+  
     const deleteNodeButtons = graphGroup
       .selectAll(".delete-node-button")
       .data(nodes)
@@ -186,9 +212,9 @@ const NetworkGraph = ({
       .on("click", (event, d) => {
         deleteNode(d.id);
       });
-
+  
     const xOffset = 100;
-    const yOffset = 70;
+    const yOffset = 50;
     graphGroup.attr("transform", `translate(${xOffset}, ${yOffset})`);
   };
  
