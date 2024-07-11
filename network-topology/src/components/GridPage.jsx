@@ -76,12 +76,16 @@ const GridPage = () => {
       console.error("Failed to add transformers:", error);
     }
   };
+  const handleTreeView=()=>{
+    navigate('/')
+
+  }
 
   return (
     <div className="bg-backPage min-h-screen">
       <Navbar />
       <div className="flex flex-col items-center px-5 mt-12 w-full text-4xl text-center text-navColor max-md:mt-10 max-md:max-w-full">
-        <button className="justify-center items-start self-end   px-11 py-2.5  text-xl tracking-normal text-white bg-customGreen border border-green-500 border-solid shadow-sm rounded-[31px] w-[250px] h-[50px] max-md:pr-5 max-md:pl-8">
+        <button onClick={handleTreeView} className="justify-center items-start self-end   px-11 py-2.5  text-xl tracking-normal text-white bg-customGreen border border-green-500 border-solid shadow-sm rounded-[31px] w-[250px] h-[50px] max-md:pr-5 max-md:pl-8">
           Tree View
         </button>
 

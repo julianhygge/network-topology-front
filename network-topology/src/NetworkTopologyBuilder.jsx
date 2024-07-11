@@ -6,9 +6,13 @@ import { getSubstationById, updateSubstationTopology } from "./services/Substati
 import GridSideBar from "./components/GridSideBar";
 import "./App.css";
 import Navbar from "./components/Navbar";
+import { useLocation } from "react-router-dom";
+
 
 const NetworkTopologyBuilder = () => {
-  const [selectedSubstationId, setSelectedSubstationId] = useState(null);
+  const location = useLocation();
+  const [selectedSubstationId, setSelectedSubstationId] = useState(location.state?.substationId || null);
+  //const [selectedSubstationId, setSelectedSubstationId] = useState(null);
   const [substationData, setSubstationData] = useState({ nodes: [], links: [] });
   const [transformerDetails, setTransformerDetails] = useState(null);
   const [houseDetails, setHouseDetails] = useState(null);
@@ -66,6 +70,12 @@ const NetworkTopologyBuilder = () => {
       fetchSubstationData();
     }
   }, [selectedSubstationId]);
+  useEffect(() => {
+    if (location.state?.substationId) {
+      setSelectedSubstationId(location.state.substationId);
+    }
+  }, [location.state]);
+
 
   const handleSaveTopology = async () => {
     try {
@@ -334,7 +344,7 @@ const NetworkTopologyBuilder = () => {
             <span className="cursor-pointer float-right" onClick={handleCloseHouseForm}>
               Close
             </span>
-            <HouseForm house={houseDetails} onSave={handleHouseSave} />
+            <HouseForm house={houseDetails} selectedGridId={selectedSubstationId} onSave={handleHouseSave} />
           </div>
         </div>
       )}

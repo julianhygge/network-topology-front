@@ -89,13 +89,22 @@ const TransformerPage = () => {
     const handleBackToGridPage = () => {
       navigate("/gridPage");
     }
+    const handleTreeView = () => {
+      navigate("/",{ state: { substationId } });
+    };
 
     return (
         <div className="bg-backPage min-h-screen">
           <Navbar />
           {error && <div className="text-red-600 text-xl flex justify-center mt-2">{error}</div>}
+          <div className="flex flex-col  px-5 mt-12 text-4xl text-center text-navColor max-md:mt-10 max-md:max-w-full">
+        <button onClick={handleTreeView} className="justify-center items-start self-end   px-11 py-2.5  text-xl tracking-normal text-white bg-customGreen border border-green-500 border-solid shadow-sm rounded-[31px] w-[250px] h-[50px] max-md:pr-5 max-md:pl-8">
+          Tree View
+        </button>
+      </div>
           <div className="p-4 text-2xl text-gray-600 text-left ml-16">
             <button onClick={handleBackToGridPage}>Back</button>
+       
           </div>
           <div className="text-2xl text-left ml-24 text-gray-600 mb-8">
             {substationName}
