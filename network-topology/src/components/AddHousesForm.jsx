@@ -42,7 +42,7 @@ const AddHousesForm = ({ show, onClose, onSubmit, transformerName }) => {
           <div className="flex flex-col items-center px-60 py-20 rounded-2xl shadow-2xl bg-navColor bg-opacity-90 max-md:px-5 mt-10 mb-20">
             <img
               loading="lazy"
-              src="images/HyggeLogo.png"
+              src={`${process.env.PUBLIC_URL}/images/HyggeLogo.png`} 
               alt="Hygge Logo"
               className="w-[80px]"
             />
