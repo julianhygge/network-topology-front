@@ -6,7 +6,7 @@ export default function Navbar() {
         <header className="flex items-center gap-10 px-9 py-4 text-xl  font-medium   bg-navColor  max-md:flex-wrap max-md:px-5">
         <img
           loading="lazy"
-          src="images/HyggeLogo.png"
+          src={`${process.env.PUBLIC_URL}/images/HyggeLogo.png`} 
           alt="Hygge Logo"
           className="shrink-0 w-[50px]"
         />

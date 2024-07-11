@@ -6,11 +6,14 @@ import {
   generateSubstation,
   updateSubstationTransformers,
 } from "../services/Substation";
+import { useNavigate } from "react-router-dom";
 
 const GridPage = () => {
   const [substations, setSubstations] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedSubstation, setSelectedSubstation] = useState(null);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     fetchSubstations();
@@ -65,6 +68,9 @@ const GridPage = () => {
         }),
       };
       await updateSubstationTransformers(selectedSubstation.id, payload);
+      navigate(`/transformers/${selectedSubstation.id}`, {
+        state: { substationName: selectedSubstation.name }
+      });
       handleCloseForm();
     } catch (error) {
       console.error("Failed to add transformers:", error);

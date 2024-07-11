@@ -15,7 +15,7 @@ function App() {
      <Route path='/' element={<NetworkTopologyBuilder/>}/>
      <Route path="/grid" element={<Grid/> }/>
      <Route path='/gridPage'element={<GridPage/>}/>
-     <Route path='/transformerPage'element={<TransformerPage/>}/>
+     <Route path="/transformers/:substationId" element={<TransformerPage />} />
      </Routes>
      </BrowserRouter>
   );

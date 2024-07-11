@@ -1,19 +1,25 @@
 import React, {useState, useEffect}  from "react";
 import Navbar from "./Navbar";
+import { useParams, useLocation } from "react-router-dom";
 import { getSubstationById, updateSubstationTransformers} from "../services/Substation";
 import AddHousesForm from "./AddHousesForm";
+import { useNavigate } from "react-router-dom";
 
 const TransformerPage = () => {
+    const navigate = useNavigate();
+    const { substationId } = useParams();
+    const location = useLocation();
     const [substation, setSubstation] = useState(null);
     const [error, setError] = useState(null);
     const [showForm, setShowForm] = useState(false);
     const [selectedTransformer, setSelectedTransformer] = useState(null);
     const [selectedTransformerIndex, setSelectedTransformerIndex] = useState(null);
-    const substationId = "3d5265f7-7b08-4bab-9746-925ef1bb6ab0";
+    const substationName = location.state?.substationName || "Grid";
+
 
     useEffect(() => {
         fetchSubstationsById();
-    },[])
+    },[substationId])
 
     const fetchSubstationsById = async() => {
         try {
@@ -80,15 +86,19 @@ const TransformerPage = () => {
       }
     };
 
+    const handleBackToGridPage = () => {
+      navigate("/gridPage");
+    }
+
     return (
         <div className="bg-backPage min-h-screen">
           <Navbar />
           {error && <div className="text-red-600 text-xl flex justify-center mt-2">{error}</div>}
           <div className="p-4 text-2xl text-gray-600 text-left ml-16">
-            <button>Back</button>
+            <button onClick={handleBackToGridPage}>Back</button>
           </div>
           <div className="text-2xl text-left ml-24 text-gray-600 mb-8">
-            Grid - 1
+            {substationName}
           </div>
           {substation ? (
             <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-4 mt-4 ml-4 items-center">
@@ -110,7 +120,7 @@ const TransformerPage = () => {
                     </div>
                   </div>
                 ))}
-              <button onClick={handleAddTransformer} className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-4 w-24 h-24 border border-black">
+              <button onClick={handleAddTransformer} className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-4 w-24 h-24 border border-black ml-8">
                 <div className="text-4xl">+</div>
                 <div className="text-base text-black-400">Add</div>
               </button>
