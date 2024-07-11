@@ -15,10 +15,6 @@ const TransformerPage = () => {
         fetchSubstationsById();
     },[])
 
-  //   useEffect(() => {
-  //     console.log(substation);
-  // },substation)
-
     const fetchSubstationsById = async() => {
         try {
             const data = await getSubstationById(substationId);
