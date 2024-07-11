@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const AddHousesForm = ({ show, onClose, onSubmit, transformerName }) => {
   const [numberOfHouses, setNumberOfHouses] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if(!show){
+        setNumberOfHouses('');
+        setError('');
+    }
+  },[show])
 
   const handleInputChange = (e) => {
     setNumberOfHouses(e.target.value);
@@ -19,6 +26,8 @@ const AddHousesForm = ({ show, onClose, onSubmit, transformerName }) => {
   };
 
   const handleClose = () => {
+    setNumberOfHouses('');
+    setError('');
     onClose();
   };
 

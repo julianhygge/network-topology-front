@@ -60,9 +60,29 @@ const TransformerPage = () => {
     };
 
     const handleSubmitAddHouseForm = async(numberOfHouses) => {
+      try {
+        const houses = Array.from({ length: numberOfHouses }, () => ({
+          type: "house",
+          action: "add"
+        }));
 
+        const payload = {
+          "nodes": [
+              {
+                  "id": selectedTransformer,
+                  "type": "transformer",
+                  "action": "update",
+                  "children": houses
+              }
+          ]
+        }
+        const updatedSubstation = await updateSubstationTransformers(substationId, payload)
+        setSubstation(updatedSubstation);
+      } catch (error) {
+        console.error('Failed to add houses:', error);
+        setError('Failed to add houses. Please try again later.');
+      }
     };
-
 
     return (
         <div className="bg-backPage min-h-screen">
