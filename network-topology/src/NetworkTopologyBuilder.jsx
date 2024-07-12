@@ -1,19 +1,26 @@
-import React, { useState, useEffect,} from "react";
+import React, { useState, useEffect } from "react";
 import NetworkGraph from "./components/NetworkGraph";
 import TransformerForm from "./components/TransformerForm";
 import HouseForm from "./components/HouseForm";
-import { getSubstationById, updateSubstationTopology } from "./services/Substation";
+import {
+  getSubstationById,
+  updateSubstationTopology,
+} from "./services/Substation";
 import GridSideBar from "./components/GridSideBar";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import { useLocation } from "react-router-dom";
 
-
 const NetworkTopologyBuilder = () => {
   const location = useLocation();
-  const [selectedSubstationId, setSelectedSubstationId] = useState(location.state?.substationId || null);
+  const [selectedSubstationId, setSelectedSubstationId] = useState(
+    location.state?.substationId || null
+  );
   //const [selectedSubstationId, setSelectedSubstationId] = useState(null);
-  const [substationData, setSubstationData] = useState({ nodes: [], links: [] });
+  const [substationData, setSubstationData] = useState({
+    nodes: [],
+    links: [],
+  });
   const [transformerDetails, setTransformerDetails] = useState(null);
   const [houseDetails, setHouseDetails] = useState(null);
   const [transformerCounter, setTransformerCounter] = useState(0);
@@ -32,9 +39,15 @@ const NetworkTopologyBuilder = () => {
               (acc, node) => {
                 const newNode = {
                   ids: node.id,
-                  id: node.type === 'transformer' ? `Transformer-${node.id}` : `House-${node.id}`,
-                  label: node.type === 'transformer' ? `Transformer-${node.id}` : `House-${node.id}`,
-                  color: node.is_complete ? 'green' : 'black',
+                  id:
+                    node.type === "transformer"
+                      ? `Transformer-${node.id}`
+                      : `House-${node.id}`,
+                  label:
+                    node.type === "transformer"
+                      ? `Transformer-${node.id}`
+                      : `House-${node.id}`,
+                  color: node.is_complete ? "green" : "black",
                   type: node.type,
                   children: node.children || [],
                 };
@@ -45,7 +58,10 @@ const NetworkTopologyBuilder = () => {
 
                 acc.nodes.push(newNode);
                 if (node.children && node.children.length) {
-                  const childGraphData = buildGraphData(node.children, newNode.id);
+                  const childGraphData = buildGraphData(
+                    node.children,
+                    newNode.id
+                  );
                   acc.nodes = acc.nodes.concat(childGraphData.nodes);
                   acc.links = acc.links.concat(childGraphData.links);
                 }
@@ -60,7 +76,9 @@ const NetworkTopologyBuilder = () => {
 
           console.log("Graph data being set:", graphData);
           setSubstationData(graphData);
-          setTransformerCounter(data.nodes.filter(node => node.type === 'transformer').length);
+          setTransformerCounter(
+            data.nodes.filter((node) => node.type === "transformer").length
+          );
           setInitialSubstationData(graphData);
         } catch (error) {
           console.error("Error fetching substation data:", error);
@@ -76,12 +94,10 @@ const NetworkTopologyBuilder = () => {
     }
   }, [location.state]);
 
-
   const handleSaveTopology = async () => {
     try {
-      
       const updatedData = { ...substationData, deletedNodes };
-      console.log('updated data',updatedData)
+      console.log("updated data", updatedData);
       await updateSubstationTopology(selectedSubstationId, updatedData);
 
       const newData = await getSubstationById(selectedSubstationId);
@@ -91,9 +107,15 @@ const NetworkTopologyBuilder = () => {
           (acc, node) => {
             const newNode = {
               ids: node.id,
-              id: node.type === 'transformer' ? `Transformer-${node.id}` : `House-${node.id}`,
-              label: node.type === 'transformer' ? `Transformer-${node.id}` : `House-${node.id}`,
-              color: node.is_complete ? 'green' : 'black',
+              id:
+                node.type === "transformer"
+                  ? `Transformer-${node.id}`
+                  : `House-${node.id}`,
+              label:
+                node.type === "transformer"
+                  ? `Transformer-${node.id}`
+                  : `House-${node.id}`,
+              color: node.is_complete ? "green" : "black",
               type: node.type,
               children: node.children || [],
             };
@@ -119,7 +141,9 @@ const NetworkTopologyBuilder = () => {
 
       console.log("Graph data being set:", graphData);
       setSubstationData(graphData);
-      setTransformerCounter(newData.nodes.filter(node => node.type === 'transformer').length);
+      setTransformerCounter(
+        newData.nodes.filter((node) => node.type === "transformer").length
+      );
       setInitialSubstationData(graphData);
       setDeletedNodes([]);
     } catch (error) {
@@ -177,77 +201,82 @@ const NetworkTopologyBuilder = () => {
     setHouseDetails(null);
   };
 
-  
   const addTransformer = (parentTransformerId = null) => {
     const newTransformer = {
       ids: `temp-${transformerCounter}`,
       id: `Transformer-${transformerCounter}`,
       label: `Transformer-${transformerCounter}`,
       color: "grey",
-      type: 'transformer',
+      type: "transformer",
       is_complete: false,
       action: "add",
-      children: [], 
+      children: [],
     };
-  
+
     setSubstationData((prevData) => {
       const updatedNodes = [...prevData.nodes, newTransformer];
       const updatedLinks = [...prevData.links];
-  
+
       if (parentTransformerId) {
-
-        const parentTransformerIndex = prevData.nodes.findIndex(node => node.id === parentTransformerId);
+        const parentTransformerIndex = prevData.nodes.findIndex(
+          (node) => node.id === parentTransformerId
+        );
         if (parentTransformerIndex !== -1) {
-
           prevData.nodes[parentTransformerIndex].children.push(newTransformer);
-          updatedLinks.push({ source: parentTransformerId, target: newTransformer.id });
+          updatedLinks.push({
+            source: parentTransformerId,
+            target: newTransformer.id,
+          });
         }
       }
-  
+
       return { ...prevData, nodes: updatedNodes, links: updatedLinks };
     });
-  
+
     setTransformerCounter(transformerCounter + 1);
   };
-  
+
   const addHouse = (transformerId) => {
     setSubstationData((prevData) => {
-      const transformerNode = prevData.nodes.find(node => node.id === transformerId);
+      const transformerNode = prevData.nodes.find(
+        (node) => node.id === transformerId
+      );
       if (!transformerNode) return prevData;
-  
+
       const newHouse = {
         ids: `temp-house-${transformerId}-${transformerNode.children.length}`,
         id: `House-${transformerId}-${transformerNode.children.length}`,
         label: `House-${transformerId}-${transformerNode.children.length}`,
         color: "grey",
-        type: 'house',
+        type: "house",
         is_complete: false,
         action: "add",
         x: transformerNode.x || 0,
         y: transformerNode.y || 0,
       };
-  
-      const updatedNodes = [...prevData.nodes, newHouse];
-      const updatedLinks = [...prevData.links, { source: transformerId, target: newHouse.id }];
-  
 
-      const transformerIndex = updatedNodes.findIndex(node => node.id === transformerId);
+      const updatedNodes = [...prevData.nodes, newHouse];
+      const updatedLinks = [
+        ...prevData.links,
+        { source: transformerId, target: newHouse.id },
+      ];
+
+      const transformerIndex = updatedNodes.findIndex(
+        (node) => node.id === transformerId
+      );
       if (transformerIndex !== -1) {
         updatedNodes[transformerIndex].children.push(newHouse);
       }
-  
+
       return { ...prevData, nodes: updatedNodes, links: updatedLinks };
     });
   };
-  
-
 
   const deleteNode = (nodeId) => {
     setSubstationData((prevData) => {
       const nodeToDelete = prevData.nodes.find((node) => node.id === nodeId);
-  
-      if (nodeToDelete) {
 
+      if (nodeToDelete) {
         const nodesToDelete = [];
         const collectNodesToDelete = (node) => {
           nodesToDelete.push(node.id);
@@ -256,38 +285,44 @@ const NetworkTopologyBuilder = () => {
           }
         };
         collectNodesToDelete(nodeToDelete);
-  
 
         setDeletedNodes((prevDeleted) => [
           ...prevDeleted,
-          ...nodesToDelete.map((id) => ({ id:nodeToDelete.ids, type: nodeToDelete.type })),
+          ...nodesToDelete.map((id) => ({
+            id: nodeToDelete.ids,
+            type: nodeToDelete.type,
+          })),
         ]);
-  
 
         const removeNodesRecursively = (nodes, nodeIdsToDelete) => {
           return nodes.filter((node) => {
             if (nodeIdsToDelete.includes(node.id)) return false;
             if (node.children) {
-              node.children = removeNodesRecursively(node.children, nodeIdsToDelete);
+              node.children = removeNodesRecursively(
+                node.children,
+                nodeIdsToDelete
+              );
             }
             return true;
           });
         };
-  
 
-        const updatedNodes = removeNodesRecursively(prevData.nodes, nodesToDelete);
-        const updatedLinks = prevData.links.filter(
-          (link) => !nodesToDelete.includes(link.source) && !nodesToDelete.includes(link.target)
+        const updatedNodes = removeNodesRecursively(
+          prevData.nodes,
+          nodesToDelete
         );
-  
+        const updatedLinks = prevData.links.filter(
+          (link) =>
+            !nodesToDelete.includes(link.source) &&
+            !nodesToDelete.includes(link.target)
+        );
+
         return { ...prevData, nodes: updatedNodes, links: updatedLinks };
       }
       return prevData;
     });
   };
-  
-  
-  
+
   const handleCancel = () => {
     setSubstationData(initialSubstationData);
     setDeletedNodes([]);
@@ -297,61 +332,81 @@ const NetworkTopologyBuilder = () => {
 
   return (
     <>
-  <Navbar />
-  <div className="flex">
-    <GridSideBar onGridSelect={setSelectedSubstationId} />
-    <div className="flex-1 p-4">
-      {substationData && (
-        <>
-          <div className="flex gap-2 mb-4">
-            <button className="cursor-pointer border px-2 py-1" onClick={handleSaveTopology}>
-              Save
-            </button>
-            <button className="cursor-pointer border px-2 py-1" onClick={handleCancel}>
-              Cancel
-            </button>
-          </div>
-          <div className="flex items-center gap-2 mb-4">
-            <button className="cursor-pointer border px-2 py-1" onClick={() => addTransformer(null)}>
-              Add Transformer
-            </button>
-            <span>Transformers: {transformerCounter}</span>
-          </div>
-          <NetworkGraph
-            data={substationData}
-            onTransformerEdit={handleTransformerEdit}
-            onHouseEdit={handleHouseEdit}
-            addHouse={addHouse}
-            deleteNode={deleteNode}
-            addTransformer={addTransformer}
-            deletedNodes={deletedNodes}
-          />
-        </>
-      )}
-      {transformerDetails && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-4 rounded">
-            <span className="cursor-pointer float-right" onClick={handleCloseTransformerForm}>
-              Close
-            </span>
-            <TransformerForm transformer={transformerDetails} onSave={handleTransformerSave} />
-          </div>
+      <Navbar />
+      <div className="flex">
+        <GridSideBar
+          onGridSelect={setSelectedSubstationId}
+          selectedGridId={selectedSubstationId}
+        />
+        <div className="flex-1 p-4">
+          {substationData && (
+            <>
+              <div className="flex gap-2 mb-4">
+                <button
+                  className="cursor-pointer border px-2 py-1"
+                  onClick={handleSaveTopology}
+                >
+                  Save
+                </button>
+                <button
+                  className="cursor-pointer border px-2 py-1"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </button>
+              </div>
+              <div className="flex items-center gap-2 mb-4">
+                <button
+                  className="cursor-pointer border px-2 py-1"
+                  onClick={() => addTransformer(null)}
+                >
+                  Add Transformer
+                </button>
+                <span>Transformers: {transformerCounter}</span>
+              </div>
+              <NetworkGraph
+                data={substationData}
+                onTransformerEdit={handleTransformerEdit}
+                onHouseEdit={handleHouseEdit}
+                addHouse={addHouse}
+                deleteNode={deleteNode}
+                addTransformer={addTransformer}
+                deletedNodes={deletedNodes}
+              />
+            </>
+          )}
+          {transformerDetails && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+              <div className="bg-white p-4 rounded">
+                <span
+                  className="cursor-pointer float-right"
+                  onClick={handleCloseTransformerForm}
+                >
+                  Close
+                </span>
+                <TransformerForm
+                  transformer={transformerDetails}
+                  onSave={handleTransformerSave}
+                />
+              </div>
+            </div>
+          )}
+          {houseDetails && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+              <div className="bg-white p-4 rounded">
+                <span
+                  className="cursor-pointer float-right"
+                  onClick={handleCloseHouseForm}
+                >
+                  Close
+                </span>
+                <HouseForm house={houseDetails} onSave={handleHouseSave} />
+              </div>
+            </div>
+          )}
         </div>
-      )}
-      {houseDetails && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-4 rounded">
-            <span className="cursor-pointer float-right" onClick={handleCloseHouseForm}>
-              Close
-            </span>
-            <HouseForm house={houseDetails} selectedGridId={selectedSubstationId} onSave={handleHouseSave} />
-          </div>
-        </div>
-      )}
-    </div>
-  </div>
-</>
-
+      </div>
+    </>
   );
 };
 
