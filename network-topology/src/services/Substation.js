@@ -54,75 +54,14 @@ export const getSubstationById = async (substationId) => {
   }
 };
 
-export const updateSubstationTopology = async (
-  substationId,
-  substationData
-) => {
-  const createNodeMap = (nodes) => {
-    const nodeMap = {};
-    nodes.forEach((node) => {
-      nodeMap[node.id] = {
-        id: node.ids.startsWith("temp") ? undefined : node.ids,
-        type: node.type,
-        action: node.ids.startsWith("temp") ? "add" : "update",
-        children: [],
-      };
-    });
-    return nodeMap;
-  };
-
-  const nodeMap = createNodeMap(substationData.nodes);
-
-  substationData.links.forEach((link) => {
-    const parentNode = nodeMap[link.source];
-    const childNode = nodeMap[link.target];
-
-    if (parentNode && childNode) {
-      parentNode.children.push(childNode);
-    }
-  });
-
-  const collectTopLevelNodes = (nodes, links) => {
-    const childIds = new Set(links.map((link) => link.target));
-    return nodes.filter((node) => !childIds.has(node.id));
-  };
-
-  const topLevelNodes = collectTopLevelNodes(
-    substationData.nodes,
-    substationData.links
-  );
-
-  const formatNode = (node) => {
-    const formattedNode = {
-      id: node.id,
-      type: node.type,
-      action: node.action,
-      children: node.children.map((child) => formatNode(child)),
-    };
-
-    if (formattedNode.children.length === 0) {
-      delete formattedNode.children;
-    }
-
-    return formattedNode;
-  };
-
-  const formattedNodes = topLevelNodes.map((node) =>
-    formatNode(nodeMap[node.id])
-  );
-
+export const updateSubstationTopology = async (substationId, updatedData) => {
   const payload = {
     substation_id: substationId,
-    nodes: [
-      ...formattedNodes,
-      ...substationData.deletedNodes.map((node) => ({
-        id: node.id,
-        type: node.type,
-        action: "delete",
-      })),
-    ],
+    nodes: updatedData.nodes,
   };
-  console.log(JSON.stringify(payload));
+
+  console.log("Payload:", JSON.stringify(payload, null, 2));
+
   try {
     const token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
@@ -147,6 +86,7 @@ export const updateSubstationTopology = async (
   }
 };
 
+
 export const updateSubstationTransformers = async (substationId, payload) => {
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
@@ -166,7 +106,10 @@ export const updateSubstationTransformers = async (substationId, payload) => {
     }
     return await response.json();
   } catch (error) {
-    console.error("Error updating(adding Transformer) substation topology:", error);
+    console.error(
+      "Error updating(adding Transformer) substation topology:",
+      error
+    );
     throw error;
   }
 };

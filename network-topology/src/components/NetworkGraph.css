@@ -1,0 +1,246 @@
+.network-graph {
+  font-family: Arial, sans-serif;
+  position: relative;
+  padding-top: 30px;
+}
+
+.connection-line {
+  position: absolute;
+  height: 2px;
+  background-color: #333;
+  z-index: 1;
+  transition: "none";
+}
+
+.connection-line::before,
+.connection-line::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 10px;
+  background-color: #333;
+}
+
+.connection-line::before {
+  left: -1px;
+}
+
+.connection-line::after {
+  left: -1px;
+}
+
+.transformers-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  position: relative;
+}
+
+.transformer-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: white;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.transformer-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  position: relative;
+  flex-direction: column;
+}
+
+.transformer-header::before,
+.add-transformer::before {
+  content: "";
+  position: absolute;
+  width: 2px;
+  background-color: #333;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.transformer-actions {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+  z-index: 10;
+}
+
+.transformer-header:hover .transformer-actions {
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  flex-direction: column;
+}
+
+.houses-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 10px;
+  min-width: 140px;
+  border-style: solid;
+  border-radius: 11px;
+  border-width: 1px;
+  min-height: 270px;
+}
+
+.house-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+
+
+.add-house,
+.add-transformer {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.add-transformer {
+  align-self: flex-start;
+  margin-top: 10px;
+  position: relative;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+}
+
+.transformer.black {
+  background-color: black;
+}
+
+.house.black {
+  background-color: black;
+}
+
+.house.gray {
+  background-color: gray;
+}
+
+.house.green {
+  background-color: #4caf50;
+}
+.house.orange {
+  background-color: #ff9800;
+}
+.house.blue {
+  background-color: #2196f3;
+}
+.house.grey {
+  background-color: #9e9e9e;
+}
+.transformer-node {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-around;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: white;
+  min-width: 200px;
+  gap: 1px;
+}
+
+.transformers-column {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+
+.sub-connection-line {
+  position: absolute;
+  height: 2px;
+  background-color: #333;
+  z-index: 1;
+  transition: "none";
+}
+
+.sub-connection-line::before,
+.sub-connection-line::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 10px;
+  background-color: #333;
+  top: 2px;
+}
+
+.sub-connection-line::before {
+  left: 0;
+}
+
+.sub-connection-line::after {
+  left: 0px;
+  height: 11px;
+}
+
+.house-actions {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.house-item:hover .house-actions {
+  display: flex;
+}
+
+.house-actions button {
+  margin-left: 5px;
+  padding: 2px 5px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.transformer-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.transformer-label {
+  margin-top: 5px;
+  font-size: 12px;
+}
+.add-transformer-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
