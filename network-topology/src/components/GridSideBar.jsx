@@ -10,13 +10,19 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
       try {
         const data = await getSubstations();
         setGrids(data.items);
+
+        if (!selectedGridId && data.items.length > 0) {
+          const firstGridId = data.items[0].id;
+          setSelectedGrid(firstGridId);
+          onGridSelect(firstGridId); 
+        }
       } catch (error) {
         console.error('Error fetching substations:', error);
       }
     };
 
     fetchGrids();
-  }, []);
+  }, [selectedGridId, onGridSelect]);
 
   useEffect(() => {
     if (selectedGridId) {
@@ -46,9 +52,9 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
     }
   };
 
-  const handleGridClick = (grid) => {
-    setSelectedGrid(grid);
-    onGridSelect(grid);
+  const handleGridClick = (gridId) => {
+    setSelectedGrid(gridId);
+    onGridSelect(gridId);
   };
 
   return (
