@@ -5,15 +5,24 @@ import {
   getSubstations,
   generateSubstation,
   updateSubstationTransformers,
+  deleteSubstation,
 } from "../services/Substation";
 import { useNavigate } from "react-router-dom";
+import Delete from "./DeleteConfirm";
 
 const GridPage = () => {
   const [substations, setSubstations] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedSubstation, setSelectedSubstation] = useState(null);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [substationToDelete, setSubstationToDelete] = useState(null);
+  const [contextMenu, setContextMenu] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+    substation: null,
+  });
   const navigate = useNavigate();
-
 
   useEffect(() => {
     fetchSubstations();
@@ -69,23 +78,75 @@ const GridPage = () => {
       };
       await updateSubstationTransformers(selectedSubstation.id, payload);
       navigate(`/transformers/${selectedSubstation.id}`, {
-        state: { substationName: selectedSubstation.name }
+        state: { substationName: selectedSubstation.name },
       });
       handleCloseForm();
     } catch (error) {
       console.error("Failed to add transformers:", error);
     }
   };
-  const handleTreeView=()=>{
-    navigate('/')
 
-  }
+  const handleTreeView = () => {
+    navigate("/");
+  };
+
+  const handleContextMenu = (event, substation) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const rect = event.target.getBoundingClientRect();
+    setContextMenu({
+      visible: true,
+      x: event.clientX,
+      y: event.clientY,
+      substation,
+      rect,
+    });
+  };
+
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (contextMenu.visible) {
+        setContextMenu({ visible: false, x: 0, y: 0, substation: null });
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [contextMenu]);
+  const handleDeleteClick = () => {
+    setSubstationToDelete(contextMenu.substation);
+    setShowDeletePopup(true);
+    setContextMenu({ visible: false, x: 0, y: 0, substation: null });
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteSubstation(substationToDelete.id);
+      setSubstations(
+        substations.filter((sub) => sub.id !== substationToDelete.id)
+      );
+      setShowDeletePopup(false);
+      setSubstationToDelete(null);
+    } catch (error) {
+      console.error("Failed to delete substation:", error);
+    }
+  };
+
+  const handleCloseDeletePopup = () => {
+    setShowDeletePopup(false);
+    setSubstationToDelete(null);
+  };
 
   return (
     <div className="bg-backPage min-h-screen">
       <Navbar />
       <div className="flex flex-col items-center px-5 mt-12 w-full text-4xl text-center text-navColor max-md:mt-10 max-md:max-w-full">
-        <button onClick={handleTreeView} className="justify-center items-start self-end   px-11 py-2.5  text-xl tracking-normal text-white bg-customGreen border border-green-500 border-solid shadow-sm rounded-[31px] w-[250px] h-[50px] max-md:pr-5 max-md:pl-8">
+        <button
+          onClick={handleTreeView}
+          className="justify-center items-start self-end px-11 py-2.5 text-xl tracking-normal text-white bg-customGreen border border-green-500 border-solid shadow-sm rounded-[31px] w-[250px] h-[50px] max-md:pr-5 max-md:pl-8"
+        >
           Tree View
         </button>
 
@@ -95,12 +156,16 @@ const GridPage = () => {
           <div className="z-10 shrink-0 mt-0 rounded-full bg-zinc-300 h-[50px] w-[50px]" />
         </div>
       </div>
-      <div className="flex flex-col  px-5 mt-11   max-md:max-w-full">
+      <div className="flex flex-col px-5 mt-11 max-md:max-w-full">
         <div className="max-md:max-w-full">
-          <div className="  grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4  gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {substations.map((substation, index) => (
-              <div key={substation.id} className="flex flex-col w-full mb-5">
-                <div className="text-xl font-bold mb-5 text-cyan-900 flex justify-center  ">
+              <div
+                key={substation.id}
+                className="flex flex-col w-full mb-5 relative"
+                onContextMenu={(e) => handleContextMenu(e, substation)}
+              >
+                <div className="text-xl font-bold mb-5 text-cyan-900 flex justify-center">
                   {substation.name}
                 </div>
                 <div className="flex flex-col grow px-5 pt-20 pb-10 mx-auto w-full text-center text-white bg-white rounded-3xl border border-solid shadow-sm border-navColor max-md:mt-10">
@@ -114,20 +179,49 @@ const GridPage = () => {
                     <div className="text-5xl max-md:text-2xl mt-[-11px]">+</div>
                   </button>
                 </div>
+                {contextMenu.visible &&
+                  contextMenu.substation.id === substation.id && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: `${contextMenu.y - contextMenu.rect.top}px`,
+                        left: `${contextMenu.x - contextMenu.rect.left}px`,
+                        backgroundColor: "white",
+                        border: "1px solid #ccc",
+                        borderRadius: "5px",
+                        zIndex: 1000,
+                        padding: "5px",
+                      }}
+                    >
+                      <button
+                        onClick={handleDeleteClick}
+                        className="px-4 py-2 text-red-600"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
               </div>
             ))}
             <button
               onClick={handleAddSubstation}
-              className="flex flex-col w-[150px]  ml-36"
+              className="flex flex-col w-[150px] ml-36"
             >
               <div className="flex flex-col items-center self-stretch h-[150px] px-10 pt-8 pb-8 my-auto w-full text-center text-navColor whitespace-nowrap bg-white rounded-3xl border border-solid shadow-sm border-navColor max-md:px-5 max-md:mt-10">
-                <div className="text-5xl max-md:text-4xl ">+</div>
+                <div className="text-5xl max-md:text-4xl">+</div>
                 <div className="mt-1 text-2xl">Add</div>
               </div>
             </button>
           </div>
         </div>
       </div>
+      {showDeletePopup && (
+        <Delete
+          onClose={handleCloseDeletePopup}
+          onConfirm={handleDelete}
+          transformerName={substationToDelete?.name}
+        />
+      )}
       <TransForm
         show={showForm}
         onClose={handleCloseForm}

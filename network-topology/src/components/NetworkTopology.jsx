@@ -152,6 +152,7 @@ const NetworkTopology = () => {
                 const newSubTransformer = {
                     id: crypto.randomUUID(),
                     type: "transformer",
+                    color:"grey",
                     is_complete: false,
                     name: `${node.name}.${node.children.filter(child => child.type === "transformer").length + 1}`,
                     alias: `${node.name}.${node.children.filter(child => child.type === "transformer").length + 1}`,
