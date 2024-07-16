@@ -45,6 +45,9 @@ const NetworkTopology = () => {
     }, [selectedSubstationId]);
 
     const handleAddTransformer = () => {
+        const transformerCount = data.nodes.filter(child => child.type === "transformer").length;
+        const match = data.substation_name.match(/(\d+)$/);
+        const grid = parseInt(match[1], 10);
         const newTransformer = {
             ids: `temp-${transformerCounter}`,
             id: `Transformer-${transformerCounter}`,
@@ -54,8 +57,8 @@ const NetworkTopology = () => {
             is_complete: false,
             new: true,
             action: "add",
-            name: `T-${data.nodes.length + 1}`,
-            alias: `T-${data.nodes.length + 1}`,
+            nomenclature: `T-${grid}.${transformerCount+1}`,
+            name: `T-${grid}.${transformerCount+1}`,
             children: [],
         };
 
@@ -90,13 +93,15 @@ const NetworkTopology = () => {
     const handleAddHouse = (transformerId) => {
         const addHouseRecursive = (node) => {
             if (node.id === transformerId) {
+                const houseCount = node.children.filter(child => child.type === "house").length;
+                let prev_nomenclature = node.nomenclature.split('-')[1];
                 const newHouse = {
                     id: crypto.randomUUID(),
                     type: "house",
                     is_complete: false,
                     new: true,
-                    name: `H-${node.children.filter(child => child.type === "house").length + 1}`,
-                    alias: `H-${node.children.filter(child => child.type === "house").length + 1}`,
+                    nomenclature: `H.${prev_nomenclature}.${houseCount + 1}`,
+                    name: `H.${prev_nomenclature}.${houseCount + 1}`,
                     children: null,
                 };
                 return {
@@ -149,13 +154,15 @@ const NetworkTopology = () => {
     const handleAddSubTransformer = (transformerId) => {
         const addSubTransformerRecursive = (node) => {
             if (node.id === transformerId) {
+                const transformerCount = node.children.filter(child => child.type === "transformer").length;
+                const prev_nomenclature = node.nomenclature.split('-')[1];
                 const newSubTransformer = {
                     id: crypto.randomUUID(),
                     type: "transformer",
                     color:"grey",
                     is_complete: false,
-                    name: `${node.name}.${node.children.filter(child => child.type === "transformer").length + 1}`,
-                    alias: `${node.name}.${node.children.filter(child => child.type === "transformer").length + 1}`,
+                    nomenclature: `T-${prev_nomenclature}.${transformerCount + 1}`,
+                    name: `T-${prev_nomenclature}.${transformerCount + 1}`,
                     children: [],
                 };
                 return {
@@ -202,8 +209,8 @@ const NetworkTopology = () => {
             if (!currentNode) {
                 return { id: initialNode.id, type: initialNode.type, action: 'delete' };
             }
-            const hasChanges = currentNode.name !== initialNode.name ||
-                currentNode.alias !== initialNode.alias ||
+            const hasChanges = currentNode.nomenclature !== initialNode.nomenclature ||
+                currentNode.name !== initialNode.name ||
                 currentNode.is_complete !== initialNode.is_complete;
 
             const updatedChildren = [];
