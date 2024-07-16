@@ -196,7 +196,7 @@ const NetworkGraph2 = ({
       return (
         <div key={node.id} className="house-item">
           <House color={getColor(node.is_complete, node.new)} />
-          <span>{node.name}</span>
+          <span>{node.nomenclature}</span>
           <div className="house-actions">
             <button onClick={() => onConfigure(node)}>
               Configure
@@ -217,7 +217,7 @@ const NetworkGraph2 = ({
       >
         <div className="transformer-header">
           <Transformer color={getColor(node.is_complete, node.new)} />
-          <span>{node.name}</span>
+          <span>{node.nomenclature}</span>
           <div className="transformer-actions">
             <button onClick={() => onConfigure(node)}>
               Configure
