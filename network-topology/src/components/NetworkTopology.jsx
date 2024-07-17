@@ -52,7 +52,7 @@ const NetworkTopology = () => {
             ids: `temp-${transformerCounter}`,
             id: `Transformer-${transformerCounter}`,
             label: `Transformer-${transformerCounter}`,
-            color: "grey",
+            // color: "grey",
             type: "transformer",
             is_complete: false,
             new: true,
@@ -159,7 +159,7 @@ const NetworkTopology = () => {
                 const newSubTransformer = {
                     id: crypto.randomUUID(),
                     type: "transformer",
-                    color:"grey",
+                    color:"Grey",
                     is_complete: false,
                     nomenclature: `T-${prev_nomenclature}.${transformerCount + 1}`,
                     name: `T-${prev_nomenclature}.${transformerCount + 1}`,

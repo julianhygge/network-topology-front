@@ -6,8 +6,8 @@
 
 .connection-line {
   position: absolute;
-  height: 2px;
-  background-color: #333;
+  height: 4px;
+  background-color: #8BB6C2;
   z-index: 1;
   transition: "none";
 }
@@ -18,7 +18,7 @@
   position: absolute;
   width: 2px;
   height: 10px;
-  background-color: #333;
+  background-color: #8BB6C2;
 }
 
 .connection-line::before {
@@ -61,8 +61,8 @@
 .add-transformer::before {
   content: "";
   position: absolute;
-  width: 2px;
-  background-color: #333;
+  width: 4px;
+  background-color: #8BB6C2;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -94,11 +94,15 @@
   gap: 10px;
   margin-top: 10px;
   padding: 10px;
-  min-width: 140px;
+  min-width: 160px;
   border-style: solid;
+  border-width: 1px;
   border-radius: 11px;
   border-width: 1px;
   min-height: 270px;
+  border-color: #8BB6C2;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+
 }
 
 .house-item {
@@ -113,15 +117,28 @@
 
 .add-house,
 .add-transformer {
-  background-color: #f0f0f0;
+  /* background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 50%;
-  width: 30px;
+  width: 80px;
   height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+  cursor: pointer; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer; 
+  background-color:white;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 18px;
+  height: 35px;
+  width: 85px;
+  font-size: 1.875rem;  
+border-color: #D59805;
+color: #FCB712; 
 }
 
 .add-transformer {
@@ -131,8 +148,8 @@
 }
 
 .icon {
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
   display: inline-block;
 }
 
@@ -150,6 +167,7 @@
 
 .house.green {
   background-color: #4caf50;
+  height: 50px;
 }
 .house.orange {
   background-color: #ff9800;
@@ -182,19 +200,19 @@
 
 .sub-connection-line {
   position: absolute;
-  height: 2px;
-  background-color: #333;
+  background-color: #8BB6C2;
   z-index: 1;
   transition: "none";
+  width: 4px;
 }
 
 .sub-connection-line::before,
 .sub-connection-line::after {
   content: "";
   position: absolute;
-  width: 2px;
+  width: 4px;
   height: 10px;
-  background-color: #333;
+  background-color: #8BB6C2;
   top: 2px;
 }
 
