@@ -19,7 +19,6 @@
   width: 2px;
   height: 10px;
   background-color: #8BB6C2;
-  background-color: #8BB6C2;
 }
 
 .connection-line::before {
@@ -64,8 +63,6 @@
   position: absolute;
   width: 4px;
   background-color: #8BB6C2;
-  width: 4px;
-  background-color: #8BB6C2;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -97,8 +94,6 @@
   gap: 10px;
   margin-top: 10px;
   padding: 10px;
-  min-width: 160px;
-  min-width: 160px;
   min-width: 160px;
   border-style: solid;
   border-width: 1px;
@@ -134,11 +129,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
+  cursor: pointer; 
+  background-color:white;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 18px;
+  height: 35px;
+  width: 85px;
+  font-size: 1.875rem;  
+border-color: #D59805;
+color: #FCB712; 
 }
 
 .add-transformer {
@@ -148,6 +148,8 @@
 }
 
 .icon {
+  width: 40px;
+  height: 40px;
   width: 40px;
   height: 40px;
   display: inline-block;
@@ -167,6 +169,7 @@
 
 .house.green {
   background-color: #4caf50;
+  height: 50px;
   height: 50px;
 }
 .house.orange {
