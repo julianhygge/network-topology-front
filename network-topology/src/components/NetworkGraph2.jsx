@@ -29,7 +29,7 @@ const SubConnectionLine = ({ transformer, params = {} }) => {
     topOffset = 0,
     startOffset = 0,
     endOffset = 0,
-    lineHeight = 2,
+    lineHeight = 4,
     minWidth = 10,
   } = params;
 
@@ -271,7 +271,7 @@ const NetworkGraph2 = ({
       )}
       <div className="transformers-row">
         {data.nodes.map((node) => renderNode(node))}
-        <button className="add-transformer" onClick={onAddTransformer}>
+        <button className="add-transformer " onClick={onAddTransformer}>
           + 
         </button>
         <label>Add T</label>
