@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { getSubstations, generateSubstation } from '../services/Substation';
+import { getSubstations, generateSubstation, deleteSubstation } from '../services/Substation';
+import Delete from './DeleteConfirm'; 
 
 const GridSideBar = ({ onGridSelect, selectedGridId }) => {
   const [grids, setGrids] = useState([]);
   const [selectedGrid, setSelectedGrid] = useState(selectedGridId || null);
+  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, grid: null });
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
 
   useEffect(() => {
     const fetchGrids = async () => {
@@ -29,6 +32,24 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
       setSelectedGrid(selectedGridId);
     }
   }, [selectedGridId]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (contextMenu.visible && !event.target.closest('.context-menu')) {
+        setContextMenu({ visible: false, x: 0, y: 0, grid: null });
+      }
+    };
+
+    if (contextMenu.visible) {
+      document.addEventListener('click', handleClickOutside);
+    } else {
+      document.removeEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [contextMenu]);
 
   const handleAddGrid = async () => {
     try {
@@ -57,6 +78,27 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
     onGridSelect(gridId);
   };
 
+  const handleContextMenu = (event, grid) => {
+    event.preventDefault();
+    setContextMenu({
+      visible: true,
+      x: event.clientX,
+      y: event.clientY,
+      grid: grid,
+    });
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      await deleteSubstation(contextMenu.grid.id);
+      setGrids(grids.filter(g => g.id !== contextMenu.grid.id));
+      setContextMenu({ visible: false, x: 0, y: 0, grid: null });
+      setShowDeletePopup(false);
+    } catch (error) {
+      console.error('Failed to delete substation:', error);
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <div className="flex flex-col bg-sideBar w-[120px] h-full overflow-auto">
@@ -69,6 +111,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
                   selectedGrid === grid.id ? 'bg-white' : ''
                 }`}
                 onClick={() => handleGridClick(grid.id)}
+                onContextMenu={(event) => handleContextMenu(event, grid)}
               >
                 <img
                   loading="lazy"
@@ -91,6 +134,26 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
           </div>
         </div>
       </div>
+      {contextMenu.visible && (
+        <div
+          className="fixed z-10 context-menu"
+          style={{ top: contextMenu.y, left: contextMenu.x }}
+        >
+          <button
+            className="p-2 bg-white  text-[#F21818] rounded"
+            onClick={() => setShowDeletePopup(true)}
+          >
+            Delete
+          </button>
+        </div>
+      )}
+      {showDeletePopup && contextMenu.grid && (
+        <Delete
+          onConfirm={handleConfirmDelete}
+          onClose={() => setShowDeletePopup(false)}
+          transformerName={contextMenu.grid.name}
+        />
+      )}
     </div>
   );
 };
