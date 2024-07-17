@@ -3,9 +3,15 @@ import { updateTransformerData } from "../services/Tranformer";
 
 const TransformerForm = ({ transformer, onSave, onClose }) => {
   const [formData, setFormData] = useState({
+    name_of_transformer: transformer.name_of_transformer || "",
     max_capacity_kw: transformer.max_capacity_kw || "",
-    export_efficiency: transformer.export_efficiency || "",
+    years_of_service: transformer.years_of_service || "",
+    forward_efficiency: transformer.forward_efficiency || "",
     allow_export: transformer.allow_export || false,
+    digital_twin_model: transformer.digital_twin_model || false,
+    backward_efficiency: transformer.backward_efficiency || "",
+    primary_ampacity: transformer.primary_ampacity || "",
+    secondary_ampacity: transformer.secondary_ampacity || ""
   });
 
   const handleChange = (e) => {
@@ -43,94 +49,90 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-customBackground bg-opacity-55 z-50">
-      <div className="bg-white rounded-2xl p-32 w-full max-w-5xl border border-solid shadow-sm max-md:px-5 mt-20 mb-20">
-      <button className="cursor-pointer float-right" onClick={handleClose}>close</button>
-      <h2 className="text-lg font-semibold text-center">Enter/Edit the Transformer Configurations</h2>
+      <div className="relative bg-white rounded-2xl pt-[90px] px-28 pb-8 w-full max-w-5xl border border-solid shadow-sm max-md:px-5 mt-36 mb-16 ml-28">
+      <div className="absolute inset-0 bg-no-repeat bg-center bg-contain opacity-10 right-4 top-4" 
+             style={{ 
+               backgroundImage: `url(${process.env.PUBLIC_URL}/images/HyggeLogo.png)`,
+               backgroundSize: "210px 210px"
+             }}>
+      </div>
+      <button className="cursor-pointer absolute top-5 right-5 p-2 text-4xl font-thin" onClick={handleClose}>&times;</button>
+      <h2 className="text-lg font-semibold text-center mb-11">Enter/Edit the Transformer Configurations</h2>
         <form onSubmit={handleSubmit} className="mt-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col mb-4 pr-4 border-r border-customBorderColor border-1">
-              <div className="mb-4 flex flex-col items-center">
-                <div className="w-full flex justify-start ml-1">
-                  <label className="block text-customGrey-700 text-[14px]">Name of Transformer</label>
-                </div>
+            <div className="flex flex-col mb-4 pr-4 border-r border-customBorderColor">
+              <div className="mb-4 flex flex-col items-start ml-7">
+                <label className="block text-customGrey-700 text-sm">Name of Transformer</label>
                 <input
-                  className="border border-black rounded-xl w-[300px] py-2 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
-                  name="name"
-                  value={formData.name || ""}
+                  name="name_of_transformer"
+                  value={formData.name_of_transformer}
                   onChange={handleChange}
                 />
               </div>
-              <div className="mb-4 flex flex-col items-center">
-                <div className="w-full flex justify-start ml-1">
-                  <label className="block text-customGrey-700 text-[14px]">Max Capacity [kW]</label>
-                </div>
+              <div className="mb-4 flex flex-col items-start ml-7">
+                <label className="block text-customGrey-700 text-[14px]">Max Capacity [kW]</label>
                 <input
-                  className="border border-black rounded-xl w-[300px] py-2 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
                   name="max_capacity_kw"
                   value={formData.max_capacity_kw}
                   onChange={handleChange}
                 />
               </div>
-              <div className="mb-4 flex flex-col items-center">
-                <div className="w-full flex justify-start ml-1">
-                  <label className="block text-customGrey-700 text-[14px]">Years of Service</label>
-                </div>
+              <div className="mb-4 flex flex-col items-start ml-7">
+                <label className="block text-customGrey-700 text-sm">Years of Service</label>
                 <input
-                  className="border border-black rounded-xl w-[300px] py-2 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
                   name="years_of_service"
-                  value={formData.years_of_service || ""}
+                  value={formData.years_of_service}
                   onChange={handleChange}
                 />
               </div>
 
-              <div className="mb-4 flex flex-col items-center">
-                <div className="w-full flex justify-start ml-1">
-                  <label className="block text-customGrey-700 text-[14px]">Forward Efficiency</label>
-                </div>
+              <div className="mb-4 flex flex-col items-start ml-7">
+                <label className="block text-customGrey-700 text-sm">Forward Efficiency</label>
                 <input
-                  className="border border-black rounded-xl w-[300px] py-2 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
-                  name="years_of_service"
-                  value={formData.forward_efficiency || ""}
+                  name="forward_efficiency"
+                  value={formData.forward_efficiency}
                   onChange={handleChange}
                 />
               </div>
             </div>
             <div className="flex flex-col mb-4 pl-4">
-              <div className="grid grid-cols-2 mb-7.625 mt-8">
+              <div className="grid grid-cols-2 mb-7 mt-9 ml-3">
                 <div className="flex items-center">
                   <input
                     className="mr-2"
                     type="checkbox"
                     name="allow_export"
-                    checked={formData.allow_backward}
+                    checked={formData.allow_export}
                     onChange={handleChange}
-                    style={{ width: "16px", height: "16px" }}
+                    style={{ width: "20px", height: "20px" }}
                   />
-                  <label className="text-customGrey-700 text-[14px] whitespace-nowrap">Allow Backward</label>
+                  <label className="text-customGrey-700 text-[14px] whitespace-nowrap">Allow Export</label>
                 </div>
 
                 <div className="flex items-center">
                   <input
                     className="mr-2"
                     type="checkbox"
-                    name="allow_export"
+                    name="digital_twin_model"
                     checked={formData.digital_twin_model}
                     onChange={handleChange}
-                    style={{ width: "16px", height: "16px" }}
+                    style={{ width: "20px", height: "20px" }}
                   />
                   <label className="text-customGrey-700 text-[14px]">Digital Twin Model</label>
                 </div>
               </div>
-              <div className="mb-4 flex flex-col items-center">
-                <div className="w-full flex justify-start ml-1">
-                  <label className="block text-customGrey-700 text-[14px]">Backward Efficiency [%]</label>
-                </div>
+              <div className="mb-4 flex flex-col items-start ml-3">
+                <label className="block text-customGrey-700 text-[14px]">Backward Efficiency [%]</label>
                 <input
-                  className="border border-black rounded-xl w-[300px] py-2 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
                   name="backward_efficiency"
                   value={formData.backward_efficiency}
@@ -138,12 +140,10 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                 />
               </div>
 
-              <div className="mb-4 flex flex-col items-center">
-                <div className="w-full flex justify-start ml-1">
-                  <label className="block text-customGrey-700 text-[14px]">Primary Ampacity [Ampere]</label>
-                </div>
+              <div className="mb-4 flex flex-col items-start ml-3">
+                <label className="block text-customGrey-700 text-[14px]">Primary Ampacity [Ampere]</label>
                 <input
-                  className="border border-black rounded-xl w-[300px] py-2 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
                   name="primary_ampacity"
                   value={formData.primary_ampacity}
@@ -151,12 +151,10 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                 />
               </div>
 
-              <div className="mb-4 flex flex-col items-center">
-                <div className="w-full flex justify-start ml-1">
-                  <label className="block text-customGrey-700 text-[14px]">Secondary Ampacity [Ampere]</label>
-                </div>
+              <div className="mb-4 flex flex-col items-start ml-3">
+                <label className="block text-customGrey-700 text-[14px]">Secondary Ampacity [Ampere]</label>
                 <input
-                  className="border border-black rounded-xl w-[300px] py-2 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
                   name="secondary_ampacity"
                   value={formData.secondary_ampacity}
@@ -166,12 +164,14 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
             </div>
           </div>
         </form>
-          <button 
+        <div className="flex justify-center items-center">
+        <button 
           type="submit" 
-          className="bg-yellow-500 text-white font-semibold py-2 px-4 rounded w-full hover:bg-yellow-600"
+          className="bg-yellow-500 text-center mt-1 opacity-80 text-saveButtonColor font-semibold py-4 px-4 rounded-xl hover:bg-yellow-500 hover:opacity-100 w-[200px]"
           >
             Save
           </button>
+        </div>
       </div>
     </div>
   );
