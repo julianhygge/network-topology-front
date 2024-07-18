@@ -91,7 +91,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-customBackground bg-opacity-55 z-50">
       <div className="relative bg-white rounded-2xl pt-[100px] px-28 pb-8 w-full max-w-5xl border border-solid shadow-sm max-md:px-5 mt-36 mb-16 ml-28 z-10">
-      <div className="absolute inset-0 top-4">
+      <div className="absolute inset-0 top-4 -z-10">
         <Breadcrumb/>
       </div>
       <div className="absolute inset-0 bg-no-repeat bg-center bg-contain opacity-10 right-4 top-4" 
