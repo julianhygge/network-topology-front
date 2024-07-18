@@ -16,7 +16,10 @@ module.exports = {
         sideBar:"#1A5A6C",
         gridColor:"#794C03",
         gridColor1:"#E4A83A",
-        saveButtonColor:'#265B65'
+        saveButtonColor:'#265B65',
+        item1: '#98BEC9',
+        item2: '#A5CFDB',
+        item3: '#BCDCE5'
       },
       spacing: {
         '7.25': '1.8125rem',

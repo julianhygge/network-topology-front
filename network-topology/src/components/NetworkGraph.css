@@ -8,7 +8,7 @@
   position: absolute;
   height: 4px;
   background-color: #8BB6C2;
-  /* z-index: 1; */
+  z-index: 1;
   transition: "none";
 }
 
@@ -137,8 +137,8 @@
   height: 35px;
   width: 85px;
   font-size: 1.875rem;  
-border-color: #D59805;
-color: #FCB712; 
+  border-color: #D59805;
+  color: #FCB712; 
 }
 
 .add-transformer {
@@ -201,7 +201,7 @@ color: #FCB712;
 .sub-connection-line {
   position: absolute;
   background-color: #8BB6C2;
-  /* z-index: 1; */
+  z-index: 1;
   transition: "none";
   width: 4px;
 }
