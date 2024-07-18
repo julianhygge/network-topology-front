@@ -322,22 +322,13 @@ const NetworkTopology = () => {
                             />
                         </>
                     )}
-                    {transformerDetails && (
-                        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                            <div className="bg-white p-4 rounded">
-                                <span
-                                    className="cursor-pointer float-right"
-                                    onClick={handleCloseTransformerForm}
-                                >
-                                    Close
-                                </span>
-                                <TransformerForm
-                                    transformer={transformerDetails}
-                                    onSave={handleTransformerSave}
-                                />
-                            </div>
-                        </div>
-                    )}
+                    {transformerDetails && 
+                        <TransformerForm
+                            transformer={transformerDetails}
+                            onSave={handleTransformerSave}
+                            onClose={handleCloseTransformerForm}
+                        />
+                    }
                     {houseDetails && (
                         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                             <div className="bg-white p-4 rounded">
