@@ -159,7 +159,7 @@ const NetworkTopology = () => {
                 const newSubTransformer = {
                     id: crypto.randomUUID(),
                     type: "transformer",
-                    color:"Grey",
+                    new:true,
                     is_complete: false,
                     nomenclature: `T-${prev_nomenclature}.${transformerCount + 1}`,
                     name: `T-${prev_nomenclature}.${transformerCount + 1}`,
@@ -296,18 +296,18 @@ const NetworkTopology = () => {
                 <div className="flex-1 p-4">
                     {data && (
                         <>
-                            <div className="flex gap-2 mb-4">
+                            <div className="flex gap-2 mb-4 justify-end">
                                 <button
-                                    className="cursor-pointer border px-2 py-1"
+                                    className="cursor-pointer  border px-9 py-1 items-end bg-[#49AC82] rounded-2xl text-white w-[120] border-[#49AC82]"
                                     onClick={handleSaveTopology}
                                 >
-                                    Save
+                                    SAVE
                                 </button>
                                 <button
-                                    className="cursor-pointer border px-2 py-1"
-                                    onClick={handleCancel}
+                                     className="cursor-pointer  border px-7 py-1 items-end bg-[#49AC82] rounded-2xl text-white w-[120] border-[#49AC82]"
+                                     onClick={handleCancel}
                                 >
-                                    Cancel
+                                    CANCEL
                                 </button>
                             </div>
                             <NetworkGraph2
