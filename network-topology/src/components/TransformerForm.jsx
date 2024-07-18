@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { updateTransformerData } from "../services/Tranformer";
 import Breadcrumb from "./Breadcrumb";
 
-const TransformerForm = ({ transformer, onSave, onClose }) => {
+const TransformerForm = ({ transformer, onSave, onClose}) => {
   const [formData, setFormData] = useState({
     name: transformer.name || "",
     max_capacity_kw: transformer.max_capacity_kw ? transformer.max_capacity_kw.toString() : "",
@@ -14,7 +14,6 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
     primary_ampacity: transformer.primary_ampacity ? transformer.primary_ampacity.toString() : "",
     secondary_ampacity: transformer.secondary_ampacity ? transformer.secondary_ampacity.toString() : ""
   });
-
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -92,7 +91,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-customBackground bg-opacity-55 z-50">
       <div className="relative bg-white rounded-2xl pt-[100px] px-28 pb-8 w-full max-w-5xl border border-solid shadow-sm max-md:px-5 mt-36 mb-16 ml-28 z-10">
       <div className="absolute inset-0 top-4 -z-10">
-        <Breadcrumb/>
+        <Breadcrumb nodeId={transformer.id}/>
       </div>
       <div className="absolute inset-0 bg-no-repeat bg-center bg-contain opacity-10 right-4 top-4" 
              style={{ 

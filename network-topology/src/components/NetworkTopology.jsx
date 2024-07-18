@@ -337,7 +337,10 @@ const NetworkTopology = () => {
                                 >
                                     Close
                                 </span>
-                                <HouseForm house={houseDetails} onSave={handleHouseSave} />
+                                <HouseForm 
+                                house={houseDetails} 
+                                onSave={handleHouseSave} 
+                                />
                             </div>
                         </div>
                     )}
