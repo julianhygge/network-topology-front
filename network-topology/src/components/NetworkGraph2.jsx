@@ -274,7 +274,7 @@ const NetworkGraph2 = ({
         <button className="add-transformer " onClick={onAddTransformer}>
           + 
         </button>
-        <label>Add T</label>
+        <label className="text-navColor text-sm mt-[50px] ml-[-80px]">Add-T</label>
          
       </div>
     </div>
