@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { updateHouseData } from "../services/House";
+import Breadcrumb from "./Breadcrumb";
 
 const HouseForm = ({ house, onSave }) => {
   const [formData, setFormData] = useState({
@@ -39,119 +40,122 @@ const HouseForm = ({ house, onSave }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Load Profile:
-        <input className="border"
-          type="text"
-          name="load_profile"
-          value={formData.load_profile}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <label>
-        Has Solar:
-        <input  className="border"
-          type="checkbox"
-          name="has_solar"
-          checked={formData.has_solar}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <label>
-        Solar kW:
-        <input  className="border"
-          type="number"
-          name="solar_kw"
-          value={formData.solar_kw}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <label>
-        House Type:
-        <input  className="border"
-          type="text"
-          name="house_type"
-          value={formData.house_type}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <label>
-        Connection kW:
-        <input  className="border"
-          type="number"
-          name="connection_kw"
-          value={formData.connection_kw}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <label>
-        Battery Type:
-        <input  className="border"
-          type="text"
-          name="battery_type"
-          value={formData.battery_type}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <label>
-        Has Battery:
-        <input  className="border"
-          type="checkbox"
-          name="has_battery"
-          checked={formData.has_battery}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <label>
-        Voluntary Storage:
-        <input  className="border"
-          type="checkbox"
-          name="voluntary_storage"
-          checked={formData.voluntary_storage}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <label>
-        Battery Peak Charging Rate:
-        <input  className="border"
-          type="number"
-          name="battery_peak_charging_rate"
-          value={formData.battery_peak_charging_rate}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <label>
-        Battery Peak Discharging Rate:
-        <input  className="border"
-          type="number"
-          name="battery_peak_discharging_rate"
-          value={formData.battery_peak_discharging_rate}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <label>
-        Battery Total kWh:
-        <input  className="border"
-          type="number"
-          name="battery_total_kwh"
-          value={formData.battery_total_kwh}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <button  className="border"type="submit">Save</button>
-    </form>
+    <div>
+      <Breadcrumb nodeId={house.id}/>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Load Profile:
+          <input className="border"
+            type="text"
+            name="load_profile"
+            value={formData.load_profile}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Has Solar:
+          <input  className="border"
+            type="checkbox"
+            name="has_solar"
+            checked={formData.has_solar}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Solar kW:
+          <input  className="border"
+            type="number"
+            name="solar_kw"
+            value={formData.solar_kw}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          House Type:
+          <input  className="border"
+            type="text"
+            name="house_type"
+            value={formData.house_type}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Connection kW:
+          <input  className="border"
+            type="number"
+            name="connection_kw"
+            value={formData.connection_kw}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Battery Type:
+          <input  className="border"
+            type="text"
+            name="battery_type"
+            value={formData.battery_type}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Has Battery:
+          <input  className="border"
+            type="checkbox"
+            name="has_battery"
+            checked={formData.has_battery}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Voluntary Storage:
+          <input  className="border"
+            type="checkbox"
+            name="voluntary_storage"
+            checked={formData.voluntary_storage}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Battery Peak Charging Rate:
+          <input  className="border"
+            type="number"
+            name="battery_peak_charging_rate"
+            value={formData.battery_peak_charging_rate}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Battery Peak Discharging Rate:
+          <input  className="border"
+            type="number"
+            name="battery_peak_discharging_rate"
+            value={formData.battery_peak_discharging_rate}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Battery Total kWh:
+          <input  className="border"
+            type="number"
+            name="battery_total_kwh"
+            value={formData.battery_total_kwh}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <button  className="border"type="submit">Save</button>
+      </form>
+    </div>
   );
 };
 
