@@ -154,7 +154,7 @@ const NetworkTopologyBuilder = () => {
   const handleTransformerSave = (updatedTransformer) => {
     setSubstationData((prevData) => {
       const updatedNodes = prevData.nodes.map((node) => {
-        if (node.ids === updatedTransformer.id) {
+        if (node.id === updatedTransformer.id) {
           return {
             ...node,
             color: updatedTransformer.is_complete ? "green" : "black",

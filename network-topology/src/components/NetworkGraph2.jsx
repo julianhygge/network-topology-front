@@ -120,6 +120,7 @@ const NetworkGraph2 = ({
   const nodeVerticalLineHeight = 20;
 
   useEffect(() => {
+    console.log("data: ", data);
     const updateLineStyle = () => {
       const transformersRow = document.querySelector(".transformers-row");
       if (transformersRow) {
@@ -151,7 +152,7 @@ const NetworkGraph2 = ({
     updateLineStyle();
     window.addEventListener("resize", updateLineStyle);
     return () => window.removeEventListener("resize", updateLineStyle);
-  }, [data.nodes]);
+  }, [data]);
 
 
   useEffect(() => {
@@ -168,6 +169,7 @@ const NetworkGraph2 = ({
   }, []);
 
   const getColor = (isComplete, isNew) => {
+    console.log("iscomplete:", isComplete);
     if (isNew) return "Grey";
     return isComplete ? "Green" : "Black";
   };

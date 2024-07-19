@@ -20,6 +20,7 @@ const NetworkGraph = ({
   const svgRef = useRef(null);
 
   useEffect(() => {
+    console.log("data: "+ data);
     renderGraph();
   }, [data]);
 
@@ -118,6 +119,9 @@ const NetworkGraph = ({
     const height = 659;
 
     svg.attr("width", width).attr("height", height);
+
+    // Clear previous elements
+    svg.selectAll("*").remove();
 
     const nodes = data.nodes;
     const links = data.links;
