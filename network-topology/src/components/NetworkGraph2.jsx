@@ -21,6 +21,7 @@ const House = ({ color }) => (
     className="icon house"
   />
 );
+
 const SubConnectionLine = ({ transformer, params = {} }) => {
   const [subLineStyle, setSubLineStyle] = useState({});
   const [showLine, setShowLine] = useState(false);
@@ -114,6 +115,8 @@ const NetworkGraph2 = ({
 }) => {
   const [lineStyle, setLineStyle] = useState({});
   const [showLine, setShowLine] = useState(false);
+  const [contextMenu, setContextMenu] = useState({visible: false, x: 0, y: 0, node: null});
+  
   const lineTopOffset = 40;
   const verticalLineHeight = 10;
   const nodeVerticalLineTop = -20;
@@ -153,7 +156,6 @@ const NetworkGraph2 = ({
     return () => window.removeEventListener("resize", updateLineStyle);
   }, [data.nodes]);
 
-
   useEffect(() => {
     const style = document.createElement("style");
     style.textContent = `
@@ -191,20 +193,57 @@ const NetworkGraph2 = ({
     }
   };
 
+  const handleContextMenu = (event, node) => {
+    event.preventDefault();
+    console.log(node);
+    setContextMenu({
+      visible: true,
+      x: event.clientX,
+      y: event.clientY,
+      node,
+    });
+  };
+
+  const handleClick = () => {
+    setContextMenu({
+      visible: false,
+      x: 0,
+      y: 0,
+      node: null,
+    });
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
+
+  const renderContextMenu = () => {
+    const { x, y, node } = contextMenu;
+
+    if (!node) return null;
+
+    return (
+      <div className="context-menu" style={{ top: y-170, left: x-155 }}>
+        <button onClick={() => onConfigure(node)}>Configure</button>
+        {node.type === 'transformer' && (
+          <button onClick={() => onAddSubTransformer(node.id)}>Add T</button>
+        )}
+        <button className='text-[#F21818]' onClick={() => node.type === 'transformer' ? onDeleteTransformer(node.id) : onDeleteHouse(node.id)}>
+          Delete
+        </button>
+      </div>
+    );
+  };
+
   const renderNode = (node, level = 0) => {
     if (node.type === "house") {
       return (
-        <div key={node.id} className="house-item">
+        <div key={node.id} className="house-item"onContextMenu={(e) => handleContextMenu(e, node)} >
           <House color={getColor(node.is_complete, node.new)} />
           <span>{node.nomenclature}</span>
-          <div className="house-actions">
-            <button onClick={() => onConfigure(node)}>
-              Configure
-            </button>
-            <button onClick={() => onDeleteHouse(node.id)}>
-              Delete
-            </button>
-          </div>
         </div>
       );
     }
@@ -214,32 +253,17 @@ const NetworkGraph2 = ({
         key={node.id}
         className="transformer-column"
         data-transformer-id={node.id}
+      
       >
-        <div className="transformer-header">
+        <div className="transformer-header"   onContextMenu={(e) => handleContextMenu(e, node)}>
           <Transformer color={getColor(node.is_complete, node.new)} />
           <span>{node.nomenclature}</span>
-          <div className="transformer-actions">
-            <button onClick={() => onConfigure(node)}>
-              Configure
-            </button>
-            <button onClick={() => onDeleteTransformer(node.id)}>
-              Delete
-            </button>
-            <button onClick={() => onAddSubTransformer(node.id)}>
-              Add T
-            </button>
-          </div>
         </div>
         <div className="transformer-node">
           <SubConnectionLine transformer={node} />
           <div className="houses-column">
             {node.children && node.children.filter(child => child.type === "house").map(renderNode)}
-            <button
-              className="add-house"
-              onClick={() => onAddHouse(node.id)}
-            >
-              +
-            </button>
+            <button className="add-house" onClick={() => onAddHouse(node.id)}>+</button>
           </div>
           {node.children && node.children.filter(child => child.type === "transformer").map(child => renderNode(child, level + 1))}
         </div>
@@ -247,8 +271,6 @@ const NetworkGraph2 = ({
     );
   };
 
-
-  
   return (
     <div className="network-graph">
       {showLine && (
@@ -271,12 +293,9 @@ const NetworkGraph2 = ({
       )}
       <div className="transformers-row">
         {data.nodes.map((node) => renderNode(node))}
-        <button className="add-transformer " onClick={onAddTransformer}>
-          + 
-        </button>
-        <label className="text-navColor text-sm mt-[50px] ml-[-80px]">Add-T</label>
-         
+        <button className="add-transformer" onClick={onAddTransformer}>+</button>
       </div>
+      {contextMenu.visible && renderContextMenu()}
     </div>
   );
 };
