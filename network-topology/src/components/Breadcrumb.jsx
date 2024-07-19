@@ -1,71 +1,51 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { fetchBreadcrumbNavigationPath } from '../services/Breadcrumb';
 import './Breadcrumb.css';
 
-const Breadcrumb = ({nodeId}) => {
+const Breadcrumb = ({ nodeId }) => {
     const [breadcrumb, setBreadcrumb] = useState(null);
-    const [error, setError] = useState(null);
+    const backgroundClasses = ['#98BEC9', '#A5CFDB', '#BCDCE5', '#CDEEF7'];
 
     useEffect(() => {
-        if(nodeId){
+        if (nodeId) {
             fetchBreadcrumbNavigationPathByNodeId(nodeId);
         }
-    }, [nodeId])
+    }, [nodeId]);
 
-    const fetchBreadcrumbNavigationPathByNodeId = async(nodeId) =>{
+    const fetchBreadcrumbNavigationPathByNodeId = async (nodeId) => {
         try {
             const data = await fetchBreadcrumbNavigationPath(nodeId);
             console.log(data);
             setBreadcrumb(data);
         } catch (error) {
             console.error('Failed to fetch breadcrumbs:', error);
-            setError('Failed to fetch breadcrumbs. Please try again later.');
         }
-    }
+    };
 
-    // const path = [
-    //     { id: '1', name: 'Shanti Niketan-1', bgColor: 'bg-item1', color: '#98BEC9'},
-    //     { id: '2', name: 'Shanti Niketan-1', bgColor: 'bg-item2', color: '#A5CFDB' },
-    //     { id: '3', name: 'Shanti Niketan-1', bgColor: 'bg-item3', color: '#BCDCE5' }
-    // ];
-
-  return (
-    <div className="breadcrumb-container flex items-center mb-4">
-        {breadcrumb && (<div>
-            {breadcrumb.locality}
-        </div>)}
-        <div>
-            &gt;
+    return (
+        <div className="breadcrumb-container flex items-center mb-4">
+            {breadcrumb && (
+                <React.Fragment>
+                    <div className={`breadcrumb-item`} style={{ backgroundColor: backgroundClasses[0] }}>
+                        {breadcrumb.locality}
+                    </div>
+                    <div className="breadcrumb-triangle" style={{ borderLeftColor: backgroundClasses[0] }}></div>
+                    <div className={`breadcrumb-item`} style={{ backgroundColor: backgroundClasses[1], marginLeft: "-22px" }}>
+                        {breadcrumb.substation_name}
+                    </div>
+                    <div className="breadcrumb-triangle" style={{ borderLeftColor: backgroundClasses[1] }}></div>
+                    {breadcrumb.path.map((node, index) => (
+                        <React.Fragment key={node.id}>
+                            <div className={`breadcrumb-item`} style={{ backgroundColor: backgroundClasses[index + 2], marginLeft: "-22px"}}>
+                                {node.name !== node.nomenclature && node.name !== "Unknown" ? `${node.name} ${node.nomenclature}` : node.nomenclature}
+                            </div>
+                            <div className="breadcrumb-triangle" style={{ borderLeftColor: backgroundClasses[index + 2] }}></div>
+                        </React.Fragment>
+                    ))}
+                </React.Fragment>
+            )}
         </div>
-        {breadcrumb && (<div>
-            {breadcrumb.substation_name}
-        </div>)}
-        <div>
-            &gt;
-        </div>
-        {breadcrumb && (<div>
-            {breadcrumb.path.name}
-        </div>)}
-      {/* {breadcrumb.map((item, index) => (
-        <div key={item.id} className="breadcrumb-item flex items-center">
-            <div className={`${item.bgColor} text-sm px-6 py-3 flex items-center`}>
-            {item.name}
-            </div>
-            <div className="breadcrumb-triangle" style={{ borderLeftColor: path[index].color }}></div>
-        </div>
-      ))} */}
-    </div>
-    // <div className="breadcrumb-container flex items-center mb-4">
-    //   {path.map((item, index) => (
-    //     <div key={item.id} className="breadcrumb-item flex items-center">
-    //         <div className={`${item.bgColor} text-sm px-6 py-3 flex items-center`}>
-    //         {item.name}
-    //         </div>
-    //         <div className="breadcrumb-triangle" style={{ borderLeftColor: path[index].color }}></div>
-    //     </div>
-    //   ))}
-    // </div>
-  );
+    );
 };
 
 export default Breadcrumb;
