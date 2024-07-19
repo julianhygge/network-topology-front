@@ -19,7 +19,8 @@ module.exports = {
         saveButtonColor:'#265B65',
         item1: '#98BEC9',
         item2: '#A5CFDB',
-        item3: '#BCDCE5'
+        item3: '#BCDCE5',
+        item4: '#CDEEF7'
       },
       spacing: {
         '7.25': '1.8125rem',
