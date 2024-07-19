@@ -196,7 +196,24 @@ const NetworkTopology = () => {
     };
 
     const handleTransformerSave = (updatedTransformer) => {
-        setTransformerDetails(null);
+        setData((prevData) => {
+            const updatedNodes = prevData.nodes.map((node) => {
+              if (node.id === updatedTransformer.id) {
+                const updatedNode = {
+                    ...node,
+                    is_complete: updatedTransformer.is_complete,
+                    color: updatedTransformer.is_complete ? "green" : "black",
+                }
+                console.log("updated Node: ", updatedNode);
+                return updatedNode;
+              }
+              return node;
+            });
+            const newNodeData = {...prevData, nodes:updatedNodes};
+            console.log("new node data: ", newNodeData);
+            return newNodeData;
+          });
+          setTransformerDetails(null);
     };
 
     const handleSaveTopology = async () => {

@@ -75,7 +75,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
         transformer.id,
         parsedFormData
       );
-      console.log(updatedTransformer);
+      console.log("updated transformer:" +  updatedTransformer.is_complete);
 
       onSave(updatedTransformer);
     } catch (error) {
