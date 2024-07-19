@@ -265,7 +265,7 @@ color: #FCB712;
 
 .context-menu {
   position: absolute;
-  background-color: white;
+  background: white;
   border: 1px solid #908B8B;
   z-index: 1000;
   border-radius: 10px;
@@ -283,6 +283,6 @@ color: #FCB712;
 }
 
 .context-menu button:hover {
-  background-color: #EFEFEF;
+  background: #EFEFEF;
 }
 
