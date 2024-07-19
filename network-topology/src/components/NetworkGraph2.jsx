@@ -171,7 +171,6 @@ const NetworkGraph2 = ({
   }, []);
 
   const getColor = (isComplete, isNew) => {
-    console.log("iscomplete:", isComplete);
     if (isNew) return "Grey";
     return isComplete ? "Green" : "Black";
   };
