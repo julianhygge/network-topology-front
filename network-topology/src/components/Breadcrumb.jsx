@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { fetchBreadcrumbNavigationPath } from '../services/Breadcrumb';
+import React, {useState, useEffect} from 'react';
+import { fetchBreadcrumbNavigationPath } from '../services/Breadcrumb';
 import './Breadcrumb.css';
 
 const Breadcrumb = ({nodeId}) => {
@@ -55,6 +57,16 @@ const Breadcrumb = ({nodeId}) => {
         </div>
       ))} */}
     </div>
+    // <div className="breadcrumb-container flex items-center mb-4">
+    //   {path.map((item, index) => (
+    //     <div key={item.id} className="breadcrumb-item flex items-center">
+    //         <div className={`${item.bgColor} text-sm px-6 py-3 flex items-center`}>
+    //         {item.name}
+    //         </div>
+    //         <div className="breadcrumb-triangle" style={{ borderLeftColor: path[index].color }}></div>
+    //     </div>
+    //   ))}
+    // </div>
   );
 };
 
