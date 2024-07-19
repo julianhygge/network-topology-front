@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import { fetchBreadcrumbNavigationPath } from '../services/Breadcrumb';
-import React, {useState, useEffect} from 'react';
-import { fetchBreadcrumbNavigationPath } from '../services/Breadcrumb';
 import './Breadcrumb.css';
 
 const Breadcrumb = ({nodeId}) => {

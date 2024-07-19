@@ -155,7 +155,7 @@ const NetworkGraph2 = ({
     updateLineStyle();
     window.addEventListener("resize", updateLineStyle);
     return () => window.removeEventListener("resize", updateLineStyle);
-  }, [data]);
+  }, [data.nodes]);
 
   useEffect(() => {
     const style = document.createElement("style");
