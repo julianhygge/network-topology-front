@@ -3,8 +3,8 @@ import './NetworkGraph.css';
 import { fetchTransformerDetails } from "../services/Tranformer";
 import { fetchHouseDetails } from "../services/House";
 
-const Transformer = ({ color, name }) => (
-  <div className="transformer-wrapper">
+const Transformer = ({ color, name, onTransformerClick }) => (
+  <div className="transformer-wrapper" onClick={onTransformerClick}>
     <img 
       src={`/images/${color}Transformer.png`} 
       alt="Transformer" 
@@ -14,12 +14,14 @@ const Transformer = ({ color, name }) => (
   </div>
 );
 
-const House = ({ color }) => (
+const House = ({ color, onHouseClick }) => (
+  <div onClick={onHouseClick}>
   <img 
     src={`/images/${color}House.png`} 
     alt="House" 
     className="icon house"
   />
+  </div>
 );
 
 const SubConnectionLine = ({ transformer, params = {} }) => {
@@ -104,6 +106,7 @@ const SubConnectionLine = ({ transformer, params = {} }) => {
 };
 
 const NetworkGraph2 = ({
+  onSelectedNode,
   data,
   onAddTransformer,
   onAddHouse,
@@ -239,11 +242,15 @@ const NetworkGraph2 = ({
     );
   };
 
+  // const handleNodeClick = (node) => {
+  //   console.log(`Node ID: ${node.id}`);
+  // };
+
   const renderNode = (node, level = 0) => {
     if (node.type === "house") {
       return (
         <div key={node.id} className="house-item"onContextMenu={(e) => handleContextMenu(e, node)} >
-          <House color={getColor(node.is_complete, node.new)} />
+          <House color={getColor(node.is_complete, node.new)} onHouseClick={() => onSelectedNode(node)} />
           <span>{node.nomenclature}</span>
         </div>
       );
@@ -256,8 +263,8 @@ const NetworkGraph2 = ({
         data-transformer-id={node.id}
       
       >
-        <div className="transformer-header"   onContextMenu={(e) => handleContextMenu(e, node)}>
-          <Transformer color={getColor(node.is_complete, node.new)} />
+        <div className="transformer-header" onContextMenu={(e) => handleContextMenu(e, node)}>
+          <Transformer color={getColor(node.is_complete, node.new)} onTransformerClick={() => onSelectedNode(node)}/>
           <span>{node.nomenclature}</span>
         </div>
         <div className="transformer-node">

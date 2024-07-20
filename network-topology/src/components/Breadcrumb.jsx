@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchBreadcrumbNavigationPath } from '../services/Breadcrumb';
 import './Breadcrumb.css';
 
-const Breadcrumb = ({ nodeId }) => {
+const Breadcrumb = ({ nodeId, onEditNode }) => {
     const [breadcrumb, setBreadcrumb] = useState(null);
     const backgroundClasses = ['#98BEC9', '#A5CFDB', '#BCDCE5', '#CDEEF7'];
 
@@ -36,7 +36,10 @@ const Breadcrumb = ({ nodeId }) => {
                     <div className="breadcrumb-triangle" style={{ borderLeftColor: backgroundClasses[1] }}></div>
                     {breadcrumb.path.map((node, index) => (
                         <React.Fragment key={node.id}>
-                            <div className={`breadcrumb-item`} style={{ backgroundColor: backgroundClasses[index + 2], marginLeft: "-22px"}}>
+                            <div className={`breadcrumb-item`} 
+                                style={{ backgroundColor: backgroundClasses[index + 2], marginLeft: "-22px"}}
+                                onClick={() => onEditNode(node)}
+                                >
                                 {node.name !== node.nomenclature && node.name !== "Unknown" ? `${node.name} ${node.nomenclature}` : node.nomenclature}
                             </div>
                             <div className="breadcrumb-triangle" style={{ borderLeftColor: backgroundClasses[index + 2] }}></div>
