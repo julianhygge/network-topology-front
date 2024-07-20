@@ -100,15 +100,16 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
   };
 
   return (
-    <div className="flex flex-col  h-screen ">
-      <div className="flex flex-col bg-sideBar w-[120px]  h-full  overflow-auto ">
-        <div className="flex-1   ">
-          <div className="grid space-y-10">
+    <div className="flex flex-col h-[90vh] 2xl:h-[92vh]">
+    <div className="flex flex-col bg-sideBar w-[120px] h-full relative">
+      <div className="flex-1 overflow-hidden">
+        <div className="h-[calc(100%_-_80px)] overflow-auto no-scrollbar ">
+          <div className="grid gap-y-10">
             {grids.map((grid) => (
               <button
                 key={grid.id}
                 className={`grid justify-center cursor-pointer mt-2 ${
-                  selectedGrid === grid.id ? 'bg-white py-3' : ''
+                  selectedGrid === grid.id ? 'bg-white py-1' : ''
                 }`}
                 onClick={() => handleGridClick(grid.id)}
                 onContextMenu={(event) => handleContextMenu(event, grid)}
@@ -117,44 +118,46 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
                   loading="lazy"
                   src="images/GridImage.png"
                   alt="Grid Logo"
-                  className="h-[55px] w-[55px]"
+                  className="h-[55px] w-[55px] "
                 />
-                <span className=" text-gridColor1 ">{grid.name}</span>
+                <span className="text-gridColor1">{grid.name}</span>
               </button>
             ))}
-            <button
-              className="grid justify-center  cursor-pointer hover:opacity-50"
-              onClick={handleAddGrid}
-            >
-              <p className="bg-white w-[80px] px-4 rounded-[50px] text-3xl text-gridColor1 ">
-                +
-              </p>
-              <p className="text-white text-sm mt-2">Add Grid</p>
-            </button>
           </div>
         </div>
       </div>
-      {contextMenu.visible && (
-        <div
-          className="fixed z-10 context-menu"
-          style={{ top: contextMenu.y, left: contextMenu.x}}
-        >
-          <button
-            className="p-2 bg-white  text-[#F21818] rounded"
-            onClick={() => setShowDeletePopup(true)}
-          >
-            Delete
-          </button>
-        </div>
-      )}
-      {showDeletePopup && contextMenu.grid && (
-        <Delete
-          onConfirm={handleConfirmDelete}
-          onClose={() => setShowDeletePopup(false)}
-          transformerName={contextMenu.grid.name}
-        />
-      )}
+      <button
+        className="absolute bottom-1 left-4 grid justify-center cursor-pointer hover:opacity-50 "
+        onClick={handleAddGrid}
+      >
+        <p className="bg-white w-[80px] px-4 rounded-[50px] text-3xl text-gridColor1">
+          +
+        </p>
+        <p className="text-white text-sm mt-2">Add Grid</p>
+      </button>
     </div>
+    {contextMenu.visible && (
+      <div
+        className="fixed z-10 context-menu"
+        style={{ top: contextMenu.y, left: contextMenu.x }}
+      >
+        <button
+          className="p-2 bg-white text-[#F21818] rounded"
+          onClick={() => setShowDeletePopup(true)}
+        >
+          Delete
+        </button>
+      </div>
+    )}
+    {showDeletePopup && contextMenu.grid && (
+      <Delete
+        onConfirm={handleConfirmDelete}
+        onClose={() => setShowDeletePopup(false)}
+        transformerName={contextMenu.grid.name}
+      />
+    )}
+  </div>
+  
   );
 };
 
