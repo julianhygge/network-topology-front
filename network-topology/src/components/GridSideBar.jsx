@@ -100,15 +100,15 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="flex flex-col bg-sideBar w-[120px] h-full overflow-auto">
-        <div className="flex-1 h-full">
-          <div className="grid space-y-20">
+    <div className="flex flex-col  h-screen ">
+      <div className="flex flex-col bg-sideBar w-[120px]  h-full  overflow-auto ">
+        <div className="flex-1   ">
+          <div className="grid space-y-10">
             {grids.map((grid) => (
               <button
                 key={grid.id}
-                className={`grid justify-center cursor-pointer mt-24 ${
-                  selectedGrid === grid.id ? 'bg-white' : ''
+                className={`grid justify-center cursor-pointer mt-2 ${
+                  selectedGrid === grid.id ? 'bg-white py-3' : ''
                 }`}
                 onClick={() => handleGridClick(grid.id)}
                 onContextMenu={(event) => handleContextMenu(event, grid)}
@@ -117,13 +117,13 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
                   loading="lazy"
                   src="images/GridImage.png"
                   alt="Grid Logo"
-                  className="h-[70px] w-[70px]"
+                  className="h-[55px] w-[55px]"
                 />
-                <span className="text-xl text-gridColor1 ">{grid.name}</span>
+                <span className=" text-gridColor1 ">{grid.name}</span>
               </button>
             ))}
             <button
-              className="grid justify-center mt-24 cursor-pointer hover:opacity-50"
+              className="grid justify-center  cursor-pointer hover:opacity-50"
               onClick={handleAddGrid}
             >
               <p className="bg-white w-[80px] px-4 rounded-[50px] text-3xl text-gridColor1 ">
@@ -137,7 +137,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
       {contextMenu.visible && (
         <div
           className="fixed z-10 context-menu"
-          style={{ top: contextMenu.y, left: contextMenu.x }}
+          style={{ top: contextMenu.y, left: contextMenu.x}}
         >
           <button
             className="p-2 bg-white  text-[#F21818] rounded"
