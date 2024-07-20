@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import { getSubstationById, updateSubstationTopology } from '../services/Substation';
 import TransformerForm from "./TransformerForm";
 import HouseForm from './HouseForm';
+import Breadcrumb from './Breadcrumb';
 
 
 const NetworkTopology = () => {
@@ -14,6 +15,7 @@ const NetworkTopology = () => {
     const [selectedSubstationId, setSelectedSubstationId] = useState(
         location.state?.substationId || null
     );
+    const [selectedNode, setSelectedNode] = useState(null);
     const [transformerDetails, setTransformerDetails] = useState(null);
     const [houseDetails, setHouseDetails] = useState(null);
     const [transformerCounter, setTransformerCounter] = useState(0);
@@ -300,6 +302,22 @@ const NetworkTopology = () => {
         setHouseDetails(null);
       };
     
+      const handleEditNode = (node) => {
+        console.log("node: ", node);
+        if (node.nomenclature.startsWith("T")) {
+            console.log("transformer node");
+            handleTransformerEdit(node);
+        } else if (node.nomenclature.startsWith("H")) {
+            // TODO: make and implement the house form like transformer form
+            console.log("house node");
+            // handleHouseEdit(node);
+        }
+    };
+
+    const handleSelectedNode = (node) => {
+        setSelectedNode(node);
+    };
+    
 
     return (
         <>
@@ -326,7 +344,9 @@ const NetworkTopology = () => {
                                     Cancel
                                 </button>
                             </div>
+                            <Breadcrumb nodeId={selectedNode?.id} onEditNode={handleEditNode} />
                             <NetworkGraph2
+                                onSelectedNode={handleSelectedNode}
                                 data={data}
                                 onAddTransformer={handleAddTransformer}
                                 onAddHouse={handleAddHouse}
