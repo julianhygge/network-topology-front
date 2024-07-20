@@ -4,7 +4,7 @@ import { fetchTransformerDetails } from "../services/Tranformer";
 import { fetchHouseDetails } from "../services/House";
 
 const Transformer = ({ color, name, onTransformerClick }) => (
-  <div className="transformer-wrapper" onClick={onTransformerClick}>
+  <div className="transformer-wrapper cursor-pointer" onClick={onTransformerClick}>
     <img 
       src={`/images/${color}Transformer.png`} 
       alt="Transformer" 
@@ -15,7 +15,7 @@ const Transformer = ({ color, name, onTransformerClick }) => (
 );
 
 const House = ({ color, onHouseClick }) => (
-  <div onClick={onHouseClick}>
+  <div className='cursor-pointer' onClick={onHouseClick}>
   <img 
     src={`/images/${color}House.png`} 
     alt="House" 
@@ -249,7 +249,7 @@ const NetworkGraph2 = ({
   const renderNode = (node, level = 0) => {
     if (node.type === "house") {
       return (
-        <div key={node.id} className="house-item"onContextMenu={(e) => handleContextMenu(e, node)} >
+        <div key={node.id} className="house-item cursor-pointer" onContextMenu={(e) => handleContextMenu(e, node)} >
           <House color={getColor(node.is_complete, node.new)} onHouseClick={() => onSelectedNode(node)} />
           <span>{node.nomenclature}</span>
         </div>
@@ -263,7 +263,7 @@ const NetworkGraph2 = ({
         data-transformer-id={node.id}
       
       >
-        <div className="transformer-header" onContextMenu={(e) => handleContextMenu(e, node)}>
+        <div className="transformer-header cursor-pointer" onContextMenu={(e) => handleContextMenu(e, node)}>
           <Transformer color={getColor(node.is_complete, node.new)} onTransformerClick={() => onSelectedNode(node)}/>
           <span>{node.nomenclature}</span>
         </div>

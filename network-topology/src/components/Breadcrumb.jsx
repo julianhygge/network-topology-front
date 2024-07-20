@@ -36,7 +36,7 @@ const Breadcrumb = ({ nodeId, onEditNode }) => {
                     <div className="breadcrumb-triangle" style={{ borderLeftColor: backgroundClasses[1] }}></div>
                     {breadcrumb.path.map((node, index) => (
                         <React.Fragment key={node.id}>
-                            <div className={`breadcrumb-item`} 
+                            <div className={`breadcrumb-item cursor-pointer`} 
                                 style={{ backgroundColor: backgroundClasses[index + 2], marginLeft: "-22px"}}
                                 onClick={() => onEditNode(node)}
                                 >
