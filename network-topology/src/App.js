@@ -6,6 +6,7 @@ import GridPage from "./components/GridPage";
 import TransformerPage from "./components/TransformerPage";
 import NetworkTopology from "./components/NetworkTopology";
 import UserConfiguration from "./components/UserConfiguration";
+import Page1 from "./LoadProfile/Page1";
 
 
 function App() {
