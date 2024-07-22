@@ -41,7 +41,7 @@ const NetworkTopology = () => {
                     console.error("Error fetching substation data:", error);
                 }
             };
-
+            setSelectedNode(null);
             fetchSubstationData();
         }
     }, [selectedSubstationId]);
@@ -344,7 +344,7 @@ const NetworkTopology = () => {
                                     Cancel
                                 </button>
                             </div>
-                            <Breadcrumb nodeId={selectedNode?.id} onEditNode={handleEditNode} />
+                            {selectedNode && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
                             <NetworkGraph2
                                 onSelectedNode={handleSelectedNode}
                                 data={data}

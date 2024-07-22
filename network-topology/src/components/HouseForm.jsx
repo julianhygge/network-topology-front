@@ -41,7 +41,8 @@ const HouseForm = ({ house, onSave }) => {
 
   return (
     <div>
-      <Breadcrumb nodeId={house.id}/>
+      {/* TODO: Breadcrumb once the house form is made */}
+      {/* <Breadcrumb nodeId={house.id}/> */}
       <form onSubmit={handleSubmit}>
         <label>
           Load Profile:
