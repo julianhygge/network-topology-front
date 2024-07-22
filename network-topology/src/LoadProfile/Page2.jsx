@@ -4,7 +4,7 @@ const Page2 = () => {
   return (
     <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
       <div>
-        <span className="flex text-center text-navColor items-center text-[24px]">
+        <span className="flex text-center text-navColor items-center text-[24px] font-medium">
           Please do the configuration from below.
         </span>
       </div>

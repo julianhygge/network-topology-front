@@ -109,7 +109,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
               <button
                 key={grid.id}
                 className={`grid justify-center cursor-pointer mt-2 ${
-                  selectedGrid === grid.id ? 'bg-white py-1' : ''
+                  selectedGrid === grid.id ? 'bg-white py-1 text-[#794C03]' : ''
                 }`}
                 onClick={() => handleGridClick(grid.id)}
                 onContextMenu={(event) => handleContextMenu(event, grid)}
@@ -120,7 +120,9 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
                   alt="Grid Logo"
                   className="h-[55px] w-[55px] "
                 />
-                <span className="text-gridColor1">{grid.name}</span>
+                <span  className={`text-gridColor1  ${
+                 selectedGrid === grid.id ? ' text-[#794C03]  font-bold' : ''
+                  }`}>{grid.name}</span>
               </button>
             ))}
           </div>

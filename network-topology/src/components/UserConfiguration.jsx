@@ -31,7 +31,7 @@ const UserConfiguration = () => {
                   <React.Fragment key={index}>
                     <button
                       className={`grid justify-center items-center cursor-pointer text-xl py-7 px-4 ${
-                        selectedButton === item ? "bg-[#FDFFFF] rounded-lg text-3xl text-[#794C03]" : "text-gridColor1"
+                        selectedButton === item ? "bg-[#FDFFFF] rounded-lg text-3xl text-[#794C03] font-bold" : "text-gridColor1"
                       }`}
                       onClick={() => handleButtonClick(item)}
                       style={{ minHeight: '110px' }}
