@@ -5,6 +5,8 @@ import Navbar from './Navbar';
 import GridSideBar from './GridSideBar';
 import { useLocation } from "react-router-dom";
 import { getSubstationById, updateSubstationTopology } from '../services/Substation';
+import { fetchTransformerDetails } from '../services/Tranformer';
+import { fetchHouseDetails } from '../services/House';
 import TransformerForm from "./TransformerForm";
 import HouseForm from './HouseForm';
 import Breadcrumb from './Breadcrumb';
@@ -302,15 +304,17 @@ const NetworkTopology = () => {
         setHouseDetails(null);
       };
     
-      const handleEditNode = (node) => {
+      const handleEditNode = async(node) => {
         console.log("node: ", node);
         if (node.nomenclature.startsWith("T")) {
             console.log("transformer node");
-            handleTransformerEdit(node);
+            const transformerDetails = await fetchTransformerDetails(node.id);
+            handleTransformerEdit(transformerDetails);
         } else if (node.nomenclature.startsWith("H")) {
             // TODO: make and implement the house form like transformer form
             console.log("house node");
-            // handleHouseEdit(node);
+            // const houseDetails = await fetchHouseDetails(node.id);
+            // handleHouseEdit(houseDetails);
         }
     };
 
