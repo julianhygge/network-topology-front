@@ -334,7 +334,10 @@ const NetworkTopology = () => {
                 <div className="flex-1 p-4">
                     {data && (
                         <>
-                            <div className="flex gap-2 mb-4 justify-end">
+                            <div className="flex justify-between">
+                            {selectedSubstationId && !selectedNode && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
+                                {selectedNode && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
+                                <div className='flex mb-6 gap-2 justify-end'>
                                 <button
                                     className="cursor-pointer  border px-9 py-1 items-end bg-[#49AC82] rounded-2xl text-white w-[120] border-[#49AC82]"
                                     onClick={handleSaveTopology}
@@ -347,8 +350,8 @@ const NetworkTopology = () => {
                                 >
                                     CANCEL
                                 </button>
+                                </div>
                             </div>
-                            {selectedNode && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
                             <NetworkGraph2
                                 onSelectedNode={handleSelectedNode}
                                 data={data}
