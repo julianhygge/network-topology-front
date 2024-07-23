@@ -152,6 +152,8 @@ const NetworkGraph2 = ({
         } else {
           setShowLine(false);
         }
+      }else{
+        setShowLine(false);
       }
     };
 
@@ -299,10 +301,29 @@ const NetworkGraph2 = ({
           }}
         ></div>
       )}
-      <div className="transformers-row">
-        {data.nodes.map((node) => renderNode(node))}
-        <button className="add-transformer" onClick={onAddTransformer}>+</button>
-      </div>
+      <React.Fragment>
+        {data && data.nodes && data.nodes.length > 0 ? 
+          (
+            <div className="transformers-row">
+              {data.nodes.map((node) => renderNode(node))}
+              <button className="add-transformer" onClick={onAddTransformer}>+</button>
+            </div>
+          ) 
+          : 
+          (
+            <div className='flex flex-col items-center gap-36 h-screen text-center'>
+              <div className='add-transformer-top-part flex flex-col gap-1'>
+                <button className="add-transformer-empty-grid" onClick={onAddTransformer}>+</button>
+                <div>Add - T</div>
+              </div>
+              <div className='add-transformer-bottom-part flex flex-col gap-1'>
+                <div>Transformer is not added yet under this {data.substation_name}</div>
+                <div>Please add it from the above <b>Add-T</b> button</div>
+              </div>
+            </div>
+          )
+        }
+      </React.Fragment>
       {contextMenu.visible && renderContextMenu()}
     </div>
   );

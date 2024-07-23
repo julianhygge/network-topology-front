@@ -147,6 +147,25 @@ color: #FCB712;
   position: relative;
 }
 
+.add-transformer-empty-grid{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer; 
+  background-color:white;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 18px;
+  height: 35px;
+  width: 85px;
+  font-size: 1.875rem;  
+  border-color: #D59805;
+  color: #FCB712; 
+  align-self: flex-start;
+  margin-top: 10px;
+  position: relative;
+}
+
 .icon {
   width: 40px;
   height: 40px;
