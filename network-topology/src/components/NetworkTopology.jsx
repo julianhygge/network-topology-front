@@ -394,6 +394,7 @@ const NetworkTopology = () => {
                         <Delete
                         onClose={handleCloseDeletePopup}
                         onConfirm={handleDelete}
+                        entityId={nodeToDelete}
                         entityName={nodeToDeleteName}
                         entityType={nodeType}
                         />
