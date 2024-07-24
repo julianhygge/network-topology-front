@@ -219,7 +219,7 @@ const GridPage = () => {
         <Delete
           onClose={handleCloseDeletePopup}
           onConfirm={handleDelete}
-          transformerName={substationToDelete?.name}
+          entityName={substationToDelete?.name}
         />
       )}
       <TransForm

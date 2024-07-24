@@ -155,7 +155,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
       <Delete
         onConfirm={handleConfirmDelete}
         onClose={() => setShowDeletePopup(false)}
-        transformerName={contextMenu.grid.name}
+        entityName={contextMenu.grid.name}
       />
     )}
   </div>

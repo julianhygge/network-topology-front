@@ -1,6 +1,7 @@
 import React from "react";
+import Breadcrumb from "./Breadcrumb";
 
-const Delete = ({ onConfirm, onClose, transformerName }) => {
+const Delete = ({ onConfirm, onClose, entityName, entityType }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className=" flex flex-col justify-center px-1 text-xl font-medium text-orange-600 max-w-[728px] bg-white rounded-3xl border border-sky-400 border-solid shadow-sm">
@@ -9,8 +10,8 @@ const Delete = ({ onConfirm, onClose, transformerName }) => {
             <button className="flex" onClick={onClose}>X</button>
           </div>
           <div className="mt-20 text-center w-[540px] max-md:mt-10">
-            Are you sure to delete this Grid <br />
-            <span className="text-2xl">{transformerName} ?</span>
+            Are you sure to delete this {entityType.charAt(0).toUpperCase() + entityType.slice(1)} <br />
+            <span className="text-2xl">{entityName} ?</span>
           </div>
           <div className="mt-16 text-center max-md:mt-10"> Please Confirm</div>
           <button
