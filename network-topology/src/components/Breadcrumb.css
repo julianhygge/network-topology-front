@@ -1,6 +1,27 @@
+.breadcrumb-wrapper {
+    width: 750px;
+    max-width: 750px;
+    overflow-x: scroll;
+}
+
+.breadcrumb-wrapper::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.breadcrumb-wrapper::-webkit-scrollbar:horizontal {
+    height: 7px;
+}
+
+.breadcrumb-wrapper::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border:#E7FAFF;
+    background-color: #8BB6C2
+}
+
 .breadcrumb-container {
     display: flex;
     align-items: center;
+    white-space: nowrap;
 }
 
 .breadcrumb-item {
@@ -17,7 +38,7 @@
     text-align: center;
     padding: 8px 8px;
     z-index: 1;
-    margin: 0;
+    margin-left: 0;
     border-radius: 1px;
 }
 
