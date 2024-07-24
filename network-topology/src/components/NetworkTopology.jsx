@@ -10,6 +10,7 @@ import { fetchHouseDetails } from '../services/House';
 import TransformerForm from "./TransformerForm";
 import HouseForm from './HouseForm';
 import Breadcrumb from './Breadcrumb';
+import Delete from './DeleteConfirm';
 
 
 const NetworkTopology = () => {
@@ -18,10 +19,14 @@ const NetworkTopology = () => {
         location.state?.substationId || null
     );
     const [selectedNode, setSelectedNode] = useState(null);
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [transformerDetails, setTransformerDetails] = useState(null);
     const [houseDetails, setHouseDetails] = useState(null);
     const [transformerCounter, setTransformerCounter] = useState(0);
     const [deletedNodes, setDeletedNodes] = useState([]);
+    const [nodeToDelete, setNodeToDelete] = useState(null);
+    const [nodeToDeleteName, setNodeToDeleteName] = useState(null);
+    const [nodeType, setNodeType] = useState(null);
     const [initialSubstationData, setInitialSubstationData] = useState(null);
     const [data, setData] = React.useState({
         "nodes": []
@@ -128,30 +133,8 @@ const NetworkTopology = () => {
     };
 
     const handleDeleteTransformer = (transformerId) => {
-        const deleteTransformerRecursive = (node) => {
-            if (node.children && node.children.some((sub) => sub.id === transformerId)) {
-                return {
-                    ...node,
-                    children: node.children.filter(
-                        (sub) => sub.id !== transformerId
-                    ),
-                };
-            }
-            if (node.children && node.children.length > 0) {
-                return {
-                    ...node,
-                    children: node.children.map(deleteTransformerRecursive),
-                };
-            }
-            return node;
-        };
-
-        setData((prevState) => ({
-            ...prevState,
-            nodes: prevState.nodes
-                .filter((t) => t.id !== transformerId)
-                .map(deleteTransformerRecursive),
-        }));
+        setNodeToDelete(transformerId);
+        setShowDeletePopup(true);
     };
 
     const handleAddSubTransformer = (transformerId) => {
@@ -318,8 +301,49 @@ const NetworkTopology = () => {
         }
     };
 
+    const handleDelete = async() => {
+        const payload = {
+            "nodes": [
+              {
+                "id": nodeToDelete,
+                "action": "delete",
+                "type": nodeType
+              }
+            ]
+        }
+        try {
+            await updateSubstationTopology(selectedSubstationId, payload);
+            const data = await getSubstationById(selectedSubstationId);
+            setData(data);
+        } catch (error) {
+            console.error('Error updating topology:', error);
+        }
+        setShowDeletePopup(false);
+        setNodeToDelete(null);
+        setNodeToDeleteName(null);
+        setNodeType(null);
+    };
+
     const handleSelectedNode = (node) => {
         setSelectedNode(node);
+    };
+
+    const handleRightClickSelectedNode = (node) => {
+        console.log("right click node: ", node);
+        setSelectedNode(node);
+        if(node.name && node.name != node.nomenclature){
+            setNodeToDeleteName(node.name + " " + node.nomenclature);
+        }else{
+            setNodeToDeleteName(node.nomenclature);
+        }
+        setNodeType(node.type);
+    }
+
+    const handleCloseDeletePopup = () => {
+        setShowDeletePopup(false);
+        setNodeToDelete(null);
+        setNodeToDeleteName(null);
+        setNodeType(null);
     };
     
 
@@ -354,6 +378,7 @@ const NetworkTopology = () => {
                             </div>
                             <NetworkGraph2
                                 onSelectedNode={handleSelectedNode}
+                                onRightClickSelectedNode={handleRightClickSelectedNode}
                                 data={data}
                                 onAddTransformer={handleAddTransformer}
                                 onAddHouse={handleAddHouse}
@@ -364,6 +389,14 @@ const NetworkTopology = () => {
                                 onHouseEdit={handleHouseEdit}
                             />
                         </>
+                    )}
+                    {showDeletePopup && (
+                        <Delete
+                        onClose={handleCloseDeletePopup}
+                        onConfirm={handleDelete}
+                        entityName={nodeToDeleteName}
+                        entityType={nodeType}
+                        />
                     )}
                     {transformerDetails && 
                         <TransformerForm

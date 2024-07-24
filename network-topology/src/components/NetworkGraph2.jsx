@@ -107,6 +107,7 @@ const SubConnectionLine = ({ transformer, params = {} }) => {
 
 const NetworkGraph2 = ({
   onSelectedNode,
+  onRightClickSelectedNode,
   data,
   onAddTransformer,
   onAddHouse,
@@ -200,6 +201,7 @@ const NetworkGraph2 = ({
   };
 
   const handleContextMenu = (event, node) => {
+    onRightClickSelectedNode(node)
     event.preventDefault();
     console.log(node);
     setContextMenu({
