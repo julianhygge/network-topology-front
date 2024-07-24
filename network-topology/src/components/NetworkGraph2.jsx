@@ -234,10 +234,10 @@ const NetworkGraph2 = ({
     if (!node) return null;
 
     return (
-      <div className="context-menu" style={{ top: y-170, left: x-155 }}>
-        <button onClick={() => onConfigure(node)}>Configure</button>
+      <div className="context-menu" style={{ top: y-170, left: x-100 }}>
+        <button className='text-navColor ' onClick={() => onConfigure(node)}>Configure</button>
         {node.type === 'transformer' && (
-          <button onClick={() => onAddSubTransformer(node.id)}>Add T</button>
+          <button className='text-navColor' onClick={() => onAddSubTransformer(node.id)}>Add Sub-T</button>
         )}
         <button className='text-[#F21818]' onClick={() => node.type === 'transformer' ? onDeleteTransformer(node.id) : onDeleteHouse(node.id)}>
           Delete

@@ -8,7 +8,7 @@ export default function Navbar() {
     }
   return (
     <div>
-        <header className="flex items-center gap-10 px-9 py-4 text-xl  font-medium   bg-navColor  max-md:flex-wrap max-md:px-5">
+        <header className="flex items-center gap-10  px-9 py-4 text-xl  font-medium   w-[100%] bg-navColor  max-md:flex-wrap max-md:px-5">
         <img
           loading="lazy"
           src={`${process.env.PUBLIC_URL}/images/HyggeLogo.png`} 

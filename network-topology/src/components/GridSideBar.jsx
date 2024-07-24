@@ -101,15 +101,15 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
 
   return (
     <div className="flex flex-col h-[90vh] 2xl:h-[92vh]">
-    <div className="flex flex-col bg-sideBar w-[120px] h-full relative">
+    <div className="flex flex-col bg-sideBar w-[110px] h-full relative">
       <div className="flex-1 overflow-hidden">
         <div className="h-[calc(100%_-_80px)] overflow-auto no-scrollbar ">
-          <div className="grid gap-y-10">
+          <div className="grid gap-y-5">
             {grids.map((grid) => (
               <button
                 key={grid.id}
-                className={`grid justify-center cursor-pointer mt-2 ${
-                  selectedGrid === grid.id ? 'bg-white py-1 text-[#794C03]' : ''
+                className={`flex flex-col  items-center py-5 justify-center cursor-pointer  ${
+                  selectedGrid === grid.id ? 'bg-white  text-[#794C03]' : ''
                 }`}
                 onClick={() => handleGridClick(grid.id)}
                 onContextMenu={(event) => handleContextMenu(event, grid)}
@@ -118,10 +118,10 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
                   loading="lazy"
                   src="images/GridImage.png"
                   alt="Grid Logo"
-                  className="h-[55px] w-[55px] "
+                  className="h-[52.81px] w-[46px]  "
                 />
                 <span  className={`text-gridColor1  ${
-                 selectedGrid === grid.id ? ' text-[#794C03]  font-bold' : ''
+                 selectedGrid === grid.id ? ' text-[#794c03]  font-bold' : ''
                   }`}>{grid.name}</span>
               </button>
             ))}
