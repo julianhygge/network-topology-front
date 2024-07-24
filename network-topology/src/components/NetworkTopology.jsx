@@ -342,22 +342,20 @@ const NetworkTopology = () => {
                 <div className="flex-1">
                     {data && (
                         <>
-                            <div className="flex justify-between bg-breadcrumbBackgroundColor inset-0">
+                            <div className="flex justify-between bg-breadcrumbBackgroundColor">
                                 <div className='flex mt-4'>
                                     {selectedSubstationId && !selectedNode && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
-                                </div>
-                                <div className='flex'>
                                     {selectedNode && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
                                 </div>
                                 <div className='flex py-5 gap-2 justify-end mr-2'>
                                     <button
-                                        className="cursor-pointer  border px-9 items-end bg-[#49AC82] rounded-2xl text-white w-[120] border-[#49AC82]"
+                                        className="cursor-pointer  border px-11 items-end bg-[#49AC82] rounded-2xl text-white w-[120] border-[#49AC82]"
                                         onClick={handleSaveTopology}
                                     >
                                         SAVE
                                     </button>
                                     <button
-                                        className="cursor-pointer  border px-7 items-end bg-[#49AC82] rounded-2xl text-white w-[120] border-[#49AC82]"
+                                        className="cursor-pointer  border px-8 items-end bg-[#49AC82] rounded-2xl text-white w-[120] border-[#49AC82]"
                                         onClick={handleCancel}
                                     >
                                         CANCEL
