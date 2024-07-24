@@ -339,25 +339,29 @@ const NetworkTopology = () => {
                     onGridSelect={setSelectedSubstationId}
                     selectedGridId={selectedSubstationId}
                 />
-                <div className="flex-1 p-4">
+                <div className="flex-1">
                     {data && (
                         <>
-                            <div className="flex justify-between">
-                            {selectedSubstationId && !selectedNode && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
-                                {selectedNode && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
-                                <div className='flex mb-6 gap-2 justify-end'>
-                                <button
-                                    className="cursor-pointer  border px-9 py-1 items-end bg-[#49AC82] rounded-2xl text-white w-[120] border-[#49AC82]"
-                                    onClick={handleSaveTopology}
-                                >
-                                    SAVE
-                                </button>
-                                <button
-                                     className="cursor-pointer  border px-7 py-1 items-end bg-[#49AC82] rounded-2xl text-white w-[120] border-[#49AC82]"
-                                     onClick={handleCancel}
-                                >
-                                    CANCEL
-                                </button>
+                            <div className="flex justify-between bg-breadcrumbBackgroundColor inset-0">
+                                <div className='flex mt-4'>
+                                    {selectedSubstationId && !selectedNode && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
+                                </div>
+                                <div className='flex'>
+                                    {selectedNode && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
+                                </div>
+                                <div className='flex py-5 gap-2 justify-end mr-2'>
+                                    <button
+                                        className="cursor-pointer  border px-9 items-end bg-[#49AC82] rounded-2xl text-white w-[120] border-[#49AC82]"
+                                        onClick={handleSaveTopology}
+                                    >
+                                        SAVE
+                                    </button>
+                                    <button
+                                        className="cursor-pointer  border px-7 items-end bg-[#49AC82] rounded-2xl text-white w-[120] border-[#49AC82]"
+                                        onClick={handleCancel}
+                                    >
+                                        CANCEL
+                                    </button>
                                 </div>
                             </div>
                             <NetworkGraph2
