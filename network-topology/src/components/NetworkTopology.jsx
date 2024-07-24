@@ -78,24 +78,8 @@ const NetworkTopology = () => {
     };
 
     const handleDeleteHouse = (houseId) => {
-        setData(prevData => {
-            const deleteHouseRecursive = (nodes) => {
-                return nodes.map(node => {
-                    if (node.children) {
-                        return {
-                            ...node,
-                            children: deleteHouseRecursive(node.children.filter(child => child.id !== houseId))
-                        };
-                    }
-                    return node;
-                });
-            };
-
-            return {
-                ...prevData,
-                nodes: deleteHouseRecursive(prevData.nodes)
-            };
-        });
+        setNodeToDelete(houseId);
+        setShowDeletePopup(true);
     };
 
     const handleAddHouse = (transformerId) => {
