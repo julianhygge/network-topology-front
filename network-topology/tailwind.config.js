@@ -6,6 +6,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        breadcrumbBackgroundColor: "#E7FAFF",
         customGreen:'#49AC82',
         customYellow:'#FFBE21',
         customBackground:'#BED2D4',
