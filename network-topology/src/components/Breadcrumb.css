@@ -2,6 +2,7 @@
     width: 750px;
     max-width: 750px;
     overflow-x: scroll;
+    padding-bottom: 8px;
 }
 
 .breadcrumb-wrapper::-webkit-scrollbar {

@@ -46,7 +46,7 @@ const Breadcrumb = ({ nodeId, onEditNode, size = 'normal' }) => {
 
     return (
         <div className='breadcrumb-wrapper'>
-            <div className={`breadcrumb-container flex items-center mb-4`}>
+            <div className={`breadcrumb-container flex items-center`}>
                 {breadcrumb && (
                     <React.Fragment>
                         <div className={`${getSizeClass()}`} style={{ backgroundColor: generateDynamicBackgroundClasses(0) }}>
