@@ -274,8 +274,32 @@ const NetworkGraph2 = ({
         <div className="transformer-node">
           <SubConnectionLine transformer={node} />
           <div className="houses-column">
-            {node.children && node.children.filter(child => child.type === "house").map(renderNode)}
-            <button className="add-house" onClick={() => onAddHouse(node.id)}>+</button>
+            {node.children && node.children.length > 0 ?
+              node.children.filter(child => child.type === "house").map(renderNode) 
+              :
+              (
+              <div className='flex flex-col items-center text-center gap-5 pt-14 pb-20 px-2'>
+                <div className='text-md'>
+                    House is not 
+                    <br/>
+                    added yet under 
+                    <br/>
+                    this Transformer
+                </div>
+
+                <div className='text-md'>
+                    Please add from
+                    <br/>
+                    the below 
+                    <br/>
+                    Button
+                </div>
+              </div>
+              )
+            }
+            <div className='absolute bottom-1'>
+              <button className="add-house" onClick={() => onAddHouse(node.id)}>+</button>
+            </div>
           </div>
           {node.children && node.children.filter(child => child.type === "transformer").map(child => renderNode(child, level + 1))}
         </div>
