@@ -274,7 +274,7 @@ const NetworkGraph2 = ({
         <div className="transformer-node">
           <SubConnectionLine transformer={node} />
           <div className="houses-column">
-            {node.children && node.children.length > 0 ?
+            {node.children && node.children.filter(child => child.type === "house").length > 0 ?
               node.children.filter(child => child.type === "house").map(renderNode) 
               :
               (
