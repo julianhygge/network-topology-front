@@ -108,8 +108,8 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
             {grids.map((grid) => (
               <button
                 key={grid.id}
-                className={`flex flex-col  items-center py-5 justify-center cursor-pointer  ${
-                  selectedGrid === grid.id ? 'bg-white  text-[#794C03]' : ''
+                className={`flex flex-col  items-center py-5 justify-center cursor-pointer   ${
+                  selectedGrid === grid.id ? 'bg-white  ' : ''
                 }`}
                 onClick={() => handleGridClick(grid.id)}
                 onContextMenu={(event) => handleContextMenu(event, grid)}
@@ -120,8 +120,8 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
                   alt="Grid Logo"
                   className="h-[52.81px] w-[46px]  "
                 />
-                <span  className={`text-gridColor1  ${
-                 selectedGrid === grid.id ? ' text-[#794c03]  font-bold' : ''
+                <span  className={`text-gridColor1   font-dinPro ${
+                 selectedGrid === grid.id ? 'text-brown font-bold font-dinPro' : ''
                   }`}>{grid.name}</span>
               </button>
             ))}
@@ -135,7 +135,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
         <p className="bg-white w-[80px] px-4 rounded-[50px] text-3xl text-gridColor1">
           +
         </p>
-        <p className="text-white text-sm mt-2">Add Grid</p>
+        <p className="text-white text-sm mt-2 font-dinPro font-medium">Add Grid</p>
       </button>
     </div>
     {contextMenu.visible && (

@@ -296,14 +296,11 @@
 .context-menu button {
   display: block;
   width: 100%;
-  padding: 8px 40px 8px 24px;
+  padding: 8px 35px 8px 24px;
   background: none;
   border: none;
   text-align: left;
   cursor: pointer;
-  font-weight: 200;
-  font-size: 14px;
-
 }
 
 .context-menu button:hover {

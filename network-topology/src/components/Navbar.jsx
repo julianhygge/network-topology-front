@@ -8,7 +8,7 @@ export default function Navbar() {
     }
   return (
     <div>
-        <header className="flex items-center gap-10  px-9 py-4 text-xl  font-medium   w-[100%] bg-navColor  max-md:flex-wrap max-md:px-5">
+        <header className="flex items-center gap-10   px-9 py-4 text-xl  font-medium    bg-navColor  ">
         <img
           loading="lazy"
           src={`${process.env.PUBLIC_URL}/images/HyggeLogo.png`} 
@@ -16,7 +16,7 @@ export default function Navbar() {
           className="shrink-0 w-[50px] cursor-pointer"
           onClick={HandleClick}
         />
-        <h1 className="flex-auto my-auto max-md:max-w-full text-white ">
+        <h1 className="flex-auto my-auto max-md:max-w-full text-white font-dinPro ">
           Welcome to Hygge Power Trading Simulator
         </h1>
       </header>

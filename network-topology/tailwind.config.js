@@ -21,13 +21,17 @@ module.exports = {
         item1: '#98BEC9',
         item2: '#A5CFDB',
         item3: '#BCDCE5',
-        item4: '#CDEEF7'
+        item4: '#CDEEF7',
+        brown:'#794C03'
       },
       spacing: {
         '7.25': '1.8125rem',
         '7.5': '1.875rem',
         '7.75': '1.9375rem', 
         '7.625': '1.90625rem'
+      },
+      fontFamily: {
+        dinPro: ['"DIN PRO"', 'sans-serif'],
       },
     },
   },

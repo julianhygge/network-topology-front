@@ -332,14 +332,14 @@ const NetworkTopology = () => {
     
 
     return (
-        <>
+        <div>
             <Navbar />
             <div className="flex">
                 <GridSideBar
                     onGridSelect={setSelectedSubstationId}
                     selectedGridId={selectedSubstationId}
                 />
-                <div className="flex-1">
+                <div className="flex-1 ">
                     {data && (
                         <>
                             <div className="flex justify-between bg-breadcrumbBackgroundColor">
@@ -410,7 +410,7 @@ const NetworkTopology = () => {
                     )}
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

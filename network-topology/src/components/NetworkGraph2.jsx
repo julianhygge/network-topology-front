@@ -235,11 +235,11 @@ const NetworkGraph2 = ({
 
     return (
       <div className="context-menu" style={{ top: y-170, left: x-100 }}>
-        <button className='text-navColor ' onClick={() => onConfigure(node)}>Configure</button>
+        <button className='text-navColor font-dinPro font-medium ' onClick={() => onConfigure(node)}>Configure</button>
         {node.type === 'transformer' && (
-          <button className='text-navColor' onClick={() => onAddSubTransformer(node.id)}>Add Sub-T</button>
+          <button className='text-navColor font-dinPro font-medium' onClick={() => onAddSubTransformer(node.id)}>Add Sub-T</button>
         )}
-        <button className='text-[#F21818]' onClick={() => node.type === 'transformer' ? onDeleteTransformer(node.id) : onDeleteHouse(node.id)}>
+        <button className='text-[#F21818] font-dinPro font-medium' onClick={() => node.type === 'transformer' ? onDeleteTransformer(node.id) : onDeleteHouse(node.id)}>
           Delete
         </button>
       </div>
