@@ -155,6 +155,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
       <Delete
         onConfirm={handleConfirmDelete}
         onClose={() => setShowDeletePopup(false)}
+        entityType="grid"
         entityName={contextMenu.grid.name}
       />
     )}
