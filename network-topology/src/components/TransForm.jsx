@@ -19,8 +19,8 @@ const TransForm = ({ show, onClose, onSubmit, substationName }) => {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50 ">
-      <div className="relative flex flex-col pb-1 text-white">
+    <div className="fixed inset-0 flex items-center justify-center  bg-[#FFFFFF] bg-opacity-60 z-50  mt-19 font-dinPro">
+      <div className="relative flex flex-col pb-1 text-white ">
         <main className="flex flex-col items-center mt-10 max-md:mt-10">
           <div className="flex flex-col items-center px-60 py-20 rounded-2xl shadow-2xl bg-navColor bg-opacity-90 max-md:px-5 mt-7">
             <img
@@ -29,7 +29,7 @@ const TransForm = ({ show, onClose, onSubmit, substationName }) => {
               alt="Hygge Logo"
               className="w-[60px]"
             />
-            <h2 className="mt-12 text-2xl tracking-wide text-center max-md:mt-10">
+            <h2 className="mt-12 text-2xl  text-[#FFFFFF] tracking-wide text-center max-md:mt-10 ">
               Please add the <br />number of transformers <br />under the {substationName}
             </h2>
             <p className=" mt-10 text-[20px] max-md:mt-10">Enter Number of Transformers</p>

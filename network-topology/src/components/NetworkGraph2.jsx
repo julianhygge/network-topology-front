@@ -255,7 +255,7 @@ const NetworkGraph2 = ({
       return (
         <div key={node.id} className="house-item cursor-pointer" onContextMenu={(e) => handleContextMenu(e, node)} >
           <House color={getColor(node.is_complete, node.new)} onHouseClick={() => onSelectedNode(node)} />
-          <span>{node.nomenclature}</span>
+          <span className='font-dinPro font-medium text-navColor'>{node.nomenclature}</span>
         </div>
       );
     }
@@ -269,7 +269,7 @@ const NetworkGraph2 = ({
       >
         <div className="transformer-header cursor-pointer" onContextMenu={(e) => handleContextMenu(e, node)}>
           <Transformer color={getColor(node.is_complete, node.new)} onTransformerClick={() => onSelectedNode(node)}/>
-          <span>{node.nomenclature}</span>
+          <span className='font-dinPro font-medium text-navColor'>{node.nomenclature}</span>
         </div>
         <div className="transformer-node">
           <SubConnectionLine transformer={node} />
@@ -278,8 +278,8 @@ const NetworkGraph2 = ({
               node.children.filter(child => child.type === "house").map(renderNode) 
               :
               (
-              <div className='flex flex-col items-center text-center gap-5 pt-14 pb-20 px-2'>
-                <div className='text-md'>
+              <div className='flex flex-col items-center text-center gap-5 pt-14 pb-20 px-2 font-dinPro font-medium text-navColor'>
+                <div className=''>
                     House is not 
                     <br/>
                     added yet under 

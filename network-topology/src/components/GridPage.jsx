@@ -140,12 +140,13 @@ const GridPage = () => {
   };
 
   return (
+
     <div className="bg-backPage min-h-screen">
       <Navbar />
       <div className="flex flex-col items-center px-5 mt-12 w-full text-4xl text-center text-navColor max-md:mt-10 max-md:max-w-full">
         <button
           onClick={handleTreeView}
-          className="justify-center items-start self-end px-11 py-2.5 text-xl tracking-normal text-white bg-customGreen border border-green-500 border-solid shadow-sm rounded-[31px] w-[250px] h-[50px] max-md:pr-5 max-md:pl-8"
+          className="justify-center items-start font-dinPro self-end px-11 py-2.5 text-xl tracking-normal text-white bg-customGreen border border-green-500 border-solid shadow-sm rounded-[31px] w-[250px] h-[50px] max-md:pr-5 max-md:pl-8"
         >
           Tree View
         </button>
@@ -165,7 +166,7 @@ const GridPage = () => {
                 className="flex flex-col w-full mb-5 relative"
                 onContextMenu={(e) => handleContextMenu(e, substation)}
               >
-                <div className="text-xl font-bold mb-5 text-cyan-900 flex justify-center">
+                <div className="text-3xl  mb-2 text-navColor flex justify-center font-dinPro font-normal">
                   {substation.name}
                 </div>
                 <div className="flex flex-col grow px-5 pt-20 pb-10 mx-auto w-full text-center text-white bg-white rounded-3xl border border-solid shadow-sm border-navColor max-md:mt-10">
@@ -173,7 +174,7 @@ const GridPage = () => {
                     onClick={() => handleShowForm(substation)}
                     className="flex gap-5 items-start px-12 py-3 mt-60 bg-customGreen border border-green-500 border-solid shadow-sm rounded-[33px] max-md:px-5 max-md:mt-10 h-[60px]"
                   >
-                    <div className="flex-auto text-1xl font-medium tracking-normal mt-1">
+                    <div className="flex-auto text-1xl font-medium tracking-normal mt-1 font-dinPro">
                       <span>Add </span>Transformers
                     </div>
                     <div className="text-5xl max-md:text-2xl mt-[-11px]">+</div>
@@ -209,7 +210,7 @@ const GridPage = () => {
             >
               <div className="flex flex-col items-center self-stretch h-[150px] px-10 pt-8 pb-8 my-auto w-full text-center text-navColor whitespace-nowrap bg-white rounded-3xl border border-solid shadow-sm border-navColor max-md:px-5 max-md:mt-10">
                 <div className="text-5xl max-md:text-4xl">+</div>
-                <div className="mt-1 text-2xl">Add</div>
+                <div className="mt-1 text-xl font-dinPro">Add</div>
               </div>
             </button>
           </div>
@@ -217,9 +218,9 @@ const GridPage = () => {
       </div>
       {showDeletePopup && (
         <Delete
-          onClose={handleCloseDeletePopup}
-          onConfirm={handleDelete}
-          entityName={substationToDelete?.name}
+        onClose={handleCloseDeletePopup}
+        onConfirm={handleDelete}
+        entityName={substationToDelete?.name}
         />
       )}
       <TransForm
@@ -229,6 +230,7 @@ const GridPage = () => {
         substationName={selectedSubstation?.name}
       />
     </div>
+
   );
 };
 

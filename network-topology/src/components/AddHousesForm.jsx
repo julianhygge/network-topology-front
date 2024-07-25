@@ -36,7 +36,7 @@ const AddHousesForm = ({ show, onClose, onSubmit, transformerName }) => {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50 ">
       <div className="relative flex flex-col pb-1 text-white">
         <main className="flex flex-col items-center mt-10 max-md:mt-10">
           <div className="flex flex-col items-center px-60 py-20 rounded-2xl shadow-2xl bg-navColor bg-opacity-90 max-md:px-5 mt-10 mb-20">

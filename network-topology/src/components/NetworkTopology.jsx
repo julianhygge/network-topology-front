@@ -347,19 +347,19 @@ const NetworkTopology = () => {
                                     {selectedSubstationId && !selectedNode && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
                                     {selectedNode && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
                                 </div>
-                                <div className='flex pb-[20px] pt-[6px] gap-2 justify-end mr-2'>
+                                <div className='flex pb-[20px] pt-[6px] gap-2 justify-end mr-2 font-dinPro font-medium'>
                                     <button
-                                        className="cursor-pointer border px-[50px] items-end bg-[#49AC82] rounded-2xl text-white text-lg font-sm w-[120] border-[#49AC82]"
+                                        className="cursor-pointer border px-[50px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                                         onClick={handleSaveTopology}
                                     >
                                         SAVE
                                     </button>
-                                    <button
+                                    {/* <button
                                         className="cursor-pointer border px-9 items-end bg-[#49AC82] rounded-2xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                                         onClick={handleCancel}
                                     >
                                         CANCEL
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
                             <NetworkGraph2
