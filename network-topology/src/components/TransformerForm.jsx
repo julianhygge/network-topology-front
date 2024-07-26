@@ -96,8 +96,8 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-customBackground bg-opacity-55 z-50">
       <div className="relative bg-white rounded-2xl pt-[100px] px-28 pb-8 w-full max-w-5xl border border-solid shadow-sm max-md:px-5 mt-36 mb-16 ml-28 z-10">
-      <div className="absolute top-4 left-0 right-0 z-1">
-          {transformer && transformer.new!==true && <Breadcrumb nodeId={transformer.id} onEditNode={handleBreadcrumbNodeClick}/>}
+      <div className="absolute top-4 left-0 right-0 z-1 text-[14px] text-black font-light">
+          {transformer && transformer.new!==true && <Breadcrumb nodeId={transformer.id} onEditNode={handleBreadcrumbNodeClick} size="small-transformer-configuration"/>}
       </div>
       <div className="absolute inset-0 bg-no-repeat bg-center bg-contain opacity-15 right-4 top-4" 
              style={{ 
@@ -114,7 +114,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
               <div className="mb-4 flex flex-col items-start ml-7">
                 <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">Name of Transformer</label>
                 <input
-                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm"
                   type="text"
                   name="name"
                   value={formData.name}
@@ -125,7 +125,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
               <div className="mb-4 flex flex-col items-start ml-7">
                 <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">Max Capacity ( kW )</label>
                 <input
-                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm"
                   type="text"
                   name="max_capacity_kw"
                   value={formData.max_capacity_kw}
@@ -136,7 +136,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
               <div className="mb-4 flex flex-col items-start ml-7">
                 <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">Years of Service</label>
                 <input
-                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm"
                   type="text"
                   name="years_of_service"
                   value={formData.years_of_service}
@@ -148,7 +148,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
               <div className="mb-4 flex flex-col items-start ml-7">
                 <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">Forward Efficiency ( % )</label>
                 <input
-                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm"
                   type="text"
                   name="forward_efficiency"
                   value={formData.forward_efficiency}
@@ -186,7 +186,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
               <div className="mb-4 flex flex-col items-start ml-3">
                 <label className={`block text-customGrey-700 text-[13px] ml-2 font-[500] ${formData.allow_export?'':"opacity-15"}`}>Backward Efficiency ( % )</label>
                 <input
-                  className={`border border-black rounded-xl w-80 py-2.5 px-3 mt-1 ${formData.allow_export?'':"opacity-15"}`}
+                  className={`border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${formData.allow_export?'':"opacity-15"}`}
                   type="text"
                   name="backward_efficiency"
                   value={formData.backward_efficiency}
@@ -199,7 +199,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
               <div className="mb-4 flex flex-col items-start ml-3">
                 <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">Primary Ampacity ( A )</label>
                 <input
-                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm"
                   type="text"
                   name="primary_ampacity"
                   value={formData.primary_ampacity}
@@ -211,7 +211,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
               <div className="mb-4 flex flex-col items-start ml-3">
                 <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">Secondary Ampacity ( A )</label>
                 <input
-                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
+                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm"
                   type="text"
                   name="secondary_ampacity"
                   value={formData.secondary_ampacity}

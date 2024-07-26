@@ -21,18 +21,30 @@
 
 .breadcrumb-container {
     display: flex;
+    flex: 1;
     align-items: center;
     white-space: nowrap;
 }
 
 .breadcrumb-item {
-    flex: 0 0 170px;
     text-align: center;
-    padding: 10px 8px;
-    z-index: 1;
+    padding: 10px 25px;
+    z-index: 2;
     margin: 0;
     border-radius: 1px;
+    clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 0% 0%);
 }
+
+.breadcrumb-item:nth-child(1){
+    z-index: 50;
+}
+
+.breadcrumb-item:nth-child(2){
+    position: relative;
+    z-index: 20;
+    left: -15px;
+}
+
 
 .breadcrumb-item-small {
     flex: 0 0 140px;
@@ -43,11 +55,20 @@
     border-radius: 1px;
 }
 
-.breadcrumb-triangle {
+.breadcrumb-item-small-transformer {
+    flex: 0 0 140px;
+    text-align: center;
+    padding: 11px 8px;
+    z-index: 1;
+    margin-left: 0;
+    border-radius: 1px;
+}
+
+/* .breadcrumb-triangle {
     width: 0;
     height: 0;
     border-top: 22px solid transparent;
     border-bottom: 22px solid transparent;
     border-left: 22px solid;
     z-index: 2;
-}
+} */

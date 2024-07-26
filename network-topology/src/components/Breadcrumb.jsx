@@ -32,7 +32,13 @@ const Breadcrumb = ({ nodeId, onEditNode, size = 'normal' }) => {
     };
 
     const getSizeClass = () => {
-        return size === 'small' ? 'breadcrumb-item-small' : 'breadcrumb-item';
+        if (size === "small-delete-modal"){
+            return 'breadcrumb-item-small'
+        }else if (size === "small-transformer-configuration"){
+            return 'breadcrumb-item-small-transformer'
+        }else{
+            return 'breadcrumb-item'
+        }
     };
 
     const generateDynamicBackgroundClasses = (index) => {
@@ -46,26 +52,28 @@ const Breadcrumb = ({ nodeId, onEditNode, size = 'normal' }) => {
 
     return (
         <div className='breadcrumb-wrapper'>
-            <div className={`breadcrumb-container flex items-center`}>
+            <div className={`breadcrumb-container`}>
                 {breadcrumb && (
                     <React.Fragment>
-                        <div className={`${getSizeClass()}`} style={{ backgroundColor: generateDynamicBackgroundClasses(0) }}>
+                        <div className={`${getSizeClass()}`} style={{ backgroundColor: generateDynamicBackgroundClasses(0)}}>
                             {breadcrumb.locality}
                         </div>
-                        <div className="breadcrumb-triangle" style={{ borderLeftColor: generateDynamicBackgroundClasses(0) }}></div>
-                        <div className={`${getSizeClass()}`} style={{ backgroundColor: generateDynamicBackgroundClasses(1), marginLeft: "-22px" }}>
+                        <div className={`${getSizeClass()}`} style={{ backgroundColor: generateDynamicBackgroundClasses(1)}}>
                             {breadcrumb.substation_name}
                         </div>
-                        <div className="breadcrumb-triangle" style={{ borderLeftColor: generateDynamicBackgroundClasses(1) }}></div>
                         {breadcrumb.path.map((node, index) => (
                             <React.Fragment key={node.id}>
                                 <div className={`${getSizeClass()} cursor-pointer`}
-                                    style={{ backgroundColor: generateDynamicBackgroundClasses(index + 2), marginLeft: "-22px" }}
+                                    style={{ 
+                                        position: "relative",
+                                        zIndex: breadcrumb.path.length - index,
+                                        backgroundColor: generateDynamicBackgroundClasses(index + 2),
+                                        left: `${-15 + -((index+1)*15)}px`
+                                        }}     
                                     onClick={() => onEditNode(node)}
                                 >
                                     {node.name !== node.nomenclature && node.name !== "Unknown" ? `${node.name} ${node.nomenclature}` : node.nomenclature}
                                 </div>
-                                <div className="breadcrumb-triangle" style={{ borderLeftColor: generateDynamicBackgroundClasses(index + 2) }}></div>
                             </React.Fragment>
                         ))}
                     </React.Fragment>
