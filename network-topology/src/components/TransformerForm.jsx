@@ -96,7 +96,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
     <div className="fixed inset-0 flex items-center justify-center bg-customBackground bg-opacity-55 z-50">
       <div className="relative bg-white rounded-2xl pt-[100px] px-28 pb-8 w-full max-w-5xl border border-solid shadow-sm max-md:px-5 mt-36 mb-16 ml-28 z-10">
       <div className="absolute top-4 left-0 right-0 z-1">
-          <Breadcrumb nodeId={transformer.id} onEditNode={handleBreadcrumbNodeClick}/>
+          {transformer && transformer.new!=true && <Breadcrumb nodeId={transformer.id} onEditNode={handleBreadcrumbNodeClick}/>}
       </div>
       <div className="absolute inset-0 bg-no-repeat bg-center bg-contain opacity-10 right-4 top-4" 
              style={{ 
@@ -106,7 +106,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
              }}>
       </div>
       <button className="cursor-pointer absolute top-1 right-5 p-2 text-4xl font-thin" onClick={handleClose}>&times;</button>
-      <h2 className="text-lg font-semibold text-center mb-11">Enter/Edit the Transformer Configurations</h2>
+      <h2 className="text-lg font-semibold text-center mb-11">Enter / Edit the Transformer Configurations</h2>
         <form onSubmit={handleSubmit} className="mt-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col mb-4 pr-4 border-r border-customBorderColor">
