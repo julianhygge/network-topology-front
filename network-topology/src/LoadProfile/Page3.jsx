@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DeleteConfirm from "./DeleteConfirm";
-const Page3 = () => {
+
+const Page3 = ({ profiles }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleDeleteClick = () => {
@@ -10,6 +11,7 @@ const Page3 = () => {
   const handleClosePopup = () => {
     setShowDeleteConfirm(false);
   };
+  console.log(profiles)
 
   return (
     <div className="flex flex-col items-center text-1xl mt-[150px] font-bold text-center text-navColor">
@@ -21,27 +23,27 @@ const Page3 = () => {
           <div className="w-1/4">Action</div>
         </div>
       </div>
-      <div className="flex flex-col gap-5 items-center px-20 py-5 w-[1250px] bg-sky-50 rounded-2xl max-md:flex-wrap max-md:px-5 max-md:max-w-full text-navColor">
-        <div className="flex w-full">
-          <div className="w-1/4 text-center mt-4">20/July/2024</div>
-          <div className="w-1/4 text-center mt-4">Admin</div>
-          <div className="w-1/2 text-center flex-auto mt-4">
-            Suresh_Patel_15min_load_profile.csv
-          </div>
-          <div className="flex w-1/4 justify-center gap-2 text-1xl font-medium">
-            <button className="px-8 py-4 shadow-sm bg-[#BDD8DB] rounded-[33px] max-md:px-5 text-navColor">
-              Download File
-            </button>
-            <img
-              loading="lazy"
-              src="images/DeleteButton.png"
-              className="w-[36px] h-[41.23px] mt-2 cursor-pointer"
-              alt="Icon"
-              onClick={handleDeleteClick}
-            />
+      {profiles.items.map(profile => (
+        <div key={profile.profile_id} className="flex flex-col gap-5 items-center px-20 py-5 w-[1250px] bg-sky-50 rounded-2xl max-md:flex-wrap max-md:px-5 max-md:max-w-full text-navColor">
+          <div className="flex w-full">
+            <div className="w-1/4 text-center mt-4">{new Date(profile.created_on).toLocaleDateString()}</div>
+            <div className="w-1/4 text-center mt-4">{profile.user}</div>
+            <div className="w-1/2 text-center flex-auto mt-4">{profile.file_name}</div>
+            <div className="flex w-1/4 justify-center gap-2 text-1xl font-medium">
+              <a href={profile.links.download} className="px-8 py-4 shadow-sm bg-[#BDD8DB] rounded-[33px] max-md:px-5 text-navColor">
+                Download File
+              </a>
+              <img
+                loading="lazy"
+                src="images/DeleteButton.png"
+                className="w-[36px] h-[41.23px] mt-2 cursor-pointer"
+                alt="Icon"
+                onClick={handleDeleteClick}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      ))}
       <button className="self-center px-12 py-4 mt-20 text-1xl text-navColor font-semibold tracking-normal bg-[#6AD1CE] shadow-sm rounded-[33px] max-md:px-5 max-md:mt-10">
         Upload Again
       </button>
@@ -49,4 +51,5 @@ const Page3 = () => {
     </div>
   );
 };
+
 export default Page3;

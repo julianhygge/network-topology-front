@@ -6,18 +6,29 @@ import { DeleteConfirm } from "./DeleteConfirm";
 const Page1 = () => {
   const [showSecondStep, setShowSecondStep] = useState(false);
   const [showThirdStep, setShowThirdStep] = useState(false);
+  const [noSelected, setNoSelected] = useState(false);
+  const [attach15MinFile, setAttach15MinFile] = useState(false);
 
   const handleNoClick = () => {
     if (showSecondStep) {
       setShowSecondStep(false);
+      setNoSelected(true);
+      setShowThirdStep(true);
+      setAttach15MinFile(false);
+    } else {
+      setNoSelected(true);
+      setShowThirdStep(true);
+      setAttach15MinFile(false);
     }
   };
 
   const handleYesClick = () => {
     if (showSecondStep) {
       setShowThirdStep(true);
+      setAttach15MinFile(true);
     } else {
       setShowSecondStep(true);
+      setNoSelected(false);
     }
   };
 
@@ -31,8 +42,9 @@ const Page1 = () => {
   };
 
   if (showThirdStep) {
-    return <Page2 onBack={handleBackClick} />;
+    return <Page2 onBack={handleBackClick} attach15MinFile={attach15MinFile} />;
   }
+
 
   return (
     <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
@@ -60,7 +72,7 @@ const Page1 = () => {
         )}
         <div className="mt-20 text-xl max-md:mt-10">
           {showSecondStep
-            ? "Do you have the “15 Min Load profile Data” available ?"
+            ? (<>Do you have the <br /> “15 Min Load profile Data” available ?</>)
             : "Do you have the “Load file (csv)” available?"}
         </div>
         <div className="flex gap-8 justify-between mt-20 max-w-full text-xl tracking-normal text-white whitespace-nowrap max-md:mt-10">

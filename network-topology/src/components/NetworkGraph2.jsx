@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './NetworkGraph.css';
 import { fetchTransformerDetails } from "../services/Tranformer";
 import { fetchHouseDetails } from "../services/House";
+import { useNavigate } from 'react-router-dom';
 
 const Transformer = ({ color, name, onTransformerClick }) => (
   <div className="transformer-wrapper cursor-pointer" onClick={onTransformerClick}>
@@ -120,6 +121,8 @@ const NetworkGraph2 = ({
   const [lineStyle, setLineStyle] = useState({});
   const [showLine, setShowLine] = useState(false);
   const [contextMenu, setContextMenu] = useState({visible: false, x: 0, y: 0, node: null});
+  const navigate = useNavigate();
+
   
   const lineTopOffset = 40;
   const verticalLineHeight = 10;
@@ -192,8 +195,9 @@ const NetworkGraph2 = ({
         const transformerDetails = await fetchTransformerDetails(d.id);
         onTransformerEdit(transformerDetails);
       } else if (d.type === "house") {
-        const houseDetails = await fetchHouseDetails(d.id);
-        onHouseEdit(houseDetails);
+        // const houseDetails = await fetchHouseDetails(d.id);
+        // onHouseEdit(houseDetails);
+        navigate(`/config?house_id=${d.id}`);
       }
     } catch (error) {
       console.error("Error fetching details:", error);
