@@ -315,7 +315,7 @@ const NetworkTopology = () => {
     const handleRightClickSelectedNode = (node) => {
         console.log("right click node: ", node);
         setSelectedNode(node);
-        if(node.name && node.name != node.nomenclature){
+        if(node.name && node.name !== node.nomenclature){
             setNodeToDeleteName(node.name + " " + node.nomenclature);
         }else{
             setNodeToDeleteName(node.nomenclature);
@@ -344,8 +344,8 @@ const NetworkTopology = () => {
                         <>
                             <div className="flex justify-between bg-breadcrumbBackgroundColor">
                                 <div className='flex mt-[10px]'>
-                                    {selectedSubstationId && (!selectedNode || selectedNode.new==true) && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
-                                    {selectedNode && selectedNode.new!=true && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
+                                    {selectedSubstationId && (!selectedNode || selectedNode.new===true) && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
+                                    {selectedNode && selectedNode.new!==true && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
                                 </div>
                                 <div className='flex pb-[20px] pt-[10px] gap-2 justify-end mr-2 font-dinPro font-medium'>
                                     <button

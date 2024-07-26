@@ -39,7 +39,7 @@
 } */
 
 body,html{
-  font-family: 'DIN PRO';
+  font-family: 'DIN PRO', sans-serif;
 }
 .network-topology-builder {
   padding: 20px;

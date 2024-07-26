@@ -2,6 +2,7 @@ import React, { useState} from "react";
 import { updateTransformerData } from "../services/Tranformer";
 import Breadcrumb from "./Breadcrumb";
 import "./Breadcrumb.css"
+import { bgcolor } from "@mui/system";
 
 const TransformerForm = ({ transformer, onSave, onClose}) => {
   const [formData, setFormData] = useState({
@@ -96,9 +97,9 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
     <div className="fixed inset-0 flex items-center justify-center bg-customBackground bg-opacity-55 z-50">
       <div className="relative bg-white rounded-2xl pt-[100px] px-28 pb-8 w-full max-w-5xl border border-solid shadow-sm max-md:px-5 mt-36 mb-16 ml-28 z-10">
       <div className="absolute top-4 left-0 right-0 z-1">
-          {transformer && transformer.new!=true && <Breadcrumb nodeId={transformer.id} onEditNode={handleBreadcrumbNodeClick}/>}
+          {transformer && transformer.new!==true && <Breadcrumb nodeId={transformer.id} onEditNode={handleBreadcrumbNodeClick}/>}
       </div>
-      <div className="absolute inset-0 bg-no-repeat bg-center bg-contain opacity-10 right-4 top-4" 
+      <div className="absolute inset-0 bg-no-repeat bg-center bg-contain opacity-15 right-4 top-4" 
              style={{ 
                backgroundImage: `url(${process.env.PUBLIC_URL}/images/HyggeLogo.png)`,
                backgroundSize: "210px 210px",
@@ -111,7 +112,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col mb-4 pr-4 border-r border-customBorderColor">
               <div className="mb-4 flex flex-col items-start ml-7">
-                <label className="block text-customGrey-700 text-sm">Name of Transformer</label>
+                <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">Name of Transformer</label>
                 <input
                   className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
@@ -122,7 +123,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
                 />
               </div>
               <div className="mb-4 flex flex-col items-start ml-7">
-                <label className="block text-customGrey-700 text-[14px]">Max Capacity [kW]</label>
+                <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">Max Capacity ( kW )</label>
                 <input
                   className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
@@ -133,7 +134,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
                 />
               </div>
               <div className="mb-4 flex flex-col items-start ml-7">
-                <label className="block text-customGrey-700 text-sm">Years of Service</label>
+                <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">Years of Service</label>
                 <input
                   className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
@@ -145,7 +146,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
               </div>
 
               <div className="mb-4 flex flex-col items-start ml-7">
-                <label className="block text-customGrey-700 text-sm">Forward Efficiency</label>
+                <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">Forward Efficiency ( % )</label>
                 <input
                   className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
@@ -167,7 +168,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
                     onChange={handleChange}
                     style={{ width: "20px", height: "20px" }}
                   />
-                  <label className="text-customGrey-700 text-[14px] whitespace-nowrap">Allow Export</label>
+                  <label className="text-customGrey-700 text-[13px] whitespace-nowrap font-[500]">Allow Export</label>
                 </div>
 
                 <div className="flex items-center">
@@ -179,23 +180,24 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
                     onChange={handleChange}
                     style={{ width: "20px", height: "20px" }}
                   />
-                  <label className="text-customGrey-700 text-[14px]">Digital Twin Model</label>
+                  <label className="text-customGrey-700 text-[13px] font-[500]">Digital Twin Model</label>
                 </div>
               </div>
-              {formData.allow_export && (<div className="mb-4 flex flex-col items-start ml-3">
-                <label className="block text-customGrey-700 text-[14px]">Backward Efficiency [%]</label>
+              <div className="mb-4 flex flex-col items-start ml-3">
+                <label className={`block text-customGrey-700 text-[13px] ml-2 font-[500] ${formData.allow_export?'':"opacity-15"}`}>Backward Efficiency ( % )</label>
                 <input
-                  className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
+                  className={`border border-black rounded-xl w-80 py-2.5 px-3 mt-1 ${formData.allow_export?'':"opacity-15"}`}
                   type="text"
                   name="backward_efficiency"
                   value={formData.backward_efficiency}
                   onChange={handleChange}
                   placeholder="0.00"
+                  disabled={!formData.allow_export}
                 />
-              </div>)}
+              </div>
 
               <div className="mb-4 flex flex-col items-start ml-3">
-                <label className="block text-customGrey-700 text-[14px]">Primary Ampacity [Ampere]</label>
+                <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">Primary Ampacity ( A )</label>
                 <input
                   className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
@@ -207,7 +209,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
               </div>
 
               <div className="mb-4 flex flex-col items-start ml-3">
-                <label className="block text-customGrey-700 text-[14px]">Secondary Ampacity [Ampere]</label>
+                <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">Secondary Ampacity ( A )</label>
                 <input
                   className="border border-black rounded-xl w-80 py-2.5 px-3 mt-1"
                   type="text"
@@ -226,7 +228,7 @@ const TransformerForm = ({ transformer, onSave, onClose}) => {
           className="bg-yellow-500 text-center mt-1 opacity-80 text-saveButtonColor font-semibold py-4 px-4 rounded-xl hover:bg-yellow-500 hover:opacity-100 w-[200px]"
           onClick={handleSubmit}
           >
-            Save
+            SAVE
           </button>
         </div>
       </div>
