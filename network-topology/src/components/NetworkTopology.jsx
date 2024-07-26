@@ -343,11 +343,11 @@ const NetworkTopology = () => {
                     {data && (
                         <>
                             <div className="flex justify-between bg-breadcrumbBackgroundColor">
-                                <div className='flex mt-[6px]'>
+                                <div className='flex mt-[10px]'>
                                     {selectedSubstationId && (!selectedNode || selectedNode.new==true) && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
                                     {selectedNode && selectedNode.new!=true && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
                                 </div>
-                                <div className='flex pb-[20px] pt-[6px] gap-2 justify-end mr-2 font-dinPro font-medium'>
+                                <div className='flex pb-[20px] pt-[10px] gap-2 justify-end mr-2 font-dinPro font-medium'>
                                     <button
                                         className="cursor-pointer border px-[50px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                                         onClick={handleSaveTopology}
