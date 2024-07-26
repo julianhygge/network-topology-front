@@ -1,3 +1,4 @@
+@import './fonts.css';
 /* .App {
   text-align: center;
 }
@@ -36,6 +37,10 @@
     transform: rotate(360deg);
   }
 } */
+
+body,html{
+  font-family: 'DIN PRO';
+}
 .network-topology-builder {
   padding: 20px;
 }

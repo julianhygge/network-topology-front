@@ -3,7 +3,6 @@
 @font-face {
     font-family: 'DIN PRO';
     src: url('../public/fonts/dinPro/Normal.otf') format('opentype');
-    src: url();
     font-weight: normal;
     font-style: normal;
   }
