@@ -83,7 +83,7 @@ const Page3 = ({ profiles, onUploadAgain }) => {
       {profiles.items.map(profile=>(
 
       <button key={profile.profile_id} className="self-center px-12 py-4 mt-20 text-1xl text-navColor font-semibold tracking-normal bg-[#6AD1CE] shadow-sm rounded-[33px] max-md:px-5 max-md:mt-10"
-        onClick={()=>handleUploadAgain(profile.file_name,profile.links.delete)}>
+        onClick={()=>handleDeleteClick(profile.links.delete,profile.file_name)}>
         Upload Again
       </button>
       ))}
