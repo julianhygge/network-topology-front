@@ -336,8 +336,8 @@ const NetworkGraph2 = ({
           (
             <div className="transformers-row">
               {data.nodes.map((node) => renderNode(node))}
-              <button className="add-transformer" onClick={onAddTransformer}>+ </button>
-              <label className="text-navColor text-sm mt-[50px] ml-[-80px]">Add-T</label>
+              <button className="min-w-[90px] add-transformer" onClick={onAddTransformer}>+ </button>
+              <label className="min-w-[90px] text-navColor text-sm mt-[50px] ml-[-80px]">Add-T</label>
             </div>
           ) 
           : 
