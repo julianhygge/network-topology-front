@@ -12,7 +12,6 @@ import Page2 from "./LoadProfile/Page2";
 
 function App() {
   return (
-   
      <BrowserRouter>
      <Routes>
      <Route path='/' element={<NetworkTopology/>}/>

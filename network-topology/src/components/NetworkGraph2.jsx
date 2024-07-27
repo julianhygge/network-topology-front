@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import './NetworkGraph.css';
 import { fetchTransformerDetails } from "../services/Tranformer";
 import { fetchHouseDetails } from "../services/House";
+import { useNavigate } from 'react-router-dom';
 
 const Transformer = ({ color, name, onTransformerClick }) => (
   <div className="transformer-wrapper cursor-pointer" onClick={onTransformerClick}>
     <img 
       src={`/images/${color}Transformer.png`} 
       alt="Transformer" 
-      className="icon transformer"
+      className={`icon transformer ${color === 'Green' ? 'green-transformer-icon' : ''}`}
     />
     <span className="transformer-label">{name}</span>
   </div>
@@ -120,6 +121,8 @@ const NetworkGraph2 = ({
   const [lineStyle, setLineStyle] = useState({});
   const [showLine, setShowLine] = useState(false);
   const [contextMenu, setContextMenu] = useState({visible: false, x: 0, y: 0, node: null});
+  const navigate = useNavigate();
+
   
   const lineTopOffset = 40;
   const verticalLineHeight = 10;
@@ -192,8 +195,9 @@ const NetworkGraph2 = ({
         const transformerDetails = await fetchTransformerDetails(d.id);
         onTransformerEdit(transformerDetails);
       } else if (d.type === "house") {
-        const houseDetails = await fetchHouseDetails(d.id);
-        onHouseEdit(houseDetails);
+        // const houseDetails = await fetchHouseDetails(d.id);
+        // onHouseEdit(houseDetails);
+        navigate(`/config?house_id=${d.id}`);
       }
     } catch (error) {
       console.error("Error fetching details:", error);
@@ -332,7 +336,8 @@ const NetworkGraph2 = ({
           (
             <div className="transformers-row">
               {data.nodes.map((node) => renderNode(node))}
-              <button className="add-transformer" onClick={onAddTransformer}>+</button>
+              <button className="add-transformer" onClick={onAddTransformer}>+ </button>
+              <label className="text-navColor text-sm mt-[50px] ml-[-80px]">Add-T</label>
             </div>
           ) 
           : 
@@ -340,7 +345,7 @@ const NetworkGraph2 = ({
             <div className='flex flex-col items-center gap-36 h-screen text-center'>
               <div className='add-transformer-top-part flex flex-col gap-1'>
                 <button className="add-transformer-empty-grid" onClick={onAddTransformer}>+</button>
-                <div>Add - T</div>
+                <div >Add - T</div>
               </div>
               <div className='add-transformer-bottom-part flex flex-col gap-1'>
                 <div>Transformer is not added yet under this {data.substation_name}</div>
