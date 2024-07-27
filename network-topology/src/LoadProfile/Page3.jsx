@@ -30,7 +30,7 @@ const Page3 = ({ profiles }) => {
             <div className="w-1/4 text-center mt-4">{profile.user}</div>
             <div className="w-1/2 text-center flex-auto mt-4">{profile.file_name}</div>
             <div className="flex w-1/4 justify-center gap-2 text-1xl font-medium">
-              <a href={profile.links.download} className="px-8 py-4 shadow-sm bg-[#BDD8DB] rounded-[33px] max-md:px-5 text-navColor">
+              <a href={`net-topology-api${profile.links.download}`} className="px-8 py-4 shadow-sm bg-[#BDD8DB] rounded-[33px] max-md:px-5 text-navColor">
                 Download File
               </a>
               <img

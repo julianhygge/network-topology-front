@@ -16,9 +16,9 @@ const Page1 = () => {
       setShowThirdStep(true);
       setAttach15MinFile(false);
     } else {
-      setNoSelected(true);
-      setShowThirdStep(true);
-      setAttach15MinFile(false);
+      // setNoSelected(true);
+      // setShowThirdStep(true);
+      // setAttach15MinFile(false);
     }
   };
 
