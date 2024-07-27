@@ -14,7 +14,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
     defaultValues: {
       name: transformer.name || "",
       max_capacity_kw: transformer.max_capacity_kw || "0.00",
-      years_of_service: transformer.years_of_service || 0,
+      years_of_service: transformer.years_of_service || "0",
       forward_efficiency: transformer.forward_efficiency || "0.00",
       allow_export: transformer.allow_export || false,
       digital_twin_model: transformer.digital_twin_model || false,
