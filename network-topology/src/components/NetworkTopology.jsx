@@ -315,7 +315,7 @@ const NetworkTopology = () => {
     const handleRightClickSelectedNode = (node) => {
         console.log("right click node: ", node);
         setSelectedNode(node);
-        if(node.name && node.name != node.nomenclature){
+        if(node.name && node.name !== node.nomenclature){
             setNodeToDeleteName(node.name + " " + node.nomenclature);
         }else{
             setNodeToDeleteName(node.nomenclature);
@@ -342,14 +342,14 @@ const NetworkTopology = () => {
                 <div className="flex-1 ">
                     {data && (
                         <>
-                            <div className="flex justify-between bg-breadcrumbBackgroundColor">
-                                <div className='flex mt-[6px]'>
-                                    {selectedSubstationId && (!selectedNode || selectedNode.new==true) && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
-                                    {selectedNode && selectedNode.new!=true && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
+                            <div className="relative bg-breadcrumbBackgroundColor py-[1px]">
+                                <div className='absolute left-0 top-3'>
+                                    {selectedSubstationId && (!selectedNode || selectedNode.new===true) && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
+                                    {selectedNode && selectedNode.new!==true && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
                                 </div>
-                                <div className='flex pb-[20px] pt-[6px] gap-2 justify-end mr-2 font-dinPro font-medium'>
+                                <div className='flex pb-[20px] pt-[10px] gap-2 justify-end mr-2 font-dinPro font-medium'>
                                     <button
-                                        className="cursor-pointer border px-[50px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
+                                        className="cursor-pointer border px-[50px] py-1 items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                                         onClick={handleSaveTopology}
                                     >
                                         SAVE
@@ -380,6 +380,7 @@ const NetworkTopology = () => {
                         <Delete
                         onClose={handleCloseDeletePopup}
                         onConfirm={handleDelete}
+                        entity={selectedNode}
                         entityId={nodeToDelete}
                         entityName={nodeToDeleteName}
                         entityType={nodeType}
