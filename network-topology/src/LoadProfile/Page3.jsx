@@ -1,18 +1,54 @@
 import React, { useState } from "react";
 import DeleteConfirm from "./DeleteConfirm";
 
-const Page3 = ({ profiles }) => {
+const Page3 = ({ profiles, onUploadAgain }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [selectedFileName, setSelectedFileName] = useState("");
+  const [selectedDeleteLink, setSelectedDeleteLink] = useState("");
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = (deleteLink, fileName) => {
+    console.log(deleteLink)
+    setSelectedDeleteLink(deleteLink);
+    setSelectedFileName(fileName);
     setShowDeleteConfirm(true);
   };
 
   const handleClosePopup = () => {
     setShowDeleteConfirm(false);
   };
-  console.log(profiles)
 
+  const handleConfirmDelete = async () => {
+    const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
+
+    try {
+      const response = await fetch(`https://hygge-test.ddns.net:8080/net-topology-api${selectedDeleteLink}`, 
+        { method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+
+         });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete file');
+      }
+      console.log(`Deleted file: ${selectedFileName}`);
+      setShowDeleteConfirm(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to delete the file:", error);
+    }
+  };
+
+  const handleUploadAgain = async (filename ,deletelink) => {
+    //setSelectedDeleteLink(deletelink);
+    onUploadAgain(deletelink);
+    // console.log(deletelink)
+    // setShowDeleteConfirm(true);
+    setSelectedFileName(filename);
+  };
   return (
     <div className="flex flex-col items-center text-1xl mt-[150px] font-bold text-center text-navColor">
       <div className="flex justify-center items-center px-16 py-5 w-[1250px] bg-sky-100 rounded-2xl max-md:px-5 max-md:max-w-full">
@@ -38,16 +74,26 @@ const Page3 = ({ profiles }) => {
                 src="images/DeleteButton.png"
                 className="w-[36px] h-[41.23px] mt-2 cursor-pointer"
                 alt="Icon"
-                onClick={handleDeleteClick}
+                onClick={() => handleDeleteClick(profile.links.delete, profile.file_name)}
               />
             </div>
           </div>
         </div>
       ))}
-      <button className="self-center px-12 py-4 mt-20 text-1xl text-navColor font-semibold tracking-normal bg-[#6AD1CE] shadow-sm rounded-[33px] max-md:px-5 max-md:mt-10">
+      {profiles.items.map(profile=>(
+
+      <button key={profile.profile_id} className="self-center px-12 py-4 mt-20 text-1xl text-navColor font-semibold tracking-normal bg-[#6AD1CE] shadow-sm rounded-[33px] max-md:px-5 max-md:mt-10"
+        onClick={()=>handleUploadAgain(profile.file_name,profile.links.delete)}>
         Upload Again
       </button>
-      {showDeleteConfirm && <DeleteConfirm onClose={handleClosePopup} />}
+      ))}
+      {showDeleteConfirm && (
+        <DeleteConfirm
+          onClose={handleClosePopup}
+          onConfirm={handleConfirmDelete}
+          fileName={selectedFileName}
+        />
+      )}
     </div>
   );
 };

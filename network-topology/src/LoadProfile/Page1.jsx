@@ -3,7 +3,7 @@ import Page2 from "./Page2";
 import { Page3 } from "./Page3";
 import { DeleteConfirm } from "./DeleteConfirm";
 
-const Page1 = () => {
+const Page1 = ({ onUploadSuccess }) => {
   const [showSecondStep, setShowSecondStep] = useState(false);
   const [showThirdStep, setShowThirdStep] = useState(false);
   const [noSelected, setNoSelected] = useState(false);
@@ -42,9 +42,14 @@ const Page1 = () => {
   };
 
   if (showThirdStep) {
-    return <Page2 onBack={handleBackClick} attach15MinFile={attach15MinFile} />;
+    return (
+      <Page2
+        onBack={handleBackClick}
+        attach15MinFile={attach15MinFile}
+        onUploadSuccess={onUploadSuccess}
+      />
+    );
   }
-
 
   return (
     <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
@@ -71,9 +76,13 @@ const Page1 = () => {
           </button>
         )}
         <div className="mt-20 text-xl max-md:mt-10">
-          {showSecondStep
-            ? (<>Do you have the <br /> “15 Min Load profile Data” available ?</>)
-            : "Do you have the “Load file (csv)” available?"}
+          {showSecondStep ? (
+            <>
+              Do you have the <br /> “15 Min Load profile Data” available ?
+            </>
+          ) : (
+            "Do you have the “Load file (csv)” available?"
+          )}
         </div>
         <div className="flex gap-8 justify-between mt-20 max-w-full text-xl tracking-normal text-white whitespace-nowrap max-md:mt-10">
           <button

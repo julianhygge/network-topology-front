@@ -19,7 +19,8 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
       } else {
         setErrorMessage(
           <>
-            The file you have uploaded is invalid. <br /> Please upload the correct .csv file.
+            The file you have uploaded is invalid. <br /> Please upload the
+            correct .csv file.
           </>
         );
         setSelectedFile(null);
@@ -30,24 +31,18 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
   const handleFileUpload = async () => {
     if (selectedFile) {
       try {
-        const response = await uploadLoadProfile(houseId, "Profile name", selectedFile, false);
-        if(response){
-          window.location.reload();
-
-        }
-        
+        await uploadLoadProfile(houseId, "Profile name", selectedFile, false);
+        onUploadSuccess();
       } catch (error) {
         setErrorMessage("File upload failed. Please try again.");
       }
     }
   };
-
   const handleDeleteFile = () => {
     setSelectedFile(null);
     setErrorMessage("");
     fileInputRef.current.value = null;
   };
-
   return (
     <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
       <div>
@@ -56,10 +51,13 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
         </span>
       </div>
       <div className="flex flex-col items-center w-[50vw] px-10 pt-10 pb-20 font-medium text-center text-navColor bg-white rounded-2xl max-w-[860px] shadow-[0px_5px_10px_rgba(169,218,198,1)] max-md:px-5">
-        <button className="self-start text-xl max-md:max-w-full" onClick={onBack}>
+        <button
+          className="self-start text-xl max-md:max-w-full"
+          onClick={onBack}
+        >
           BACK
         </button>
-        <div className="mt-12 text-xl w-[350px] max-md:mt-10 relative justify-center mb-3">
+        <div className="mt-12 text-xl w-[335px] max-md:mt-10 relative justify-center mb-3">
           {errorMessage ? (
             <span className="text-[#FC4C02]">{errorMessage}</span>
           ) : selectedFile ? (
@@ -78,7 +76,7 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
           ) : (
             <>
               Please browse and upload the <br />
-              {attach15MinFile ? " 15 Min data load profile" : ""} .csv <br />
+              {attach15MinFile ? " 15 Min data load profile" : ""} .csv 
               file from your computer
             </>
           )}

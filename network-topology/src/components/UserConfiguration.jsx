@@ -11,7 +11,6 @@ const UserConfiguration = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const houseId = searchParams.get("house_id");
-  
 
   const handleButtonClick = async (buttonName) => {
     setSelectedButton(buttonName);
@@ -28,15 +27,62 @@ const UserConfiguration = () => {
     }
   };
 
+  const handleUploadSuccess = async () => {
+    setIsLoading(true);
+    try {
+      const profiles = await fetchLoadProfiles(houseId);
+      setLoadProfiles(profiles);
+      setSelectedButton("Load Profile");
+    } catch (error) {
+      console.error("Error fetching load profiles after upload:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUploadAgain = async (deleteLink) => {
+    const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
+    console.log(deleteLink)
+    try {
+      const response = await fetch(`https://hygge-test.ddns.net:8080/net-topology-api${deleteLink}`, 
+        { method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+
+         });
+         if (!response.ok) {
+          throw new Error('Failed to delete file');
+        }
+        console.log('Deleted file before uploading again');
+      setSelectedButton(null); // Clear the selection to show Page1
+    } catch (error) {
+      console.error("Failed to delete the file:", error);
+    }
+  };
+
   const renderContent = () => {
     if (selectedButton === "Load Profile") {
       if (isLoading) {
-        return <div className="flex items-center justify-center h-full text-xl">Loading...</div>;
+        return (
+          <div className="flex items-center justify-center h-full text-xl">
+            Loading...
+          </div>
+        );
       }
-      console.log(loadProfiles)
-      return loadProfiles.items.length > 0 ? <Page3 profiles={loadProfiles}  /> : <Page1 />;
+      return loadProfiles.items.length > 0 ? (
+        <Page3 profiles={loadProfiles} onUploadAgain={handleUploadAgain} />
+      ) : (
+        <Page1 onUploadSuccess={handleUploadSuccess} />
+      );
     }
-    return <div className="flex items-center justify-center h-full text-xl">Select a profile to view details.</div>;
+    return (
+      <div className="flex items-center justify-center h-full text-xl">
+        Select a profile to view details.
+      </div>
+    );
   };
 
   return (
@@ -47,12 +93,23 @@ const UserConfiguration = () => {
           <div className="flex-1 overflow-hidden">
             <div className="h-[calc(100%_-_80px)] mt-20">
               <div className="grid font-normal">
-                {["Load Profile", "Solar Profile", "Battery Profile", "Flags", "EV Profile", "Wind Profile"].map((item, index) => (
+                {[
+                  "Load Profile",
+                  "Solar Profile",
+                  "Battery Profile",
+                  "Flags",
+                  "EV Profile",
+                  "Wind Profile",
+                ].map((item, index) => (
                   <React.Fragment key={index}>
                     <button
-                      className={`grid justify-center items-center cursor-pointer text-[16px] ${selectedButton === item ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold" : "text-gridColor1"}`}
+                      className={`grid justify-center items-center cursor-pointer text-[16px] ${
+                        selectedButton === item
+                          ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
+                          : "text-gridColor1"
+                      }`}
                       onClick={() => handleButtonClick(item)}
-                      style={{ minHeight: '110px' }}
+                      style={{ minHeight: "110px" }}
                     >
                       {item.split(" ").map((word, wordIndex) => (
                         <React.Fragment key={wordIndex}>
@@ -79,9 +136,7 @@ const UserConfiguration = () => {
             </p>
           </button>
         </div>
-        <div className="flex-1 overflow-auto">
-          {renderContent()}
-        </div>
+        <div className="flex-1 overflow-auto">{renderContent()}</div>
       </div>
     </>
   );
