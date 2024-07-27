@@ -100,66 +100,68 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
   };
 
   return (
-    <div className="flex flex-col h-[90vh] 2xl:h-[92vh]">
-    <div className="flex flex-col bg-sideBar w-[110px] h-full relative">
-      <div className="flex-1 overflow-hidden">
-        <div className="h-[calc(100%_-_80px)] overflow-auto no-scrollbar ">
-          <div className="grid gap-y-5">
-            {grids.map((grid) => (
-              <button
-                key={grid.id}
-                className={`flex flex-col  items-center py-5 justify-center cursor-pointer   ${
-                  selectedGrid === grid.id ? 'bg-white  ' : ''
-                }`}
-                onClick={() => handleGridClick(grid.id)}
-                onContextMenu={(event) => handleContextMenu(event, grid)}
-              >
-                <img
-                  loading="lazy"
-                  src="images/GridImage.png"
-                  alt="Grid Logo"
-                  className="h-[52.81px] w-[46px]  "
-                />
-                <span  className={`text-gridColor1   font-dinPro ${
-                 selectedGrid === grid.id ? 'text-brown font-bold font-dinPro' : ''
-                  }`}>{grid.name}</span>
-              </button>
-            ))}
+    <>
+    <div className="flex flex-col h-[89.7vh]  2xl:h-[91vh]">
+      <div className="flex flex-col bg-sideBar w-[110px] h-full relative ">
+        <div className="flex-1 overflow-hidden">
+          <div className="h-[calc(100%_-_80px)] overflow-auto no-scrollbar ">
+            <div className="grid gap-y-5">
+              {grids.map((grid) => (
+                <button
+                  key={grid.id}
+                  className={`flex flex-col  items-center py-5 justify-center cursor-pointer   ${
+                    selectedGrid === grid.id ? 'bg-white  ' : ''
+                  }`}
+                  onClick={() => handleGridClick(grid.id)}
+                  onContextMenu={(event) => handleContextMenu(event, grid)}
+                >
+                  <img
+                    loading="lazy"
+                    src="images/GridImage.png"
+                    alt="Grid Logo"
+                    className="h-[52.81px] w-[46px]  "
+                  />
+                  <span  className={`text-gridColor1   font-dinPro ${
+                  selectedGrid === grid.id ? 'text-brown font-bold font-dinPro' : ''
+                    }`}>{grid.name}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      <button
-        className="absolute bottom-1 left-4 grid justify-center cursor-pointer hover:opacity-50 "
-        onClick={handleAddGrid}
-      >
-        <p className="bg-white w-[80px] px-4 rounded-[50px] text-3xl text-gridColor1 border-2 border-[]">
-          +
-        </p>
-        <p className="text-white text-sm mt-2 font-dinPro font-medium">Add Grid</p>
-      </button>
-    </div>
-    {contextMenu.visible && (
-      <div
-        className="fixed z-10 context-menu"
-        style={{ top: contextMenu.y, left: contextMenu.x }}
-      >
         <button
-          className="p-2 bg-white text-[#F21818] rounded"
-          onClick={() => setShowDeletePopup(true)}
+          className="absolute bottom-3 left-4 grid justify-center cursor-pointer hover:opacity-50 "
+          onClick={handleAddGrid}
         >
-          Delete
+          <p className="bg-[#FFF8E6] w-[80px]  rounded-[50px] text-3xl text-gridColor1 border-2 border-[#D59805]">
+            +
+          </p>
+          <p className="text-white text-m mt-2 font-dinPro font-medium">Add Grid</p>
         </button>
       </div>
-    )}
-    {showDeletePopup && contextMenu.grid && (
-      <Delete
-        onConfirm={handleConfirmDelete}
-        onClose={() => setShowDeletePopup(false)}
-        entityType="grid"
-        entityName={contextMenu.grid.name}
-      />
-    )}
-  </div>
+    </div>
+    {contextMenu.visible && (
+        <div
+          className="fixed z-10 context-menu"
+          style={{ top: contextMenu.y, left: contextMenu.x }}
+        >
+          <button
+            className="p-2 bg-white text-[#F21818] rounded"
+            onClick={() => setShowDeletePopup(true)}
+          >
+            Delete
+          </button>
+        </div>
+      )}
+      {showDeletePopup && contextMenu.grid && (
+        <Delete
+          onConfirm={handleConfirmDelete}
+          onClose={() => setShowDeletePopup(false)}
+          entityType="grid"
+          entityName={contextMenu.grid.name}
+        />
+      )}
+    </>
   
   );
 };

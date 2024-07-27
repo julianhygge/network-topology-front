@@ -9,7 +9,7 @@ const Transformer = ({ color, name, onTransformerClick }) => (
     <img 
       src={`/images/${color}Transformer.png`} 
       alt="Transformer" 
-      className="icon transformer"
+      className={`icon transformer ${color === 'Green' ? 'green-transformer-icon' : ''}`}
     />
     <span className="transformer-label">{name}</span>
   </div>
@@ -336,7 +336,8 @@ const NetworkGraph2 = ({
           (
             <div className="transformers-row">
               {data.nodes.map((node) => renderNode(node))}
-              <button className="add-transformer" onClick={onAddTransformer}>+</button>
+              <button className="add-transformer" onClick={onAddTransformer}>+ </button>
+              <label className="text-navColor text-sm mt-[50px] ml-[-80px]">Add-T</label>
             </div>
           ) 
           : 
@@ -344,7 +345,7 @@ const NetworkGraph2 = ({
             <div className='flex flex-col items-center gap-36 h-screen text-center'>
               <div className='add-transformer-top-part flex flex-col gap-1'>
                 <button className="add-transformer-empty-grid" onClick={onAddTransformer}>+</button>
-                <div>Add - T</div>
+                <div >Add - T</div>
               </div>
               <div className='add-transformer-bottom-part flex flex-col gap-1'>
                 <div>Transformer is not added yet under this {data.substation_name}</div>

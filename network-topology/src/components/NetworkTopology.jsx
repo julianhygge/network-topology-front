@@ -332,24 +332,23 @@ const NetworkTopology = () => {
     
 
     return (
-        <div>
+        <div className='flex-col box-border max-w-[1920px] h-full'>
             <Navbar />
-            <div className="flex">
+            <div className="flex h-full box-border">
                 <GridSideBar
                     onGridSelect={setSelectedSubstationId}
                     selectedGridId={selectedSubstationId}
                 />
-                <div className="flex-1 ">
                     {data && (
-                        <>
-                            <div className="flex justify-between bg-breadcrumbBackgroundColor">
+                        <div className='flex-col overflow-hidden box-border h-full w-full'>
+                            <div className="flex justify-between items-center bg-breadcrumbBackgroundColor py-2 pr-[24px]">
                                 <div className='flex mt-[6px]'>
                                     {selectedSubstationId && (!selectedNode || selectedNode.new==true) && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
                                     {selectedNode && selectedNode.new!=true && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
                                 </div>
-                                <div className='flex pb-[20px] pt-[6px] gap-2 justify-end mr-2 font-dinPro font-medium'>
+                                <div className='flex items-center justify-between font-dinPro font-medium'>
                                     <button
-                                        className="cursor-pointer border px-[50px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
+                                        className="cursor-pointer border px-[50px] py-[6px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                                         onClick={handleSaveTopology}
                                     >
                                         SAVE
@@ -362,6 +361,7 @@ const NetworkTopology = () => {
                                     </button> */}
                                 </div>
                             </div>
+                            <div className='overflow-auto h-[83vh]  xl:h-[79vh]'>
                             <NetworkGraph2
                                 onSelectedNode={handleSelectedNode}
                                 onRightClickSelectedNode={handleRightClickSelectedNode}
@@ -374,7 +374,9 @@ const NetworkTopology = () => {
                                 onTransformerEdit={handleTransformerEdit}
                                 onHouseEdit={handleHouseEdit}
                             />
-                        </>
+                            </div>
+                            
+                        </div>
                     )}
                     {showDeletePopup && (
                         <Delete
@@ -408,7 +410,6 @@ const NetworkTopology = () => {
                             </div>
                         </div>
                     )}
-                </div>
             </div>
         </div>
     );
