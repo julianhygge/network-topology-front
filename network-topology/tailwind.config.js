@@ -1,3 +1,5 @@
+const { width } = require('@mui/system');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -39,7 +41,7 @@ module.exports = {
     addUtilities({
       '.no-scrollbar': {
         '&::-webkit-scrollbar': {
-          display: 'none',
+          width:'0px',
         },
         '-ms-overflow-style': 'none',
         'scrollbar-width': 'none',

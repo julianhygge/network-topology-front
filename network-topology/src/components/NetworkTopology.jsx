@@ -332,9 +332,9 @@ const NetworkTopology = () => {
     
 
     return (
-        <div className='flex-col box-border max-w-[1920px] h-full'>
+        <div className='flex-col  box-border max-w-[1920px] h-full'>
             <Navbar />
-            <div className="flex h-full box-border">
+            <div className="flex h-full box-border ">
                 <GridSideBar
                     onGridSelect={setSelectedSubstationId}
                     selectedGridId={selectedSubstationId}
@@ -361,7 +361,7 @@ const NetworkTopology = () => {
                                     </button> */}
                                 </div>
                             </div>
-                            <div className='overflow-auto h-[83vh]  xl:h-[79vh]'>
+                            <div className='overflow-auto  h-[79.7vh]  2xl:h-[83.5vh]'>
                             <NetworkGraph2
                                 onSelectedNode={handleSelectedNode}
                                 onRightClickSelectedNode={handleRightClickSelectedNode}

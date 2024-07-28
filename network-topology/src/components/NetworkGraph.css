@@ -35,6 +35,7 @@
   gap: 20px;
   padding: 20px;
   position: relative;
+  height: 100%;
 }
 
 .transformer-column {
@@ -291,7 +292,7 @@
 }
 
 .context-menu {
-  position: absolute;
+  position: fixed;
   background: white;
   top: 60px;
   border: 1px solid #908B8B;

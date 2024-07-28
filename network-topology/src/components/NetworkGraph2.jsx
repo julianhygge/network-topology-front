@@ -205,9 +205,10 @@ const NetworkGraph2 = ({
   };
 
   const handleContextMenu = (event, node) => {
-    onRightClickSelectedNode(node)
+    onRightClickSelectedNode(node);
     event.preventDefault();
-    console.log(node);
+    console.log('sahndklndkl',node);
+  
     setContextMenu({
       visible: true,
       x: event.clientX,
@@ -215,7 +216,7 @@ const NetworkGraph2 = ({
       node,
     });
   };
-
+  
   const handleClick = () => {
     setContextMenu({
       visible: false,
@@ -224,21 +225,21 @@ const NetworkGraph2 = ({
       node: null,
     });
   };
-
+  
   useEffect(() => {
     document.addEventListener("click", handleClick);
     return () => {
       document.removeEventListener("click", handleClick);
     };
   }, []);
-
+  
   const renderContextMenu = () => {
     const { x, y, node } = contextMenu;
-
+  
     if (!node) return null;
-
+  
     return (
-      <div className="context-menu" style={{ top: y-170, left: x-100 }}>
+      <div className="context-menu" style={{ top: `${y-20}px`, left: `${x+20}px` }}>
         <button className='text-navColor font-dinPro font-medium ' onClick={() => onConfigure(node)}>Configure</button>
         {node.type === 'transformer' && (
           <button className='text-navColor font-dinPro font-medium' onClick={() => onAddSubTransformer(node.id)}>Add Sub-T</button>
@@ -249,7 +250,6 @@ const NetworkGraph2 = ({
       </div>
     );
   };
-
   // const handleNodeClick = (node) => {
   //   console.log(`Node ID: ${node.id}`);
   // };
@@ -258,8 +258,8 @@ const NetworkGraph2 = ({
     if (node.type === "house") {
       return (
         <div key={node.id} className="house-item cursor-pointer" onContextMenu={(e) => handleContextMenu(e, node)} >
-          <House color={getColor(node.is_complete, node.new)} onHouseClick={() => onSelectedNode(node)} />
-          <span className='font-dinPro font-medium text-navColor'>{node.nomenclature}</span>
+          <House color={getColor(node.is_complete, node.new)}  onHouseClick={() => onSelectedNode(node)} />
+          <span className='font-dinPro font-medium text-navColor'  >{node.nomenclature}</span>
         </div>
       );
     }
