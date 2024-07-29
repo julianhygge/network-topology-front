@@ -348,7 +348,7 @@ const NetworkTopology = () => {
                                 </div>
                                 <div className='flex items-center justify-between font-dinPro font-medium'>
                                     <button
-                                        className="cursor-pointer border px-[50px] py-[6px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
+                                        className="cursor-pointer border px-[65px] mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                                         onClick={handleSaveTopology}
                                     >
                                         SAVE

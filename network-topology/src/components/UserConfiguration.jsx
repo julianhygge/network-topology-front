@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import Page1 from "../LoadProfile/Page1";
 import Page3 from "../LoadProfile/Page3";
 import { fetchLoadProfiles } from "../services/LoadProfile";
+import  PageLoad  from "../LoadProfile/PageLoad";
 
 const UserConfiguration = () => {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -11,6 +12,7 @@ const UserConfiguration = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const houseId = searchParams.get("house_id");
+  const [showPageLoad, setShowPageLoad] = useState(false);
 
   const handleButtonClick = async (buttonName) => {
     setSelectedButton(buttonName);
@@ -62,8 +64,17 @@ const UserConfiguration = () => {
       console.error("Failed to delete the file:", error);
     }
   };
+  const handleNoClick = () => {
+
+    setShowPageLoad(true); 
+
+  };
 
   const renderContent = () => {
+    if (showPageLoad) {
+      return <PageLoad />; 
+    }
+
     if (selectedButton === "Load Profile") {
       if (isLoading) {
         return (
@@ -75,9 +86,10 @@ const UserConfiguration = () => {
       return loadProfiles.items.length > 0 ? (
         <Page3 profiles={loadProfiles} onUploadAgain={handleUploadAgain} />
       ) : (
-        <Page1 onUploadSuccess={handleUploadSuccess} />
+        <Page1 onUploadSuccess={handleUploadSuccess} onNoClick={handleNoClick} />
       );
     }
+
     return (
       <div className="flex items-center justify-center h-full text-xl">
         Select a profile to view details.
