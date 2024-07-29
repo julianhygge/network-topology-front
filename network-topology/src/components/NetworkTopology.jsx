@@ -77,10 +77,37 @@ const NetworkTopology = () => {
         setTransformerCounter(transformerCounter + 1);
     };
 
-    const handleDeleteHouse = (houseId) => {
-        setNodeToDelete(houseId);
-        setShowDeletePopup(true);
+    const handleDeleteHouse = (house, newHouse) => {
+        const deleteHouseRecursive = (nodes, parentId, houseId) => {
+            return nodes.map(node => {
+                if (node.id === parentId) {
+                    return {
+                        ...node,
+                        children: node.children ? node.children.filter(child => child.id !== houseId) : []
+                    };
+                } else if (node.children && node.children.length > 0) {
+                    return {
+                        ...node,
+                        children: deleteHouseRecursive(node.children, parentId, houseId)
+                    };
+                }
+                return node;
+            });
+        };
+    
+        if (newHouse) {
+            const updatedNodes = deleteHouseRecursive(data.nodes, house.parentId, house.id);
+            setData(prevState => ({
+                ...prevState,
+                nodes: updatedNodes
+            }));
+        } else {
+            setNodeToDelete(house.id);
+            setShowDeletePopup(true);
+        }
     };
+    
+    
 
     const handleAddHouse = (transformerId) => {
         const addHouseRecursive = (node) => {
@@ -95,6 +122,7 @@ const NetworkTopology = () => {
                     nomenclature: `H.${prev_nomenclature}.${houseCount + 1}`,
                     name: `H.${prev_nomenclature}.${houseCount + 1}`,
                     children: null,
+                    parentId: transformerId
                 };
                 return {
                     ...node,
@@ -116,10 +144,28 @@ const NetworkTopology = () => {
         }));
     };
 
-    const handleDeleteTransformer = (transformerId) => {
-        setNodeToDelete(transformerId);
-        setShowDeletePopup(true);
+    const handleDeleteTransformer = (transformerId, newTransformer) => {
+        const deleteTransformerRecursive = (nodes, transformId) => {
+            return nodes
+                .filter(node => node.id !== transformId)
+                .map(node => ({
+                    ...node,
+                    children: node.children ? deleteTransformerRecursive(node.children, transformId) : []
+                }));
+        };
+    
+        if (newTransformer) {
+            const updatedNodes = deleteTransformerRecursive(data.nodes, transformerId);
+            setData((prevState) => ({
+                ...prevState,
+                nodes: updatedNodes
+            }));
+        } else {
+            setNodeToDelete(transformerId);
+            setShowDeletePopup(true);
+        }
     };
+    
 
     const handleAddSubTransformer = (transformerId) => {
         const addSubTransformerRecursive = (node) => {
@@ -244,6 +290,7 @@ const NetworkTopology = () => {
         };
 
         try {
+            console.log("updated data: ", updatedData);
             await updateSubstationTopology(selectedSubstationId, updatedData);
             const data = await getSubstationById(selectedSubstationId);
             setData(data);
