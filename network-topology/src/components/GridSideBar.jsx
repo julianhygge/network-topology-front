@@ -130,10 +130,10 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
           </div>
         </div>
         <button
-          className="fixed bottom-3 left-3 grid justify-center cursor-pointer hover:opacity-50 "
+          className="fixed bottom-3 left-3 grid justify-center cursor-pointer hover:opacity-50"
           onClick={handleAddGrid}
         >
-          <p className=" flex  justify-center bg-[#FFF8E6] w-[80px]   rounded-[50px]  text-3xl  text-gridColor1 border-2 border-[#D59805]">
+          <p className="flex justify-center items-center bg-[#FFF8E6] w-[80px] rounded-[50px] text-3xl text-gridColor1 border-2 border-[#D59805] pb-1">
             +
           </p>
           <p className="text-white text-m mt-2 font-dinPro font-medium">Add Grid</p>
