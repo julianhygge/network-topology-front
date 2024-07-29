@@ -207,7 +207,6 @@ const NetworkGraph2 = ({
   const handleContextMenu = (event, node) => {
     onRightClickSelectedNode(node);
     event.preventDefault();
-    console.log('sahndklndkl',node);
   
     setContextMenu({
       visible: true,
@@ -244,7 +243,7 @@ const NetworkGraph2 = ({
         {node.type === 'transformer' && (
           <button className='text-navColor font-dinPro font-medium' onClick={() => onAddSubTransformer(node.id)}>Add Sub-T</button>
         )}
-        <button className='text-[#F21818] font-dinPro font-medium' onClick={() => node.type === 'transformer' ? onDeleteTransformer(node.id) : onDeleteHouse(node.id)}>
+        <button className='text-[#F21818] font-dinPro font-medium' onClick={() => node.type === 'transformer' ? onDeleteTransformer(node.id, node.new) : onDeleteHouse(node, node.new)}>
           Delete
         </button>
       </div>
@@ -336,7 +335,7 @@ const NetworkGraph2 = ({
           (
             <div className="transformers-row">
               {data.nodes.map((node) => renderNode(node))}
-              <button className="min-w-[90px] add-transformer" onClick={onAddTransformer}>+ </button>
+              <button className="min-w-[90px] add-transformer" onClick={onAddTransformer}>+</button>
               <label className="min-w-[90px] text-navColor text-sm mt-[50px] ml-[-80px]">Add-T</label>
             </div>
           ) 
