@@ -15,6 +15,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
         setGrids(data.items);
 
         if (!selectedGridId && data.items.length > 0) {
+          console.log("hello")
           const firstGridId = data.items[0].id;
           setSelectedGrid(firstGridId);
           onGridSelect(firstGridId); 
@@ -94,6 +95,8 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
       setGrids(grids.filter(g => g.id !== contextMenu.grid.id));
       setContextMenu({ visible: false, x: 0, y: 0, grid: null });
       setShowDeletePopup(false);
+      setSelectedGrid(null);
+      onGridSelect(null); 
     } catch (error) {
       console.error('Failed to delete substation:', error);
     }
