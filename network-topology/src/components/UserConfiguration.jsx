@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 import Page1 from "../LoadProfile/Page1";
 import Page3 from "../LoadProfile/Page3";
 import { fetchLoadProfiles } from "../services/LoadProfile";
-import  PageLoad  from "../LoadProfile/PageLoad";
+import PageLoad from "../LoadProfile/PageLoad";
 
 const UserConfiguration = () => {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -44,21 +44,22 @@ const UserConfiguration = () => {
 
   const handleUploadAgain = async (deleteLink) => {
     const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
     console.log(deleteLink)
     try {
-      const response = await fetch(`https://hygge-test.ddns.net:8080/net-topology-api${deleteLink}`, 
-        { method: 'DELETE',
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
+      const response = await fetch(`https://hygge-test.ddns.net:8080/net-topology-api${deleteLink}`,
+        {
+          method: 'DELETE',
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
 
-         });
-         if (!response.ok) {
-          throw new Error('Failed to delete file');
-        }
-        console.log('Deleted file before uploading again');
+        });
+      if (!response.ok) {
+        throw new Error('Failed to delete file');
+      }
+      console.log('Deleted file before uploading again');
       setSelectedButton(null); // Clear the selection to show Page1
     } catch (error) {
       console.error("Failed to delete the file:", error);
@@ -66,13 +67,13 @@ const UserConfiguration = () => {
   };
   const handleNoClick = () => {
 
-    setShowPageLoad(true); 
+    setShowPageLoad(true);
 
   };
 
   const renderContent = () => {
     if (showPageLoad) {
-      return <PageLoad />; 
+      return <PageLoad />;
     }
 
     if (selectedButton === "Load Profile") {
@@ -83,7 +84,7 @@ const UserConfiguration = () => {
           </div>
         );
       }
-      return loadProfiles.items.length > 0 ? (
+      return loadProfiles.items?.length > 0 ? (
         <Page3 profiles={loadProfiles} onUploadAgain={handleUploadAgain} />
       ) : (
         <Page1 onUploadSuccess={handleUploadSuccess} onNoClick={handleNoClick} />
@@ -115,11 +116,10 @@ const UserConfiguration = () => {
                 ].map((item, index) => (
                   <React.Fragment key={index}>
                     <button
-                      className={`grid justify-center items-center cursor-pointer text-[16px] ${
-                        selectedButton === item
+                      className={`grid justify-center items-center cursor-pointer text-[16px] ${selectedButton === item
                           ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
                           : "text-gridColor1"
-                      }`}
+                        }`}
                       onClick={() => handleButtonClick(item)}
                       style={{ minHeight: "110px" }}
                     >
