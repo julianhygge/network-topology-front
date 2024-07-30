@@ -8,7 +8,7 @@ export default function Navbar() {
     }
   return (
     <div>
-        <header className="flex w-full items-center gap-10 px-9 py-4 text-xl font-medium bg-navColor  ">
+        <header className="flex  justify-between items-center w-full  gap-10 px-9 py-4 text-xl font-medium bg-navColor  ">
         <img
           loading="lazy"
           src={`${process.env.PUBLIC_URL}/images/HyggeLogo.png`} 
@@ -19,6 +19,11 @@ export default function Navbar() {
         <h1 className="flex-auto my-auto max-md:max-w-full text-white font-dinPro ">
           Welcome to Hygge Power Trading Simulator
         </h1>
+        <div className="absolute left-1/2 transform -translate-x-1/2 ml-5">
+      <span className="px-10 py-2 text-navColor bg-[#FFB600] opacity-90  rounded-3xl  font-medium ">
+        Shanti Niketan-1, S00011
+      </span>
+    </div>
       </header>
     </div>
   )
