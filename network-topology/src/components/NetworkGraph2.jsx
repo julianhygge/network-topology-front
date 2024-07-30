@@ -258,7 +258,7 @@ const NetworkGraph2 = ({
       return (
         <div key={node.id} className="house-item cursor-pointer" onContextMenu={(e) => handleContextMenu(e, node)} >
           <House color={getColor(node.is_complete, node.new)}  onHouseClick={() => onSelectedNode(node)} />
-          <span className='font-dinPro font-medium text-navColor'  >{node.nomenclature}</span>
+          <span className='font-dinPro font-medium house-name text-navColor'  >{node.nomenclature}</span>
         </div>
       );
     }

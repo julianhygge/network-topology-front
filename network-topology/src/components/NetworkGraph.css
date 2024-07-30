@@ -318,3 +318,6 @@
   border-radius: 10px;
 }
 
+.house-name {
+  white-space: nowrap;
+}
