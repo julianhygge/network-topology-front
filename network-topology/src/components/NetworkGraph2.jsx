@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 
 const Transformer = ({ color, name, onTransformerClick }) => (
   <div className="transformer-wrapper cursor-pointer" onClick={onTransformerClick}>
-    <img 
-      src={`/images/${color}Transformer.png`} 
-      alt="Transformer" 
+    <img
+      src={`/images/${color}Transformer.png`}
+      alt="Transformer"
       className={`icon transformer ${color === 'Green' ? 'green-transformer-icon' : ''}`}
     />
     <span className="transformer-label">{name}</span>
@@ -17,11 +17,11 @@ const Transformer = ({ color, name, onTransformerClick }) => (
 
 const House = ({ color, onHouseClick }) => (
   <div className='cursor-pointer' onClick={onHouseClick}>
-  <img 
-    src={`/images/${color}House.png`} 
-    alt="House" 
-    className="icon house"
-  />
+    <img
+      src={`/images/${color}House.png`}
+      alt="House"
+      className="icon house"
+    />
   </div>
 );
 
@@ -120,10 +120,10 @@ const NetworkGraph2 = ({
 }) => {
   const [lineStyle, setLineStyle] = useState({});
   const [showLine, setShowLine] = useState(false);
-  const [contextMenu, setContextMenu] = useState({visible: false, x: 0, y: 0, node: null});
+  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, node: null });
   const navigate = useNavigate();
 
-  
+
   const lineTopOffset = 40;
   const verticalLineHeight = 10;
   const nodeVerticalLineTop = -20;
@@ -156,7 +156,7 @@ const NetworkGraph2 = ({
         } else {
           setShowLine(false);
         }
-      }else{
+      } else {
         setShowLine(false);
       }
     };
@@ -207,7 +207,7 @@ const NetworkGraph2 = ({
   const handleContextMenu = (event, node) => {
     onRightClickSelectedNode(node);
     event.preventDefault();
-  
+
     setContextMenu({
       visible: true,
       x: event.clientX,
@@ -215,7 +215,7 @@ const NetworkGraph2 = ({
       node,
     });
   };
-  
+
   const handleClick = () => {
     setContextMenu({
       visible: false,
@@ -224,21 +224,21 @@ const NetworkGraph2 = ({
       node: null,
     });
   };
-  
+
   useEffect(() => {
     document.addEventListener("click", handleClick);
     return () => {
       document.removeEventListener("click", handleClick);
     };
   }, []);
-  
+
   const renderContextMenu = () => {
     const { x, y, node } = contextMenu;
-  
+
     if (!node) return null;
-  
+
     return (
-      <div className="context-menu" style={{ top: `${y-20}px`, left: `${x+20}px` }}>
+      <div className="context-menu" style={{ top: `${y - 20}px`, left: `${x + 20}px` }}>
         <button className='text-navColor font-dinPro font-medium ' onClick={() => onConfigure(node)}>Configure</button>
         {node.type === 'transformer' && (
           <button className='text-navColor font-dinPro font-medium' onClick={() => onAddSubTransformer(node.id)}>Add Sub-T</button>
@@ -256,8 +256,8 @@ const NetworkGraph2 = ({
   const renderNode = (node, level = 0) => {
     if (node.type === "house") {
       return (
-        <div key={node.id} className="house-item cursor-pointer" onContextMenu={(e) => handleContextMenu(e, node)} >
-          <House color={getColor(node.is_complete, node.new)}  onHouseClick={() => onSelectedNode(node)} />
+        <div key={node.id} className="house-item cursor-pointer" onDoubleClick={() => { onConfigure(node) }} onContextMenu={(e) => handleContextMenu(e, node)} >
+          <House color={getColor(node.is_complete, node.new)} onHouseClick={() => onSelectedNode(node)} />
           <span className='font-dinPro font-medium house-name text-navColor'  >{node.nomenclature}</span>
         </div>
       );
@@ -268,36 +268,36 @@ const NetworkGraph2 = ({
         key={node.id}
         className="transformer-column"
         data-transformer-id={node.id}
-      
+
       >
-        <div className="transformer-header cursor-pointer" onContextMenu={(e) => handleContextMenu(e, node)}>
-          <Transformer color={getColor(node.is_complete, node.new)} onTransformerClick={() => onSelectedNode(node)}/>
+        <div className="transformer-header cursor-pointer" onDoubleClick={() => { onConfigure(node) }} onContextMenu={(e) => handleContextMenu(e, node)}>
+          <Transformer color={getColor(node.is_complete, node.new)} onTransformerClick={() => onSelectedNode(node)} />
           <span className='font-dinPro font-medium text-navColor'>{node.nomenclature}</span>
         </div>
         <div className="transformer-node">
           <SubConnectionLine transformer={node} />
           <div className="houses-column">
             {node.children && node.children.filter(child => child.type === "house").length > 0 ?
-              node.children.filter(child => child.type === "house").map(renderNode) 
+              node.children.filter(child => child.type === "house").map(renderNode)
               :
               (
-              <div className='flex flex-col items-center text-center gap-5 pt-14 pb-20 px-2 font-dinPro font-medium text-navColor'>
-                <div className=''>
-                    House is not 
-                    <br/>
-                    added yet under 
-                    <br/>
+                <div className='flex flex-col items-center text-center gap-5 pt-14 pb-20 px-2 font-dinPro font-medium text-navColor'>
+                  <div className=''>
+                    House is not
+                    <br />
+                    added yet under
+                    <br />
                     this Transformer
-                </div>
+                  </div>
 
-                <div className='text-md'>
+                  <div className='text-md'>
                     Please add from
-                    <br/>
-                    the below 
-                    <br/>
+                    <br />
+                    the below
+                    <br />
                     Button
+                  </div>
                 </div>
-              </div>
               )
             }
             <div className='absolute bottom-1'>
@@ -331,15 +331,15 @@ const NetworkGraph2 = ({
         ></div>
       )}
       <React.Fragment>
-        {data && data.nodes && data.nodes.length > 0 ? 
+        {data && data.nodes && data.nodes.length > 0 ?
           (
             <div className="transformers-row">
               {data.nodes.map((node) => renderNode(node))}
               <button className="min-w-[90px] add-transformer" onClick={onAddTransformer}>+</button>
               <label className="min-w-[90px] text-navColor text-sm mt-[50px] ml-[-80px]">Add-T</label>
             </div>
-          ) 
-          : 
+          )
+          :
           (
             <div className='flex flex-col items-center gap-36 h-screen text-center'>
               <div className='add-transformer-top-part flex flex-col gap-1'>
