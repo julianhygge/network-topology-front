@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import Page1 from "../LoadProfile/Page1";
 import Page3 from "../LoadProfile/Page3";
@@ -10,8 +10,7 @@ const UserConfiguration = () => {
   const [selectedButton, setSelectedButton] = useState(null);
   const [loadProfiles, setLoadProfiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchParams] = useSearchParams();
-  const houseId = searchParams.get("house_id");
+  const {houseId} = useParams();
   const [showPageLoad, setShowPageLoad] = useState(false);
 
   const handleButtonClick = async (buttonName) => {
@@ -133,7 +132,7 @@ const UserConfiguration = () => {
                       <img
                         className="grid justify-center w-20 ml-5"
                         loading="lazy"
-                        src="images/Line 24.png"
+                        src={`${process.env.PUBLIC_URL}/images/Line 24.png`}
                         alt="Line"
                       />
                     )}
@@ -143,9 +142,9 @@ const UserConfiguration = () => {
             </div>
           </div>
           <button className="absolute top mt-2 left-4 grid justify-center cursor-pointer hover:opacity-50">
-            <p className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1">
-              <img loading="lazy" src="images/Arrow 2.png" alt="Back" />
-            </p>
+            <div className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1">
+              <img loading="lazy" src={`${process.env.PUBLIC_URL}/images/Arrow 2.png`} alt="Back" />
+            </div>
           </button>
         </div>
         <div className="flex-1 overflow-auto">{renderContent()}</div>
