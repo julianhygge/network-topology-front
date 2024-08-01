@@ -3,16 +3,11 @@ import Breadcrumb from "./Breadcrumb";
 import "./Breadcrumb.css"
 
 const Delete = ({ onConfirm, onClose, entity, entityId, entityName, entityType }) => {
-
-  const handleBreadcrumbNodeClick = (node) => {
-    // this function wont do anything
-  }
-
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="relative flex flex-col justify-center text-xl font-medium text-orange-600 w-[800px] max-w-[800px] bg-white rounded-3xl border border-sky-400 border-solid shadow-sm z-10">
         <div className="absolute top-5 z-1 text-[14px] text-black font-light">
-          {entity && entity.new!==true && <Breadcrumb nodeId={entityId} onEditNode={handleBreadcrumbNodeClick}/>}
+          {entity && entity.new!==true && <Breadcrumb nodeId={entityId} onEditNode={() => {}}/>}
         </div>
         <div className="flex flex-col items-center  pb-14 pt-2  max-md:pr-5 max-md:max-w-full">
           <button className="cursor-pointer absolute top-3 right-5 p-2 text-4xl font-thin text-black" onClick={onClose}>X</button>

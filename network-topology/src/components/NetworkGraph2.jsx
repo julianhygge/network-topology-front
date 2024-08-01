@@ -197,7 +197,7 @@ const NetworkGraph2 = ({
       } else if (d.type === "house") {
         // const houseDetails = await fetchHouseDetails(d.id);
         // onHouseEdit(houseDetails);
-        navigate(`/config?house_id=${d.id}`);
+        navigate(`/config/${d.id}`);
       }
     } catch (error) {
       console.error("Error fetching details:", error);

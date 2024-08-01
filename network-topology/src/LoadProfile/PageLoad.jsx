@@ -1,11 +1,12 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams} from 'react-router-dom';
 
 const PageLoad = () => {
   const navigate = useNavigate();
+  const {houseId} = useParams();
 
   const handleLoadBuilderNavigation = () => {
-    navigate('/loadBuilder');
+    navigate(`/loadBuilder/${houseId}`);
   }
   return (
     <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">

@@ -19,9 +19,9 @@ function App() {
      <Route path="/grid" element={<Grid/> }/>
      <Route path='/gridPage'element={<GridPage/>}/>
      <Route path="/transformers/:substationId" element={<TransformerPage />} />
-     <Route path="/config" element={<UserConfiguration/>}></Route>
+     <Route path="/config/:houseId" element={<UserConfiguration/>}></Route>
      <Route path="/p" element={<Page2/>}></Route>
-     <Route path="/loadBuilder" element={<LoadBuilder/>}></Route>
+     <Route path="/loadBuilder/:houseId" element={<LoadBuilder/>}></Route>
      </Routes>
      </BrowserRouter>
   );
