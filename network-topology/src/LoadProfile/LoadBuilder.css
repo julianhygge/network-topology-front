@@ -1,0 +1,79 @@
+/* grid container */
+.container {
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    width: 100%;
+}
+
+li{
+    list-style: none;
+}
+
+/* nav */
+
+.nav{
+    grid-column: 1 / 7;
+}
+
+.nav ul {
+    display: grid;
+}
+
+.nav li {
+    list-style: none;
+    margin: 4px;
+    padding: 4px;
+}
+
+.heading {
+    grid-column: 4 / 5;
+}
+
+.watts {
+    grid-column: 5 / 6;
+}
+
+.reset-profile {
+    grid-column: 6 / 7;
+}
+
+/* table */
+.table-container{
+    grid-column: 1 / 7;
+}
+
+.device-table > ul{
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr;
+    grid-row: 1 / 2;
+ }
+
+.table-body{
+    grid-row: 2 / 3;
+}
+
+.device-type-column{
+    grid-column: 1 / 2;
+}
+
+.rating-column{
+    grid-column: 2 / 3;
+}
+
+.quantity-column{
+    grid-column: 3 / 4;
+}
+
+.hours-column{
+    grid-column: 4 / 5;
+}
+
+.total-column{
+    grid-column: 5 / 6;
+}
+
+.action-column{
+    grid-column: 6 / 7;
+}
