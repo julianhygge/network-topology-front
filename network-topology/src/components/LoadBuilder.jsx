@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { fetchLoadProfileItems } from '../services/LoadProfile';
+import { fetchLoadProfileItems, saveLoadProfileItems } from '../services/LoadProfile';
 import { fetchAppliances } from '../services/Appliance';
 
 const LoadBuilderForm = ({ onAdd, appliances }) => {
   const [error, setError] = useState('');
-  const [profileId, setProfileId] = useState("");
+  const [electricalDeviceId, setElectricalDeviceId] = useState("");
   const [ratingWatts, setRatingWatts] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [hours, setHours] = useState(0);
   const [total, setTotal] = useState(0);
 
   const handleAdd = () => {
-    if (!profileId) {
+    if (!electricalDeviceId) {
       setError("Please select a profile");
       return;
     }
@@ -28,8 +28,8 @@ const LoadBuilderForm = ({ onAdd, appliances }) => {
       setError("Please enter hours");
       return;
     }
-    onAdd({ profileId, ratingWatts, quantity, hours, addedTotal: total });
-    setProfileId("");
+    onAdd({ electricalDeviceId, ratingWatts, quantity, hours, addedTotal: total });
+    setElectricalDeviceId("");
     setRatingWatts(0);
     setQuantity(0);
     setHours(0);
@@ -39,7 +39,7 @@ const LoadBuilderForm = ({ onAdd, appliances }) => {
   return (
     <div className=''>
       <div className='border-2'>
-        <select value={profileId} name='profiles' onChange={(e) => setProfileId(e.target.value)}>
+        <select value={electricalDeviceId} name='profiles' onChange={(e) => setElectricalDeviceId(e.target.value)}>
           <option value=''>Select a profile</option>
           {appliances.map((appliance) => (<option key={appliance.id} value={appliance.id}>{appliance.name}</option>))}
         </select>
@@ -94,11 +94,11 @@ const LoadBuilder = ({ onReset }) => {
       try {
         const data = await fetchLoadProfileItems(searchParams.get("house_id"));
         const items = data.items;
-        console.log(data)
+        console.log("Items from useEffect", items)
 
         items.push({
           id: 1,
-          profile_id: 2,
+          electrical_device_id: 2,
           rating_watts: 100,
           quantity: 3,
           hours: 2,
@@ -114,18 +114,18 @@ const LoadBuilder = ({ onReset }) => {
   }, []);
 
   const calculateTotalAndSetLoads = (items) => {
-    const total = items.reduce((acc, item) => {
+    const sum = items.reduce((acc, item) => {
       const total = item.quantity * item.rating_watts * item.hours;
       item.total = total;
       return acc + total;
     }, 0)
     setLoads(items);
-    setTotal(total)
+    setTotal(sum)
   }
 
-  const onAdd = ({ profileId, ratingWatts, quantity, hours, addedTotal }) => {
+  const onAdd = ({ electricalDeviceId, ratingWatts, quantity, hours, addedTotal }) => {
     setTotal(addedTotal + total);
-    setLoads([...loads, { profile_id: parseInt(profileId), rating_watts: ratingWatts, quantity, hours, total: addedTotal }]);
+    setLoads([...loads, { electrical_device_id: parseInt(electricalDeviceId), rating_watts: ratingWatts, quantity, hours, total: addedTotal }]);
   };
 
   const removeLoad = (loadToRemove) => {
@@ -136,10 +136,21 @@ const LoadBuilder = ({ onReset }) => {
   }
 
   const saveLoads = () => {
-    console.log(loads);
+    console.log("Items to save: ", loads);
+    const saveLoads = async () => {
+      try {
+        const newLoads = await saveLoadProfileItems(searchParams.get("house_id"), loads);
+        const items = newLoads.items;
+        console.log("Items from save response: ", items)
+        calculateTotalAndSetLoads(items);
+      } catch (error) {
+        console.error("Error saving load profile items:", error);
+      }
+    }
+    saveLoads()
   }
 
-  const profileIdToName = (profileId) => {
+  const electricalIdToName = (profileId) => {
     return appliances.find((appliance) => appliance.id === profileId)?.name;
   }
 
@@ -158,7 +169,7 @@ const LoadBuilder = ({ onReset }) => {
       </tr>
       {loads.map((load) => (
         <tr key={load.id}>
-          <td>{profileIdToName(load.profile_id)}</td>
+          <td>{electricalIdToName(load.electrical_device_id)}</td>
           <td>{load.rating_watts}</td>
           <td>{load.quantity}</td>
           <td>{load.hours}</td>

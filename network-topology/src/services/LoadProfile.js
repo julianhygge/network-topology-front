@@ -18,6 +18,20 @@ export const fetchLoadProfileItems = async (houseId) => {
   }
 }
 
+export const saveLoadProfileItems = async (houseId, loads) => {
+  try {
+    const response = await axios.post(`${API_URL}/load/houses/${houseId}/load-profile-items`, { items: loads }, {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error saving load profile items:", error);
+    throw error;
+  }
+}
+
 export const fetchLoadProfiles = async (houseId) => {
   try {
     const response = await axios.get(`${API_URL}/load/?house_id=${houseId}`, {
