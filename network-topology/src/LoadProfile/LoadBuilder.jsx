@@ -120,16 +120,46 @@ const LoadBuilder = () => {
                                         { type: 'Washing Machine', rating: 1800, quantity: 2, hours: 8, total: 28800 }
                                     ].map((item, index) => (
                                         // TODO: Change the key to something better than index like an id.
-                                        <ul key={index}>
-                                            <li className='device-type-column'>{item.type}</li>
-                                            <li className='rating-column'>{item.rating}</li>
-                                            <li className='quantity-column'>{item.quantity}</li>
-                                            <li className='hours-column'>{item.hours}</li>
-                                            <li className='total-column'>{item.total}</li>
-                                            <li className='action-column'>
-                                                <button className="delete-button">X</button>
-                                            </li>
-                                        </ul>
+                                        <React.Fragment key={index}>
+                                            <ul>
+                                                <li className='device-type-column'>{item.type}</li>
+                                                <li className='rating-column'>{item.rating}</li>
+                                                <li className='quantity-column'>{item.quantity}</li>
+                                                <li className='hours-column'>{item.hours}</li>
+                                                <li className='total-column'>{item.total}</li>
+                                                <li className='action-column'>
+                                                    <button className="delete-button">X</button>
+                                                </li>
+                                            </ul>
+                                            {index === 7 && (
+                                                <ul>
+                                                    <li className='device-type-column'>
+                                                        <button className='select-button'>Select</button>
+                                                    </li>
+                                                    <li className='rating-column'>
+                                                        <button className='enter-button'>Enter</button>
+                                                    </li>
+                                                    <li className='quantity-column'>
+                                                        <div className='flex justify-center gap-2'>
+                                                            <button>-</button>
+                                                            <input className='text-center w-10' type="text" value={"00"}/>
+                                                            <button>+</button>
+                                                        </div>
+                                                    </li>
+                                                    <li className='hours-column'>
+                                                        <div className='flex justify-center gap-2'>
+                                                            <button>-</button>
+                                                            <input className='text-center w-10' type="text" value={"10"}/>
+                                                            <button>+</button>
+                                                        </div>
+                                                    </li>
+                                                    <li className='total-column'>00</li>
+                                                    <li className='action-column'>
+                                                        <button className="add-button">+</button>
+                                                    </li>
+                                            </ul>
+                                            )}
+                                        </React.Fragment>
                                     ))}
                                 </div>
                             </div>
