@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { fetchLoadProfileItems, saveLoadProfileItems } from '../services/LoadProfile';
+import { deleteLoadProfile, fetchLoadProfileItems, saveLoadProfileItems } from '../services/LoadProfile';
 import { fetchAppliances } from '../services/Appliance';
 import LoadBuilderForm from './LoadBuilderForm';
+import LoadBuilderReset from './LoadBuilderReset';
 
 const LoadBuilder = ({ onReset }) => {
   const [loads, setLoads] = useState([]);
   const [searchParams] = useSearchParams()
   const [total, setTotal] = useState(0);
   const [appliances, setAppliances] = useState([])
+  const [showReset, setShowReset] = useState(false);
 
   useEffect(() => {
     const fetchApplianceItems = async () => {
@@ -25,15 +27,6 @@ const LoadBuilder = ({ onReset }) => {
         const data = await fetchLoadProfileItems(searchParams.get("house_id"));
         const items = data.items;
         console.log("Items from useEffect", items)
-
-        items.push({
-          id: 1,
-          electrical_device_id: 2,
-          rating_watts: 100,
-          quantity: 3,
-          hours: 2,
-          total: 100
-        })
         calculateTotalAndSetLoads(items)
       } catch (error) {
         console.error("Error fetching load profile items:", error);
@@ -84,13 +77,22 @@ const LoadBuilder = ({ onReset }) => {
     return appliances.find((appliance) => appliance.id === profileId)?.name;
   }
 
-  const reset = () => {
-
+  const reset = async () => {
+    try {
+      const profileId = loads.find((load) => load.profile_id)?.profile_id;
+      if (profileId) {
+        await deleteLoadProfile(profileId);
+      }
+    } catch (error) {
+      console.error("Error deleting load profile:", error);
+    }
+    setShowReset(false);
+    onReset();
   }
 
   return <div>Load Builder
     <h2>Total: {total}</h2>
-    <button onClick={reset}>Reset</button>
+    <button onClick={() => setShowReset(true)}>Reset</button>
     <button onClick={saveLoads}>Save</button>
     <table>
       <tr>
@@ -115,6 +117,7 @@ const LoadBuilder = ({ onReset }) => {
       ))}
     </table>
     <LoadBuilderForm onAdd={(load) => onAdd(load)} appliances={appliances} />
+    {showReset && <LoadBuilderReset onYes={reset} onNo={() => setShowReset(false)} />}
   </div>
 }
 

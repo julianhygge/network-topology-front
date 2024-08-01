@@ -68,3 +68,18 @@ export const uploadLoadProfile = async (houseId, profileName, file, interval15Mi
     throw error;
   }
 };
+
+export const deleteLoadProfile = async (profileId) => {
+  try {
+    const response = await axios.delete(`${API_URL}/load/${profileId}`, {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting load profile:", error);
+    throw error;
+  }
+
+}
