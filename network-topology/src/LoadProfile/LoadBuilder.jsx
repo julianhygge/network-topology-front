@@ -27,7 +27,7 @@ const LoadBuilder = () => {
                                     <React.Fragment key={index}>
                                         <button
                                         className={`grid justify-center items-center text-[15px] ${selectedButton === item
-                                            ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold cursor-default"
+                                            ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold cursor-pointer"
                                             : "text-gridColor1 cursor-not-allowed"
                                             }`}
                                         style={{ minHeight: item === "Load Profile" ? "100px" : "95px" }}
