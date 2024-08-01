@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar from '../components/Navbar';
 import Breadcrumb from '../components/Breadcrumb';
 import { useParams } from 'react-router-dom';
+import "./LoadBuilder.css"
 
 const LoadBuilder = () => {
     const selectedButton = "Load Profile";
@@ -26,7 +27,7 @@ const LoadBuilder = () => {
                                     <React.Fragment key={index}>
                                         <button
                                         className={`grid justify-center items-center text-[15px] ${selectedButton === item
-                                            ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold cursor-default"
+                                            ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold cursor-pointer"
                                             : "text-gridColor1 cursor-not-allowed"
                                             }`}
                                         style={{ minHeight: item === "Load Profile" ? "100px" : "95px" }}
@@ -56,19 +57,112 @@ const LoadBuilder = () => {
                             </div>
                         </button>
                     </div>
-                    <div className='flex flex-1 justify-between bg-breadcrumbBackgroundColor max-h-[60px]'>
-                        <div className="text-[14px] text-black font-light mt-2">
-                            {houseId.houseId && (
-                                <Breadcrumb nodeId={houseId.houseId} onEditNode={() => {}} />
-                            )}
+                    <div className='flex flex-col flex-1'>
+                        <div className='flex justify-between bg-breadcrumbBackgroundColor max-h-[60px]'>
+                            <div className="text-[14px] text-black font-light mt-2">
+                                {houseId.houseId && (
+                                    <Breadcrumb nodeId={houseId.houseId} onEditNode={() => {}} />
+                                )}
+                            </div>
+                            <div className='mt-2 mr-2'>
+                                <button
+                                    className="cursor-pointer border bg-[#49AC82] px-[50px] py-[5px] rounded-3xl text-white text-md font-medium border-[#49AC82]"
+                                    onClick={() => {}}
+                                >
+                                    SAVE
+                                </button>
+                            </div>
                         </div>
-                        <div className='mt-2 mr-2'>
-                            <button
-                                className="cursor-pointer border bg-[#49AC82] px-[50px] py-[5px] rounded-3xl text-white text-md font-medium border-[#49AC82]"
-                                onClick={() => {}}
-                            >
-                                SAVE
-                            </button>
+                        <div className='container'>
+                            <div className='nav'>
+                                <ul>
+                                    <li className='heading'>
+                                        Please continue to do the configuration from Load Builder below.
+                                    </li>
+                                    <li className='watts'>
+                                        Total = 67,800 Watts
+                                    </li>
+                                    <li className='reset-profile'>
+                                        Reset Profile
+                                    </li>
+                                </ul>
+                            </div>
+                            <div className="table-container">
+                                <div className="device-table">
+                                    <ul>
+                                        <li className='device-type-column'>
+                                            Device Type
+                                        </li>
+                                        <li className='rating-column'>
+                                            Rating (watts)
+                                        </li>
+                                        <li className='quantity-column'>
+                                           Quantity
+                                        </li>
+                                        <li className='hours-column'>
+                                           Hours
+                                        </li>
+                                        <li className='total-column'>
+                                           Total (w)
+                                        </li>
+                                        <li className='action-column'>
+                                           Action
+                                        </li>
+                                    </ul>
+                                    {[
+                                        { type: 'AC', rating: 1800, quantity: 2, hours: 8, total: 28800 },
+                                        { type: 'TV', rating: 800, quantity: 2, hours: 10, total: 16000 },
+                                        { type: 'Geiser', rating: 2000, quantity: 2, hours: 1, total: 4000 },
+                                        { type: 'Fan', rating: 1800, quantity: 2, hours: 8, total: 28800 },
+                                        { type: 'Microwave', rating: 1800, quantity: 2, hours: 8, total: 28800 },
+                                        { type: 'LED', rating: 1800, quantity: 2, hours: 8, total: 28800 },
+                                        { type: 'Fridge', rating: 1800, quantity: 2, hours: 8, total: 28800 },
+                                        { type: 'Washing Machine', rating: 1800, quantity: 2, hours: 8, total: 28800 }
+                                    ].map((item, index) => (
+                                        // TODO: Change the key to something better than index like an id.
+                                        <React.Fragment key={index}>
+                                            <ul>
+                                                <li className='device-type-column'>{item.type}</li>
+                                                <li className='rating-column'>{item.rating}</li>
+                                                <li className='quantity-column'>{item.quantity}</li>
+                                                <li className='hours-column'>{item.hours}</li>
+                                                <li className='total-column'>{item.total}</li>
+                                                <li className='action-column'>
+                                                    <button className="delete-button">X</button>
+                                                </li>
+                                            </ul>
+                                            {index === 7 && (
+                                                <ul>
+                                                    <li className='device-type-column'>
+                                                        <button className='select-button'>Select</button>
+                                                    </li>
+                                                    <li className='rating-column'>
+                                                        <button className='enter-button'>Enter</button>
+                                                    </li>
+                                                    <li className='quantity-column'>
+                                                        <div className='flex justify-center gap-2'>
+                                                            <button>-</button>
+                                                            <input className='text-center w-10' type="text" value={"00"}/>
+                                                            <button>+</button>
+                                                        </div>
+                                                    </li>
+                                                    <li className='hours-column'>
+                                                        <div className='flex justify-center gap-2'>
+                                                            <button>-</button>
+                                                            <input className='text-center w-10' type="text" value={"10"}/>
+                                                            <button>+</button>
+                                                        </div>
+                                                    </li>
+                                                    <li className='total-column'>00</li>
+                                                    <li className='action-column'>
+                                                        <button className="add-button">+</button>
+                                                    </li>
+                                            </ul>
+                                            )}
+                                        </React.Fragment>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
