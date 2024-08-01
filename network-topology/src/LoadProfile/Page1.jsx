@@ -3,7 +3,7 @@ import Page2 from "./Page2";
 import { LoadProfilesList } from "./Page3";
 import { DeleteConfirm } from "./DeleteConfirm";
 
-const Page1 = ({ onUploadSuccess, onNoClick }) => {
+const LoadProfileFileUpload = ({ onUploadSuccess, onNoClick }) => {
   const [showSecondStep, setShowSecondStep] = useState(false);
   const [showThirdStep, setShowThirdStep] = useState(false);
   const [noSelected, setNoSelected] = useState(false);
@@ -101,4 +101,4 @@ const Page1 = ({ onUploadSuccess, onNoClick }) => {
   );
 };
 
-export default Page1;
+export default LoadProfileFileUpload;

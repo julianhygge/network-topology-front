@@ -8,11 +8,11 @@ const DISPLAY_TYPES = {
   LOAD_BUILDER: "load_builder",
 }
 
-const PageLoad = () => {
+const LoadProfileMenuCustom = ({ onReset }) => {
   const [displayType, setDisplayType] = useState(DISPLAY_TYPES.NONE);
 
   if (displayType === DISPLAY_TYPES.LOAD_BUILDER) {
-    return <LoadBuilder onReset={() => { setDisplayType(DISPLAY_TYPES.NONE) }} />
+    return <LoadBuilder onReset={() => { onReset(); setDisplayType(DISPLAY_TYPES.NONE) }} />
   }
 
   return (
@@ -55,4 +55,4 @@ const PageLoad = () => {
     </div >
   )
 }
-export default PageLoad;
+export default LoadProfileMenuCustom;

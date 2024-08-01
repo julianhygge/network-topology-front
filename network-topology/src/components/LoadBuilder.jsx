@@ -6,7 +6,7 @@ import LoadBuilderForm from './LoadBuilderForm';
 import LoadBuilderReset from './LoadBuilderReset';
 import ReactRouterPrompt from "react-router-prompt";
 
-const LoadBuilder = ({ onReset }) => {
+const LoadBuilder = ({ onReset, profileId }) => {
   const [loads, setLoads] = useState([]);
   const [searchParams] = useSearchParams()
   const [total, setTotal] = useState(0);
@@ -83,8 +83,8 @@ const LoadBuilder = ({ onReset }) => {
   }
 
   const reset = async () => {
+    console.log("Reset in LoadBuilder")
     try {
-      const profileId = loads.find((load) => load.profile_id)?.profile_id;
       if (profileId) {
         await deleteLoadProfile(profileId);
         isUnsaved.current = false;

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "./Navbar";
-import Page1 from "../LoadProfile/Page1";
+import LoadProfileFileUpload from "../LoadProfile/Page1";
 import LoadProfilesList from "../LoadProfile/Page3";
 import { fetchLoadProfiles } from "../services/LoadProfile";
-import PageLoad from "../LoadProfile/PageLoad";
+import LoadProfileMenuCustom from "../LoadProfile/PageLoad";
 import LoadBuilder from "./LoadBuilder";
 
 const UserConfiguration = () => {
@@ -67,14 +67,17 @@ const UserConfiguration = () => {
     }
   };
   const handleNoClick = () => {
-
     setShowPageLoad(true);
-
   };
+
+  const onResetLoadProfile = () => {
+    console.log("Resetting load profile");
+    setShowPageLoad(false);
+  }
 
   const renderContent = () => {
     if (showPageLoad) {
-      return <PageLoad />;
+      return <LoadProfileMenuCustom onReset={onResetLoadProfile} />;
     }
 
     if (selectedButton === "Load Profile") {
@@ -85,13 +88,14 @@ const UserConfiguration = () => {
           </div>
         );
       }
+      console.log("LoadProfilesList: ", loadProfiles.items)
       if (!loadProfiles.items || loadProfiles.items?.length === 0) {
-        return (<Page1 onUploadSuccess={handleUploadSuccess} onNoClick={handleNoClick} />);
+        return (<LoadProfileFileUpload onUploadSuccess={handleUploadSuccess} onNoClick={handleNoClick} />);
       }
 
       return loadProfiles.items[0].source !== "Builder" ? (
         <LoadProfilesList profiles={loadProfiles} onUploadAgain={handleUploadAgain} />
-      ) : (<LoadBuilder onReset={() => { setShowPageLoad(true) }} />)
+      ) : (<LoadBuilder onReset={() => { setLoadProfiles({}) }} profileId={loadProfiles.items[0].profile_id} />)
     }
 
     return (
