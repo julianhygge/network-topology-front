@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import LoadBuilder from '../components/LoadBuilder'
 
 const DISPLAY_TYPES = {
@@ -8,7 +8,7 @@ const DISPLAY_TYPES = {
   LOAD_BUILDER: "load_builder",
 }
 
-const PagLoad = () => {
+const PageLoad = () => {
   const [displayType, setDisplayType] = useState(DISPLAY_TYPES.NONE);
 
   if (displayType === DISPLAY_TYPES.LOAD_BUILDER) {
@@ -55,4 +55,4 @@ const PagLoad = () => {
     </div >
   )
 }
-export default PagLoad;
+export default PageLoad;

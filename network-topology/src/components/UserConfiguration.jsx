@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import Page1 from "../LoadProfile/Page1";
-import Page3 from "../LoadProfile/Page3";
+import LoadProfilesList from "../LoadProfile/Page3";
 import { fetchLoadProfiles } from "../services/LoadProfile";
 import PageLoad from "../LoadProfile/PageLoad";
+import LoadBuilder from "./LoadBuilder";
 
 const UserConfiguration = () => {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -84,11 +85,13 @@ const UserConfiguration = () => {
           </div>
         );
       }
-      return loadProfiles.items?.length > 0 ? (
-        <Page3 profiles={loadProfiles} onUploadAgain={handleUploadAgain} />
-      ) : (
-        <Page1 onUploadSuccess={handleUploadSuccess} onNoClick={handleNoClick} />
-      );
+      if (!loadProfiles.items || loadProfiles.items?.length === 0) {
+        return (<Page1 onUploadSuccess={handleUploadSuccess} onNoClick={handleNoClick} />);
+      }
+
+      return loadProfiles.items[0].source !== "Builder" ? (
+        <LoadProfilesList profiles={loadProfiles} onUploadAgain={handleUploadAgain} />
+      ) : (<LoadBuilder onReset={() => { setShowPageLoad(true) }} />)
     }
 
     return (
@@ -117,8 +120,8 @@ const UserConfiguration = () => {
                   <React.Fragment key={index}>
                     <button
                       className={`grid justify-center items-center cursor-pointer text-[16px] ${selectedButton === item
-                          ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
-                          : "text-gridColor1"
+                        ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
+                        : "text-gridColor1"
                         }`}
                       onClick={() => handleButtonClick(item)}
                       style={{ minHeight: "110px" }}

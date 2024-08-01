@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DeleteConfirm from "./DeleteConfirm";
 
-const Page3 = ({ profiles, onUploadAgain }) => {
+const LoadProfilesList = ({ profiles, onUploadAgain }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState("");
   const [selectedDeleteLink, setSelectedDeleteLink] = useState("");
@@ -19,17 +19,18 @@ const Page3 = ({ profiles, onUploadAgain }) => {
 
   const handleConfirmDelete = async () => {
     const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
 
     try {
-      const response = await fetch(`https://hygge-test.ddns.net:8080/net-topology-api${selectedDeleteLink}`, 
-        { method: 'DELETE',
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
+      const response = await fetch(`https://hygge-test.ddns.net:8080/net-topology-api${selectedDeleteLink}`,
+        {
+          method: 'DELETE',
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
 
-         });
+        });
 
       if (!response.ok) {
         throw new Error('Failed to delete file');
@@ -42,7 +43,7 @@ const Page3 = ({ profiles, onUploadAgain }) => {
     }
   };
 
-  const handleUploadAgain = async (filename ,deletelink) => {
+  const handleUploadAgain = async (filename, deletelink) => {
     //setSelectedDeleteLink(deletelink);
     onUploadAgain(deletelink);
     // console.log(deletelink)
@@ -80,12 +81,12 @@ const Page3 = ({ profiles, onUploadAgain }) => {
           </div>
         </div>
       ))}
-      {profiles.items.map(profile=>(
+      {profiles.items.map(profile => (
 
-      <button key={profile.profile_id} className="self-center px-12 py-4 mt-20 text-1xl text-navColor font-semibold tracking-normal bg-[#6AD1CE] shadow-sm rounded-[33px] max-md:px-5 max-md:mt-10"
-        onClick={()=>handleDeleteClick(profile.links.delete,profile.file_name)}>
-        Upload Again
-      </button>
+        <button key={profile.profile_id} className="self-center px-12 py-4 mt-20 text-1xl text-navColor font-semibold tracking-normal bg-[#6AD1CE] shadow-sm rounded-[33px] max-md:px-5 max-md:mt-10"
+          onClick={() => handleDeleteClick(profile.links.delete, profile.file_name)}>
+          Upload Again
+        </button>
       ))}
       {showDeleteConfirm && (
         <DeleteConfirm
@@ -98,4 +99,4 @@ const Page3 = ({ profiles, onUploadAgain }) => {
   );
 };
 
-export default Page3;
+export default LoadProfilesList;
