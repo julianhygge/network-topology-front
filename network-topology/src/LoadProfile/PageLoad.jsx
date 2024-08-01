@@ -1,6 +1,12 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const PageLoad = () => {
+  const navigate = useNavigate();
+
+  const handleLoadBuilderNavigation = () => {
+    navigate('/loadBuilder');
+  }
   return (
     <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
       <div>
@@ -29,6 +35,7 @@ const PageLoad = () => {
           </button>
           <button
             className="flex justify-center items-center px-14 py-10 shadow-xl bg-white  border-[1px] border-navColor  rounded-[20px] max-md:px-5"
+            onClick={handleLoadBuilderNavigation}
           >
             Load  <br />
             Builder
