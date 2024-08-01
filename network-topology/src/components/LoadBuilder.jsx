@@ -28,7 +28,7 @@ const LoadBuilderForm = ({ onAdd, appliances }) => {
       setError("Please enter hours");
       return;
     }
-    onAdd({ profileId, ratingWatts, quantity, hours });
+    onAdd({ profileId, ratingWatts, quantity, hours, addedTotal: total });
     setProfileId("");
     setRatingWatts(0);
     setQuantity(0);
@@ -97,19 +97,14 @@ const LoadBuilder = ({ onReset }) => {
         console.log(data)
 
         items.push({
-          profile_id: "Fridge",
+          id: 1,
+          profile_id: 2,
           rating_watts: 100,
           quantity: 3,
           hours: 2,
           total: 100
         })
-        const total = items.reduce((acc, item) => {
-          const total = item.quantity * item.rating_watts * item.hours;
-          item.total = total;
-          return acc + total;
-        }, 0)
-        setLoads(items);
-        setTotal(total)
+        calculateTotalAndSetLoads(items)
       } catch (error) {
         console.error("Error fetching load profile items:", error);
       }
@@ -118,8 +113,40 @@ const LoadBuilder = ({ onReset }) => {
     fetchItems();
   }, []);
 
-  return <div>Load Builde
+  const calculateTotalAndSetLoads = (items) => {
+    const total = items.reduce((acc, item) => {
+      const total = item.quantity * item.rating_watts * item.hours;
+      item.total = total;
+      return acc + total;
+    }, 0)
+    setLoads(items);
+    setTotal(total)
+  }
+
+  const onAdd = ({ profileId, ratingWatts, quantity, hours, addedTotal }) => {
+    setTotal(addedTotal + total);
+    setLoads([...loads, { profile_id: parseInt(profileId), rating_watts: ratingWatts, quantity, hours, total: addedTotal }]);
+  };
+
+  const removeLoad = (loadToRemove) => {
+    const load = loads.find((load) => load === loadToRemove);
+    if (!load) return;
+    setTotal(total - load.total);
+    setLoads(loads.filter((load) => load !== loadToRemove));
+  }
+
+  const saveLoads = () => {
+    console.log(loads);
+  }
+
+  const profileIdToName = (profileId) => {
+    return appliances.find((appliance) => appliance.id === profileId)?.name;
+  }
+
+  return <div>Load Builder
     <h2>Total: {total}</h2>
+    <button>Reset</button>
+    <button onClick={saveLoads}>Save</button>
     <table>
       <tr>
         <td>Device Type</td>
@@ -131,19 +158,18 @@ const LoadBuilder = ({ onReset }) => {
       </tr>
       {loads.map((load) => (
         <tr key={load.id}>
-          <td>{load.profile_id}</td>
+          <td>{profileIdToName(load.profile_id)}</td>
           <td>{load.rating_watts}</td>
           <td>{load.quantity}</td>
           <td>{load.hours}</td>
           <td>{load.total}</td>
           <td>
-            <button>X</button>
+            <button onClick={() => removeLoad(load)}>X</button>
           </td>
         </tr>
       ))}
     </table>
-    <LoadBuilderForm onAdd={(load) => { console.log(load) }} appliances={appliances} />
-    {/* {appliances.map((appliance) => (<div key={appliance.id}> {appliance.name} </div>))} */}
+    <LoadBuilderForm onAdd={(load) => onAdd(load)} appliances={appliances} />
   </div>
 }
 
