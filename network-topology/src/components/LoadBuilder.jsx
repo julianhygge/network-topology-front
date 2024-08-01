@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { deleteLoadProfile, fetchLoadProfileItems, saveLoadProfileItems } from '../services/LoadProfile';
 import { fetchAppliances } from '../services/Appliance';
 import LoadBuilderForm from './LoadBuilderForm';
 import LoadBuilderReset from './LoadBuilderReset';
+import ReactRouterPrompt from "react-router-prompt";
 
 const LoadBuilder = ({ onReset }) => {
   const [loads, setLoads] = useState([]);
@@ -11,6 +12,7 @@ const LoadBuilder = ({ onReset }) => {
   const [total, setTotal] = useState(0);
   const [appliances, setAppliances] = useState([])
   const [showReset, setShowReset] = useState(false);
+  const isUnsaved = useRef(false);
 
   useEffect(() => {
     const fetchApplianceItems = async () => {
@@ -44,11 +46,13 @@ const LoadBuilder = ({ onReset }) => {
     }, 0)
     setLoads(items);
     setTotal(sum)
+    isUnsaved.current = false;
   }
 
   const onAdd = ({ electricalDeviceId, ratingWatts, quantity, hours, addedTotal }) => {
     setTotal(addedTotal + total);
     setLoads([...loads, { electrical_device_id: parseInt(electricalDeviceId), rating_watts: ratingWatts, quantity, hours, total: addedTotal }]);
+    isUnsaved.current = true;
   };
 
   const removeLoad = (loadToRemove) => {
@@ -56,11 +60,12 @@ const LoadBuilder = ({ onReset }) => {
     if (!load) return;
     setTotal(total - load.total);
     setLoads(loads.filter((load) => load !== loadToRemove));
+    isUnsaved.current = true;
   }
 
   const saveLoads = () => {
     console.log("Items to save: ", loads);
-    const saveLoads = async () => {
+    const save = async () => {
       try {
         const newLoads = await saveLoadProfileItems(searchParams.get("house_id"), loads);
         const items = newLoads.items;
@@ -70,7 +75,7 @@ const LoadBuilder = ({ onReset }) => {
         console.error("Error saving load profile items:", error);
       }
     }
-    saveLoads()
+    save()
   }
 
   const electricalIdToName = (profileId) => {
@@ -82,6 +87,7 @@ const LoadBuilder = ({ onReset }) => {
       const profileId = loads.find((load) => load.profile_id)?.profile_id;
       if (profileId) {
         await deleteLoadProfile(profileId);
+        isUnsaved.current = false;
       }
     } catch (error) {
       console.error("Error deleting load profile:", error);
@@ -90,35 +96,54 @@ const LoadBuilder = ({ onReset }) => {
     onReset();
   }
 
-  return <div>Load Builder
-    <h2>Total: {total}</h2>
-    <button onClick={() => setShowReset(true)}>Reset</button>
-    <button onClick={saveLoads}>Save</button>
-    <table>
-      <tr>
-        <td>Device Type</td>
-        <td>Rating (watts)</td>
-        <td>Quantity</td>
-        <td>Hours</td>
-        <td>Total</td>
-        <td>Action</td>
-      </tr>
-      {loads.map((load) => (
-        <tr key={load.id}>
-          <td>{electricalIdToName(load.electrical_device_id)}</td>
-          <td>{load.rating_watts}</td>
-          <td>{load.quantity}</td>
-          <td>{load.hours}</td>
-          <td>{load.total}</td>
-          <td>
-            <button onClick={() => removeLoad(load)}>X</button>
-          </td>
+  return <>
+    <ReactRouterPrompt when={isUnsaved.current}>
+      {({ isActive, onConfirm, onCancel }) =>
+        isActive && (
+          <div>
+            <div>
+              <p>Do you really want to leave?</p>
+              <button type="button" onClick={onCancel}>
+                Cancel
+              </button>
+              <button type="submit" onClick={onConfirm}>
+                Ok
+              </button>
+            </div>
+          </div>
+        )
+      }
+    </ReactRouterPrompt>
+    <div>Load Builder
+      <h2>Total: {total}</h2>
+      <button onClick={() => setShowReset(true)}>Reset</button>
+      <button onClick={saveLoads}>Save</button>
+      <table>
+        <tr>
+          <td>Device Type</td>
+          <td>Rating (watts)</td>
+          <td>Quantity</td>
+          <td>Hours</td>
+          <td>Total</td>
+          <td>Action</td>
         </tr>
-      ))}
-    </table>
-    <LoadBuilderForm onAdd={(load) => onAdd(load)} appliances={appliances} />
-    {showReset && <LoadBuilderReset onYes={reset} onNo={() => setShowReset(false)} />}
-  </div>
+        {loads.map((load) => (
+          <tr key={load.id}>
+            <td>{electricalIdToName(load.electrical_device_id)}</td>
+            <td>{load.rating_watts}</td>
+            <td>{load.quantity}</td>
+            <td>{load.hours}</td>
+            <td>{load.total}</td>
+            <td>
+              <button onClick={() => removeLoad(load)}>X</button>
+            </td>
+          </tr>
+        ))}
+      </table>
+      <LoadBuilderForm onAdd={(load) => onAdd(load)} appliances={appliances} />
+      {showReset && <LoadBuilderReset onYes={reset} onNo={() => setShowReset(false)} />}
+    </div>
+  </>
 }
 
 export default LoadBuilder;
