@@ -6,11 +6,11 @@ import Page3 from "../LoadProfile/Page3";
 import { fetchLoadProfiles } from "../services/LoadProfile";
 import PageLoad from "../LoadProfile/PageLoad";
 
-const UserConfiguration = () => {
+const HouseConfiguration = () => {
   const [selectedButton, setSelectedButton] = useState(null);
   const [loadProfiles, setLoadProfiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const {houseId} = useParams();
+  const { houseId } = useParams();
   const [showPageLoad, setShowPageLoad] = useState(false);
 
   const handleButtonClick = async (buttonName) => {
@@ -41,7 +41,7 @@ const UserConfiguration = () => {
     }
   };
 
-  
+
   const handleNoClick = () => {
 
     setShowPageLoad(true);
@@ -62,7 +62,7 @@ const UserConfiguration = () => {
         );
       }
       return loadProfiles.items?.length > 0 ? (
-        <Page3 profiles={loadProfiles}  />
+        <Page3 profiles={loadProfiles} />
       ) : (
         <Page1 onUploadSuccess={handleUploadSuccess} onNoClick={handleNoClick} />
       );
@@ -94,8 +94,8 @@ const UserConfiguration = () => {
                   <React.Fragment key={index}>
                     <button
                       className={`grid justify-center items-center cursor-pointer text-[16px] ${selectedButton === item
-                          ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
-                          : "text-gridColor1"
+                        ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
+                        : "text-gridColor1"
                         }`}
                       onClick={() => handleButtonClick(item)}
                       style={{ minHeight: "110px" }}
@@ -131,4 +131,4 @@ const UserConfiguration = () => {
   );
 };
 
-export default UserConfiguration;
+export default HouseConfiguration;
