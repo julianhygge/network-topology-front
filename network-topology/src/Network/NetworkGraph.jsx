@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './NetworkGraph.css';
+import '../Network/NetworkGraph.css';
 import { fetchTransformerDetails } from "../services/Tranformer";
 import { fetchHouseDetails } from "../services/House";
 import { useNavigate } from 'react-router-dom';
@@ -106,7 +106,7 @@ const SubConnectionLine = ({ transformer, params = {} }) => {
   return <div className="sub-connection-line" style={subLineStyle}></div>;
 };
 
-const NetworkGraph2 = ({
+const NetworkGraph = ({
   onSelectedNode,
   onRightClickSelectedNode,
   data,
@@ -359,4 +359,4 @@ const NetworkGraph2 = ({
   );
 };
 
-export default NetworkGraph2;
+export default NetworkGraph;
