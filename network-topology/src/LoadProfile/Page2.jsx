@@ -1,13 +1,13 @@
 import React, { useState, useRef } from "react";
 import { uploadLoadProfile } from "../services/LoadProfile";
-import { useSearchParams } from "react-router-dom";
+//import { useSearchParams } from "react-router-dom";
 import { useParams } from "react-router-dom";
 const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const fileInputRef = useRef(null);
-  const [searchParams] = useSearchParams();
-  // const houseId = searchParams.get("house_id");
+  // const [searchParams] = useSearchParams();
+  // // const houseId = searchParams.get("house_id");
   const {houseId}=useParams();
 
   const handleFileChange = (event) => {
@@ -32,10 +32,15 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
   const handleFileUpload = async () => {
     if (selectedFile) {
       try {
-        await uploadLoadProfile(houseId, "Profile name", selectedFile, false);
+        await uploadLoadProfile(houseId, "Profile name", selectedFile, attach15MinFile);
         onUploadSuccess();
       } catch (error) {
-        setErrorMessage("File upload failed. Please try again.");
+        let errorMessage = "An error occurred while uploading the file.";
+        if (error.response && error.response.data) {
+
+          errorMessage = error.response.data.detail || error.response.data.message || errorMessage;
+        }
+        setErrorMessage(errorMessage);
       }
     }
   };
