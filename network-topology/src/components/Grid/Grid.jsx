@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "./Navbar";
-import { getSubstations, generateSubstation } from "../services/Substation";
+import Navbar from "components/Common/Navbar";
+import { getSubstations, generateSubstation } from "services/Substation";
 import { useNavigate } from "react-router-dom";
 
 const Grid = () => {

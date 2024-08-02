@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "./Navbar";
-import Page1 from "./LoadProfile/Page1";
-import Page3 from "./LoadProfile/Page3";
-import { fetchLoadProfiles } from "../services/LoadProfile";
-import PageLoad from "./LoadProfile/PageLoad";
+import Navbar from "components/Common/Navbar";
+import Page1 from "components/LoadProfile/Page1";
+import Page3 from "components/LoadProfile/Page3";
+import { fetchLoadProfiles } from "services/LoadProfile";
+import PageLoad from "components/LoadProfile/PageLoad";
 
 const HouseConfiguration = () => {
   const [selectedButton, setSelectedButton] = useState(null);

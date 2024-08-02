@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import './GenerationPage.css';
-import Navbar from "components/Navbar";
+import Navbar from "components/Common/Navbar";
 
 const GenerationPage1 = () => {
   const selectedButton = "Load Profile";

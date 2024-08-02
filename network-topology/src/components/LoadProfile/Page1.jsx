@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Page2 from "./Page2";
+import Page2 from "components/LoadProfile/Page2";
 
 const Page1 = ({ onUploadSuccess, onNoClick }) => {
   const [showSecondStep, setShowSecondStep] = useState(false);

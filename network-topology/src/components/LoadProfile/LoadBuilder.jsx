@@ -1,6 +1,6 @@
 import React from 'react'
-import Navbar from 'components/Navbar';
-import Breadcrumb from 'components/Breadcrumb';
+import Navbar from 'components/Common/Navbar';
+import Breadcrumb from 'components/Breadcrumb/Breadcrumb';
 import { useParams } from 'react-router-dom';
 import "./LoadBuilder.css"
 

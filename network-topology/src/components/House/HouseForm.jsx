@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { updateHouseData } from "../services/House";
-import Breadcrumb from "./Breadcrumb";
+import { updateHouseData } from "services/House";
 
 const HouseForm = ({ house, onSave }) => {
   const [formData, setFormData] = useState({
@@ -56,7 +55,7 @@ const HouseForm = ({ house, onSave }) => {
         <br />
         <label>
           Has Solar:
-          <input  className="border"
+          <input className="border"
             type="checkbox"
             name="has_solar"
             checked={formData.has_solar}
@@ -66,7 +65,7 @@ const HouseForm = ({ house, onSave }) => {
         <br />
         <label>
           Solar kW:
-          <input  className="border"
+          <input className="border"
             type="number"
             name="solar_kw"
             value={formData.solar_kw}
@@ -76,7 +75,7 @@ const HouseForm = ({ house, onSave }) => {
         <br />
         <label>
           House Type:
-          <input  className="border"
+          <input className="border"
             type="text"
             name="house_type"
             value={formData.house_type}
@@ -86,7 +85,7 @@ const HouseForm = ({ house, onSave }) => {
         <br />
         <label>
           Connection kW:
-          <input  className="border"
+          <input className="border"
             type="number"
             name="connection_kw"
             value={formData.connection_kw}
@@ -96,7 +95,7 @@ const HouseForm = ({ house, onSave }) => {
         <br />
         <label>
           Battery Type:
-          <input  className="border"
+          <input className="border"
             type="text"
             name="battery_type"
             value={formData.battery_type}
@@ -106,7 +105,7 @@ const HouseForm = ({ house, onSave }) => {
         <br />
         <label>
           Has Battery:
-          <input  className="border"
+          <input className="border"
             type="checkbox"
             name="has_battery"
             checked={formData.has_battery}
@@ -116,7 +115,7 @@ const HouseForm = ({ house, onSave }) => {
         <br />
         <label>
           Voluntary Storage:
-          <input  className="border"
+          <input className="border"
             type="checkbox"
             name="voluntary_storage"
             checked={formData.voluntary_storage}
@@ -126,7 +125,7 @@ const HouseForm = ({ house, onSave }) => {
         <br />
         <label>
           Battery Peak Charging Rate:
-          <input  className="border"
+          <input className="border"
             type="number"
             name="battery_peak_charging_rate"
             value={formData.battery_peak_charging_rate}
@@ -136,7 +135,7 @@ const HouseForm = ({ house, onSave }) => {
         <br />
         <label>
           Battery Peak Discharging Rate:
-          <input  className="border"
+          <input className="border"
             type="number"
             name="battery_peak_discharging_rate"
             value={formData.battery_peak_discharging_rate}
@@ -146,7 +145,7 @@ const HouseForm = ({ house, onSave }) => {
         <br />
         <label>
           Battery Total kWh:
-          <input  className="border"
+          <input className="border"
             type="number"
             name="battery_total_kwh"
             value={formData.battery_total_kwh}
@@ -154,7 +153,7 @@ const HouseForm = ({ house, onSave }) => {
           />
         </label>
         <br />
-        <button  className="border"type="submit">Save</button>
+        <button className="border" type="submit">Save</button>
       </form>
     </div>
   );

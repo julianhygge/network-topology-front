@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import NetworkGraph from './NetworkGraph';
-import Navbar from 'components/Navbar';
-import GridSideBar from 'components/GridSideBar';
+import NetworkGraph from 'components/Network/NetworkGraph';
+import Navbar from 'components/Common/Navbar';
+import GridSideBar from 'components/Grid/GridSideBar';
 import { useLocation } from "react-router-dom";
 import { getSubstationById, updateSubstationTopology } from 'services/Substation';
 import { fetchTransformerDetails } from 'services/Tranformer';
-import TransformerForm from "components/TransformerForm";
-import HouseForm from 'components/HouseForm';
-import Breadcrumb from 'components/Breadcrumb';
-import Delete from 'components/DeleteConfirm';
+import TransformerForm from "components/Transformer/TransformerForm";
+import HouseForm from 'components/House/HouseForm';
+import Breadcrumb from 'components/Breadcrumb/Breadcrumb';
+import Delete from 'components/Common/DeleteConfirm';
 
 
 const NetworkTopology = () => {
@@ -388,8 +388,8 @@ const NetworkTopology = () => {
           <div className='flex-col overflow-hidden box-border h-full w-full'>
             <div className="flex justify-between items-center bg-breadcrumbBackgroundColor py-2 pr-[24px]">
               <div className='flex mt-[6px]'>
-                {selectedSubstationId && (!selectedNode || selectedNode.new == true) && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
-                {selectedNode && selectedNode.new != true && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
+                {selectedSubstationId && (!selectedNode || selectedNode.new) && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
+                {selectedNode && !selectedNode.new && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
               </div>
               <div className='flex items-center justify-between font-dinPro font-medium'>
                 <button

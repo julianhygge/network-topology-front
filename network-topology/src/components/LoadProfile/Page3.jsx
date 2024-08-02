@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DeleteConfirm from "./DeleteConfirm";
+import DeleteConfirm from "components/LoadProfile/DeleteConfirm";
 
 const Page3 = ({ profiles, onUploadAgain }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -51,7 +51,7 @@ const Page3 = ({ profiles, onUploadAgain }) => {
   const handleDownload = async (downloadLink) => {
     console.log(downloadLink)
     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
-  
+
     const fullUrl = `https://hygge-test.ddns.net:8080/net-topology-api/v1/load/download/file?profile_id=117`;
 
     setIsLoading(true);
@@ -80,11 +80,11 @@ const Page3 = ({ profiles, onUploadAgain }) => {
       const contentDisposition = response.headers.get('content-disposition');
       const fileName = contentDisposition ? contentDisposition.split('filename=')[1] : 'csv_file';
       link.setAttribute('download', fileName);
-      
+
       document.body.appendChild(link);
       link.click();
       link.remove();
-  
+
       console.log('Download successful');
     } catch (error) {
       console.error('Failed to download the file:', error);

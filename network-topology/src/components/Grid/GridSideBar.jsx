@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getSubstations, generateSubstation, deleteSubstation } from '../services/Substation';
-import Delete from './DeleteConfirm'; 
+import { getSubstations, generateSubstation, deleteSubstation } from 'services/Substation';
+import Delete from 'components/Common/DeleteConfirm';
 
 const GridSideBar = ({ onGridSelect, selectedGridId }) => {
   const [grids, setGrids] = useState([]);
@@ -18,7 +18,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
           console.log("hello")
           const firstGridId = data.items[0].id;
           setSelectedGrid(firstGridId);
-          onGridSelect(firstGridId); 
+          onGridSelect(firstGridId);
         }
       } catch (error) {
         console.error('Error fetching substations:', error);
@@ -96,7 +96,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
       setContextMenu({ visible: false, x: 0, y: 0, grid: null });
       setShowDeletePopup(false);
       setSelectedGrid(null);
-      onGridSelect(null); 
+      onGridSelect(null);
     } catch (error) {
       console.error('Failed to delete substation:', error);
     }
@@ -104,46 +104,44 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
 
   return (
     <>
-    <div className="flex flex-col">
-      <div className="flex flex-col bg-sideBar w-[110px] h-full relative ">
-        <div className="flex-1 overflow-hidden">
-          <div className="h-[80vh] overflow-auto no-scrollbar ">
-            <div className="grid gap-y-5">
-              {grids.map((grid) => (
-                <button
-                  key={grid.id}
-                  className={`flex flex-col  items-center py-5 justify-center cursor-pointer   ${
-                    selectedGrid === grid.id ? 'bg-white  ' : ''
-                  }`}
-                  onClick={() => handleGridClick(grid.id)}
-                  onContextMenu={(event) => handleContextMenu(event, grid)}
-                >
-                  <img
-                    loading="lazy"
-                    src="images/GridImage.png"
-                    alt="Grid Logo"
-                    className="h-[52.81px] w-[46px]  "
-                  />
-                  <span  className={`text-gridColor1   font-dinPro ${
-                  selectedGrid === grid.id ? 'text-brown font-bold font-dinPro' : ''
-                    }`}>{grid.name}</span>
-                </button>
-              ))}
+      <div className="flex flex-col">
+        <div className="flex flex-col bg-sideBar w-[110px] h-full relative ">
+          <div className="flex-1 overflow-hidden">
+            <div className="h-[80vh] overflow-auto no-scrollbar ">
+              <div className="grid gap-y-5">
+                {grids.map((grid) => (
+                  <button
+                    key={grid.id}
+                    className={`flex flex-col  items-center py-5 justify-center cursor-pointer   ${selectedGrid === grid.id ? 'bg-white  ' : ''
+                      }`}
+                    onClick={() => handleGridClick(grid.id)}
+                    onContextMenu={(event) => handleContextMenu(event, grid)}
+                  >
+                    <img
+                      loading="lazy"
+                      src="images/GridImage.png"
+                      alt="Grid Logo"
+                      className="h-[52.81px] w-[46px]  "
+                    />
+                    <span className={`text-gridColor1   font-dinPro ${selectedGrid === grid.id ? 'text-brown font-bold font-dinPro' : ''
+                      }`}>{grid.name}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
+          <button
+            className="fixed bottom-3 left-3 grid justify-center cursor-pointer hover:opacity-50"
+            onClick={handleAddGrid}
+          >
+            <p className="flex justify-center items-center bg-[#FFF8E6] w-[80px] rounded-[50px] text-3xl text-gridColor1 border-2 border-[#D59805] pb-1">
+              +
+            </p>
+            <p className="text-white text-m mt-2 font-dinPro font-medium">Add Grid</p>
+          </button>
         </div>
-        <button
-          className="fixed bottom-3 left-3 grid justify-center cursor-pointer hover:opacity-50"
-          onClick={handleAddGrid}
-        >
-          <p className="flex justify-center items-center bg-[#FFF8E6] w-[80px] rounded-[50px] text-3xl text-gridColor1 border-2 border-[#D59805] pb-1">
-            +
-          </p>
-          <p className="text-white text-m mt-2 font-dinPro font-medium">Add Grid</p>
-        </button>
       </div>
-    </div>
-    {contextMenu.visible && (
+      {contextMenu.visible && (
         <div
           className="fixed z-10 context-menu"
           style={{ top: contextMenu.y, left: contextMenu.x }}
@@ -165,7 +163,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
         />
       )}
     </>
-  
+
   );
 };
 
