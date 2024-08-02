@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Navbar from "./Navbar";
-import LoadProfile from "../LoadProfile/LoadProfile";
+import Navbar from "components/Common/Navbar";
+import LoadProfile from "components/LoadProfile/LoadProfile";
 
-const UserConfiguration = () => {
+const HouseConfiguration = () => {
   const [selectedButton, setSelectedButton] = useState(null);
   const [isUnsaved, setUnsaved] = useState(false);
 
@@ -58,7 +58,7 @@ const UserConfiguration = () => {
                       <img
                         className="grid justify-center w-20 ml-5"
                         loading="lazy"
-                        src="images/Line 24.png"
+                        src={`${process.env.PUBLIC_URL}/images/Line 24.png`}
                         alt="Line"
                       />
                     )}
@@ -68,9 +68,9 @@ const UserConfiguration = () => {
             </div>
           </div>
           <button className="absolute top mt-2 left-4 grid justify-center cursor-pointer hover:opacity-50">
-            <p className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1">
-              <img loading="lazy" src="images/Arrow 2.png" alt="Back" />
-            </p>
+            <div className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1">
+              <img loading="lazy" src={`${process.env.PUBLIC_URL}/images/Arrow 2.png`} alt="Back" />
+            </div>
           </button>
         </div>
         <div className="flex-1 overflow-auto">{renderContent()}</div>
@@ -79,4 +79,4 @@ const UserConfiguration = () => {
   );
 };
 
-export default UserConfiguration;
+export default HouseConfiguration;

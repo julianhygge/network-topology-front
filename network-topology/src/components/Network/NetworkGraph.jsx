@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './NetworkGraph.css';
-import { fetchTransformerDetails } from "../services/Tranformer";
-import { fetchHouseDetails } from "../services/House";
+import { fetchTransformerDetails } from "services/Tranformer";
 import { useNavigate } from 'react-router-dom';
 
 const Transformer = ({ color, name, onTransformerClick }) => (
@@ -106,7 +105,7 @@ const SubConnectionLine = ({ transformer, params = {} }) => {
   return <div className="sub-connection-line" style={subLineStyle}></div>;
 };
 
-const NetworkGraph2 = ({
+const NetworkGraph = ({
   onSelectedNode,
   onRightClickSelectedNode,
   data,
@@ -197,7 +196,7 @@ const NetworkGraph2 = ({
       } else if (d.type === "house") {
         // const houseDetails = await fetchHouseDetails(d.id);
         // onHouseEdit(houseDetails);
-        navigate(`/config?house_id=${d.id}`);
+        navigate(`/config/${d.id}`);
       }
     } catch (error) {
       console.error("Error fetching details:", error);
@@ -359,4 +358,4 @@ const NetworkGraph2 = ({
   );
 };
 
-export default NetworkGraph2;
+export default NetworkGraph;

@@ -1,5 +1,5 @@
 import { React, useState } from 'react'
-import LoadBuilder from './LoadBuilder'
+import LoadBuilder from 'components/LoadProfile/LoadBuilder'
 
 const DISPLAY_TYPES = {
   NONE: "none",

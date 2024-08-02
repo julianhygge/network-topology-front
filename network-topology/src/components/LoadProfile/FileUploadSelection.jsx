@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FileUpload from "./FileUpload";
+import FileUpload from "components/LoadProfile/FileUpload";
 
 const FileUploadSelection = ({ onUploadSuccess, onNoClick }) => {
   const [showSecondStep, setShowSecondStep] = useState(false);

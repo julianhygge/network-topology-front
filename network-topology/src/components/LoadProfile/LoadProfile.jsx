@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetchLoadProfiles } from "../services/LoadProfile";
-import LoadBuilder from "./LoadBuilder";
-import LoadProfileMenuCustom from "./LoadProfileMenu";
-import FileUploadSelection from "./FileUploadSelection";
-import LoadProfileFileList from "./LoadProfileFileList";
+import { fetchLoadProfiles } from "services/LoadProfile";
+import LoadBuilder from "components/LoadProfile/LoadBuilder";
+import LoadProfileMenuCustom from "components/LoadProfile/LoadProfileMenu";
+import FileUploadSelection from "components/LoadProfile/FileUploadSelection";
+import LoadProfileFileList from "components/LoadProfile/LoadProfileFileList";
 
 const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
   const [loadProfiles, setLoadProfiles] = useState([]);
