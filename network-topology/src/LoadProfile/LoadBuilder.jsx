@@ -6,13 +6,14 @@ import LoadBuilderForm from './LoadBuilderForm';
 import LoadBuilderReset from './LoadBuilderReset';
 import ReactRouterPrompt from "react-router-prompt";
 
-const LoadBuilder = ({ onReset, profileId, setUnsaved }) => {
+const LoadBuilder = ({ onReset, setUnsaved }) => {
   const [loads, setLoads] = useState([]);
   const [searchParams] = useSearchParams()
   const [total, setTotal] = useState(0);
   const [appliances, setAppliances] = useState([])
   const [showReset, setShowReset] = useState(false);
   const isUnsaved = useRef(false);
+  const [profileId, setProfileId] = useState(null);
 
   useEffect(() => {
     const fetchApplianceItems = async () => {
@@ -28,6 +29,7 @@ const LoadBuilder = ({ onReset, profileId, setUnsaved }) => {
       try {
         const data = await fetchLoadProfileItems(searchParams.get("house_id"));
         const items = data.items;
+        setProfileId(data.profile_id);
         console.log("Items from useEffect", items)
         calculateTotalAndSetLoads(items)
       } catch (error) {

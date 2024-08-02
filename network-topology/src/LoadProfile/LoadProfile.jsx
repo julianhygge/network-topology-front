@@ -93,7 +93,7 @@ const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
 
     return loadProfiles.items[0].source !== "Builder" ? (
       <LoadProfileFileList profiles={loadProfiles} onUploadAgain={handleUploadAgain} />
-    ) : (<LoadBuilder onReset={() => { setLoadProfiles({}); onResetLoadProfile() }} profileId={loadProfiles.items[0].profile_id} setUnsaved={setUnsaved} />)
+    ) : (<LoadBuilder onReset={() => { setLoadProfiles({}); onResetLoadProfile() }} setUnsaved={setUnsaved} />)
   }
 
   return renderContent();
