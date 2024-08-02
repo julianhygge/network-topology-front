@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import '../Network/NetworkGraph.css';
-import { fetchTransformerDetails } from "../services/Tranformer";
-import { fetchHouseDetails } from "../services/House";
+import './NetworkGraph.css';
+import { fetchTransformerDetails } from "services/Tranformer";
 import { useNavigate } from 'react-router-dom';
 
 const Transformer = ({ color, name, onTransformerClick }) => (

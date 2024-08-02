@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import NetworkGraph from './NetworkGraph';
-import Navbar from '../components/Navbar';
-import GridSideBar from '../components/GridSideBar';
+import Navbar from 'components/Navbar';
+import GridSideBar from 'components/GridSideBar';
 import { useLocation } from "react-router-dom";
-import { getSubstationById, updateSubstationTopology } from '../services/Substation';
-import { fetchTransformerDetails } from '../services/Tranformer';
-import { fetchHouseDetails } from '../services/House';
-import TransformerForm from "../components/TransformerForm";
-import HouseForm from '../components/HouseForm';
-import Breadcrumb from '../components/Breadcrumb';
-import Delete from '../components/DeleteConfirm';
+import { getSubstationById, updateSubstationTopology } from 'services/Substation';
+import { fetchTransformerDetails } from 'services/Tranformer';
+import TransformerForm from "components/TransformerForm";
+import HouseForm from 'components/HouseForm';
+import Breadcrumb from 'components/Breadcrumb';
+import Delete from 'components/DeleteConfirm';
 
 
 const NetworkTopology = () => {

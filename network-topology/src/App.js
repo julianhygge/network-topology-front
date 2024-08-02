@@ -3,10 +3,10 @@ import './App.css';
 import Grid from "./components/Grid";
 import GridPage from "./components/GridPage";
 import TransformerPage from "./components/TransformerPage";
-import NetworkTopology from "./Network/NetworkTopology";
+import NetworkTopology from "./components//Network/NetworkTopology";
 import UserConfiguration from "./components/HouseConfiguration";
-import LoadBuilder from "./LoadProfile/LoadBuilder";
-import GenerationPage1 from "./LoadProfile/GenerationPage1";
+import LoadBuilder from "./components/LoadProfile/LoadBuilder";
+import GenerationPage1 from "./components/LoadProfile/GenerationPage1";
 
 function App() {
   return (
