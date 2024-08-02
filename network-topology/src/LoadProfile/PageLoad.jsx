@@ -11,6 +11,9 @@ const PageLoad = () => {
   const handleLoadBuilderNavigation = () => {
     navigate(`/loadBuilder/${houseId}`);
   }
+  const handleGenerationEngineNavigation = () => {
+    navigate(`/generationEngine/${houseId}`);
+  }
 
 
   const handleMethodClick = (method) => {
@@ -47,7 +50,7 @@ const PageLoad = () => {
           </button>
           <button
             className="flex justify-center items-center px-10 py-10 bg-white border-[1px] border-navColor shadow-xl rounded-[20px] max-md:px-5"
-            onClick={() => handleMethodClick("Generation Engine")}
+            onClick={handleGenerationEngineNavigation}
           >
             Generation <br />
             Engine
