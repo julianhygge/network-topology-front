@@ -6,7 +6,7 @@ import LoadBuilderForm from './LoadBuilderForm';
 import LoadBuilderReset from './LoadBuilderReset';
 import ReactRouterPrompt from "react-router-prompt";
 
-const LoadBuilder = ({ onReset, profileId }) => {
+const LoadBuilder = ({ onReset, profileId, setUnsaved }) => {
   const [loads, setLoads] = useState([]);
   const [searchParams] = useSearchParams()
   const [total, setTotal] = useState(0);
@@ -42,17 +42,20 @@ const LoadBuilder = ({ onReset, profileId }) => {
     const sum = items.reduce((acc, item) => {
       const total = item.quantity * item.rating_watts * item.hours;
       item.total = total;
+      item.isNew = false;
       return acc + total;
     }, 0)
     setLoads(items);
     setTotal(sum)
     isUnsaved.current = false;
+    setUnsaved(isUnsaved.current);
   }
 
   const onAdd = ({ electricalDeviceId, ratingWatts, quantity, hours, addedTotal }) => {
     setTotal(addedTotal + total);
-    setLoads([...loads, { electrical_device_id: parseInt(electricalDeviceId), rating_watts: ratingWatts, quantity, hours, total: addedTotal }]);
+    setLoads([...loads, { electrical_device_id: parseInt(electricalDeviceId), rating_watts: ratingWatts, quantity, hours, total: addedTotal, isNew: true }]);
     isUnsaved.current = true;
+    setUnsaved(isUnsaved.current);
   };
 
   const removeLoad = (loadToRemove) => {
@@ -60,7 +63,9 @@ const LoadBuilder = ({ onReset, profileId }) => {
     if (!load) return;
     setTotal(total - load.total);
     setLoads(loads.filter((load) => load !== loadToRemove));
-    isUnsaved.current = true;
+    isUnsaved.current = !loadToRemove.isNew;
+    console.log("Load to remove: ", loadToRemove)
+    setUnsaved(isUnsaved.current);
   }
 
   const saveLoads = () => {
@@ -88,6 +93,7 @@ const LoadBuilder = ({ onReset, profileId }) => {
       if (profileId) {
         await deleteLoadProfile(profileId);
         isUnsaved.current = false;
+        setUnsaved(isUnsaved.current);
       }
     } catch (error) {
       console.error("Error deleting load profile:", error);
@@ -119,16 +125,16 @@ const LoadBuilder = ({ onReset, profileId }) => {
       <button onClick={() => setShowReset(true)}>Reset</button>
       <button onClick={saveLoads}>Save</button>
       <table>
-        <tr>
+        <thead>
           <td>Device Type</td>
           <td>Rating (watts)</td>
           <td>Quantity</td>
           <td>Hours</td>
           <td>Total</td>
           <td>Action</td>
-        </tr>
-        {loads.map((load) => (
-          <tr key={load.id}>
+        </thead>
+        {loads.map((load, index) => (
+          <thead key={index}>
             <td>{electricalIdToName(load.electrical_device_id)}</td>
             <td>{load.rating_watts}</td>
             <td>{load.quantity}</td>
@@ -137,7 +143,7 @@ const LoadBuilder = ({ onReset, profileId }) => {
             <td>
               <button onClick={() => removeLoad(load)}>X</button>
             </td>
-          </tr>
+          </thead>
         ))}
       </table>
       <LoadBuilderForm onAdd={(load) => onAdd(load)} appliances={appliances} />

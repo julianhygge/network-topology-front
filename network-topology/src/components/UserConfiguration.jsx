@@ -4,8 +4,8 @@ import Navbar from "./Navbar";
 import LoadProfileFileUpload from "../LoadProfile/Page1";
 import LoadProfilesList from "../LoadProfile/Page3";
 import { fetchLoadProfiles } from "../services/LoadProfile";
-import LoadProfileMenuCustom from "../LoadProfile/PageLoad";
-import LoadBuilder from "./LoadBuilder";
+import LoadProfileMenuCustom from "../LoadProfile/LoadProfileMenu";
+import LoadBuilder from "../LoadProfile/LoadBuilder";
 
 const UserConfiguration = () => {
   const [selectedButton, setSelectedButton] = useState(null);
@@ -14,14 +14,18 @@ const UserConfiguration = () => {
   const [searchParams] = useSearchParams();
   const houseId = searchParams.get("house_id");
   const [showPageLoad, setShowPageLoad] = useState(false);
+  const [isUnsaved, setUnsaved] = useState(false);
 
   const handleButtonClick = async (buttonName) => {
+    if (isUnsaved) return;
+    console.log("Button clicked: ", buttonName);
     setSelectedButton(buttonName);
     if (buttonName === "Load Profile") {
       setIsLoading(true);
       try {
         const profiles = await fetchLoadProfiles(houseId);
         setLoadProfiles(profiles);
+        console.log("Load Profiles userConfig: ", profiles)
       } catch (error) {
         console.error("Error fetching load profiles:", error);
       } finally {
@@ -76,11 +80,11 @@ const UserConfiguration = () => {
   }
 
   const renderContent = () => {
-    if (showPageLoad) {
-      return <LoadProfileMenuCustom onReset={onResetLoadProfile} />;
-    }
-
     if (selectedButton === "Load Profile") {
+      if (showPageLoad) {
+        return <LoadProfileMenuCustom onReset={onResetLoadProfile} setUnsaved={setUnsaved} />;
+      }
+
       if (isLoading) {
         return (
           <div className="flex items-center justify-center h-full text-xl">
@@ -95,7 +99,7 @@ const UserConfiguration = () => {
 
       return loadProfiles.items[0].source !== "Builder" ? (
         <LoadProfilesList profiles={loadProfiles} onUploadAgain={handleUploadAgain} />
-      ) : (<LoadBuilder onReset={() => { setLoadProfiles({}) }} profileId={loadProfiles.items[0].profile_id} />)
+      ) : (<LoadBuilder onReset={() => { setLoadProfiles({}); onResetLoadProfile() }} profileId={loadProfiles.items[0].profile_id} setUnsaved={setUnsaved} />)
     }
 
     return (

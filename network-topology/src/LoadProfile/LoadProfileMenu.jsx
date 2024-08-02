@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react'
-import LoadBuilder from '../components/LoadBuilder'
+import LoadBuilder from './LoadBuilder'
 
 const DISPLAY_TYPES = {
   NONE: "none",
@@ -8,11 +8,12 @@ const DISPLAY_TYPES = {
   LOAD_BUILDER: "load_builder",
 }
 
-const LoadProfileMenuCustom = ({ onReset }) => {
+const LoadProfileMenuCustom = ({ onReset, setUnsaved }) => {
   const [displayType, setDisplayType] = useState(DISPLAY_TYPES.NONE);
 
   if (displayType === DISPLAY_TYPES.LOAD_BUILDER) {
-    return <LoadBuilder onReset={() => { onReset(); setDisplayType(DISPLAY_TYPES.NONE) }} />
+    console.log("Load Builder")
+    return <LoadBuilder onReset={() => { onReset(); setDisplayType(DISPLAY_TYPES.NONE) }} setUnsaved={setUnsaved} />
   }
 
   return (
