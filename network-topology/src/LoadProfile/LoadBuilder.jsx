@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 import Navbar from '../components/Navbar';
 import Breadcrumb from '../components/Breadcrumb';
 import { useParams } from 'react-router-dom';
-import "./LoadBuilder.css"
+import "./LoadBuilder.css";
 
 const LoadBuilder = () => {
     const selectedButton = "Load Profile";
@@ -73,39 +73,39 @@ const LoadBuilder = () => {
                                 </button>
                             </div>
                         </div>
-                        <div className='container'>
-                            <div className='nav'>
-                                <ul>
-                                    <li className='heading'>
+                        <div className='container px-6'>
+                            <div className='nav pt-4'>
+                                <ul className='pt-1 pb-3'>
+                                    <li className='heading font-light'>
                                         Please continue to do the configuration from Load Builder below.
                                     </li>
-                                    <li className='watts'>
+                                    <li className='watts font-normal'>
                                         Total = 67,800 Watts
                                     </li>
-                                    <li className='reset-profile'>
+                                    <li className='reset-profile mr-1 cursor-pointer py-1'>
                                         Reset Profile
                                     </li>
                                 </ul>
                             </div>
                             <div className="table-container">
-                                <div className="device-table">
-                                    <ul>
-                                        <li className='device-type-column'>
+                                <div className="device-table text-[15px]">
+                                    <ul className=''>
+                                        <li className='device-type-column font-medium bg-loadBuilderNavColor py-3'>
                                             Device Type
                                         </li>
-                                        <li className='rating-column'>
+                                        <li className='rating-column font-medium bg-loadBuilderNavColor py-3'>
                                             Rating (watts)
                                         </li>
-                                        <li className='quantity-column'>
+                                        <li className='quantity-column font-medium bg-loadBuilderNavColor py-3'>
                                            Quantity
                                         </li>
-                                        <li className='hours-column'>
+                                        <li className='hours-column font-medium bg-loadBuilderNavColor py-3'>
                                            Hours
                                         </li>
-                                        <li className='total-column'>
+                                        <li className='total-column font-medium bg-loadBuilderNavColor py-3'>
                                            Total (w)
                                         </li>
-                                        <li className='action-column'>
+                                        <li className='action-column font-medium bg-loadBuilderNavColor py-3'>
                                            Action
                                         </li>
                                     </ul>
@@ -119,9 +119,8 @@ const LoadBuilder = () => {
                                         { type: 'Fridge', rating: 1800, quantity: 2, hours: 8, total: 28800 },
                                         { type: 'Washing Machine', rating: 1800, quantity: 2, hours: 8, total: 28800 }
                                     ].map((item, index) => (
-                                        // TODO: Change the key to something better than index like an id.
                                         <React.Fragment key={index}>
-                                            <ul>
+                                            <ul className='py-4 border-b border-gray-300'>
                                                 <li className='device-type-column'>{item.type}</li>
                                                 <li className='rating-column'>{item.rating}</li>
                                                 <li className='quantity-column'>{item.quantity}</li>
@@ -132,30 +131,43 @@ const LoadBuilder = () => {
                                                 </li>
                                             </ul>
                                             {index === 7 && (
-                                                <ul>
+                                                <ul className='bottom-buttons pt-4 pb-6 text-[15px]'>
                                                     <li className='device-type-column'>
-                                                        <button className='select-button'>Select</button>
+                                                        <button className='select-button px-3 text-left'>
+                                                            <div className='flex items-center'>
+                                                                <div className='mr-16'>
+                                                                    Select
+                                                                </div>
+                                                                <div className='ml-10'>
+                                                                    <img src={`${process.env.PUBLIC_URL}/images/down-arrow.png`} alt="down-arrow"/>
+                                                                </div>
+                                                            </div>
+                                                        </button>
                                                     </li>
                                                     <li className='rating-column'>
-                                                        <button className='enter-button'>Enter</button>
+                                                        <input className='enter-button text-center' type="text" placeholder='Enter'/>
                                                     </li>
                                                     <li className='quantity-column'>
-                                                        <div className='flex justify-center gap-2'>
-                                                            <button>-</button>
-                                                            <input className='text-center w-10' type="text" value={"00"}/>
-                                                            <button>+</button>
+                                                        <div className='flex justify-center gap-1'>
+                                                            <button className='px-3'>-</button>
+                                                            <input className='text-center w-12' type="text" defaultValue={"00"}/>
+                                                            <button className='px-3'>+</button>
                                                         </div>
                                                     </li>
                                                     <li className='hours-column'>
-                                                        <div className='flex justify-center gap-2'>
-                                                            <button>-</button>
-                                                            <input className='text-center w-10' type="text" value={"10"}/>
-                                                            <button>+</button>
+                                                        <div className='flex justify-center gap-1'>
+                                                            <button className='px-3'>-</button>
+                                                            <input className='text-center w-12' type="text" defaultValue={"10"}/>
+                                                            <button className='px-3'>+</button>
                                                         </div>
                                                     </li>
-                                                    <li className='total-column'>00</li>
+                                                    <li className='total-column pt-[3px] pb-[3px]'>00</li>
                                                     <li className='action-column'>
-                                                        <button className="add-button">+</button>
+                                                        <button className="add-button px-8">
+                                                            <div className='add-text'>
+                                                                +
+                                                            </div>
+                                                        </button>
                                                     </li>
                                             </ul>
                                             )}
