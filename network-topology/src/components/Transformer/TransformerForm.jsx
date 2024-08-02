@@ -1,11 +1,11 @@
-import React, {useEffect}from "react";
-import { updateTransformerData } from "../services/Tranformer";
-import Breadcrumb from "./Breadcrumb";
-import "./Breadcrumb.css";
+import React, { useEffect } from "react";
+import { updateTransformerData } from "services/Tranformer";
+import Breadcrumb from "components/Breadcrumb/Breadcrumb";
+import "components/Breadcrumb/Breadcrumb.css";
 import { useForm, FormProvider } from "react-hook-form";
 
 const TransformerForm = ({ transformer, onSave, onClose }) => {
-  
+
   useEffect(() => {
     console.log("transformer: ", transformer);
   }, [transformer]);
@@ -47,7 +47,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
       <div className="relative bg-white rounded-2xl pt-[100px] px-28 pb-8 w-full max-w-5xl border border-solid shadow-sm max-md:px-5 mt-36 mb-16 ml-28 z-10">
         <div className="absolute top-4 left-0 right-0 z-1 text-[14px] text-black font-light">
           {transformer && transformer.new !== true && (
-            <Breadcrumb nodeId={transformer.id} onEditNode={() => {}} />
+            <Breadcrumb nodeId={transformer.id} onEditNode={() => { }} />
           )}
         </div>
         <div
@@ -82,7 +82,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     placeholder="Enter name of transformer"
                     {...register("name", {
                       required: "Name is required",
-                      pattern: {value: /^[a-zA-Z0-9]*$/, message: "Name must not contain special characters."},
+                      pattern: { value: /^[a-zA-Z0-9]*$/, message: "Name must not contain special characters." },
                     })}
                   />
                   {errors.name && <span className="text-red-500">{errors.name.message}</span>}
@@ -166,9 +166,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                 </div>
                 <div className="mb-4 flex flex-col items-start ml-3">
                   <label
-                    className={`block text-customGrey-700 text-[13px] ml-2 font-[500] ${
-                      allowExport ? "" : "opacity-15"
-                    }`}
+                    className={`block text-customGrey-700 text-[13px] ml-2 font-[500] ${allowExport ? "" : "opacity-15"
+                      }`}
                   >
                     Backward Efficiency ( % )
                   </label>

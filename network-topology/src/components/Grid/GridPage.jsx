@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./Navbar";
-import TransForm from "./TransForm";
+import Navbar from "components/Common/Navbar";
+import TransForm from "components/Transformer/TransForm";
 import {
   getSubstations,
   generateSubstation,
   updateSubstationTransformers,
   deleteSubstation,
-} from "../services/Substation";
+} from "services/Substation";
 import { useNavigate } from "react-router-dom";
-import Delete from "./DeleteConfirm";
+import Delete from "components/Common/DeleteConfirm";
 
 const GridPage = () => {
   const [substations, setSubstations] = useState([]);
@@ -218,9 +218,9 @@ const GridPage = () => {
       </div>
       {showDeletePopup && (
         <Delete
-        onClose={handleCloseDeletePopup}
-        onConfirm={handleDelete}
-        entityName={substationToDelete?.name}
+          onClose={handleCloseDeletePopup}
+          onConfirm={handleDelete}
+          entityName={substationToDelete?.name}
         />
       )}
       <TransForm

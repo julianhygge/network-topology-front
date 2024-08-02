@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { uploadLoadProfile } from "../services/LoadProfile";
+import { uploadLoadProfile } from "services/LoadProfile";
 //import { useSearchParams } from "react-router-dom";
 import { useParams } from "react-router-dom";
 const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
@@ -8,7 +8,7 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
   const fileInputRef = useRef(null);
   // const [searchParams] = useSearchParams();
   // // const houseId = searchParams.get("house_id");
-  const {houseId}=useParams();
+  const { houseId } = useParams();
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -73,7 +73,7 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
                 <div className="font-bold">{selectedFile.name}</div>
               </div>
               <img
-                src= "images/DeleteButton.png"
+                src={`${process.env.PUBLIC_URL}/images/DeleteButton.png`}
                 className="w-[24px] h-[28px] cursor-pointer mt-6"
                 alt="Delete Icon"
                 onClick={handleDeleteFile}
@@ -82,7 +82,7 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
           ) : (
             <>
               Please browse and upload the <br />
-              {attach15MinFile ? " 15 Min data load profile" : ""} .csv 
+              {attach15MinFile ? " 15 Min data load profile" : ""} .csv
               file from your computer
             </>
           )}
@@ -98,9 +98,8 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
           />
           <label
             htmlFor="file"
-            className={`flex justify-center items-center px-20 py-4 shadow-sm rounded-[33px] max-md:px-5 cursor-pointer ${
-              selectedFile ? "bg-[#6AD1CE] opacity-50" : "bg-[#6AD1CE]"
-            }`}
+            className={`flex justify-center items-center px-20 py-4 shadow-sm rounded-[33px] max-md:px-5 cursor-pointer ${selectedFile ? "bg-[#6AD1CE] opacity-50" : "bg-[#6AD1CE]"
+              }`}
           >
             Attach
           </label>
