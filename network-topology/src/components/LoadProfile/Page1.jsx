@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import Page2 from "./Page2";
-import { Page3 } from "./Page3";
-import { DeleteConfirm } from "./DeleteConfirm";
+import Page2 from "components/LoadProfile/Page2";
 
-const Page1 = ({ onUploadSuccess,onNoClick }) => {
+const Page1 = ({ onUploadSuccess, onNoClick }) => {
   const [showSecondStep, setShowSecondStep] = useState(false);
   const [showThirdStep, setShowThirdStep] = useState(false);
   const [noSelected, setNoSelected] = useState(false);
@@ -16,7 +14,7 @@ const Page1 = ({ onUploadSuccess,onNoClick }) => {
       setShowThirdStep(true);
       setAttach15MinFile(false);
     } else {
-      onNoClick(); 
+      onNoClick();
     }
   };
 
