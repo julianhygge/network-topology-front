@@ -73,7 +73,7 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
                 <div className="font-bold">{selectedFile.name}</div>
               </div>
               <img
-                src="images/DeleteButton.png"
+                src={`${process.env.PUBLIC_URL}/images/DeleteButton.png`}
                 className="w-[24px] h-[28px] cursor-pointer mt-6"
                 alt="Delete Icon"
                 onClick={handleDeleteFile}

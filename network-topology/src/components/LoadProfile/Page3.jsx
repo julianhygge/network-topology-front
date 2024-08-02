@@ -119,7 +119,7 @@ const Page3 = ({ profiles, onUploadAgain }) => {
               </button>
               <img
                 loading="lazy"
-                src="images/DeleteButton.png"
+                src={`${process.env.PUBLIC_URL}/images/DeleteButton.png`}
                 className="w-[36px] h-[41.23px] mt-2 cursor-pointer"
                 alt="Icon"
                 onClick={() => handleDeleteClick(profile.links.delete, profile.file_name)}
