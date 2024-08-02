@@ -1,13 +1,26 @@
 import React from 'react'
 import { useNavigate, useParams} from 'react-router-dom';
+import GenerationPage1  from "./GenerationPage1";
+import { useState } from 'react';
 
 const PageLoad = () => {
   const navigate = useNavigate();
   const {houseId} = useParams();
+  const [selectedMethod, setSelectedMethod] = useState(null);
 
   const handleLoadBuilderNavigation = () => {
     navigate(`/loadBuilder/${houseId}`);
   }
+
+
+  const handleMethodClick = (method) => {
+    setSelectedMethod(method);
+  };
+
+  if (selectedMethod === "Generation Engine") {
+    return <GenerationPage1 />; 
+  }
+
   return (
     <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
       <div>
@@ -22,14 +35,19 @@ const PageLoad = () => {
           to Generate the Load Profile 
         </div>
         <div className="flex gap-8 justify-between mt-10 max-w-full text-xl tracking-normal text-navColor whitespace-nowrap max-md:mt-10">
+   
+
+
           <button
-            className="  flex justify-center items-center px-10 py-10 bg-white  border-[1px] border-navColor shadow-xl rounded-[20px] max-md:px-5"
+            className="flex justify-center items-center px-10 py-10 bg-white  border-[1px] border-navColor shadow-xl rounded-[20px] max-md:px-5"
+            onClick={() => handleMethodClick("Predefined Templates")}
           >
-          Predefined <br />
-          Templates
+            Predefined <br />
+            Templates
           </button>
           <button
-            className="flex justify-center items-center px-10 py-10  bg-white  border-[1px] border-navColor  shadow-xl  rounded-[20px] max-md:px-5"
+            className="flex justify-center items-center px-10 py-10 bg-white border-[1px] border-navColor shadow-xl rounded-[20px] max-md:px-5"
+            onClick={() => handleMethodClick("Generation Engine")}
           >
             Generation <br />
             Engine
@@ -39,11 +57,13 @@ const PageLoad = () => {
             onClick={handleLoadBuilderNavigation}
           >
             Load  <br />
-            Builder
+           Builder
+         
           </button>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
+
 export default PageLoad;
