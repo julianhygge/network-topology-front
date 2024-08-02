@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { uploadLoadProfile } from "../services/LoadProfile";
 import { useSearchParams } from "react-router-dom";
 
-const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
+const FileUpload = ({ onBack, attach15MinFile, onUploadSuccess }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const fileInputRef = useRef(null);
@@ -76,7 +76,7 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
           ) : (
             <>
               Please browse and upload the <br />
-              {attach15MinFile ? " 15 Min data load profile" : ""} .csv 
+              {attach15MinFile ? " 15 Min data load profile" : ""} .csv
               file from your computer
             </>
           )}
@@ -92,9 +92,8 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
           />
           <label
             htmlFor="file"
-            className={`flex justify-center items-center px-20 py-4 shadow-sm rounded-[33px] max-md:px-5 cursor-pointer ${
-              selectedFile ? "bg-[#6AD1CE] opacity-50" : "bg-[#6AD1CE]"
-            }`}
+            className={`flex justify-center items-center px-20 py-4 shadow-sm rounded-[33px] max-md:px-5 cursor-pointer ${selectedFile ? "bg-[#6AD1CE] opacity-50" : "bg-[#6AD1CE]"
+              }`}
           >
             Attach
           </label>
@@ -112,4 +111,4 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
   );
 };
 
-export default Page2;
+export default FileUpload;

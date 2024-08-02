@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import Page2 from "./Page2";
-import { LoadProfilesList } from "./Page3";
-import { DeleteConfirm } from "./DeleteConfirm";
+import FileUpload from "./FileUpload";
 
-const LoadProfileFileUpload = ({ onUploadSuccess, onNoClick }) => {
+const FileUploadSelection = ({ onUploadSuccess, onNoClick }) => {
   const [showSecondStep, setShowSecondStep] = useState(false);
   const [showThirdStep, setShowThirdStep] = useState(false);
   const [noSelected, setNoSelected] = useState(false);
@@ -41,7 +39,7 @@ const LoadProfileFileUpload = ({ onUploadSuccess, onNoClick }) => {
 
   if (showThirdStep) {
     return (
-      <Page2
+      <FileUpload
         onBack={handleBackClick}
         attach15MinFile={attach15MinFile}
         onUploadSuccess={onUploadSuccess}
@@ -101,4 +99,4 @@ const LoadProfileFileUpload = ({ onUploadSuccess, onNoClick }) => {
   );
 };
 
-export default LoadProfileFileUpload;
+export default FileUploadSelection;

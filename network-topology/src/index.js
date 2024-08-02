@@ -8,7 +8,7 @@ import GridPage from "./components/GridPage";
 import TransformerPage from "./components/TransformerPage";
 import NetworkTopology from "./components/NetworkTopology";
 import UserConfiguration from "./components/UserConfiguration";
-import Page2 from "./LoadProfile/Page2";
+import FileUpload from "./LoadProfile/FileUpload";
 
 const router = createBrowserRouter(
   [
@@ -17,7 +17,7 @@ const router = createBrowserRouter(
     { path: 'gridPage', element: <GridPage /> },
     { path: "transformers/:substationId", element: <TransformerPage /> },
     { path: "config", element: <UserConfiguration /> },
-    { path: "p", element: <Page2 /> },
+    { path: "p", element: <FileUpload /> },
   ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

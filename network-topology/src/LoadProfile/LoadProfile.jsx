@@ -3,13 +3,13 @@ import { useSearchParams } from "react-router-dom";
 import { fetchLoadProfiles } from "../services/LoadProfile";
 import LoadBuilder from "./LoadBuilder";
 import LoadProfileMenuCustom from "./LoadProfileMenu";
-import LoadProfileFileUpload from "./Page1";
-import LoadProfilesList from "./Page3";
+import FileUploadSelection from "./FileUploadSelection";
+import LoadProfileFileList from "./LoadProfileFileList";
 
 const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
   const [loadProfiles, setLoadProfiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showPageLoad, setShowPageLoad] = useState(false);
+  const [showCustomMenu, setShowCustomMenu] = useState(false);
   const [searchParams] = useSearchParams();
   const houseId = searchParams.get("house_id");
 
@@ -67,19 +67,15 @@ const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
   };
 
   const handleNoClick = () => {
-    setShowPageLoad(true);
+    setShowCustomMenu(true);
   };
 
   const onResetLoadProfile = () => {
     console.log("Resetting load profile");
-    setShowPageLoad(false);
+    setShowCustomMenu(false);
   }
 
   const renderContent = () => {
-    if (showPageLoad) {
-      return <LoadProfileMenuCustom onReset={onResetLoadProfile} setUnsaved={setUnsaved} />;
-    }
-
     if (isLoading) {
       return (
         <div className="flex items-center justify-center h-full text-xl">
@@ -89,11 +85,14 @@ const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
     }
     console.log("LoadProfilesList: ", loadProfiles.items)
     if (!loadProfiles.items || loadProfiles.items?.length === 0) {
-      return (<LoadProfileFileUpload onUploadSuccess={handleUploadSuccess} onNoClick={handleNoClick} />);
+      if (showCustomMenu) {
+        return <LoadProfileMenuCustom onReset={onResetLoadProfile} setUnsaved={setUnsaved} />;
+      }
+      return (<FileUploadSelection onUploadSuccess={handleUploadSuccess} onNoClick={handleNoClick} />);
     }
 
     return loadProfiles.items[0].source !== "Builder" ? (
-      <LoadProfilesList profiles={loadProfiles} onUploadAgain={handleUploadAgain} />
+      <LoadProfileFileList profiles={loadProfiles} onUploadAgain={handleUploadAgain} />
     ) : (<LoadBuilder onReset={() => { setLoadProfiles({}); onResetLoadProfile() }} profileId={loadProfiles.items[0].profile_id} setUnsaved={setUnsaved} />)
   }
 
