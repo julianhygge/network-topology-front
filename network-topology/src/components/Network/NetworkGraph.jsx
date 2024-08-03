@@ -1,29 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import './NetworkGraph.css';
+import React, { useEffect, useState } from "react";
+import "./NetworkGraph.css";
 import { fetchTransformerDetails } from "services/Tranformer";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
+// Transformer component displays a transformer icon and name
 const Transformer = ({ color, name, onTransformerClick }) => (
-  <div className="transformer-wrapper cursor-pointer" onClick={onTransformerClick}>
+  <div
+    className="transformer-wrapper cursor-pointer"
+    onClick={onTransformerClick}
+  >
     <img
       src={`/images/${color}Transformer.png`}
       alt="Transformer"
-      className={`icon transformer ${color === 'Green' ? 'green-transformer-icon' : ''}`}
+      className={`icon transformer ${
+        color === "Green" ? "green-transformer-icon" : ""
+      }`}
     />
     <span className="transformer-label">{name}</span>
   </div>
 );
-
+// House component displays a house icon
 const House = ({ color, onHouseClick }) => (
-  <div className='cursor-pointer' onClick={onHouseClick}>
-    <img
-      src={`/images/${color}House.png`}
-      alt="House"
-      className="icon house"
-    />
+  <div className="cursor-pointer" onClick={onHouseClick}>
+    <img src={`/images/${color}House.png`} alt="House" className="icon house" />
   </div>
 );
 
+// SubConnectionLine is a component for rendering a connection line between transformers and houses
 const SubConnectionLine = ({ transformer, params = {} }) => {
   const [subLineStyle, setSubLineStyle] = useState({});
   const [showLine, setShowLine] = useState(false);
@@ -36,6 +39,7 @@ const SubConnectionLine = ({ transformer, params = {} }) => {
     minWidth = 10,
   } = params;
 
+  // Effect to calculate the position and size of the sub-connection line
   useEffect(() => {
     const updateSubLineStyle = () => {
       const transformerNode = document.querySelector(
@@ -52,20 +56,14 @@ const SubConnectionLine = ({ transformer, params = {} }) => {
           const lastRect = lastNode.getBoundingClientRect();
           const parentRect = transformerNode.getBoundingClientRect();
 
-          const width = Math.max(
-            lastRect.right - firstRect.left,
-            minWidth
-          );
+          const width = Math.max(lastRect.right - firstRect.left, minWidth);
           const left =
             firstRect.left -
             parentRect.left +
             firstRect.width / 2 +
             startOffset;
           const right =
-            lastRect.right -
-            parentRect.left -
-            lastRect.width / 2 +
-            endOffset;
+            lastRect.right - parentRect.left - lastRect.width / 2 + endOffset;
 
           setSubLineStyle({
             width: `${right - left}px`,
@@ -104,6 +102,7 @@ const SubConnectionLine = ({ transformer, params = {} }) => {
 
   return <div className="sub-connection-line" style={subLineStyle}></div>;
 };
+// NetworkGraph component renders the network of transformers and houses
 
 const NetworkGraph = ({
   onSelectedNode,
@@ -115,19 +114,25 @@ const NetworkGraph = ({
   onAddSubTransformer,
   onDeleteHouse,
   onTransformerEdit,
-  onHouseEdit
+  onHouseEdit,
 }) => {
   const [lineStyle, setLineStyle] = useState({});
   const [showLine, setShowLine] = useState(false);
-  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, node: null });
+  const [contextMenu, setContextMenu] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+    node: null,
+  });
   const navigate = useNavigate();
 
-
+  // Constants for styling the connection line
   const lineTopOffset = 40;
   const verticalLineHeight = 10;
   const nodeVerticalLineTop = -20;
   const nodeVerticalLineHeight = 20;
 
+  // Effect to calculate and update the main connection line style
   useEffect(() => {
     console.log("data: ", data);
     const updateLineStyle = () => {
@@ -144,7 +149,8 @@ const NetworkGraph = ({
           const rowRect = transformersRow.getBoundingClientRect();
 
           const lineStart = firstRect.left - rowRect.left + firstRect.width / 2;
-          const lineEnd = addButtonRect.left - rowRect.left + addButtonRect.width / 2;
+          const lineEnd =
+            addButtonRect.left - rowRect.left + addButtonRect.width / 2;
 
           setLineStyle({
             width: `${lineEnd - lineStart}px`,
@@ -178,11 +184,12 @@ const NetworkGraph = ({
     return () => document.head.removeChild(style);
   }, []);
 
+  // Function to determine transformer color based on completion and new status
   const getColor = (isComplete, isNew) => {
     if (isNew) return "Grey";
     return isComplete ? "Green" : "Black";
   };
-
+  // Function to fetch and configure the selected node
   const onConfigure = async (d) => {
     if (!d || !d.id) {
       console.error("Node data is undefined or missing id:", d);
@@ -202,7 +209,7 @@ const NetworkGraph = ({
       console.error("Error fetching details:", error);
     }
   };
-
+  // Handle right-click to open context menu
   const handleContextMenu = (event, node) => {
     onRightClickSelectedNode(node);
     event.preventDefault();
@@ -230,19 +237,39 @@ const NetworkGraph = ({
       document.removeEventListener("click", handleClick);
     };
   }, []);
-
+  // Render the context menu with actions based on node type
   const renderContextMenu = () => {
     const { x, y, node } = contextMenu;
 
     if (!node) return null;
 
     return (
-      <div className="context-menu" style={{ top: `${y - 20}px`, left: `${x + 20}px` }}>
-        <button className='text-navColor font-dinPro font-medium ' onClick={() => onConfigure(node)}>Configure</button>
-        {node.type === 'transformer' && (
-          <button className='text-navColor font-dinPro font-medium' onClick={() => onAddSubTransformer(node.id)}>Add Sub-T</button>
+      <div
+        className="context-menu"
+        style={{ top: `${y - 20}px`, left: `${x + 20}px` }}
+      >
+        <button
+          className="text-navColor font-dinPro font-medium "
+          onClick={() => onConfigure(node)}
+        >
+          Configure
+        </button>
+        {node.type === "transformer" && (
+          <button
+            className="text-navColor font-dinPro font-medium"
+            onClick={() => onAddSubTransformer(node.id)}
+          >
+            Add Sub-T
+          </button>
         )}
-        <button className='text-[#F21818] font-dinPro font-medium' onClick={() => node.type === 'transformer' ? onDeleteTransformer(node.id, node.new) : onDeleteHouse(node, node.new)}>
+        <button
+          className="text-[#F21818] font-dinPro font-medium"
+          onClick={() =>
+            node.type === "transformer"
+              ? onDeleteTransformer(node.id, node.new)
+              : onDeleteHouse(node, node.new)
+          }
+        >
           Delete
         </button>
       </div>
@@ -251,13 +278,25 @@ const NetworkGraph = ({
   // const handleNodeClick = (node) => {
   //   console.log(`Node ID: ${node.id}`);
   // };
-
+  // Render individual nodes recursively
   const renderNode = (node, level = 0) => {
     if (node.type === "house") {
       return (
-        <div key={node.id} className="house-item cursor-pointer" onDoubleClick={() => { onConfigure(node) }} onContextMenu={(e) => handleContextMenu(e, node)} >
-          <House color={getColor(node.is_complete, node.new)} onHouseClick={() => onSelectedNode(node)} />
-          <span className='font-dinPro font-medium house-name text-navColor'  >{node.nomenclature}</span>
+        <div
+          key={node.id}
+          className="house-item cursor-pointer"
+          onDoubleClick={() => {
+            onConfigure(node);
+          }}
+          onContextMenu={(e) => handleContextMenu(e, node)}
+        >
+          <House
+            color={getColor(node.is_complete, node.new)}
+            onHouseClick={() => onSelectedNode(node)}
+          />
+          <span className="font-dinPro font-medium house-name text-navColor">
+            {node.nomenclature}
+          </span>
         </div>
       );
     }
@@ -267,48 +306,65 @@ const NetworkGraph = ({
         key={node.id}
         className="transformer-column"
         data-transformer-id={node.id}
-
       >
-        <div className="transformer-header cursor-pointer" onDoubleClick={() => { onConfigure(node) }} onContextMenu={(e) => handleContextMenu(e, node)}>
-          <Transformer color={getColor(node.is_complete, node.new)} onTransformerClick={() => onSelectedNode(node)} />
-          <span className='font-dinPro font-medium text-navColor'>{node.nomenclature}</span>
+        <div
+          className="transformer-header cursor-pointer"
+          onDoubleClick={() => {
+            onConfigure(node);
+          }}
+          onContextMenu={(e) => handleContextMenu(e, node)}
+        >
+          <Transformer
+            color={getColor(node.is_complete, node.new)}
+            onTransformerClick={() => onSelectedNode(node)}
+          />
+          <span className="font-dinPro font-medium text-navColor">
+            {node.nomenclature}
+          </span>
         </div>
         <div className="transformer-node">
           <SubConnectionLine transformer={node} />
           <div className="houses-column">
-            {node.children && node.children.filter(child => child.type === "house").length > 0 ?
-              node.children.filter(child => child.type === "house").map(renderNode)
-              :
-              (
-                <div className='flex flex-col items-center text-center gap-5 pt-14 pb-20 px-2 font-dinPro font-medium text-navColor'>
-                  <div className=''>
-                    House is not
-                    <br />
-                    added yet under
-                    <br />
-                    this Transformer
-                  </div>
-
-                  <div className='text-md'>
-                    Please add from
-                    <br />
-                    the below
-                    <br />
-                    Button
-                  </div>
+            {node.children &&
+            node.children.filter((child) => child.type === "house").length >
+              0 ? (
+              node.children
+                .filter((child) => child.type === "house")
+                .map(renderNode)
+            ) : (
+              <div className="flex flex-col items-center text-center gap-5 pt-14 pb-20 px-2 font-dinPro font-medium text-navColor">
+                <div className="">
+                  House is not
+                  <br />
+                  added yet under
+                  <br />
+                  this Transformer
                 </div>
-              )
-            }
-            <div className='absolute bottom-1'>
-              <button className="add-house" onClick={() => onAddHouse(node.id)}>+</button>
+
+                <div className="text-md">
+                  Please add from
+                  <br />
+                  the below
+                  <br />
+                  Button
+                </div>
+              </div>
+            )}
+            <div className="absolute bottom-1">
+              <button className="add-house" onClick={() => onAddHouse(node.id)}>
+                +
+              </button>
             </div>
           </div>
-          {node.children && node.children.filter(child => child.type === "transformer").map(child => renderNode(child, level + 1))}
+          {node.children &&
+            node.children
+              .filter((child) => child.type === "transformer")
+              .map((child) => renderNode(child, level + 1))}
         </div>
       </div>
     );
   };
-
+  // Render the network graph
   return (
     <div className="network-graph">
       {showLine && (
@@ -330,28 +386,40 @@ const NetworkGraph = ({
         ></div>
       )}
       <React.Fragment>
-        {data && data.nodes && data.nodes.length > 0 ?
-          (
-            <div className="transformers-row">
-              {data.nodes.map((node) => renderNode(node))}
-              <button className="min-w-[90px] add-transformer" onClick={onAddTransformer}>+</button>
-              <label className="min-w-[90px] text-navColor text-sm mt-[50px] ml-[-80px]">Add-T</label>
+        {data && data.nodes && data.nodes.length > 0 ? (
+          <div className="transformers-row">
+            {data.nodes.map((node) => renderNode(node))}
+            <button
+              className="min-w-[90px] add-transformer"
+              onClick={onAddTransformer}
+            >
+              +
+            </button>
+            <label className="min-w-[90px] text-navColor text-sm mt-[50px] ml-[-80px]">
+              Add-T
+            </label>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-36 h-screen text-center">
+            <div className="add-transformer-top-part flex flex-col gap-1">
+              <button
+                className="add-transformer-empty-grid"
+                onClick={onAddTransformer}
+              >
+                +
+              </button>
+              <div>Add - T</div>
             </div>
-          )
-          :
-          (
-            <div className='flex flex-col items-center gap-36 h-screen text-center'>
-              <div className='add-transformer-top-part flex flex-col gap-1'>
-                <button className="add-transformer-empty-grid" onClick={onAddTransformer}>+</button>
-                <div >Add - T</div>
+            <div className="add-transformer-bottom-part flex flex-col gap-1">
+              <div>
+                Transformer is not added yet under this {data.substation_name}
               </div>
-              <div className='add-transformer-bottom-part flex flex-col gap-1'>
-                <div>Transformer is not added yet under this {data.substation_name}</div>
-                <div>Please add it from the above <b>Add-T</b> button</div>
+              <div>
+                Please add it from the above <b>Add-T</b> button
               </div>
             </div>
-          )
-        }
+          </div>
+        )}
       </React.Fragment>
       {contextMenu.visible && renderContextMenu()}
     </div>

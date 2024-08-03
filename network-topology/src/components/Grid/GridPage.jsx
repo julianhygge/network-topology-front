@@ -27,16 +27,16 @@ const GridPage = () => {
   useEffect(() => {
     fetchSubstations();
   }, []);
-
+  // Fetches substations from the server
   const fetchSubstations = async () => {
     try {
       const data = await getSubstations();
-      setSubstations(data.items);
+      setSubstations(data.items); // Update substations state with fetched data
     } catch (error) {
       console.error("Failed to fetch substations:", error);
     }
   };
-
+  // Adds a new substation
   const handleAddSubstation = async () => {
     try {
       const payload = {
@@ -44,7 +44,7 @@ const GridPage = () => {
         number_of_substations: 1,
       };
       const newSubstations = await generateSubstation(payload);
-
+      // Merges new substations with existing ones, avoiding duplicates
       const uniqueSubstations = [
         ...substations,
         ...newSubstations.items.filter(
@@ -57,7 +57,7 @@ const GridPage = () => {
       console.error("Failed to add substation:", error);
     }
   };
-
+  // Shows the transformer form for the selected substation
   const handleShowForm = (substation) => {
     setSelectedSubstation(substation);
     setShowForm(true);
@@ -67,16 +67,16 @@ const GridPage = () => {
     setShowForm(false);
     setSelectedSubstation(null);
   };
-
+  // Handles form submission for adding transformers
   const handleSubmitForm = async (numberOfTransformers) => {
     try {
       const payload = {
         nodes: Array(numberOfTransformers).fill({
           action: "add",
           type: "transformer",
-        }),
+        }), // Payload for adding transformers
       };
-      await updateSubstationTransformers(selectedSubstation.id, payload);
+      await updateSubstationTransformers(selectedSubstation.id, payload); // Updates substation with new transformers
       navigate(`/transformers/${selectedSubstation.id}`, {
         state: { substationName: selectedSubstation.name },
       });
@@ -85,7 +85,7 @@ const GridPage = () => {
       console.error("Failed to add transformers:", error);
     }
   };
-
+  // Navigates to the tree view page
   const handleTreeView = () => {
     navigate("/");
   };
@@ -115,12 +115,14 @@ const GridPage = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [contextMenu]);
+
+  // Handles the delete button click in the context menu
   const handleDeleteClick = () => {
     setSubstationToDelete(contextMenu.substation);
     setShowDeletePopup(true);
     setContextMenu({ visible: false, x: 0, y: 0, substation: null });
   };
-
+  // Handles the delete confirmation
   const handleDelete = async () => {
     try {
       await deleteSubstation(substationToDelete.id);
@@ -140,7 +142,6 @@ const GridPage = () => {
   };
 
   return (
-
     <div className="bg-backPage min-h-screen">
       <Navbar />
       <div className="flex flex-col items-center px-5 mt-12 w-full text-4xl text-center text-navColor max-md:mt-10 max-md:max-w-full">
@@ -230,7 +231,6 @@ const GridPage = () => {
         substationName={selectedSubstation?.name}
       />
     </div>
-
   );
 };
 

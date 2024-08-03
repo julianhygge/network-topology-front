@@ -12,7 +12,7 @@ const Grid = () => {
       try {
         const data = await getSubstations();
         if (data.items.length > 0) {
-          navigate("/gridPage");
+          navigate("/gridPage"); // Redirects to the grid page if substations exist
         }
       } catch (error) {
         console.error("Error fetching substations:", error);
@@ -20,10 +20,12 @@ const Grid = () => {
     };
     Fetch();
   }, [navigate]);
-
+  // Handles changes in the input field
   const handleInputChange = (event) => {
-    setGridNumber(event.target.value);
+    setGridNumber(event.target.value); // Updates grid number state
   };
+
+  // Handles form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
