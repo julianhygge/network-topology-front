@@ -43,10 +43,7 @@ const Page3 = ({ profiles, onUploadAgain }) => {
     }
   };
 
-  const handleUploadAgain = async (filename, deleteLink) => {
-    onUploadAgain(deleteLink);
-    setSelectedFileName(filename);
-  };
+
 
   const handleDownload = async (downloadLink) => {
 

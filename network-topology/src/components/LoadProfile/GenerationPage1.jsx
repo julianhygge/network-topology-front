@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import './GenerationPage.css';
+import "./GenerationPage.css";
 import Navbar from "components/Common/Navbar";
+import { saveGenerationProfile } from "../../services/LoadProfile";
+import { useParams } from "react-router-dom";
 
 const GenerationPage1 = () => {
   const selectedButton = "Load Profile";
+  const { houseId } = useParams();
   const [formValues, setFormValues] = useState({
     avgKWh: "",
     daily: false,
@@ -11,6 +14,8 @@ const GenerationPage1 = () => {
     avgMonthlyBill: "",
     maxDemand: "",
   });
+  const [response, setResponse] = useState(null);
+  const [isSaved, setIsSaved] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -28,11 +33,34 @@ const GenerationPage1 = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { avgKWh, daily, monthly, avgMonthlyBill, maxDemand } = formValues;
+
     if (avgKWh && (daily || monthly) && avgMonthlyBill && maxDemand) {
-      console.log(formValues);
+      const type = daily ? "Daily" : "Monthly";
+      const payload = {
+        type,
+        average_kwh: parseFloat(avgKWh),
+        average_monthly_bill: parseFloat(avgMonthlyBill),
+        max_demand_kw: parseFloat(maxDemand),
+      };
+      console.log(houseId);
+
+      try {
+        const data = await saveGenerationProfile(houseId, payload);
+        setResponse(data);
+        setIsSaved(true);
+        setFormValues({
+          avgKWh: data.average_kwh,
+          daily: data.type === "Daily",
+          monthly: data.type === "Monthly",
+          avgMonthlyBill: data.average_monthly_bill,
+          maxDemand: data.max_demand_kw,
+        });
+      } catch (error) {
+        console.error("Failed to save profile:", error);
+      }
     } else {
       alert("Please fill all fields");
     }
@@ -56,11 +84,11 @@ const GenerationPage1 = () => {
                 ].map((item, index) => (
                   <React.Fragment key={index}>
                     <button
-                      className={`grid justify-center items-center cursor-pointer text-[16px] ${selectedButton === item
-                        ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
-                        : "text-gridColor1 cursor-not-allowed"
-                        }`}
-
+                      className={`grid justify-center items-center cursor-pointer text-[16px] ${
+                        selectedButton === item
+                          ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
+                          : "text-gridColor1 cursor-not-allowed"
+                      }`}
                       style={{ minHeight: "110px" }}
                     >
                       {item.split(" ").map((word, wordIndex) => (
@@ -84,98 +112,134 @@ const GenerationPage1 = () => {
           </div>
           <button className="absolute top mt-2 left-4 grid justify-center cursor-pointer hover:opacity-50">
             <div className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1">
-              <img loading="lazy" src={`${process.env.PUBLIC_URL}/images/Arrow 2.png`} alt="Back" />
+              <img
+                loading="lazy"
+                src={`${process.env.PUBLIC_URL}/images/Arrow 2.png`}
+                alt="Back"
+              />
             </div>
           </button>
         </div>
-        <div className="flex-1 overflow-auto"><div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
-          <div>
-            <span className="flex text-center text-navColor items-center text-[20px] font-medium">
-              Load profile generation is in process,
-              <br />
-              Please continue to do the configuration from below.
-            </span>
+        <div className="flex-1 overflow-auto">
+          <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
+            <div>
+              <span className="flex text-center text-navColor items-center text-[20px] font-medium">
+                Load profile generation is in process,
+                <br />
+                Please continue to do the configuration from below.
+              </span>
+            </div>
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col justify-center items-center w-[50vw] pt-8 pb-10 font-medium text-center text-navColor bg-white rounded-2xl max-w-[860px] shadow-[0px_5px_10px_rgba(169,218,198,1)] max-md:px-5"
+            >
+              <div className="relative text-[18px] max-md:mt-10">
+                {isSaved
+                  ? "Please edit the below details and Save"
+                  : "Please enter the below details and Save"}
+                {isSaved && (
+                  <button
+                    type="button"
+                    className="absolute right-[-12vw]"
+                    onClick={() => console.log("Delete button clicked")}
+                  >
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/DeleteButton.png`}
+                      className="w-[24px] h-[28px] cursor-pointer"
+                      alt="Delete Icon"
+                    />
+                  </button>
+                )}
+              </div>
+
+              <div className="flex flex-col items-center gap-5 mt-8 w-full max-w-lg">
+                <label className="flex flex-col items-start">
+                  Enter the Avg kWh consumed
+                  <div className="flex gap-20 mt-2 mb-2">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        name="daily"
+                        checked={formValues.daily}
+                        onChange={handleInputChange}
+                        className="mr-2 custom-checkbox"
+                        disabled={isSaved}
+                      />
+                      Daily
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        name="monthly"
+                        checked={formValues.monthly}
+                        onChange={handleInputChange}
+                        className="mr-2 custom-checkbox"
+                        disabled={isSaved}
+                      />
+                      Monthly
+                    </label>
+                  </div>
+                  <input
+                    type="number"
+                    name="avgKWh"
+                    value={formValues.avgKWh}
+                    onChange={handleInputChange}
+                    className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl custom-input"
+                    disabled={isSaved}
+                  />
+                </label>
+                <label className="flex flex-col items-start">
+                  Enter the Average Monthly Bill
+                  <input
+                    type="number"
+                    name="avgMonthlyBill"
+                    value={formValues.avgMonthlyBill}
+                    onChange={handleInputChange}
+                    className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl custom-input"
+                    disabled={isSaved}
+                  />
+                </label>
+                <label className="flex flex-col items-start">
+                  Enter the Max demand (kW)
+                  <input
+                    type="number"
+                    name="maxDemand"
+                    value={formValues.maxDemand}
+                    onChange={handleInputChange}
+                    className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl custom-input"
+                    disabled={isSaved}
+                  />
+                </label>
+              </div>
+              <div className="flex gap-6 justify-between mt-10 max-w-full text-xl tracking-normal text-white whitespace-nowrap max-md:mt-10">
+                <button
+                  type="button"
+                  className={`flex justify-center items-center px-14 py-3 shadow-sm rounded-[33px] max-md:px-5  bg-[#FFB600] text-[#563E04] ${
+                    isSaved
+                      ? " opacity-50 cursor-not-allowed"
+                      : "bg-[#FFB600] text-[#563E04]"
+                  }`}
+                  disabled={isSaved}
+                  onClick={() => window.location.reload()}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className={`flex justify-center items-center px-16 py-3 shadow-sm rounded-[33px] max-md:px-5  bg-[#74AA50] ${
+                    isSaved ? " opacity-50 cursor-not-allowed" : "bg-[#74AA50]"
+                  }`}
+                  disabled={isSaved}
+                >
+                  Save
+                </button>
+              </div>
+            </form>
           </div>
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col justify-center items-center w-[50vw] pt-8 pb-10 font-medium text-center text-navColor bg-white rounded-2xl max-w-[860px] shadow-[0px_5px_10px_rgba(169,218,198,1)] max-md:px-5"
-          >
-            <div className="text-[18px] max-md:mt-10">
-              Please enter the below details and Save
-            </div>
-            <div className="flex flex-col items-center gap-5 mt-8 w-full max-w-lg">
-              <label className="flex flex-col items-start">
-                Enter the Avg kWh consumed
-                <div className="flex gap-20 mt-2 mb-2">
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="daily"
-                      checked={formValues.daily}
-                      onChange={handleInputChange}
-                      className="mr-2 custom-checkbox"
-                    />
-                    Daily
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="monthly"
-                      checked={formValues.monthly}
-                      onChange={handleInputChange}
-                      className="mr-2 custom-checkbox"
-                    />
-                    Monthly
-                  </label>
-                </div>
-                <input
-                  type="number"
-                  name="avgKWh"
-                  value={formValues.avgKWh}
-                  onChange={handleInputChange}
-                  className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl custom-input"
-                />
-              </label>
-              <label className="flex flex-col items-start">
-                Enter the Average Monthly Bill
-                <input
-                  type="number"
-                  name="avgMonthlyBill"
-                  value={formValues.avgMonthlyBill}
-                  onChange={handleInputChange}
-                  className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl custom-input"
-                />
-              </label>
-              <label className="flex flex-col items-start">
-                Enter the Max demand (kW)
-                <input
-                  type="number"
-                  name="maxDemand"
-                  value={formValues.maxDemand}
-                  onChange={handleInputChange}
-                  className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl custom-input"
-                />
-              </label>
-            </div>
-            <div className="flex gap-6 justify-between mt-10 max-w-full text-xl tracking-normal text-white whitespace-nowrap max-md:mt-10">
-              <button
-                type="button"
-                className="flex justify-center items-center px-14 py-3 bg-[#FFB600] shadow-sm text-navColor rounded-[33px] max-md:px-5"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="flex justify-center items-center px-16 py-3 shadow-sm bg-[#74AA50] rounded-[33px] max-md:px-5"
-              >
-                Save
-              </button>
-            </div>
-          </form>
-        </div></div>
+        </div>
       </div>
     </>
-
   );
 };
+
 export default GenerationPage1;
