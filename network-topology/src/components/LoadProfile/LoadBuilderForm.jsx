@@ -15,25 +15,43 @@ const LoadBuilderForm = ({ onAdd, appliances }) => {
       setError("Please select a device profile");
       return;
     }
-    if (!ratingWatts) {
-      setError("Please enter a rating in watts");
+    const ratingWattsToSubmit = parseInt(ratingWatts, 10);
+    if (!ratingWattsToSubmit || ratingWattsToSubmit <= 0) {
+      setError("Please enter a valid rating in watts");
       return;
     }
-    if (!quantity) {
-      setError("Please enter a quantity");
+    const quantityToSubmit = parseInt(quantity, 10);
+    if (!quantityToSubmit || quantityToSubmit <= 0) {
+      setError("Please enter a valid quantity");
       return;
     }
-    if (!hours) {
-      setError("Please enter hours");
+    const hoursToSubmit = parseInt(hours, 10);
+    if (!hoursToSubmit || hoursToSubmit <= 0 || hoursToSubmit > 24) {
+      setError("Please enter a valid number of hours");
       return;
     }
     onAdd({ electricalDeviceId, ratingWatts, quantity, hours, addedTotal: total });
+    setError('');
     setElectricalDeviceId("");
     setRatingWatts(0);
     setQuantity(0);
     setHours(0);
     setTotal(0);
   };
+
+  const decrement = (setter) => {
+    setter((prev) => {
+      if (prev <= 0) return prev;
+      return parseInt(prev, 10) - 1
+    });
+  }
+
+  const increment = (setter, max = NaN) => {
+    setter((prev) => {
+      if (!isNaN(max) && prev >= max) return prev;
+      return parseInt(prev, 10) + 1
+    });
+  }
 
   return (
     <>
@@ -45,27 +63,27 @@ const LoadBuilderForm = ({ onAdd, appliances }) => {
           </select>
         </li>
         <li className='rating-column'>
-          <input className='enter-button text-center' value={ratingWatts} type="text"
+          <input className='enter-button text-center' value={ratingWatts} type="number"
             onChange={(e) => { const value = e.target.value; setRatingWatts(value); setTotal(value * quantity * hours) }}
           />
         </li>
         <li className='quantity-column'>
           <div className='flex justify-center gap-1'>
-            <button className='px-3'>-</button>
-            <input className='text-center w-12' value={quantity} type="text" placeholder="00"
+            <button onClick={() => decrement(setQuantity)} className='px-3'>-</button>
+            <input className='text-center w-12' value={quantity} type="number" placeholder="00"
               onChange={(e) => { const value = e.target.value; setQuantity(value); setTotal(ratingWatts * value * hours) }}
             />
-            <button className='px-3'>+</button>
+            <button onClick={() => increment(setQuantity)} className='px-3'>+</button>
           </div>
         </li>
         <li className='hours-column'>
           <div className='flex justify-center gap-1'>
-            <button className='px-3'>-</button>
+            <button onClick={() => decrement(setHours)} className='px-3'>-</button>
             <input className='text-center w-12' type="number"
               onChange={(e) => { const value = e.target.value; setHours(value); setTotal(ratingWatts * quantity * value) }}
               value={hours}
-              min={0} max={24} />
-            <button className='px-3'>+</button>
+            />
+            <button onClick={() => increment(setHours, 24)} className='px-3'>+</button>
           </div>
         </li>
         <li className='total-column pt-[3px] pb-[3px]'>{total}</li>
