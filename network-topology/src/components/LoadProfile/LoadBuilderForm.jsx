@@ -39,18 +39,29 @@ const LoadBuilderForm = ({ onAdd, appliances }) => {
     setTotal(0);
   };
 
-  const decrement = (setter) => {
-    setter((prev) => {
-      if (prev <= 0) return prev;
-      return parseInt(prev, 10) - 1
-    });
+  const decrement = (prev) => {
+    if (prev <= 0) return prev;
+    return parseInt(prev, 10) - 1
   }
 
-  const increment = (setter, max = NaN) => {
-    setter((prev) => {
-      if (!isNaN(max) && prev >= max) return prev;
-      return parseInt(prev, 10) + 1
-    });
+  const increment = (prev, max = NaN) => {
+    if (!isNaN(max) && prev >= max) return prev;
+    return parseInt(prev, 10) + 1
+  }
+
+  const updateQuantity = (value) => {
+    setQuantity(value);
+    setTotal(ratingWatts * value * hours);
+  }
+
+  const updateHours = (value) => {
+    setHours(value);
+    setTotal(ratingWatts * quantity * value);
+  }
+
+  const updateRatingWatts = (value) => {
+    setRatingWatts(value);
+    setTotal(value * quantity * hours);
   }
 
   return (
@@ -64,26 +75,26 @@ const LoadBuilderForm = ({ onAdd, appliances }) => {
         </li>
         <li className='rating-column'>
           <input className='enter-button text-center' value={ratingWatts} type="number"
-            onChange={(e) => { const value = e.target.value; setRatingWatts(value); setTotal(value * quantity * hours) }}
+            onChange={(e) => { const value = e.target.value; updateRatingWatts(value) }}
           />
         </li>
         <li className='quantity-column'>
           <div className='flex justify-center gap-1'>
-            <button onClick={() => decrement(setQuantity)} className='px-3'>-</button>
+            <button onClick={() => { const value = decrement(quantity); updateQuantity(value) }} className='px-3'>-</button>
             <input className='text-center w-12' value={quantity} type="number" placeholder="00"
-              onChange={(e) => { const value = e.target.value; setQuantity(value); setTotal(ratingWatts * value * hours) }}
+              onChange={(e) => { const value = e.target.value; updateQuantity(value) }}
             />
-            <button onClick={() => increment(setQuantity)} className='px-3'>+</button>
+            <button onClick={() => { const value = increment(quantity); updateQuantity(value) }} className='px-3'>+</button>
           </div>
         </li>
         <li className='hours-column'>
           <div className='flex justify-center gap-1'>
-            <button onClick={() => decrement(setHours)} className='px-3'>-</button>
+            <button onClick={() => { const value = decrement(hours); updateHours(value) }} className='px-3'>-</button>
             <input className='text-center w-12' type="number"
-              onChange={(e) => { const value = e.target.value; setHours(value); setTotal(ratingWatts * quantity * value) }}
+              onChange={(e) => { const value = e.target.value; updateHours(value) }}
               value={hours}
             />
-            <button onClick={() => increment(setHours, 24)} className='px-3'>+</button>
+            <button onClick={() => { const value = increment(hours, 24); updateHours(value) }} className='px-3'>+</button>
           </div>
         </li>
         <li className='total-column pt-[3px] pb-[3px]'>{total}</li>
