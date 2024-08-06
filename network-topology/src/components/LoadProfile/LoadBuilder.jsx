@@ -8,8 +8,9 @@ import { useEffect, useState, useRef } from 'react';
 import { deleteLoadProfile, fetchLoadProfileItems, saveLoadProfileItems } from 'services/LoadProfile';
 import { fetchAppliances } from 'services/Appliance';
 import LoadBuilderForm from './LoadBuilderForm';
-import LoadBuilderReset from './LoadBuilderReset';
+import LoadProfileDeleteModal from './LoadProfileDeleteModal';
 import ReactRouterPrompt from "react-router-prompt";
+import LoadProfileQuitModal from './LoadProfileQuitModal';
 
 const LoadBuilder = () => {
   const selectedButton = "Load Profile";
@@ -173,7 +174,7 @@ const LoadBuilder = () => {
                 </button>
               </div>
             </div>
-            <div className='container px-6'>
+            <div className='container px-6 mx-auto'>
               <div className='nav pt-4'>
                 <ul className='pt-1 pb-3'>
                   <li className='heading font-light'>
@@ -211,7 +212,7 @@ const LoadBuilder = () => {
                   </ul>
                   {loads.map((item, index) => (
                     <React.Fragment key={index}>
-                      <ul className='py-4 border-b border-gray-300'>
+                      <ul className='py-4 border-b border-gray-300 bg-[#F9FEFF]'>
                         <li className='device-type-column'>{electricalIdToName(item.electrical_device_id)}</li>
                         <li className='rating-column'>{item.rating_watts}</li>
                         <li className='quantity-column'>{item.quantity}</li>
@@ -223,22 +224,10 @@ const LoadBuilder = () => {
                       </ul>
                     </React.Fragment>))}
                   <LoadBuilderForm onAdd={(load) => onAdd(load)} appliances={appliances} />
-                  {showReset && <LoadBuilderReset onYes={reset} onNo={() => setShowReset(false)} />}
+                  {showReset && <LoadProfileDeleteModal onConfirm={reset} onCancel={() => setShowReset(false)} />}
                   <ReactRouterPrompt when={isUnsaved.current}>
                     {({ isActive, onConfirm, onCancel }) =>
-                      isActive && (
-                        <div>
-                          <div>
-                            <p>Do you really want to leave?</p>
-                            <button type="button" onClick={onCancel}>
-                              Cancel
-                            </button>
-                            <button type="submit" onClick={onConfirm}>
-                              Ok
-                            </button>
-                          </div>
-                        </div>
-                      )
+                      isActive && <LoadProfileQuitModal onConfirm={onConfirm} onCancel={onCancel} />
                     }
                   </ReactRouterPrompt>
                 </div>
@@ -250,6 +239,5 @@ const LoadBuilder = () => {
     </>
   );
 };
-// >>>>>>> 5567caa0d577feccf813eefe78faea5ccca3d71f:network-topology/src/components/LoadProfile/LoadBuilder.jsx
 
 export default LoadBuilder;

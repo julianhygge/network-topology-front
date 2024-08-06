@@ -12,7 +12,7 @@ const LoadBuilderForm = ({ onAdd, appliances }) => {
 
   const handleAdd = () => {
     if (!electricalDeviceId) {
-      setError("Please select a profile");
+      setError("Please select a device profile");
       return;
     }
     if (!ratingWatts) {
@@ -37,7 +37,7 @@ const LoadBuilderForm = ({ onAdd, appliances }) => {
 
   return (
     <>
-      <ul className='bottom-buttons pt-4 pb-6 text-[15px]'>
+      <ul className='bottom-buttons pt-4 pb-6 text-[15px] bg-[#F9FEFF]'>
         <li className='device-type-column'>
           <select className='bg-transparent place-self-center px-16 py-1 text-left ' value={electricalDeviceId} name='profiles' onChange={(e) => setElectricalDeviceId(e.target.value)}>
             <option value='' className="mr-16">Select </option>
@@ -77,7 +77,7 @@ const LoadBuilderForm = ({ onAdd, appliances }) => {
           </button>
         </li>
       </ul>
-      {error && <div>{error}</div>}
+      {error && <div className="text-red-600 text-lg">{error}</div>}
     </>)
 };
 
