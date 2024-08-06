@@ -1,22 +1,29 @@
 import React, { useState } from "react";
 import Navbar from "components/Common/Navbar";
-import LoadProfile from "components/LoadProfile/LoadProfile";
+import { useNavigate, useOutlet } from "react-router-dom";
+
+const HOUSE_CONFIG_OPTIONS = [
+  "Load Profile",
+  "Solar Profile",
+  "Battery Profile",
+  "Flags",
+  "EV Profile",
+  "Wind Profile",
+]
 
 const HouseConfiguration = () => {
-  const [selectedButton, setSelectedButton] = useState(null);
-  const [isUnsaved, setUnsaved] = useState(false);
+  const [selectedButton, setSelectedButton] = useState("Load Profile");
+  const navigate = useNavigate();
+  const outlet = useOutlet()
 
   const handleButtonClick = (buttonName) => {
-    if (isUnsaved) return;
     setSelectedButton(buttonName);
+    const path = buttonName.replaceAll(" ", "-").toLowerCase(); // Ex. converts `Load Profile` to `load-profile`
+    navigate(`${path}`);
   }
 
   const renderContent = () => {
-    if (selectedButton === "Load Profile") {
-      return <LoadProfile setUnsaved={setUnsaved} setSelectedButton={setSelectedButton} />;
-    }
-
-    return (
+    return (outlet ||
       <div className="flex items-center justify-center h-full text-xl">
         Select a profile to view details.
       </div>
@@ -31,14 +38,7 @@ const HouseConfiguration = () => {
           <div className="flex-1 overflow-hidden">
             <div className="h-[calc(100%_-_80px)] mt-20">
               <div className="grid font-normal">
-                {[
-                  "Load Profile",
-                  "Solar Profile",
-                  "Battery Profile",
-                  "Flags",
-                  "EV Profile",
-                  "Wind Profile",
-                ].map((item, index) => (
+                {HOUSE_CONFIG_OPTIONS.map((item, index) => (
                   <React.Fragment key={index}>
                     <button
                       className={`grid justify-center items-center cursor-pointer text-[16px] ${selectedButton === item

@@ -5,12 +5,16 @@ import LoadProfileMenuCustom from "components/LoadProfile/LoadProfileMenu";
 import FileUploadSelection from "components/LoadProfile/FileUploadSelection";
 import LoadProfileFileList from "components/LoadProfile/LoadProfileFileList";
 
-const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
+const LoadProfile = () => {
   const [loadProfiles, setLoadProfiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showCustomMenu, setShowCustomMenu] = useState(false);
   const { houseId } = useParams();
   const navigate = useNavigate();
+
+  const navigateOffLoadProfile = (path) => {
+    navigate(`/config/${houseId}/${path}`);
+  }
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -19,7 +23,7 @@ const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
         const profiles = await fetchLoadProfiles(houseId);
         setLoadProfiles(profiles);
         if (profiles.items[0].source === "Builder") {
-          navigate(`/loadBuilder/${houseId}`)
+          navigateOffLoadProfile("loadBuilder");
         }
         console.log("Load Profiles userConfig: ", profiles)
       } catch (error) {
@@ -36,7 +40,6 @@ const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
     try {
       const profiles = await fetchLoadProfiles(houseId);
       setLoadProfiles(profiles);
-      setSelectedButton("Load Profile");
     } catch (error) {
       console.error("Error fetching load profiles after upload:", error);
     } finally {
@@ -62,7 +65,7 @@ const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
         throw new Error('Failed to delete file');
       }
       console.log('Deleted file before uploading again');
-      setSelectedButton(null); // Reset selected button to allow user to select an option from the left nav 
+      navigateOffLoadProfile();
     } catch (error) {
       console.error("Failed to delete the file:", error);
     }
@@ -71,11 +74,6 @@ const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
   const handleNoClick = () => {
     setShowCustomMenu(true);
   };
-
-  const onResetLoadProfile = () => {
-    console.log("Resetting load profile");
-    setShowCustomMenu(false);
-  }
 
   const renderContent = () => {
     if (isLoading) {
@@ -88,7 +86,7 @@ const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
     console.log("LoadProfilesList: ", loadProfiles.items)
     if (!loadProfiles.items || loadProfiles.items?.length === 0) {
       if (showCustomMenu) {
-        return <LoadProfileMenuCustom onReset={onResetLoadProfile} setUnsaved={setUnsaved} />;
+        return <LoadProfileMenuCustom />;
       }
       return (<FileUploadSelection onUploadSuccess={handleUploadSuccess} onNoClick={handleNoClick} />);
     }

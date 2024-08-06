@@ -6,7 +6,7 @@ const LoadProfileMenuCustom = () => {
   const { houseId } = useParams();
 
   const handleNavigate = (path) => {
-    navigate(`/${path}/${houseId}`);
+    navigate(`/config/${houseId}/${path}`);
   }
 
   const handleLoadBuilderNavigation = () => {
