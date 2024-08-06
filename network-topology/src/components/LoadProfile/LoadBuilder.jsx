@@ -104,7 +104,7 @@ const LoadBuilder = () => {
                                 </button>
                             </div>
                         </div>
-                        <div className='container px-6'>
+                        <div className='container px-6 mx-auto'>
                             <div className='nav pt-4'>
                                 <ul className='pt-1 pb-3'>
                                     <li className='heading font-light'>
@@ -151,7 +151,7 @@ const LoadBuilder = () => {
                                         { type: 'Washing Machine', rating: 1800, quantity: 2, hours: 8, total: 28800 }
                                     ].map((item, index) => (
                                         <React.Fragment key={index}>
-                                            <ul className='py-4 border-b border-gray-300'>
+                                            <ul className='py-4 border-b border-gray-300 bg-[#F9FEFF]'>
                                                 <li className='device-type-column'>{item.type}</li>
                                                 <li className='rating-column'>{item.rating}</li>
                                                 <li className='quantity-column'>{item.quantity}</li>
@@ -162,7 +162,7 @@ const LoadBuilder = () => {
                                                 </li>
                                             </ul>
                                             {index === 7 && (
-                                                <ul className='bottom-buttons pt-4 pb-6 text-[15px]'>
+                                                <ul className='bottom-buttons pt-4 pb-6 text-[15px] bg-[#F9FEFF]'>
                                                     <li className='device-type-column'>
                                                         <button className='select-button px-3 text-left'>
                                                             <div className='flex items-center'>
