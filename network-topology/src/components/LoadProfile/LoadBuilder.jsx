@@ -1,21 +1,26 @@
-/*
-<<<<<<< HEAD:network-topology/src/LoadProfile/LoadBuilder.jsx
+import React from 'react'
+import Navbar from 'components/Common/Navbar';
+import Breadcrumb from 'components/Breadcrumb/Breadcrumb';
+import { useNavigate, useParams } from 'react-router-dom';
+import "./LoadBuilder.css"
+
 import { useEffect, useState, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { deleteLoadProfile, fetchLoadProfileItems, saveLoadProfileItems } from '../services/LoadProfile';
-import { fetchAppliances } from '../services/Appliance';
+import { deleteLoadProfile, fetchLoadProfileItems, saveLoadProfileItems } from 'services/LoadProfile';
+import { fetchAppliances } from 'services/Appliance';
 import LoadBuilderForm from './LoadBuilderForm';
 import LoadBuilderReset from './LoadBuilderReset';
 import ReactRouterPrompt from "react-router-prompt";
 
-const LoadBuilder = ({ onReset, setUnsaved }) => {
+const LoadBuilder = () => {
+  const selectedButton = "Load Profile";
   const [loads, setLoads] = useState([]);
-  const [searchParams] = useSearchParams()
+  const { houseId } = useParams();
   const [total, setTotal] = useState(0);
   const [appliances, setAppliances] = useState([])
   const [showReset, setShowReset] = useState(false);
   const isUnsaved = useRef(false);
   const [profileId, setProfileId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchApplianceItems = async () => {
@@ -29,7 +34,7 @@ const LoadBuilder = ({ onReset, setUnsaved }) => {
     }
     const fetchItems = async () => {
       try {
-        const data = await fetchLoadProfileItems(searchParams.get("house_id"));
+        const data = await fetchLoadProfileItems(houseId);
         const items = data.items;
         setProfileId(data.profile_id);
         console.log("Items from useEffect", items)
@@ -52,14 +57,12 @@ const LoadBuilder = ({ onReset, setUnsaved }) => {
     setLoads(items);
     setTotal(sum)
     isUnsaved.current = false;
-    setUnsaved(isUnsaved.current);
   }
 
   const onAdd = ({ electricalDeviceId, ratingWatts, quantity, hours, addedTotal }) => {
     setTotal(addedTotal + total);
     setLoads([...loads, { electrical_device_id: parseInt(electricalDeviceId), rating_watts: ratingWatts, quantity, hours, total: addedTotal, isNew: true }]);
     isUnsaved.current = true;
-    setUnsaved(isUnsaved.current);
   };
 
   const removeLoad = (loadToRemove) => {
@@ -69,14 +72,13 @@ const LoadBuilder = ({ onReset, setUnsaved }) => {
     setLoads(loads.filter((load) => load !== loadToRemove));
     isUnsaved.current = !loadToRemove.isNew;
     console.log("Load to remove: ", loadToRemove)
-    setUnsaved(isUnsaved.current);
   }
 
   const saveLoads = () => {
     console.log("Items to save: ", loads);
     const save = async () => {
       try {
-        const newLoads = await saveLoadProfileItems(searchParams.get("house_id"), loads);
+        const newLoads = await saveLoadProfileItems(houseId, loads);
         const items = newLoads.items;
         console.log("Items from save response: ", items)
         calculateTotalAndSetLoads(items);
@@ -97,75 +99,14 @@ const LoadBuilder = ({ onReset, setUnsaved }) => {
       if (profileId) {
         await deleteLoadProfile(profileId);
         isUnsaved.current = false;
-        setUnsaved(isUnsaved.current);
       }
     } catch (error) {
       console.error("Error deleting load profile:", error);
     }
     setShowReset(false);
-    onReset();
+    navigate(`/config/${houseId}`);
   }
 
-  return <>
-    <ReactRouterPrompt when={isUnsaved.current}>
-      {({ isActive, onConfirm, onCancel }) =>
-        isActive && (
-          <div>
-            <div>
-              <p>Do you really want to leave?</p>
-              <button type="button" onClick={onCancel}>
-                Cancel
-              </button>
-              <button type="submit" onClick={onConfirm}>
-                Ok
-              </button>
-            </div>
-          </div>
-        )
-      }
-    </ReactRouterPrompt>
-    <div>Load Builder
-      <h2>Total: {total}</h2>
-      <button onClick={() => setShowReset(true)}>Reset</button>
-      <button onClick={saveLoads}>Save</button>
-      <table>
-        <thead>
-          <td>Device Type</td>
-          <td>Rating (watts)</td>
-          <td>Quantity</td>
-          <td>Hours</td>
-          <td>Total</td>
-          <td>Action</td>
-        </thead>
-        {loads.map((load, index) => (
-          <thead key={index}>
-            <td>{electricalIdToName(load.electrical_device_id)}</td>
-            <td>{load.rating_watts}</td>
-            <td>{load.quantity}</td>
-            <td>{load.hours}</td>
-            <td>{load.total}</td>
-            <td>
-              <button onClick={() => removeLoad(load)}>X</button>
-            </td>
-          </thead>
-        ))}
-      </table>
-      <LoadBuilderForm onAdd={(load) => onAdd(load)} appliances={appliances} />
-      {showReset && <LoadBuilderReset onYes={reset} onNo={() => setShowReset(false)} />}
-    </div>
-  </>
-}
-=======
-*/
-import React from 'react'
-import Navbar from 'components/Common/Navbar';
-import Breadcrumb from 'components/Breadcrumb/Breadcrumb';
-import { useParams } from 'react-router-dom';
-import "./LoadBuilder.css"
-
-const LoadBuilder = () => {
-  const selectedButton = "Load Profile";
-  const houseId = useParams();
   return (
     <>
       <div className="flex flex-col box-border max-w-[1920px] h-[100vh] font-dinPro">
@@ -226,100 +167,80 @@ const LoadBuilder = () => {
               <div className='mt-2 mr-2'>
                 <button
                   className="cursor-pointer border bg-[#49AC82] px-[50px] py-[5px] rounded-3xl text-white text-md font-medium border-[#49AC82]"
-                  onClick={() => { }}
+                  onClick={saveLoads}
                 >
                   SAVE
                 </button>
               </div>
             </div>
-            <div className='container'>
-              <div className='nav'>
-                <ul>
-                  <li className='heading'>
+            <div className='container px-6'>
+              <div className='nav pt-4'>
+                <ul className='pt-1 pb-3'>
+                  <li className='heading font-light'>
                     Please continue to do the configuration from Load Builder below.
                   </li>
-                  <li className='watts'>
-                    Total = 67,800 Watts
+                  <li className='watts font-normal'>
+                    Total = {total} Watts
                   </li>
-                  <li className='reset-profile'>
+                  <li className='reset-profile mr-1 cursor-pointer py-1' onClick={() => setShowReset(true)}>
                     Reset Profile
                   </li>
                 </ul>
               </div>
               <div className="table-container">
-                <div className="device-table">
-                  <ul>
-                    <li className='device-type-column'>
+                <div className="device-table text-[15px]">
+                  <ul className=''>
+                    <li className='device-type-column font-medium bg-loadBuilderNavColor py-3'>
                       Device Type
                     </li>
-                    <li className='rating-column'>
+                    <li className='rating-column font-medium bg-loadBuilderNavColor py-3'>
                       Rating (watts)
                     </li>
-                    <li className='quantity-column'>
+                    <li className='quantity-column font-medium bg-loadBuilderNavColor py-3'>
                       Quantity
                     </li>
-                    <li className='hours-column'>
+                    <li className='hours-column font-medium bg-loadBuilderNavColor py-3'>
                       Hours
                     </li>
-                    <li className='total-column'>
+                    <li className='total-column font-medium bg-loadBuilderNavColor py-3'>
                       Total (w)
                     </li>
-                    <li className='action-column'>
+                    <li className='action-column font-medium bg-loadBuilderNavColor py-3'>
                       Action
                     </li>
                   </ul>
-                  {[
-                    { type: 'AC', rating: 1800, quantity: 2, hours: 8, total: 28800 },
-                    { type: 'TV', rating: 800, quantity: 2, hours: 10, total: 16000 },
-                    { type: 'Geiser', rating: 2000, quantity: 2, hours: 1, total: 4000 },
-                    { type: 'Fan', rating: 1800, quantity: 2, hours: 8, total: 28800 },
-                    { type: 'Microwave', rating: 1800, quantity: 2, hours: 8, total: 28800 },
-                    { type: 'LED', rating: 1800, quantity: 2, hours: 8, total: 28800 },
-                    { type: 'Fridge', rating: 1800, quantity: 2, hours: 8, total: 28800 },
-                    { type: 'Washing Machine', rating: 1800, quantity: 2, hours: 8, total: 28800 }
-                  ].map((item, index) => (
-                    // TODO: Change the key to something better than index like an id.
+                  {loads.map((item, index) => (
                     <React.Fragment key={index}>
-                      <ul>
-                        <li className='device-type-column'>{item.type}</li>
-                        <li className='rating-column'>{item.rating}</li>
+                      <ul className='py-4 border-b border-gray-300'>
+                        <li className='device-type-column'>{electricalIdToName(item.electrical_device_id)}</li>
+                        <li className='rating-column'>{item.rating_watts}</li>
                         <li className='quantity-column'>{item.quantity}</li>
                         <li className='hours-column'>{item.hours}</li>
                         <li className='total-column'>{item.total}</li>
                         <li className='action-column'>
-                          <button className="delete-button">X</button>
+                          <button className="delete-button" onClick={() => removeLoad(item)}>X</button>
                         </li>
                       </ul>
-                      {index === 7 && (
-                        <ul>
-                          <li className='device-type-column'>
-                            <button className='select-button'>Select</button>
-                          </li>
-                          <li className='rating-column'>
-                            <button className='enter-button'>Enter</button>
-                          </li>
-                          <li className='quantity-column'>
-                            <div className='flex justify-center gap-2'>
-                              <button>-</button>
-                              <input className='text-center w-10' type="text" value={"00"} />
-                              <button>+</button>
-                            </div>
-                          </li>
-                          <li className='hours-column'>
-                            <div className='flex justify-center gap-2'>
-                              <button>-</button>
-                              <input className='text-center w-10' type="text" value={"10"} />
-                              <button>+</button>
-                            </div>
-                          </li>
-                          <li className='total-column'>00</li>
-                          <li className='action-column'>
-                            <button className="add-button">+</button>
-                          </li>
-                        </ul>
-                      )}
-                    </React.Fragment>
-                  ))}
+                    </React.Fragment>))}
+                  <LoadBuilderForm onAdd={(load) => onAdd(load)} appliances={appliances} />
+                  {showReset && <LoadBuilderReset onYes={reset} onNo={() => setShowReset(false)} />}
+                  <ReactRouterPrompt when={isUnsaved.current}>
+                    {({ isActive, onConfirm, onCancel }) =>
+                      isActive && (
+                        <div>
+                          <div>
+                            <p>Do you really want to leave?</p>
+                            <button type="button" onClick={onCancel}>
+                              Cancel
+                            </button>
+                            <button type="submit" onClick={onConfirm}>
+                              Ok
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    }
+                  </ReactRouterPrompt>
                 </div>
               </div>
             </div>

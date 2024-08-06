@@ -1,79 +1,124 @@
-/* grid container */
-.container {
-    text-align: center;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 4px;
-    width: 100%;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-li{
-    list-style: none;
+/* grid container */
+.container {
+  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  width: 100%;
+}
+
+li {
+  list-style: none;
 }
 
 /* nav */
 
-.nav{
-    grid-column: 1 / 7;
+.nav {
+  grid-column: 1 / 7;
 }
 
-.nav ul {
-    display: grid;
+.nav>ul {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr;
 }
 
 .nav li {
-    list-style: none;
-    margin: 4px;
-    padding: 4px;
+  list-style: none;
 }
 
 .heading {
-    grid-column: 4 / 5;
+  grid-column: 2 / 5;
+  font-size: 17px;
+  white-space: nowrap;
 }
 
 .watts {
-    grid-column: 5 / 6;
+  grid-column: 5 / 6;
+  font-size: 17px;
 }
 
 .reset-profile {
-    grid-column: 6 / 7;
+  grid-column: 6 / 7;
+  border: 1px solid #FC4C02;
+  color: #FC4C02;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 /* table */
-.table-container{
-    grid-column: 1 / 7;
+.table-container {
+  grid-column: 1 / 7;
 }
 
-.device-table > ul{
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr;
-    grid-row: 1 / 2;
- }
-
-.table-body{
-    grid-row: 2 / 3;
+.device-table>ul {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 2fr 1fr;
+  grid-row: 1 / 2;
 }
 
-.device-type-column{
-    grid-column: 1 / 2;
+.table-body {
+  grid-row: 2 / 3;
 }
 
-.rating-column{
-    grid-column: 2 / 3;
+.device-type-column {
+  grid-column: 1 / 2;
+  border-top-left-radius: 9px;
+  border-bottom-left-radius: 9px;
 }
 
-.quantity-column{
-    grid-column: 3 / 4;
+.rating-column {
+  grid-column: 2 / 3;
 }
 
-.hours-column{
-    grid-column: 4 / 5;
+.quantity-column {
+  grid-column: 3 / 4;
 }
 
-.total-column{
-    grid-column: 5 / 6;
+.hours-column {
+  grid-column: 4 / 5;
 }
 
-.action-column{
-    grid-column: 6 / 7;
+.total-column {
+  grid-column: 5 / 6;
+}
+
+.action-column {
+  grid-column: 6 / 7;
+  border-top-right-radius: 9px;
+  border-bottom-right-radius: 9px;
+}
+
+.delete-button {
+  color: #FD6222;
+}
+
+.add-button {
+  opacity: 50%;
+}
+
+.add-text {
+  color: #204A56;
+}
+
+/* bottom buttons */
+
+.bottom-buttons>li button,
+input,
+select {
+  border: 1px solid #1A5A6C;
+  color: #1A5A6C;
+  border-radius: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.enter-button {
+  width: 70%;
 }

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchLoadProfiles } from "services/LoadProfile";
-import LoadBuilder from "components/LoadProfile/LoadBuilder";
 import LoadProfileMenuCustom from "components/LoadProfile/LoadProfileMenu";
 import FileUploadSelection from "components/LoadProfile/FileUploadSelection";
 import LoadProfileFileList from "components/LoadProfile/LoadProfileFileList";
@@ -10,8 +9,8 @@ const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
   const [loadProfiles, setLoadProfiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showCustomMenu, setShowCustomMenu] = useState(false);
-  const [searchParams] = useSearchParams();
-  const houseId = searchParams.get("house_id");
+  const { houseId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -19,6 +18,9 @@ const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
       try {
         const profiles = await fetchLoadProfiles(houseId);
         setLoadProfiles(profiles);
+        if (profiles.items[0].source === "Builder") {
+          navigate(`/loadBuilder/${houseId}`)
+        }
         console.log("Load Profiles userConfig: ", profiles)
       } catch (error) {
         console.error("Error fetching load profiles:", error);
@@ -91,9 +93,9 @@ const LoadProfile = ({ setUnsaved, setSelectedButton }) => {
       return (<FileUploadSelection onUploadSuccess={handleUploadSuccess} onNoClick={handleNoClick} />);
     }
 
-    return loadProfiles.items[0].source !== "Builder" ? (
+    return (
       <LoadProfileFileList profiles={loadProfiles} onUploadAgain={handleUploadAgain} />
-    ) : (<LoadBuilder onReset={() => { setLoadProfiles({}); onResetLoadProfile() }} setUnsaved={setUnsaved} />)
+    )
   }
 
   return renderContent();
