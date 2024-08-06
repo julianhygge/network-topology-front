@@ -19,6 +19,7 @@ const router = createBrowserRouter(
     { path: "/config/:houseId", element: <UserConfiguration /> },
     { path: "/loadBuilder/:houseId", element: <LoadBuilder /> },
     { path: "/generationEngine/:houseId", element: <GenerationPage1 /> },
+    // Add predefinedTemplates route here
   ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

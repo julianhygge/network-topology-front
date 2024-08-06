@@ -1,19 +1,23 @@
-import { React, useState } from 'react'
-import LoadBuilder from 'components/LoadProfile/LoadBuilder'
+import React from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
 
-const DISPLAY_TYPES = {
-  NONE: "none",
-  PREDEFINED_TEMPLATES: "predefined_templates",
-  GENERATION_ENGINE: "generation_engine",
-  LOAD_BUILDER: "load_builder",
-}
+const LoadProfileMenuCustom = () => {
+  const navigate = useNavigate();
+  const { houseId } = useParams();
 
-const LoadProfileMenuCustom = ({ onReset, setUnsaved }) => {
-  const [displayType, setDisplayType] = useState(DISPLAY_TYPES.NONE);
+  const handleNavigate = (path) => {
+    navigate(`/${path}/${houseId}`);
+  }
 
-  if (displayType === DISPLAY_TYPES.LOAD_BUILDER) {
-    console.log("Load Builder")
-    return <LoadBuilder onReset={() => { onReset(); setDisplayType(DISPLAY_TYPES.NONE) }} setUnsaved={setUnsaved} />
+  const handleLoadBuilderNavigation = () => {
+    handleNavigate("loadBuilder");
+  }
+  const handleGenerationEngineNavigation = () => {
+    handleNavigate("generationEngine");
+  }
+
+  const handlePredefinedTemplatesNavigation = () => {
+    handleNavigate("predefinedTemplates");
   }
 
   return (
@@ -31,29 +35,31 @@ const LoadProfileMenuCustom = ({ onReset, setUnsaved }) => {
         </div>
         <div className="flex gap-8 justify-between mt-10 max-w-full text-xl tracking-normal text-navColor whitespace-nowrap max-md:mt-10">
           <button
-            className="  flex justify-center items-center px-10 py-10 bg-white  border-[1px] border-navColor shadow-xl rounded-[20px] max-md:px-5"
-            onClick={() => { setDisplayType(DISPLAY_TYPES.PREDEFINED_TEMPLATES) }}
+            className="flex justify-center items-center px-10 py-10 bg-white  border-[1px] border-navColor shadow-xl rounded-[20px] max-md:px-5"
+            onClick={handlePredefinedTemplatesNavigation}
           >
             Predefined <br />
             Templates
           </button>
           <button
-            className="flex justify-center items-center px-10 py-10  bg-white  border-[1px] border-navColor  shadow-xl  rounded-[20px] max-md:px-5"
-            onClick={() => { setDisplayType(DISPLAY_TYPES.GENERATION_ENGINE) }}
+            className="flex justify-center items-center px-10 py-10 bg-white border-[1px] border-navColor shadow-xl rounded-[20px] max-md:px-5"
+            onClick={handleGenerationEngineNavigation}
           >
             Generation <br />
             Engine
           </button>
           <button
             className="flex justify-center items-center px-14 py-10 shadow-xl bg-white  border-[1px] border-navColor  rounded-[20px] max-md:px-5"
-            onClick={() => { setDisplayType(DISPLAY_TYPES.LOAD_BUILDER) }}
+            onClick={handleLoadBuilderNavigation}
           >
             Load  <br />
             Builder
+
           </button>
         </div>
       </div>
-    </div >
-  )
-}
+    </div>
+  );
+};
+
 export default LoadProfileMenuCustom;
