@@ -22,10 +22,13 @@ const router = createBrowserRouter(
     {
       path: "/config/:houseId", element: <UserConfiguration />,
       children: [
-        { path: "loadBuilder", element: <LoadBuilder /> },
-        { path: "generationEngine", element: <GenerationPage1 /> },
-        { path: "predefinedTemplates", element: <PredefinedTemplates /> },
-        { path: "load-profile", element: <LoadProfile /> },
+        {
+          path: "load-profile", element: <LoadProfile />, children: [
+            { path: "builder", element: <LoadBuilder /> },
+            { path: "generationEngine", element: <GenerationPage1 /> },
+            { path: "predefinedTemplates", element: <PredefinedTemplates /> },
+          ]
+        },
         { path: "solar-profile", element: <SolarProfile /> },
         { path: "battery-profile", element: <BatteryProfile /> },
         { path: "flags", element: <Flags /> },

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "components/Common/Navbar";
-import { useNavigate, useOutlet } from "react-router-dom";
+import { useLocation, useNavigate, useOutlet } from "react-router-dom";
 
 const HOUSE_CONFIG_OPTIONS = [
   "Load Profile",
@@ -12,13 +12,22 @@ const HOUSE_CONFIG_OPTIONS = [
 ]
 
 const HouseConfiguration = () => {
-  const [selectedButton, setSelectedButton] = useState("Load Profile");
+  const [selectedButton, setSelectedButton] = useState();
   const navigate = useNavigate();
   const outlet = useOutlet()
+  const location = useLocation();
+
+  useEffect(() => {
+    setSelectedButton(HOUSE_CONFIG_OPTIONS.find((item) => location.pathname.includes(convertToPath(item))));
+  }, [location.pathname])
+
+  // Ex. converts `Load Profile` to `load-profile`
+  const convertToPath = (value) => {
+    return value.replaceAll(" ", "-").toLowerCase();
+  }
 
   const handleButtonClick = (buttonName) => {
-    setSelectedButton(buttonName);
-    const path = buttonName.replaceAll(" ", "-").toLowerCase(); // Ex. converts `Load Profile` to `load-profile`
+    const path = convertToPath(buttonName);
     navigate(`${path}`);
   }
 
@@ -54,7 +63,7 @@ const HouseConfiguration = () => {
                         </React.Fragment>
                       ))}
                     </button>
-                    {selectedButton !== item && index < 5 && (
+                    {selectedButton !== item && index < HOUSE_CONFIG_OPTIONS.length - 1 && (
                       <img
                         className="grid justify-center w-20 ml-5"
                         loading="lazy"

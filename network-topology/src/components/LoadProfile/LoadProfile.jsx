@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useOutlet, useParams } from "react-router-dom";
 import { fetchLoadProfiles } from "services/LoadProfile";
 import LoadProfileMenuCustom from "components/LoadProfile/LoadProfileMenu";
 import FileUploadSelection from "components/LoadProfile/FileUploadSelection";
@@ -11,9 +11,11 @@ const LoadProfile = () => {
   const [showCustomMenu, setShowCustomMenu] = useState(false);
   const { houseId } = useParams();
   const navigate = useNavigate();
+  const outlet = useOutlet();
+  const location = useLocation();
 
   const navigateOffLoadProfile = (path) => {
-    navigate(`/config/${houseId}/${path}`);
+    navigate(`/config/${houseId}/load-profile/${path}`);
   }
 
   useEffect(() => {
@@ -23,7 +25,7 @@ const LoadProfile = () => {
         const profiles = await fetchLoadProfiles(houseId);
         setLoadProfiles(profiles);
         if (profiles.items[0].source === "Builder") {
-          navigateOffLoadProfile("loadBuilder");
+          navigateOffLoadProfile("builder");
         }
         console.log("Load Profiles userConfig: ", profiles)
       } catch (error) {
@@ -33,7 +35,7 @@ const LoadProfile = () => {
       }
     };
     fetchProfiles();
-  }, [houseId])
+  }, [houseId, location.pathname])
 
   const handleUploadSuccess = async () => {
     setIsLoading(true);
@@ -76,6 +78,8 @@ const LoadProfile = () => {
   };
 
   const renderContent = () => {
+    if (outlet) { return outlet; }
+
     if (isLoading) {
       return (
         <div className="flex items-center justify-center h-full text-xl">

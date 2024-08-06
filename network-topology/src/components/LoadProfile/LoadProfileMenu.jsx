@@ -6,11 +6,11 @@ const LoadProfileMenuCustom = () => {
   const { houseId } = useParams();
 
   const handleNavigate = (path) => {
-    navigate(`/config/${houseId}/${path}`);
+    navigate(`/config/${houseId}/load-profile/${path}`);
   }
 
   const handleLoadBuilderNavigation = () => {
-    handleNavigate("loadBuilder");
+    handleNavigate("builder");
   }
   const handleGenerationEngineNavigation = () => {
     handleNavigate("generationEngine");
