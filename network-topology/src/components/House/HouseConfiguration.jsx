@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "components/Common/Navbar";
 import Page1 from "components/LoadProfile/Page1";
 import Page3 from "components/LoadProfile/Page3";
@@ -12,16 +12,33 @@ const HouseConfiguration = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { houseId } = useParams();
   const [showPageLoad, setShowPageLoad] = useState(false);
+  const navigate = useNavigate();
 
   const handleButtonClick = async (buttonName) => {
     setSelectedButton(buttonName);
     if (buttonName === "Load Profile") {
       setIsLoading(true);
       try {
-        const profiles = await fetchLoadProfiles(houseId);
-        setLoadProfiles(profiles);
+        const profilesResponse = await fetchLoadProfiles(houseId);
+        console.log(profilesResponse);
+        const profiles = profilesResponse || [];
+        
+
+        const hasFileProfile = profiles.items?.some(
+          (profile) => profile.source === "File"
+        );
+        const hasEngineLoad = profiles.items?.some(
+          (profile) => profile.source === "Engine"
+        );
+
+        if (hasFileProfile) {
+          setLoadProfiles(profiles);
+        } else if (hasEngineLoad) {
+          navigate(`/generationEngine/${houseId}`);
+          return;
+        }
       } catch (error) {
-        console.error("Error fetching load profiles:", error);
+        console.error("Error fetching profiles:", error);
       } finally {
         setIsLoading(false);
       }
@@ -41,11 +58,8 @@ const HouseConfiguration = () => {
     }
   };
 
-
   const handleNoClick = () => {
-
     setShowPageLoad(true);
-
   };
 
   const renderContent = () => {
@@ -64,7 +78,10 @@ const HouseConfiguration = () => {
       return loadProfiles.items?.length > 0 ? (
         <Page3 profiles={loadProfiles} />
       ) : (
-        <Page1 onUploadSuccess={handleUploadSuccess} onNoClick={handleNoClick} />
+        <Page1
+          onUploadSuccess={handleUploadSuccess}
+          onNoClick={handleNoClick}
+        />
       );
     }
 
@@ -93,10 +110,11 @@ const HouseConfiguration = () => {
                 ].map((item, index) => (
                   <React.Fragment key={index}>
                     <button
-                      className={`grid justify-center items-center cursor-pointer text-[16px] ${selectedButton === item
-                        ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
-                        : "text-gridColor1"
-                        }`}
+                      className={`grid justify-center items-center cursor-pointer text-[16px] ${
+                        selectedButton === item
+                          ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
+                          : "text-gridColor1"
+                      }`}
                       onClick={() => handleButtonClick(item)}
                       style={{ minHeight: "110px" }}
                     >
@@ -121,7 +139,11 @@ const HouseConfiguration = () => {
           </div>
           <button className="absolute top mt-2 left-4 grid justify-center cursor-pointer hover:opacity-50">
             <div className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1">
-              <img loading="lazy" src={`${process.env.PUBLIC_URL}/images/Arrow 2.png`} alt="Back" />
+              <img
+                loading="lazy"
+                src={`${process.env.PUBLIC_URL}/images/Arrow 2.png`}
+                alt="Back"
+              />
             </div>
           </button>
         </div>
