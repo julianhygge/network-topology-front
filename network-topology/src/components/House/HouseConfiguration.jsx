@@ -1,91 +1,38 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import Navbar from "components/Common/Navbar";
-import Page1 from "components/LoadProfile/Page1";
-import Page3 from "components/LoadProfile/Page3";
-import { fetchLoadProfiles } from "services/LoadProfile";
-import PageLoad from "components/LoadProfile/PageLoad";
+import { useLocation, useNavigate, useOutlet } from "react-router-dom";
+
+const HOUSE_CONFIG_OPTIONS = [
+  "Load Profile",
+  "Solar Profile",
+  "Battery Profile",
+  "Flags",
+  "EV Profile",
+  "Wind Profile",
+]
 
 const HouseConfiguration = () => {
-  const [selectedButton, setSelectedButton] = useState(null);
-  const [loadProfiles, setLoadProfiles] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const { houseId } = useParams();
-  const [showPageLoad, setShowPageLoad] = useState(false);
+  const [selectedButton, setSelectedButton] = useState();
   const navigate = useNavigate();
+  const outlet = useOutlet()
+  const location = useLocation();
 
-  const handleButtonClick = async (buttonName) => {
-    setSelectedButton(buttonName);
-    if (buttonName === "Load Profile") {
-      setIsLoading(true);
-      try {
-        const profilesResponse = await fetchLoadProfiles(houseId);
-        console.log(profilesResponse);
-        const profiles = profilesResponse || [];
-        
+  useEffect(() => {
+    setSelectedButton(HOUSE_CONFIG_OPTIONS.find((item) => location.pathname.includes(convertToPath(item))));
+  }, [location.pathname])
 
-        const hasFileProfile = profiles.items?.some(
-          (profile) => profile.source === "File"
-        );
-        const hasEngineLoad = profiles.items?.some(
-          (profile) => profile.source === "Engine"
-        );
+  // Ex. converts `Load Profile` to `load-profile`
+  const convertToPath = (value) => {
+    return value.replaceAll(" ", "-").toLowerCase();
+  }
 
-        if (hasFileProfile) {
-          setLoadProfiles(profiles);
-        } else if (hasEngineLoad) {
-          navigate(`/generationEngine/${houseId}`);
-          return;
-        }
-      } catch (error) {
-        console.error("Error fetching profiles:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
-
-  const handleUploadSuccess = async () => {
-    setIsLoading(true);
-    try {
-      const profiles = await fetchLoadProfiles(houseId);
-      setLoadProfiles(profiles);
-      setSelectedButton("Load Profile");
-    } catch (error) {
-      console.error("Error fetching load profiles after upload:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleNoClick = () => {
-    setShowPageLoad(true);
-  };
+  const handleButtonClick = (buttonName) => {
+    const path = convertToPath(buttonName);
+    navigate(`${path}`);
+  }
 
   const renderContent = () => {
-    if (showPageLoad) {
-      return <PageLoad />;
-    }
-
-    if (selectedButton === "Load Profile") {
-      if (isLoading) {
-        return (
-          <div className="flex items-center justify-center h-full text-xl">
-            Loading...
-          </div>
-        );
-      }
-      return loadProfiles.items?.length > 0 ? (
-        <Page3 profiles={loadProfiles} />
-      ) : (
-        <Page1
-          onUploadSuccess={handleUploadSuccess}
-          onNoClick={handleNoClick}
-        />
-      );
-    }
-
-    return (
+    return (outlet ||
       <div className="flex items-center justify-center h-full text-xl">
         Select a profile to view details.
       </div>
@@ -100,21 +47,13 @@ const HouseConfiguration = () => {
           <div className="flex-1 overflow-hidden">
             <div className="h-[calc(100%_-_80px)] mt-20">
               <div className="grid font-normal">
-                {[
-                  "Load Profile",
-                  "Solar Profile",
-                  "Battery Profile",
-                  "Flags",
-                  "EV Profile",
-                  "Wind Profile",
-                ].map((item, index) => (
+                {HOUSE_CONFIG_OPTIONS.map((item, index) => (
                   <React.Fragment key={index}>
                     <button
-                      className={`grid justify-center items-center cursor-pointer text-[16px] ${
-                        selectedButton === item
-                          ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
-                          : "text-gridColor1"
-                      }`}
+                      className={`grid justify-center items-center cursor-pointer text-[16px] ${selectedButton === item
+                        ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
+                        : "text-gridColor1"
+                        }`}
                       onClick={() => handleButtonClick(item)}
                       style={{ minHeight: "110px" }}
                     >
@@ -124,7 +63,7 @@ const HouseConfiguration = () => {
                         </React.Fragment>
                       ))}
                     </button>
-                    {selectedButton !== item && index < 5 && (
+                    {selectedButton !== item && index < HOUSE_CONFIG_OPTIONS.length - 1 && (
                       <img
                         className="grid justify-center w-20 ml-5"
                         loading="lazy"

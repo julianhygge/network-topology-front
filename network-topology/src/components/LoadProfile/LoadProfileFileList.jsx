@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DeleteConfirm from "components/LoadProfile/DeleteConfirm";
 
-const Page3 = ({ profiles, onUploadAgain }) => {
+const LoadProfileFileList = ({ profiles, onUploadAgain }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState("");
   const [selectedDeleteLink, setSelectedDeleteLink] = useState("");
@@ -144,4 +144,4 @@ const Page3 = ({ profiles, onUploadAgain }) => {
   );
 };
 
-export default Page3;
+export default LoadProfileFileList;

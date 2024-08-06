@@ -10,7 +10,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import GenerationDeletePopup from "./GenerationDeletePopup";
 
 const GenerationPage1 = () => {
-  const selectedButton = "Load Profile";
   const { houseId } = useParams();
   const navigate = useNavigate();
 
@@ -118,58 +117,7 @@ const GenerationPage1 = () => {
   };
   return (
     <>
-      <Navbar />
       <div className="flex h-[90vh] 2xl:h-[92vh] font-dinPro">
-        <div className="flex flex-col bg-sideBar w-[120px] h-full relative">
-          <div className="flex-1 overflow-hidden">
-            <div className="h-[calc(100%_-_80px)] mt-20">
-              <div className="grid font-normal">
-                {[
-                  "Load Profile",
-                  "Solar Profile",
-                  "Battery Profile",
-                  "Flags",
-                  "EV Profile",
-                  "Wind Profile",
-                ].map((item, index) => (
-                  <React.Fragment key={index}>
-                    <button
-                      className={`grid justify-center items-center cursor-pointer text-[16px] ${
-                        selectedButton === item
-                          ? "bg-[#FDFFFF] rounded-lg text-[#794C03] font-bold"
-                          : "text-gridColor1 cursor-not-allowed"
-                      }`}
-                      style={{ minHeight: "110px" }}
-                    >
-                      {item.split(" ").map((word, wordIndex) => (
-                        <React.Fragment key={wordIndex}>
-                          {word} <br />
-                        </React.Fragment>
-                      ))}
-                    </button>
-                    {selectedButton !== item && index < 5 && (
-                      <img
-                        className="grid justify-center w-20 ml-5"
-                        loading="lazy"
-                        src={`${process.env.PUBLIC_URL}/images/Line 24.png`}
-                        alt="Line"
-                      />
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
-          </div>
-          <button className="absolute top mt-2 left-4 grid justify-center cursor-pointer hover:opacity-50">
-            <div className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1">
-              <img
-                loading="lazy"
-                src={`${process.env.PUBLIC_URL}/images/Arrow 2.png`}
-                alt="Back"
-              />
-            </div>
-          </button>
-        </div>
         <div className="flex-1 overflow-auto">
           <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
             <div>
@@ -264,11 +212,10 @@ const GenerationPage1 = () => {
               <div className="flex gap-6 justify-between mt-10 max-w-full text-xl tracking-normal text-white whitespace-nowrap max-md:mt-10">
                 <button
                   type="button"
-                  className={`flex justify-center items-center px-14 py-3 shadow-sm rounded-[33px] max-md:px-5  bg-[#FFB600] text-[#563E04] ${
-                    isSaved
-                      ? " opacity-50 cursor-not-allowed"
-                      : "bg-[#FFB600] text-[#563E04]"
-                  }`}
+                  className={`flex justify-center items-center px-14 py-3 shadow-sm rounded-[33px] max-md:px-5  bg-[#FFB600] text-[#563E04] ${isSaved
+                    ? " opacity-50 cursor-not-allowed"
+                    : "bg-[#FFB600] text-[#563E04]"
+                    }`}
                   disabled={isSaved}
                   onClick={() => window.location.reload()}
                 >
@@ -276,9 +223,8 @@ const GenerationPage1 = () => {
                 </button>
                 <button
                   type="submit"
-                  className={`flex justify-center items-center px-16 py-3 shadow-sm rounded-[33px] max-md:px-5  bg-[#74AA50] ${
-                    isSaved ? " opacity-50 cursor-not-allowed" : "bg-[#74AA50]"
-                  }`}
+                  className={`flex justify-center items-center px-16 py-3 shadow-sm rounded-[33px] max-md:px-5  bg-[#74AA50] ${isSaved ? " opacity-50 cursor-not-allowed" : "bg-[#74AA50]"
+                    }`}
                   disabled={isSaved}
                 >
                   Save

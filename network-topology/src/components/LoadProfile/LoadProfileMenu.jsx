@@ -1,27 +1,23 @@
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
-import GenerationPage1 from "components/LoadProfile/GenerationPage1";
-import { useState } from 'react';
 
-const PageLoad = () => {
+const LoadProfileMenuCustom = () => {
   const navigate = useNavigate();
   const { houseId } = useParams();
-  const [selectedMethod, setSelectedMethod] = useState(null);
+
+  const handleNavigate = (path) => {
+    navigate(`/config/${houseId}/load-profile/${path}`);
+  }
 
   const handleLoadBuilderNavigation = () => {
-    navigate(`/loadBuilder/${houseId}`);
+    handleNavigate("builder");
   }
   const handleGenerationEngineNavigation = () => {
-    navigate(`/generationEngine/${houseId}`);
+    handleNavigate("generationEngine");
   }
 
-
-  const handleMethodClick = (method) => {
-    setSelectedMethod(method);
-  };
-
-  if (selectedMethod === "Generation Engine") {
-    return <GenerationPage1 />;
+  const handlePredefinedTemplatesNavigation = () => {
+    handleNavigate("predefinedTemplates");
   }
 
   return (
@@ -38,12 +34,9 @@ const PageLoad = () => {
           to Generate the Load Profile
         </div>
         <div className="flex gap-8 justify-between mt-10 max-w-full text-xl tracking-normal text-navColor whitespace-nowrap max-md:mt-10">
-
-
-
           <button
             className="flex justify-center items-center px-10 py-10 bg-white  border-[1px] border-navColor shadow-xl rounded-[20px] max-md:px-5"
-            onClick={() => handleMethodClick("Predefined Templates")}
+            onClick={handlePredefinedTemplatesNavigation}
           >
             Predefined <br />
             Templates
@@ -69,4 +62,4 @@ const PageLoad = () => {
   );
 };
 
-export default PageLoad;
+export default LoadProfileMenuCustom;

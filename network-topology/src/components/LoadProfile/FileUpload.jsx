@@ -1,13 +1,11 @@
 import React, { useState, useRef } from "react";
-import { uploadLoadProfile } from "services/LoadProfile";
-//import { useSearchParams } from "react-router-dom";
 import { useParams } from "react-router-dom";
-const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
+import { uploadLoadProfile } from "services/LoadProfile";
+
+const FileUpload = ({ onBack, attach15MinFile, onUploadSuccess }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const fileInputRef = useRef(null);
-  // const [searchParams] = useSearchParams();
-  // // const houseId = searchParams.get("house_id");
   const { houseId } = useParams();
 
   const handleFileChange = (event) => {
@@ -117,4 +115,4 @@ const Page2 = ({ onBack, attach15MinFile, onUploadSuccess }) => {
   );
 };
 
-export default Page2;
+export default FileUpload;
