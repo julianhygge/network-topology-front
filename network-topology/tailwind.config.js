@@ -25,7 +25,7 @@ module.exports = {
         item3: '#BCDCE5',
         item4: '#CDEEF7',
         brown: '#794C03',
-        loadBuilderNavColor: "#DDF4FA"
+        loadBuilderNavColor: "#DDF4FA",
       },
       spacing: {
         '7.25': '1.8125rem',

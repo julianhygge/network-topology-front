@@ -24,8 +24,18 @@ const LoadProfile = () => {
       try {
         const profiles = await fetchLoadProfiles(houseId);
         setLoadProfiles(profiles);
-        if (profiles.items[0].source === "Builder") {
+        const hasEngineLoad = profiles.items?.some(
+          (profile) => profile.source === "Engine"
+        );
+        const hasBuilderProfile = profiles.items?.some(
+          (profile) => profile.source === "Builder"
+        );
+        if (hasBuilderProfile) {
           navigateOffLoadProfile("builder");
+          return;
+        } else if (hasEngineLoad) {
+          navigateOffLoadProfile("generationEngine");
+          return;
         }
         console.log("Load Profiles userConfig: ", profiles)
       } catch (error) {

@@ -1,6 +1,6 @@
 import React from "react";
 
-const GenerationDeletePopup = () => {
+const GenerationDeletePopup = ({ onConfirm, onCancel }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="flex flex-col items-center justify-center ">
@@ -9,15 +9,21 @@ const GenerationDeletePopup = () => {
         </div>
         <div className="flex flex-col items-center w-[50vw] px-10 pt-10 pb-20 font-medium text-center text-navColor border-2 border-[#5A8E9D] bg-white rounded-2xl max-w-[860px] max-md:px-5">
           <div className="mt-20 text-xl text-[#F8440B] max-md:mt-10">
-            Are you sure to Delete the Load Profile Data of the generation
-            Engine ?<span className="font-semibold"></span>
+            Are you sure you want to delete the Load Profile Data <br />of the Generation Engine?
+            <span className="font-semibold"></span>
           </div>
-          <span className="mt-8 text-xl text-[#F8440B]"> Please Confirm</span>
+          <span className="mt-8 text-xl text-[#F8440B]">Please Confirm</span>
           <div className="flex gap-8 justify-between mt-10 max-w-full text-xl tracking-normal text-white whitespace-nowrap max-md:mt-10">
-            <button className="flex justify-center items-center px-20 py-4 bg-[#FFB600] shadow-sm rounded-[33px] max-md:px-5">
+            <button
+              className="flex justify-center items-center px-20 py-4 bg-[#FFB600] shadow-sm rounded-[33px] max-md:px-5"
+              onClick={onCancel}
+            >
               NO
             </button>
-            <button className="flex justify-center items-center px-20 py-4 shadow-sm bg-[#74AA50] rounded-[33px] max-md:px-5">
+            <button
+              className="flex justify-center items-center px-20 py-4 shadow-sm bg-[#74AA50] rounded-[33px] max-md:px-5"
+              onClick={onConfirm}
+            >
               YES
             </button>
           </div>
@@ -26,4 +32,5 @@ const GenerationDeletePopup = () => {
     </div>
   );
 };
+
 export default GenerationDeletePopup;

@@ -1,10 +1,7 @@
-import React from 'react'
-import Navbar from 'components/Common/Navbar';
 import Breadcrumb from 'components/Breadcrumb/Breadcrumb';
 import { useNavigate, useParams } from 'react-router-dom';
 import "./LoadBuilder.css"
-
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { deleteLoadProfile, fetchLoadProfileItems, saveLoadProfileItems } from 'services/LoadProfile';
 import { fetchAppliances } from 'services/Appliance';
 import LoadBuilderForm from './LoadBuilderForm';
@@ -13,7 +10,6 @@ import ReactRouterPrompt from "react-router-prompt";
 import LoadProfileQuitModal from './LoadProfileQuitModal';
 
 const LoadBuilder = () => {
-  const selectedButton = "Load Profile";
   const [loads, setLoads] = useState([]);
   const { houseId } = useParams();
   const [total, setTotal] = useState(0);

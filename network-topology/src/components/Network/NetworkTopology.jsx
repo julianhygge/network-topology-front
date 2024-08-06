@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import NetworkGraph from 'components/Network/NetworkGraph';
-import Navbar from 'components/Common/Navbar';
-import GridSideBar from 'components/Grid/GridSideBar';
+import React, { useEffect, useState } from "react";
+import NetworkGraph from "components/Network/NetworkGraph";
+import Navbar from "components/Common/Navbar";
+import GridSideBar from "components/Grid/GridSideBar";
 import { useLocation } from "react-router-dom";
-import { getSubstationById, updateSubstationTopology } from 'services/Substation';
-import { fetchTransformerDetails } from 'services/Tranformer';
+import {
+  getSubstationById,
+  updateSubstationTopology,
+} from "services/Substation";
+import { fetchTransformerDetails } from "services/Tranformer";
 import TransformerForm from "components/Transformer/TransformerForm";
-import HouseForm from 'components/House/HouseForm';
-import Breadcrumb from 'components/Breadcrumb/Breadcrumb';
-import Delete from 'components/Common/DeleteConfirm';
-
+import HouseForm from "components/House/HouseForm";
+import Breadcrumb from "components/Breadcrumb/Breadcrumb";
+import Delete from "components/Common/DeleteConfirm";
 
 const NetworkTopology = () => {
   const location = useLocation();
@@ -27,11 +29,11 @@ const NetworkTopology = () => {
   const [nodeType, setNodeType] = useState(null);
   const [initialSubstationData, setInitialSubstationData] = useState(null);
   const [data, setData] = React.useState({
-    "nodes": []
-  }
-  );
+    nodes: [],
+  });
 
   useEffect(() => {
+    // Fetch substation data when a substation is selected
     if (selectedSubstationId) {
       const fetchSubstationData = async () => {
         try {
@@ -46,15 +48,17 @@ const NetworkTopology = () => {
           console.error("Error fetching substation data:", error);
         }
       };
-      setSelectedNode(null);
+      setSelectedNode(null); // Reset selected node
       fetchSubstationData();
     }
   }, [selectedSubstationId]);
 
   const handleAddTransformer = () => {
-    const transformerCount = data.nodes.filter(child => child.type === "transformer").length;
-    const match = data.substation_name.match(/(\d+)$/);
-    const grid = parseInt(match[1], 10);
+    const transformerCount = data.nodes.filter(
+      (child) => child.type === "transformer"
+    ).length;
+    const match = data.substation_name.match(/(\d+)$/); // Extracts numeric part from substation name
+    const grid = parseInt(match[1], 10); // Parses grid number
     const newTransformer = {
       ids: `temp-${transformerCounter}`,
       id: `Transformer-${transformerCounter}`,
@@ -65,28 +69,31 @@ const NetworkTopology = () => {
       action: "add",
       nomenclature: `T-${grid}.${transformerCount + 1}`,
       name: `T-${grid}.${transformerCount + 1}`,
-      children: [],
+      children: [], // New transformer starts with no children
     };
 
     setData((prevState) => ({
       ...prevState,
-      nodes: [...prevState.nodes, newTransformer],
+      nodes: [...prevState.nodes, newTransformer], // Adds the new transformer to the graph
     }));
     setTransformerCounter(transformerCounter + 1);
   };
-
+  // Deletes a house node from the network
   const handleDeleteHouse = (house, newHouse) => {
+    // Recursive function to delete a house from the nodes array
     const deleteHouseRecursive = (nodes, parentId, houseId) => {
-      return nodes.map(node => {
+      return nodes.map((node) => {
         if (node.id === parentId) {
           return {
             ...node,
-            children: node.children ? node.children.filter(child => child.id !== houseId) : []
+            children: node.children
+              ? node.children.filter((child) => child.id !== houseId)
+              : [],
           };
         } else if (node.children && node.children.length > 0) {
           return {
             ...node,
-            children: deleteHouseRecursive(node.children, parentId, houseId)
+            children: deleteHouseRecursive(node.children, parentId, houseId),
           };
         }
         return node;
@@ -94,10 +101,15 @@ const NetworkTopology = () => {
     };
 
     if (newHouse) {
-      const updatedNodes = deleteHouseRecursive(data.nodes, house.parentId, house.id);
-      setData(prevState => ({
+      // Delete the house if it's newly added and not saved yet
+      const updatedNodes = deleteHouseRecursive(
+        data.nodes,
+        house.parentId,
+        house.id
+      );
+      setData((prevState) => ({
         ...prevState,
-        nodes: updatedNodes
+        nodes: updatedNodes,
       }));
     } else {
       setNodeToDelete(house.id);
@@ -105,13 +117,15 @@ const NetworkTopology = () => {
     }
   };
 
-
-
+  // Adds a new house under a transformer
   const handleAddHouse = (transformerId) => {
+    // Recursive function to add a house to a specific transformer
     const addHouseRecursive = (node) => {
       if (node.id === transformerId) {
-        const houseCount = node.children.filter(child => child.type === "house").length;
-        let prev_nomenclature = node.nomenclature.split('-')[1];
+        const houseCount = node.children.filter(
+          (child) => child.type === "house"
+        ).length;
+        let prev_nomenclature = node.nomenclature.split("-")[1];
         const newHouse = {
           id: crypto.randomUUID(),
           type: "house",
@@ -120,11 +134,11 @@ const NetworkTopology = () => {
           nomenclature: `H.${prev_nomenclature}.${houseCount + 1}`,
           name: `H.${prev_nomenclature}.${houseCount + 1}`,
           children: null,
-          parentId: transformerId
+          parentId: transformerId,
         };
         return {
           ...node,
-          children: [...node.children, newHouse],
+          children: [...node.children, newHouse], // Adds the new house to the transformer's children
         };
       }
       if (node.children && node.children.length > 0) {
@@ -138,25 +152,31 @@ const NetworkTopology = () => {
 
     setData((prevState) => ({
       ...prevState,
-      nodes: prevState.nodes.map(addHouseRecursive),
+      nodes: prevState.nodes.map(addHouseRecursive), // Updates the graph data
     }));
   };
-
+  // Deletes a transformer node from the network
   const handleDeleteTransformer = (transformerId, newTransformer) => {
     const deleteTransformerRecursive = (nodes, transformId) => {
       return nodes
-        .filter(node => node.id !== transformId)
-        .map(node => ({
+        .filter((node) => node.id !== transformId)
+        .map((node) => ({
           ...node,
-          children: node.children ? deleteTransformerRecursive(node.children, transformId) : []
+          children: node.children
+            ? deleteTransformerRecursive(node.children, transformId)
+            : [],
         }));
     };
 
     if (newTransformer) {
-      const updatedNodes = deleteTransformerRecursive(data.nodes, transformerId);
+      // Delete the transformer if it's newly added and not saved yet
+      const updatedNodes = deleteTransformerRecursive(
+        data.nodes,
+        transformerId
+      );
       setData((prevState) => ({
         ...prevState,
-        nodes: updatedNodes
+        nodes: updatedNodes,
       }));
     } else {
       setNodeToDelete(transformerId);
@@ -164,12 +184,14 @@ const NetworkTopology = () => {
     }
   };
 
-
+  // Adds a sub-transformer under a transformer
   const handleAddSubTransformer = (transformerId) => {
     const addSubTransformerRecursive = (node) => {
       if (node.id === transformerId) {
-        const transformerCount = node.children.filter(child => child.type === "transformer").length;
-        const prev_nomenclature = node.nomenclature.split('-')[1];
+        const transformerCount = node.children.filter(
+          (child) => child.type === "transformer"
+        ).length;
+        const prev_nomenclature = node.nomenclature.split("-")[1];
         const newSubTransformer = {
           id: crypto.randomUUID(),
           type: "transformer",
@@ -181,7 +203,7 @@ const NetworkTopology = () => {
         };
         return {
           ...node,
-          children: [...node.children, newSubTransformer],
+          children: [...node.children, newSubTransformer], // Adds the sub-transformer to the node's children
         };
       }
       if (node.children && node.children.length > 0) {
@@ -198,18 +220,18 @@ const NetworkTopology = () => {
       nodes: prevState.nodes.map(addSubTransformerRecursive),
     }));
   };
-
+  // Resets the form to the initial substation data
   const handleCancel = () => {
     setData(initialSubstationData);
     setDeletedNodes([]);
     setTransformerDetails(null);
     setHouseDetails(null);
   };
-
+  // Closes the transformer form
   const handleCloseTransformerForm = () => {
     setTransformerDetails(null);
   };
-
+  // Saves changes to a transformer and updates its state
   const handleTransformerSave = (updatedTransformer) => {
     setData((prevData) => {
       const updatedNodes = prevData.nodes.map((node) => {
@@ -218,7 +240,7 @@ const NetworkTopology = () => {
             ...node,
             is_complete: updatedTransformer.is_complete,
             color: updatedTransformer.is_complete ? "green" : "black",
-          }
+          };
           console.log("updated Node: ", updatedNode);
           return updatedNode;
         }
@@ -230,22 +252,34 @@ const NetworkTopology = () => {
     });
     setTransformerDetails(null);
   };
-
+  // Saves the network topology to the server
   const handleSaveTopology = async () => {
+    // Compares current and initial node states to determine changes
     const compareNodes = (currentNode, initialNode) => {
       if (!initialNode) {
-        return { type: currentNode.type, action: 'add', children: currentNode.children ? currentNode.children.map(child => compareNodes(child, null)) : null };
+        return {
+          type: currentNode.type,
+          action: "add",
+          children: currentNode.children
+            ? currentNode.children.map((child) => compareNodes(child, null))
+            : null,
+        };
       }
 
       if (!currentNode) {
-        return { id: initialNode.id, type: initialNode.type, action: 'delete' };
+        return { id: initialNode.id, type: initialNode.type, action: "delete" };
       }
-      const hasChanges = currentNode.nomenclature !== initialNode.nomenclature ||
+      const hasChanges =
+        currentNode.nomenclature !== initialNode.nomenclature ||
         currentNode.name !== initialNode.name ||
         currentNode.is_complete !== initialNode.is_complete;
 
       const updatedChildren = [];
-      const initialChildrenMap = new Map(initialNode.children ? initialNode.children.map(child => [child.id, child]) : []);
+      const initialChildrenMap = new Map(
+        initialNode.children
+          ? initialNode.children.map((child) => [child.id, child])
+          : []
+      );
 
       if (currentNode.children) {
         for (const child of currentNode.children) {
@@ -259,50 +293,62 @@ const NetworkTopology = () => {
       }
 
       for (const [, removedChild] of initialChildrenMap) {
-        updatedChildren.push({ id: removedChild.id, type: removedChild.type, action: 'delete' });
+        updatedChildren.push({
+          id: removedChild.id,
+          type: removedChild.type,
+          action: "delete",
+        });
       }
 
       if (hasChanges || updatedChildren.length > 0) {
         return {
           id: currentNode.id,
           type: currentNode.type,
-          action: 'update',
-          children: updatedChildren.length > 0 ? updatedChildren : undefined
+          action: "update",
+          children: updatedChildren.length > 0 ? updatedChildren : undefined,
         };
       }
 
       return null;
     };
-
+    // Finds nodes that were deleted in the current state
     const findDeletedNodes = (currentNodes, initialNodes) => {
-      const currentNodeIds = new Set(currentNodes.map(node => node.id));
-      return initialNodes.filter(node => !currentNodeIds.has(node.id))
-        .map(node => ({ id: node.id, type: node.type, action: 'delete' }));
+      const currentNodeIds = new Set(currentNodes.map((node) => node.id));
+      return initialNodes
+        .filter((node) => !currentNodeIds.has(node.id))
+        .map((node) => ({ id: node.id, type: node.type, action: "delete" }));
     };
 
     const updatedData = {
       nodes: [
-        ...data.nodes.map(node => compareNodes(node, initialSubstationData.nodes.find(n => n.id === node.id))).filter(Boolean),
-        ...findDeletedNodes(data.nodes, initialSubstationData.nodes)
-      ]
+        ...data.nodes
+          .map((node) =>
+            compareNodes(
+              node,
+              initialSubstationData.nodes.find((n) => n.id === node.id)
+            )
+          )
+          .filter(Boolean),
+        ...findDeletedNodes(data.nodes, initialSubstationData.nodes),
+      ],
     };
 
     try {
       console.log("updated data: ", updatedData);
-      await updateSubstationTopology(selectedSubstationId, updatedData);
-      const data = await getSubstationById(selectedSubstationId);
+      await updateSubstationTopology(selectedSubstationId, updatedData); // Updates substation topology on the server
+      const data = await getSubstationById(selectedSubstationId); // Fetches updated data
       setData(data);
       setInitialSubstationData(data);
     } catch (error) {
-      console.error('Error updating topology:', error);
+      console.error("Error updating topology:", error);
     }
   };
-
+  // Opens the transformer form for editing
   const handleTransformerEdit = (transformerDetails) => {
     setTransformerDetails(transformerDetails);
     setHouseDetails(null);
   };
-
+  // Opens the house form for editing
   const handleHouseEdit = (houseDetails) => {
     setHouseDetails(houseDetails);
     setTransformerDetails(null);
@@ -315,7 +361,7 @@ const NetworkTopology = () => {
   const handleHouseSave = (updatedHouse) => {
     setHouseDetails(null);
   };
-
+  // Handles node editing logic based on the node type
   const handleEditNode = async (node) => {
     console.log("node: ", node);
     if (node.nomenclature.startsWith("T")) {
@@ -329,23 +375,23 @@ const NetworkTopology = () => {
       // handleHouseEdit(houseDetails);
     }
   };
-
+  // Deletes the selected node after confirmation
   const handleDelete = async () => {
     const payload = {
-      "nodes": [
+      nodes: [
         {
-          "id": nodeToDelete,
-          "action": "delete",
-          "type": nodeType
-        }
-      ]
-    }
+          id: nodeToDelete,
+          action: "delete",
+          type: nodeType,
+        },
+      ],
+    };
     try {
       await updateSubstationTopology(selectedSubstationId, payload);
       const data = await getSubstationById(selectedSubstationId);
       setData(data);
     } catch (error) {
-      console.error('Error updating topology:', error);
+      console.error("Error updating topology:", error);
     }
     setShowDeletePopup(false);
     setNodeToDelete(null);
@@ -356,7 +402,7 @@ const NetworkTopology = () => {
   const handleSelectedNode = (node) => {
     setSelectedNode(node);
   };
-
+  // Handles right-click on a node to trigger delete action
   const handleRightClickSelectedNode = (node) => {
     console.log("right click node: ", node);
     setSelectedNode(node);
@@ -366,8 +412,8 @@ const NetworkTopology = () => {
       setNodeToDeleteName(node.nomenclature);
     }
     setNodeType(node.type);
-  }
-
+  };
+  // Closes the delete confirmation dialog
   const handleCloseDeletePopup = () => {
     setShowDeletePopup(false);
     setNodeToDelete(null);
@@ -375,9 +421,8 @@ const NetworkTopology = () => {
     setNodeType(null);
   };
 
-
   return (
-    <div className='flex-col  box-border max-w-[1920px] h-full'>
+    <div className="flex-col  box-border max-w-[1920px] h-full">
       <Navbar />
       <div className="flex h-full box-border ">
         <GridSideBar
@@ -385,13 +430,24 @@ const NetworkTopology = () => {
           selectedGridId={selectedSubstationId}
         />
         {data && (
-          <div className='flex-col overflow-hidden box-border h-full w-full'>
+          <div className="flex-col overflow-hidden box-border h-full w-full">
             <div className="flex justify-between items-center bg-breadcrumbBackgroundColor py-2 pr-[24px]">
-              <div className='flex mt-[6px]'>
-                {selectedSubstationId && (!selectedNode || selectedNode.new) && <Breadcrumb nodeId={selectedSubstationId} onEditNode={handleEditNode} />}
-                {selectedNode && !selectedNode.new && <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />}
+              <div className="flex mt-[6px]">
+                {selectedSubstationId &&
+                  (!selectedNode || selectedNode.new) && (
+                    <Breadcrumb
+                      nodeId={selectedSubstationId}
+                      onEditNode={handleEditNode}
+                    />
+                  )}
+                {selectedNode && !selectedNode.new && (
+                  <Breadcrumb
+                    nodeId={selectedNode.id}
+                    onEditNode={handleEditNode}
+                  />
+                )}
               </div>
-              <div className='flex items-center justify-between font-dinPro font-medium'>
+              <div className="flex items-center justify-between font-dinPro font-medium">
                 <button
                   className="cursor-pointer border px-[65px] mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                   onClick={handleSaveTopology}
@@ -406,7 +462,7 @@ const NetworkTopology = () => {
                                     </button> */}
               </div>
             </div>
-            <div className='overflow-auto  h-[79.7vh]  2xl:h-[83.5vh]'>
+            <div className="overflow-auto  h-[79.7vh]  2xl:h-[83.5vh]">
               <NetworkGraph
                 onSelectedNode={handleSelectedNode}
                 onRightClickSelectedNode={handleRightClickSelectedNode}
@@ -420,7 +476,6 @@ const NetworkTopology = () => {
                 onHouseEdit={handleHouseEdit}
               />
             </div>
-
           </div>
         )}
         {showDeletePopup && (
@@ -433,13 +488,13 @@ const NetworkTopology = () => {
             entityType={nodeType}
           />
         )}
-        {transformerDetails &&
+        {transformerDetails && (
           <TransformerForm
             transformer={transformerDetails}
             onSave={handleTransformerSave}
             onClose={handleCloseTransformerForm}
           />
-        }
+        )}
         {houseDetails && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-4 rounded">
@@ -449,10 +504,7 @@ const NetworkTopology = () => {
               >
                 Close
               </span>
-              <HouseForm
-                house={houseDetails}
-                onSave={handleHouseSave}
-              />
+              <HouseForm house={houseDetails} onSave={handleHouseSave} />
             </div>
           </div>
         )}
@@ -460,8 +512,5 @@ const NetworkTopology = () => {
     </div>
   );
 };
-
-
-
 
 export default NetworkTopology;

@@ -78,7 +78,11 @@ const HouseConfiguration = () => {
           </div>
           <button className="absolute top mt-2 left-4 grid justify-center cursor-pointer hover:opacity-50">
             <div className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1">
-              <img loading="lazy" src={`${process.env.PUBLIC_URL}/images/Arrow 2.png`} alt="Back" />
+              <img
+                loading="lazy"
+                src={`${process.env.PUBLIC_URL}/images/Arrow 2.png`}
+                alt="Back"
+              />
             </div>
           </button>
         </div>

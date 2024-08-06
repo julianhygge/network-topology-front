@@ -46,8 +46,12 @@ export const fetchLoadProfiles = async (houseId) => {
     throw error;
   }
 };
-
-export const uploadLoadProfile = async (houseId, profileName, file, interval15Minutes) => {
+export const uploadLoadProfile = async (
+  houseId,
+  profileName,
+  file,
+  interval15Minutes
+) => {
   const formData = new FormData();
   formData.append("house_id", houseId);
   formData.append("profile_name", profileName);
@@ -83,3 +87,62 @@ export const deleteLoadProfile = async (profileId) => {
   }
 
 }
+export const saveGenerationProfile = async (houseId, payload) => {
+  try {
+    const response = await fetch(
+      `${API_URL}/load/houses/${houseId}/generation-engine`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${TOKEN}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to save profile");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error uploading load profile:", error);
+    throw error;
+  }
+};
+
+export const fetchGenerationEngineProfile = async (houseId) => {
+  try {
+    const response = await fetch(`${API_URL}/load/houses/${houseId}/generation-engine`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+
+    });
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching generation engine profile:", error);
+    throw error;
+  }
+};
+
+export const deleteGenerationProfile = async (profileId) => {
+  try {
+    const response = await fetch(`${API_URL}/load/${profileId}/`, {
+      method: 'DELETE',
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${TOKEN}`,
+      },
+
+    });
+    console.log(response)
+    if (!response.ok) {
+      throw new Error('Failed to delete file');
+    }
+  } catch (error) {
+    console.error("Failed to delete the file:", error);
+  }
+};
