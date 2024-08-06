@@ -3,29 +3,44 @@ import Navbar from 'components/Common/Navbar';
 import Breadcrumb from 'components/Breadcrumb/Breadcrumb';
 import { useParams } from 'react-router-dom';
 import LoadProfileQuitModal from './LoadProfileQuitModal';
+import LoadProfileDeleteModal from './LoadProfileDeleteModal';
 import "./LoadBuilder.css";
 
 const LoadBuilder = () => {
     const [showLoadProfileQuitModal, setShowLoadProfileQuitModal] = useState(false);
+    const [showLoadProfileDeleteModal, setShowLoadProfileDeleteModal] = useState(false);
     const selectedButton = "Load Profile";
     const houseId = useParams();
 
-    const handleOnConfirm = () => {
+    const handleOnConfirmDeleteModal = () => {
+      setShowLoadProfileDeleteModal(false);
+    }
+
+    const handleOnCancelDeleteModal = () => {
+      setShowLoadProfileDeleteModal(false);
+    }
+
+    const handleOnConfirmQuitModal = () => {
       setShowLoadProfileQuitModal(false);
     }
 
-    const handleOnCancel = () => {
+    const handleOnCancelQuitModal = () => {
       setShowLoadProfileQuitModal(false);
     }
-    
+
     return (
         <>
             <div className="flex flex-col box-border max-w-[1920px] h-[100vh] font-dinPro">
                 <Navbar />
+                {showLoadProfileDeleteModal && 
+                <LoadProfileDeleteModal
+                  onConfirm={handleOnConfirmDeleteModal}
+                  onCancel={handleOnCancelDeleteModal}
+                />}
                 {showLoadProfileQuitModal && 
                 <LoadProfileQuitModal
-                  onConfirm={handleOnConfirm}
-                  onCancel = {handleOnCancel}
+                  onConfirm={handleOnConfirmQuitModal}
+                  onCancel={handleOnCancelQuitModal}
                 />}
                 <div className='flex h-full w-full box-border'>
                     <div className="flex flex-col bg-sideBar w-[120px] h-full relative">
@@ -98,7 +113,7 @@ const LoadBuilder = () => {
                                     <li className='watts font-normal'>
                                         Total = 67,800 Watts
                                     </li>
-                                    <li className='reset-profile mr-1 cursor-pointer py-1'>
+                                    <li onClick={() => setShowLoadProfileDeleteModal(true)} className='reset-profile mr-1 cursor-pointer py-1'>
                                         Reset Profile
                                     </li>
                                 </ul>
