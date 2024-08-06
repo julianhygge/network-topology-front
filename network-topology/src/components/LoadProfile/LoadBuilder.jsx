@@ -1,16 +1,47 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Navbar from 'components/Common/Navbar';
 import Breadcrumb from 'components/Breadcrumb/Breadcrumb';
 import { useParams } from 'react-router-dom';
+import LoadProfileQuitModal from './LoadProfileQuitModal';
+import LoadProfileDeleteModal from './LoadProfileDeleteModal';
 import "./LoadBuilder.css";
 
 const LoadBuilder = () => {
+    const [showLoadProfileQuitModal, setShowLoadProfileQuitModal] = useState(false);
+    const [showLoadProfileDeleteModal, setShowLoadProfileDeleteModal] = useState(false);
     const selectedButton = "Load Profile";
     const houseId = useParams();
+
+    const handleOnConfirmDeleteModal = () => {
+      setShowLoadProfileDeleteModal(false);
+    }
+
+    const handleOnCancelDeleteModal = () => {
+      setShowLoadProfileDeleteModal(false);
+    }
+
+    const handleOnConfirmQuitModal = () => {
+      setShowLoadProfileQuitModal(false);
+    }
+
+    const handleOnCancelQuitModal = () => {
+      setShowLoadProfileQuitModal(false);
+    }
+
     return (
         <>
             <div className="flex flex-col box-border max-w-[1920px] h-[100vh] font-dinPro">
                 <Navbar />
+                {showLoadProfileDeleteModal && 
+                <LoadProfileDeleteModal
+                  onConfirm={handleOnConfirmDeleteModal}
+                  onCancel={handleOnCancelDeleteModal}
+                />}
+                {showLoadProfileQuitModal && 
+                <LoadProfileQuitModal
+                  onConfirm={handleOnConfirmQuitModal}
+                  onCancel={handleOnCancelQuitModal}
+                />}
                 <div className='flex h-full w-full box-border'>
                     <div className="flex flex-col bg-sideBar w-[120px] h-full relative">
                         <div className="flex-1 overflow-hidden">
@@ -51,7 +82,7 @@ const LoadBuilder = () => {
                                 </div>
                             </div>
                         </div>
-                        <button className="absolute top mt-2 left-0 right-0 mx-auto grid justify-center cursor-pointer hover:opacity-50">
+                        <button onClick={() => setShowLoadProfileQuitModal(true)} className="absolute top mt-2 left-0 right-0 mx-auto grid justify-center cursor-pointer hover:opacity-50">
                             <div className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1">
                                 <img loading="lazy" src={`${process.env.PUBLIC_URL}/images/Arrow 2.png`} alt="Back" />
                             </div>
@@ -82,7 +113,7 @@ const LoadBuilder = () => {
                                     <li className='watts font-normal'>
                                         Total = 67,800 Watts
                                     </li>
-                                    <li className='reset-profile mr-1 cursor-pointer py-1'>
+                                    <li onClick={() => setShowLoadProfileDeleteModal(true)} className='reset-profile mr-1 cursor-pointer py-1'>
                                         Reset Profile
                                     </li>
                                 </ul>
