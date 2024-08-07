@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import NetworkGraph from "components/Network/NetworkGraph";
+import NetworkGraph, { NODE_STATUS } from "components/Network/NetworkGraph";
 import Navbar from "components/Common/Navbar";
 import GridSideBar from "components/Grid/GridSideBar";
 import { useLocation } from "react-router-dom";
@@ -64,7 +64,7 @@ const NetworkTopology = () => {
       id: `Transformer-${transformerCounter}`,
       label: `Transformer-${transformerCounter}`,
       type: "transformer",
-      is_complete: false,
+      status: NODE_STATUS.EMPTY,
       new: true,
       action: "add",
       nomenclature: `T-${grid}.${transformerCount + 1}`,
@@ -129,7 +129,7 @@ const NetworkTopology = () => {
         const newHouse = {
           id: crypto.randomUUID(),
           type: "house",
-          is_complete: false,
+          status: NODE_STATUS.EMPTY,
           new: true,
           nomenclature: `H.${prev_nomenclature}.${houseCount + 1}`,
           name: `H.${prev_nomenclature}.${houseCount + 1}`,
@@ -196,7 +196,7 @@ const NetworkTopology = () => {
           id: crypto.randomUUID(),
           type: "transformer",
           new: true,
-          is_complete: false,
+          status: NODE_STATUS.EMPTY,
           nomenclature: `T-${prev_nomenclature}.${transformerCount + 1}`,
           name: `T-${prev_nomenclature}.${transformerCount + 1}`,
           children: [],
@@ -238,8 +238,7 @@ const NetworkTopology = () => {
         if (node.id === updatedTransformer.id) {
           const updatedNode = {
             ...node,
-            is_complete: updatedTransformer.is_complete,
-            color: updatedTransformer.is_complete ? "green" : "black",
+            status: updatedTransformer.status,
           };
           console.log("updated Node: ", updatedNode);
           return updatedNode;
@@ -272,7 +271,7 @@ const NetworkTopology = () => {
       const hasChanges =
         currentNode.nomenclature !== initialNode.nomenclature ||
         currentNode.name !== initialNode.name ||
-        currentNode.is_complete !== initialNode.is_complete;
+        currentNode.status !== initialNode.status;
 
       const updatedChildren = [];
       const initialChildrenMap = new Map(
