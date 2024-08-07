@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const API_URL = "https://hygge-test.ddns.net:8080/net-topology-api/v1";
+import { API_URL } from "services/Config";
 
 export const fetchTransformerDetails = async (transformerId) => {
   const token =

@@ -1,6 +1,6 @@
 import axios from "axios";
+import { API_URL } from "services/Config";
 
-const API_URL = "https://hygge-test.ddns.net:8080/net-topology-api/v1";
 
 export const getSubstations = async () => {
   const token =
@@ -130,7 +130,7 @@ export const deleteSubstation = async (substationId) => {
       throw new Error("Failed to delete substation");
     }
 
-    return  response.data;
+    return response.data;
   } catch (error) {
     console.error("Error deleting substation:", error);
     throw error;

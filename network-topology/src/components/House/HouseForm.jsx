@@ -1,3 +1,4 @@
+import { NODE_STATUS } from "components/Network/NetworkGraph";
 import React, { useState } from "react";
 import { updateHouseData } from "services/House";
 
@@ -29,7 +30,7 @@ const HouseForm = ({ house, onSave }) => {
 
     try {
       const updatedHouse = await updateHouseData(house.id, formData);
-      if (updatedHouse.is_complete) {
+      if (updatedHouse.status == NODE_STATUS.COMPLETE) {
         house.color = "green";
       }
       onSave(updatedHouse);

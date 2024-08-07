@@ -3,6 +3,12 @@ import "./NetworkGraph.css";
 import { fetchTransformerDetails } from "services/Tranformer";
 import { useNavigate } from "react-router-dom";
 
+export const NODE_STATUS = {
+  COMPLETE: "complete",
+  EMPTY: "empty",
+  IN_PROGRESS: "in_progress",
+}
+
 // Transformer component displays a transformer icon and name
 const Transformer = ({ color, name, onTransformerClick }) => (
   <div
@@ -12,9 +18,8 @@ const Transformer = ({ color, name, onTransformerClick }) => (
     <img
       src={`/images/${color}Transformer.png`}
       alt="Transformer"
-      className={`icon transformer ${
-        color === "Green" ? "green-transformer-icon" : ""
-      }`}
+      className={`icon transformer ${color === "Green" ? "green-transformer-icon" : ""
+        }`}
     />
     <span className="transformer-label">{name}</span>
   </div>
@@ -185,9 +190,11 @@ const NetworkGraph = ({
   }, []);
 
   // Function to determine transformer color based on completion and new status
-  const getColor = (isComplete, isNew) => {
+  const getColor = (status, isNew) => {
     if (isNew) return "Grey";
-    return isComplete ? "Green" : "Black";
+    if (status === NODE_STATUS.COMPLETE) return "Green";
+    if (status === NODE_STATUS.IN_PROGRESS) return "Orange";
+    return "Black";
   };
   // Function to fetch and configure the selected node
   const onConfigure = async (d) => {
@@ -291,7 +298,7 @@ const NetworkGraph = ({
           onContextMenu={(e) => handleContextMenu(e, node)}
         >
           <House
-            color={getColor(node.is_complete, node.new)}
+            color={getColor(node.status, node.new)}
             onHouseClick={() => onSelectedNode(node)}
           />
           <span className="font-dinPro font-medium house-name text-navColor">
@@ -315,7 +322,7 @@ const NetworkGraph = ({
           onContextMenu={(e) => handleContextMenu(e, node)}
         >
           <Transformer
-            color={getColor(node.is_complete, node.new)}
+            color={getColor(node.status, node.new)}
             onTransformerClick={() => onSelectedNode(node)}
           />
           <span className="font-dinPro font-medium text-navColor">
@@ -326,7 +333,7 @@ const NetworkGraph = ({
           <SubConnectionLine transformer={node} />
           <div className="houses-column">
             {node.children &&
-            node.children.filter((child) => child.type === "house").length >
+              node.children.filter((child) => child.type === "house").length >
               0 ? (
               node.children
                 .filter((child) => child.type === "house")
