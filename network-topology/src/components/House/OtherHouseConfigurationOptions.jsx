@@ -20,7 +20,4 @@ export const WindProfile = () => {
   return <>WindProfile</>;
 }
 
-export const PredefinedTemplates = () => {
-  return <>PredefinedTemplates</>;
-}
 
