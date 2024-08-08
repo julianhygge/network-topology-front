@@ -1,27 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchLoadTemplates } from "services/LoadProfile";
 import "./LoadBuilder.css"
 import PredefinedTemplatesDeleteModal from "./PredefinedTemplatesDeleteModal";
 
 const PredefinedTemplates = () => {
-  const [showReset, setShowReset] = useState(true);
+  const [showReset, setShowReset] = useState(false);
+  const [templates, setTemplates] = useState([]);
 
-  const templates = [
-    {
-      "id": 1,
-      "name": "Type 1",
-      "power_kw": 3
-    },
-    {
-      "id": 2,
-      "name": "Type 2",
-      "power_kw": 5
-    },
-    {
-      "id": 3,
-      "name": "Type 3",
-      "power_kw": 5
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      try {
+        const data = await fetchLoadTemplates();
+        setTemplates(data.items);
+      } catch (error) {
+        console.error("Error fetching load templates:", error);
+      }
     }
-  ]
+    fetchTemplates();
+  }, [])
+
   const isSaved = true;
 
   const reset = () => {
