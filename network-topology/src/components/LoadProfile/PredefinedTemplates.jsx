@@ -90,10 +90,10 @@ const PredefinedTemplates = () => {
             Please select one of the following <strong>Pre Defined Templates</strong><br />
             to generate the Load Profile
           </div>}
-        <div className="flex gap-8 justify-between mt-10 max-w-full text-xl tracking-normal text-navColor whitespace-nowrap max-md:mt-10">
+        <div className="grid grid-cols-3 mt-10 gap-10 items-stretch">
           {templates.map((template) => (
             <button key={template.id}
-              className={`flex justify-center items-center px-10 py-10 ${template.id === templateId ? "bg-predefinedTemplatesSelected" : "bg-white"} border-[1px] border-navColor shadow-xl rounded-[20px] max-md:px-5`}
+              className={`flex justify-center text-lg items-center px-16 py-10 ${template.id === templateId ? "bg-predefinedTemplatesSelected" : "bg-white"} border-[1px] border-sideBar shadow-xl rounded-[20px] max-md:px-5`}
               onClick={() => { setTemplateId(template.id); setIsSaved(false); console.log(template); console.log(templateId) }}
             >
               {template.name} <br />
