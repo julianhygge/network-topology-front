@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "components/Common/Navbar";
-import { useLocation, useNavigate, useOutlet } from "react-router-dom";
+import { useLocation, useNavigate, useOutlet, useParams } from "react-router-dom";
+import Breadcrumb from "components/Breadcrumb/Breadcrumb";
 
 const HOUSE_CONFIG_OPTIONS = [
   "Load Profile",
@@ -16,6 +17,7 @@ const HouseConfiguration = () => {
   const navigate = useNavigate();
   const outlet = useOutlet()
   const location = useLocation();
+  const { houseId } = useParams();
 
   useEffect(() => {
     setSelectedButton(HOUSE_CONFIG_OPTIONS.find((item) => location.pathname.includes(convertToPath(item))));
@@ -86,7 +88,16 @@ const HouseConfiguration = () => {
             </div>
           </button>
         </div>
-        <div className="flex-1 overflow-auto">{renderContent()}</div>
+        <div className='flex flex-col flex-1'>
+          <div className='flex justify-between bg-breadcrumbBackgroundColor max-h-[60px]'>
+            <div className="text-[14px] text-black font-light mt-2">
+              {houseId && (
+                <Breadcrumb nodeId={houseId} onEditNode={() => { }} />
+              )}
+            </div>
+          </div>
+          <div className="flex-1 overflow-auto">{renderContent()}</div>
+        </div>
       </div>
     </>
   );
