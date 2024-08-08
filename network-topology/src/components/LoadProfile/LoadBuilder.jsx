@@ -1,4 +1,3 @@
-import Breadcrumb from 'components/Breadcrumb/Breadcrumb';
 import { useNavigate, useParams } from 'react-router-dom';
 import "./LoadBuilder.css"
 import React, { useEffect, useState, useRef } from 'react';
@@ -91,17 +90,17 @@ const LoadBuilder = () => {
   }
 
   const reset = async () => {
-    console.log("Reset in LoadBuilder")
+    console.log("Reset in LoadBuilder with profileId: ", profileId)
+    isUnsaved.current = false;
+    setShowReset(false);
+    navigate(`/config/${houseId}`);
     try {
       if (profileId) {
         await deleteLoadProfile(profileId);
-        isUnsaved.current = false;
       }
     } catch (error) {
       console.error("Error deleting load profile:", error);
     }
-    setShowReset(false);
-    navigate(`/config/${houseId}`);
   }
 
   return (
@@ -168,7 +167,7 @@ const LoadBuilder = () => {
                     </React.Fragment>))}
                   <LoadBuilderForm onAdd={(load) => onAdd(load)} appliances={appliances} />
                   {showReset && <LoadProfileDeleteModal onConfirm={reset} onCancel={() => setShowReset(false)} />}
-                  <ReactRouterPrompt when={isUnsaved.current}>
+                  <ReactRouterPrompt when={() => isUnsaved.current}>
                     {({ isActive, onConfirm, onCancel }) =>
                       isActive && <LoadProfileQuitModal onConfirm={onConfirm} onCancel={onCancel} />
                     }
