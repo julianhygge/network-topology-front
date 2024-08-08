@@ -20,6 +20,11 @@ const GenerationPage1 = () => {
     avgMonthlyBill: "",
     maxDemand: "",
   });
+  const [errors, setErrors] = useState({
+    avgKWh: "",
+    avgMonthlyBill: "",
+    maxDemand: "",
+  });
   const [response, setResponse] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -53,6 +58,24 @@ const GenerationPage1 = () => {
     loadProfile();
   }, [houseId]);
 
+  const validateInputs = () => {
+    const newErrors = {};
+    const numberPattern = /^[0-9]*\.?[0-9]+$/;
+
+    if (!numberPattern.test(formValues.avgKWh)) {
+      newErrors.avgKWh = "Avg kWh must be a valid number.";
+    }
+    if (!numberPattern.test(formValues.avgMonthlyBill)) {
+      newErrors.avgMonthlyBill = "Average Monthly Bill must be a valid number.";
+    }
+    if (!numberPattern.test(formValues.maxDemand)) {
+      newErrors.maxDemand = "Max Demand must be a valid number.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
@@ -71,9 +94,9 @@ const GenerationPage1 = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { avgKWh, daily, monthly, avgMonthlyBill, maxDemand } = formValues;
+    if (validateInputs()) {
+      const { avgKWh, daily, monthly, avgMonthlyBill, maxDemand } = formValues;
 
-    if (avgKWh && (daily || monthly) && avgMonthlyBill && maxDemand) {
       const type = daily ? "Daily" : "Monthly";
       const payload = {
         type,
@@ -81,7 +104,6 @@ const GenerationPage1 = () => {
         average_monthly_bill: parseFloat(avgMonthlyBill),
         max_demand_kw: parseFloat(maxDemand),
       };
-      console.log(houseId);
 
       try {
         const data = await saveGenerationProfile(houseId, payload);
@@ -98,8 +120,6 @@ const GenerationPage1 = () => {
       } catch (error) {
         console.error("Failed to save profile:", error);
       }
-    } else {
-      alert("Please fill all fields");
     }
   };
 
@@ -201,35 +221,38 @@ const GenerationPage1 = () => {
                     </label>
                   </div>
                   <input
-                    type="number"
+                    type="text"
                     name="avgKWh"
                     value={formValues.avgKWh}
                     onChange={handleInputChange}
                     className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl custom-input"
                     disabled={isSaved}
                   />
+                  {errors.avgKWh && <div className="text-red-500 mt-1">{errors.avgKWh}</div>}
                 </label>
                 <label className="flex flex-col items-start">
                   Enter the Average Monthly Bill
                   <input
-                    type="number"
+                    type="text"
                     name="avgMonthlyBill"
                     value={formValues.avgMonthlyBill}
                     onChange={handleInputChange}
                     className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl custom-input"
                     disabled={isSaved}
                   />
+                  {errors.avgMonthlyBill && <div className="text-red-500 mt-1">{errors.avgMonthlyBill}</div>}
                 </label>
                 <label className="flex flex-col items-start">
                   Enter the Max demand (kW)
                   <input
-                    type="number"
+                    type="text"
                     name="maxDemand"
                     value={formValues.maxDemand}
                     onChange={handleInputChange}
                     className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl custom-input"
                     disabled={isSaved}
                   />
+                  {errors.maxDemand && <div className="text-red-500 mt-1">{errors.maxDemand}</div>}
                 </label>
               </div>
               <div className="flex gap-6 justify-between mt-10 max-w-full text-xl tracking-normal text-white whitespace-nowrap max-md:mt-10">
