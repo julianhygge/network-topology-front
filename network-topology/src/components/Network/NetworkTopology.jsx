@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NetworkGraph, { NODE_STATUS } from "components/Network/NetworkGraph";
 import Navbar from "components/Common/Navbar";
 import GridSideBar from "components/Grid/GridSideBar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   getSubstationById,
   updateSubstationTopology,
@@ -31,27 +31,45 @@ const NetworkTopology = () => {
   const [data, setData] = React.useState({
     nodes: [],
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!selectedSubstationId) return;
     // Fetch substation data when a substation is selected
-    if (selectedSubstationId) {
-      const fetchSubstationData = async () => {
-        try {
-          const data = await getSubstationById(selectedSubstationId);
+    const fetchSubstationData = async () => {
+      try {
+        const data = await getSubstationById(selectedSubstationId);
 
-          setData(data);
-          setTransformerCounter(
-            data.nodes.filter((node) => node.type === "transformer").length
-          );
-          setInitialSubstationData(data);
-        } catch (error) {
-          console.error("Error fetching substation data:", error);
+        setData(data);
+        setTransformerCounter(
+          data.nodes.filter((node) => node.type === "transformer").length
+        );
+        setInitialSubstationData(data);
+        if (location.state?.houseNomenclature && location.state?.substationId === selectedSubstationId) {
+          const [, ...houseNomenclature] = location.state.houseNomenclature.split("."); // Extract path to house based on nomencalture
+          const nodes = data.nodes;
+          const house = findHouseByNonmenclature(houseNomenclature, nodes);
+          setSelectedNode(house);
+        } else {
+          setSelectedNode(null); // Reset selected node
+          navigate(location.pathname, { replace: true }); // Remove house nomenclature from location state
         }
-      };
-      setSelectedNode(null); // Reset selected node
-      fetchSubstationData();
-    }
+      } catch (error) {
+        console.error("Error fetching substation data:", error);
+        setSelectedNode(null);
+      }
+    };
+    fetchSubstationData();
   }, [selectedSubstationId]);
+
+  const findHouseByNonmenclature = (nomenclature, nodes) => {
+    const [first, ...rest] = nomenclature;
+    const node = nodes.at(first - 1);
+    if (rest.length === 0) {
+      return node;
+    }
+    return findHouseByNonmenclature(rest, node.children);
+  }
 
   const handleAddTransformer = () => {
     const transformerCount = data.nodes.filter(
