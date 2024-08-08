@@ -33,15 +33,6 @@ const NetworkTopology = () => {
   });
   const navigate = useNavigate();
 
-  const findHouseByNonmenclature = (nomenclature, nodes) => {
-    const [first, ...rest] = nomenclature;
-    const node = nodes.at(first - 1);
-    if (rest.length === 0) {
-      return node;
-    }
-    return findHouseByNonmenclature(rest, node.children);
-  }
-
   useEffect(() => {
     if (!selectedSubstationId) return;
     // Fetch substation data when a substation is selected
@@ -70,6 +61,15 @@ const NetworkTopology = () => {
     };
     fetchSubstationData();
   }, [selectedSubstationId]);
+
+  const findHouseByNonmenclature = (nomenclature, nodes) => {
+    const [first, ...rest] = nomenclature;
+    const node = nodes.at(first - 1);
+    if (rest.length === 0) {
+      return node;
+    }
+    return findHouseByNonmenclature(rest, node.children);
+  }
 
   const handleAddTransformer = () => {
     const transformerCount = data.nodes.filter(
