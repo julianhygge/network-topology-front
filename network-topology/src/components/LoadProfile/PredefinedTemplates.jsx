@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import { fetchLoadTemplates } from "services/LoadProfile";
+import { useParams } from "react-router-dom";
+import { fetchLoadTemplates, saveLoadTemplate } from "services/LoadProfile";
 import "./LoadBuilder.css"
 import PredefinedTemplatesDeleteModal from "./PredefinedTemplatesDeleteModal";
 
 const PredefinedTemplates = () => {
   const [showReset, setShowReset] = useState(false);
   const [templates, setTemplates] = useState([]);
+  const [isSaved, setIsSaved] = useState(false);
+  const [templateId, setTemplateId] = useState(null);
+  const { houseId } = useParams();
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -19,15 +23,22 @@ const PredefinedTemplates = () => {
     fetchTemplates();
   }, [])
 
-  const isSaved = true;
+  const handleReset = () => {
 
-  const reset = () => {
+  }
 
+  const handleSave = async () => {
+    try {
+      await saveLoadTemplate(houseId, templateId);
+    } catch (error) {
+      console.error("Error saving load template:", error);
+    }
+    setIsSaved(true);
   }
 
   return (
     <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
-      {!isSaved &&
+      {templateId === null &&
         <div>
           <span className="flex text-center text-navColor items-center text-[24px] font-medium mb-2">
             Load profile generation is in process, <br />
@@ -56,8 +67,8 @@ const PredefinedTemplates = () => {
         <div className="flex gap-8 justify-between mt-10 max-w-full text-xl tracking-normal text-navColor whitespace-nowrap max-md:mt-10">
           {templates.map((template) => (
             <button key={template.id}
-              className="flex justify-center items-center px-10 py-10 bg-white border-[1px] border-navColor shadow-xl rounded-[20px] max-md:px-5"
-              onClick={() => console.log(template)}
+              className={`flex justify-center items-center px-10 py-10 ${template.id === templateId ? "bg-predefinedTemplatesSelected" : "bg-white"} border-[1px] border-navColor shadow-xl rounded-[20px] max-md:px-5`}
+              onClick={() => { setTemplateId(template.id); setIsSaved(false); console.log(template); console.log(templateId) }}
             >
               {template.name} <br />
               {template.power_kw} KW
@@ -66,10 +77,11 @@ const PredefinedTemplates = () => {
         <button
           className={`flex justify-center mt-12 items-center px-16 py-3 shadow-sm rounded-[33px] max-md:px-5  bg-[#74AA50] ${isSaved ? " opacity-50 cursor-not-allowed" : "bg-[#74AA50]"
             }`}
+          onClick={handleSave}
         >Save</button>
       </div>
-      {showReset && <PredefinedTemplatesDeleteModal onConfirm={reset} onCancel={() => setShowReset(false)} />}
-    </div>
+      {showReset && <PredefinedTemplatesDeleteModal onConfirm={handleReset} onCancel={() => setShowReset(false)} />}
+    </div >
   );
 }
 
