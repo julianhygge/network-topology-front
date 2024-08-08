@@ -1,4 +1,3 @@
-import Breadcrumb from 'components/Breadcrumb/Breadcrumb';
 import { useNavigate, useParams } from 'react-router-dom';
 import "./LoadBuilder.css"
 import React, { useEffect, useState, useRef } from 'react';
@@ -91,17 +90,17 @@ const LoadBuilder = () => {
   }
 
   const reset = async () => {
-    console.log("Reset in LoadBuilder")
+    console.log("Reset in LoadBuilder with profileId: ", profileId)
+    isUnsaved.current = false;
+    setShowReset(false);
+    navigate(`/config/${houseId}`);
     try {
       if (profileId) {
         await deleteLoadProfile(profileId);
-        isUnsaved.current = false;
       }
     } catch (error) {
       console.error("Error deleting load profile:", error);
     }
-    setShowReset(false);
-    navigate(`/config/${houseId}`);
   }
 
   return (
@@ -109,20 +108,13 @@ const LoadBuilder = () => {
       <div className="flex flex-col box-border max-w-[1920px] h-[100vh] font-dinPro">
         <div className='flex h-full w-full box-border'>
           <div className='flex flex-col flex-1'>
-            <div className='flex justify-between bg-breadcrumbBackgroundColor max-h-[60px]'>
-              <div className="text-[14px] text-black font-light mt-2">
-                {houseId && (
-                  <Breadcrumb nodeId={houseId} onEditNode={() => { }} />
-                )}
-              </div>
-              <div className='mt-2 mr-2'>
-                <button
-                  className="cursor-pointer border bg-[#49AC82] px-[50px] py-[5px] rounded-3xl text-white text-md font-medium border-[#49AC82]"
-                  onClick={saveLoads}
-                >
-                  SAVE
-                </button>
-              </div>
+            <div className='absolute top-0 right-0 mt-24 mr-2'>
+              <button
+                className="cursor-pointer border bg-[#49AC82] px-[50px] py-[5px] rounded-3xl text-white text-md font-medium border-[#49AC82]"
+                onClick={saveLoads}
+              >
+                SAVE
+              </button>
             </div>
             <div className='container px-6 mx-auto'>
               <div className='nav pt-4'>
@@ -175,7 +167,7 @@ const LoadBuilder = () => {
                     </React.Fragment>))}
                   <LoadBuilderForm onAdd={(load) => onAdd(load)} appliances={appliances} />
                   {showReset && <LoadProfileDeleteModal onConfirm={reset} onCancel={() => setShowReset(false)} />}
-                  <ReactRouterPrompt when={isUnsaved.current}>
+                  <ReactRouterPrompt when={() => isUnsaved.current}>
                     {({ isActive, onConfirm, onCancel }) =>
                       isActive && <LoadProfileQuitModal onConfirm={onConfirm} onCancel={onCancel} />
                     }
