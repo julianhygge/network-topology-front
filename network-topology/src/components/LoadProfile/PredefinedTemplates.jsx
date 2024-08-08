@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { fetchLoadTemplates, saveLoadTemplate } from "services/LoadProfile";
+import { useNavigate, useParams } from "react-router-dom";
+import { deleteLoadProfile, fetchLoadTemplate, fetchLoadTemplates, saveLoadTemplate } from "services/LoadProfile";
 import "./LoadBuilder.css"
 import PredefinedTemplatesDeleteModal from "./PredefinedTemplatesDeleteModal";
 
@@ -10,6 +10,8 @@ const PredefinedTemplates = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [templateId, setTemplateId] = useState(null);
   const { houseId } = useParams();
+  const navigate = useNavigate();
+  const [profileId, setProfileId] = useState(null);
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -20,16 +22,40 @@ const PredefinedTemplates = () => {
         console.error("Error fetching load templates:", error);
       }
     }
+    const fetchProfile = async () => {
+      try {
+        if (houseId) {
+          const data = await fetchLoadTemplate(houseId);
+          setTemplateId(data.template_id);
+          setProfileId(data.profile_id);
+        }
+      } catch (error) {
+        console.error("Error fetching load profile:", error);
+      }
+    }
     fetchTemplates();
+    fetchProfile();
   }, [])
 
-  const handleReset = () => {
-
+  const handleReset = async () => {
+    setShowReset(false);
+    setIsSaved(true);
+    navigate(`/config/${houseId}`);
+    console.log("Profile id: ", profileId)
+    try {
+      if (profileId) {
+        await deleteLoadProfile(profileId);
+      }
+    } catch (error) {
+      console.error("Error deleting load profile:", error);
+    }
   }
 
   const handleSave = async () => {
     try {
-      await saveLoadTemplate(houseId, templateId);
+      const data = await saveLoadTemplate(houseId, templateId);
+      console.log("Data from saveLoadTemplate", data);
+      setProfileId(data.profile_id);
     } catch (error) {
       console.error("Error saving load template:", error);
     }
@@ -49,14 +75,14 @@ const PredefinedTemplates = () => {
         {isSaved ?
           <div className="flex flex-row items-center gap-4">
             <div>
-              <div className="text-white  cursor-pointer px-2 py-1">Reset Profile</div>
+              <div className="text-white cursor-pointer px-2 py-1">Reset Profile</div> {/* Used to make spacing even. TODO: Improve this */}
             </div>
             <div className="mt-10 text-[20px] max-md:mt-10">
               Please select any other <strong> Load Profile Type </strong><br />
               from the Pre Defined Templates below.
             </div>
             <div>
-              <button className="reset-profile mt-5 cursor-pointer px-2 py-1">Reset Profile</button>
+              <button className="reset-profile mt-5 cursor-pointer px-2 py-1" onClick={() => setShowReset(true)}>Reset Profile</button>
             </div>
           </div>
           :
