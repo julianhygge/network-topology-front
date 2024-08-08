@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "components/Common/Navbar";
 import { useLocation, useNavigate, useOutlet, useParams } from "react-router-dom";
 import Breadcrumb from "components/Breadcrumb/Breadcrumb";
+import { fetchBreadcrumbNavigationPath } from "services/Breadcrumb";
 
 const HOUSE_CONFIG_OPTIONS = [
   "Load Profile",
@@ -41,6 +42,18 @@ const HouseConfiguration = () => {
     );
   };
 
+  const handleBackButtonClick = async () => {
+    try {
+      console.log("House ID:", houseId)
+      const data = await fetchBreadcrumbNavigationPath(houseId);
+      navigate("/", { state: { substationId: data.substation_id, houseNomenclature: data.path.at(-1).nomenclature } });
+      return;
+    } catch (error) {
+      console.error("Error fetching breadcrumb navigation path details:", error.response);
+      navigate("/");
+    }
+  }
+
   return (
     <>
       <Navbar />
@@ -79,7 +92,7 @@ const HouseConfiguration = () => {
             </div>
           </div>
           <button className="absolute top mt-2 left-4 grid justify-center cursor-pointer hover:opacity-50">
-            <div className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1">
+            <div className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1" onClick={handleBackButtonClick}>
               <img
                 loading="lazy"
                 src={`${process.env.PUBLIC_URL}/images/Arrow 2.png`}
