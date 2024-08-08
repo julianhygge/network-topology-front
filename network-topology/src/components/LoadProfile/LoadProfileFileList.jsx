@@ -43,17 +43,14 @@ const LoadProfileFileList = ({ profiles, onUploadAgain }) => {
     }
   };
 
-
-
   const handleDownload = async (downloadLink) => {
-
     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
-
+  
     const fullUrl = `https://hygge-test.ddns.net:8080/net-topology-api${downloadLink}`;
-
+  
     setIsLoading(true);
     setErrorMessage("");
-
+  
     try {
       const response = await fetch(fullUrl, {
         method: 'GET',
@@ -62,26 +59,39 @@ const LoadProfileFileList = ({ profiles, onUploadAgain }) => {
           "Authorization": `Bearer ${token}`
         }
       });
-
+  
       if (!response.ok) {
         console.error(`Response status: ${response.status}`);
         console.error(`Response status text: ${response.statusText}`);
         throw new Error(`Failed to download file: ${response.statusText}`);
       }
-
+  
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-
+      console.log(response)
       const contentDisposition = response.headers.get('content-disposition');
-      const fileName = contentDisposition ? contentDisposition.split('filename=')[1] : 'csv_file';
+      console.log(contentDisposition)
+      let fileName = 'csv_file.csv'; // default file name with .csv extension
+  
+      if (contentDisposition) {
+        const fileNameMatch = contentDisposition.match(/filename=([^;]+)/);
+        if (fileNameMatch && fileNameMatch[1]) {
+          fileName = fileNameMatch[1].trim();
+          // Ensure the filename has the .csv extension
+          if (!fileName.endsWith('.csv')) {
+            fileName += '.csv';
+          }
+        }
+      }
+  
       link.setAttribute('download', fileName);
-
+  
       document.body.appendChild(link);
       link.click();
       link.remove();
-
+  
       console.log('Download successful');
     } catch (error) {
       console.error('Failed to download the file:', error);
@@ -90,7 +100,7 @@ const LoadProfileFileList = ({ profiles, onUploadAgain }) => {
       setIsLoading(false);
     }
   };
-
+  
   return (
     <div className="flex flex-col items-center text-1xl mt-[150px] font-bold text-center text-navColor">
       <div className="flex justify-center items-center px-16 py-5 w-[1250px] bg-sky-100 rounded-2xl max-md:px-5 max-md:max-w-full">
