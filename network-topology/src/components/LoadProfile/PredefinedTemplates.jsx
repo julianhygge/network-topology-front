@@ -38,9 +38,7 @@ const PredefinedTemplates = () => {
   }, [])
 
   const handleReset = async () => {
-    setShowReset(false);
     setIsSaved(true);
-    navigate(`/config/${houseId}`);
     console.log("Profile id: ", profileId)
     try {
       if (profileId) {
@@ -49,6 +47,8 @@ const PredefinedTemplates = () => {
     } catch (error) {
       console.error("Error deleting load profile:", error);
     }
+    setShowReset(false);
+    navigate(`/config/${houseId}`);
   }
 
   const handleSave = async () => {
