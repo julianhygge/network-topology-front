@@ -24,6 +24,7 @@ const GenerationPage1 = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [profileId, setProfileId] = useState(null); // To store the profile_id
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -45,6 +46,8 @@ const GenerationPage1 = () => {
       } catch (error) {
         console.error("Error fetching generation engine profile:", error);
         setIsSaved(false); // Enable form inputs on error
+      } finally {
+        setIsDataLoaded(true);
       }
     };
     loadProfile();
@@ -99,6 +102,7 @@ const GenerationPage1 = () => {
       alert("Please fill all fields");
     }
   };
+
   const handleDelete = async () => {
     try {
       if (profileId) {
@@ -115,6 +119,25 @@ const GenerationPage1 = () => {
       setShowDeletePopup(false); // Close the popup
     }
   };
+
+  const handleBeforeUnload = (e) => {
+    if (!isSaved) {
+      e.preventDefault();
+      e.returnValue = ""; // Chrome requires returnValue to be set
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isSaved]);
+
+  if (!isDataLoaded) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <div className="flex h-[90vh] 2xl:h-[92vh] font-dinPro">
