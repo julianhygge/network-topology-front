@@ -26,6 +26,7 @@ module.exports = {
         item4: '#CDEEF7',
         brown: '#794C03',
         loadBuilderNavColor: "#DDF4FA",
+        predefinedTemplatesSelected: "#F7FDFF",
       },
       spacing: {
         '7.25': '1.8125rem',

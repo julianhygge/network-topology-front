@@ -30,11 +30,17 @@ const LoadProfile = () => {
         const hasBuilderProfile = profiles.items?.some(
           (profile) => profile.source === "Builder"
         );
+        const hasPredefinedProfile = profiles.items?.some(
+          (profile) => profile.source === "Template"
+        );
         if (hasBuilderProfile) {
           navigateOffLoadProfile("builder");
           return;
         } else if (hasEngineLoad) {
           navigateOffLoadProfile("generationEngine");
+          return;
+        } else if (hasPredefinedProfile) {
+          navigateOffLoadProfile("predefinedTemplates");
           return;
         }
         console.log("Load Profiles userConfig: ", profiles)

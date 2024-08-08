@@ -10,8 +10,9 @@ import LoadBuilder from "components/LoadProfile/LoadBuilder";
 import GenerationPage1 from "components/LoadProfile/GenerationPage1";
 import React from "react";
 import ReactDOM from 'react-dom/client';
-import { BatteryProfile, EVProfile, Flags, PredefinedTemplates, SolarProfile, WindProfile } from "components/House/OtherHouseConfigurationOptions";
+import { BatteryProfile, EVProfile, Flags, SolarProfile, WindProfile } from "components/House/OtherHouseConfigurationOptions";
 import LoadProfile from "components/LoadProfile/LoadProfile";
+import PredefinedTemplates from "components/LoadProfile/PredefinedTemplates";
 
 const router = createBrowserRouter(
   [
