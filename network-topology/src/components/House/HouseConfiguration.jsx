@@ -46,7 +46,7 @@ const HouseConfiguration = () => {
     try {
       console.log("House ID:", houseId)
       const data = await fetchBreadcrumbNavigationPath(houseId);
-      navigate("/", { state: { substationId: data.substation_id, houseNomenclature: data.path.at(-1).nomenclature } });
+      navigate("/", { state: { substationId: data.substation_id, houseId: houseId } });
       return;
     } catch (error) {
       console.error("Error fetching breadcrumb navigation path details:", error.response);
