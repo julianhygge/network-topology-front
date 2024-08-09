@@ -45,14 +45,9 @@ const NetworkTopology = () => {
           data.nodes.filter((node) => node.type === "transformer").length
         );
         setInitialSubstationData(data);
-        if (location.state?.houseNomenclature && location.state?.substationId === selectedSubstationId) {
-          const [, ...houseNomenclature] = location.state.houseNomenclature.split("."); // Extract path to house based on nomencalture
-          const nodes = data.nodes;
-          const house = findHouseByNonmenclature(houseNomenclature, nodes);
-          setSelectedNode(house);
-        } else {
-          setSelectedNode(null); // Reset selected node
-          navigate(location.pathname, { replace: true }); // Remove house nomenclature from location state
+        setSelectedNode(null);
+        if (location.state?.substationId !== selectedSubstationId) {
+          navigate(location.pathname, { replace: true });
         }
       } catch (error) {
         console.error("Error fetching substation data:", error);
@@ -61,15 +56,6 @@ const NetworkTopology = () => {
     };
     fetchSubstationData();
   }, [selectedSubstationId]);
-
-  const findHouseByNonmenclature = (nomenclature, nodes) => {
-    const [first, ...rest] = nomenclature;
-    const node = nodes.at(first - 1);
-    if (rest.length === 0) {
-      return node;
-    }
-    return findHouseByNonmenclature(rest, node.children);
-  }
 
   const handleAddTransformer = () => {
     const transformerCount = data.nodes.filter(
@@ -438,6 +424,35 @@ const NetworkTopology = () => {
     setNodeType(null);
   };
 
+  const renderBreadcrumb = () => {
+    if (selectedNode && !selectedNode.new) {
+      return (
+        <Breadcrumb
+          nodeId={selectedNode.id}
+          onEditNode={handleEditNode}
+        />
+      )
+    }
+    if (!selectedNode && location.state?.houseId) {
+      return (
+        <Breadcrumb
+          nodeId={location.state?.houseId}
+          onEditNode={handleEditNode}
+        />
+      )
+    }
+    return (<>
+      {selectedSubstationId && (!location.state?.houseId ||
+        !selectedNode || selectedNode.new) && (
+          <Breadcrumb
+            nodeId={selectedSubstationId}
+            onEditNode={handleEditNode}
+          />
+        )}
+    </>
+    )
+  }
+
   return (
     <div className="flex-col  box-border max-w-[1920px] h-full">
       <Navbar />
@@ -450,19 +465,7 @@ const NetworkTopology = () => {
           <div className="flex-col overflow-hidden box-border h-full w-full">
             <div className="flex justify-between items-center bg-breadcrumbBackgroundColor py-2 pr-[24px]">
               <div className="flex mt-[6px]">
-                {selectedSubstationId &&
-                  (!selectedNode || selectedNode.new) && (
-                    <Breadcrumb
-                      nodeId={selectedSubstationId}
-                      onEditNode={handleEditNode}
-                    />
-                  )}
-                {selectedNode && !selectedNode.new && (
-                  <Breadcrumb
-                    nodeId={selectedNode.id}
-                    onEditNode={handleEditNode}
-                  />
-                )}
+                {renderBreadcrumb()}
               </div>
               <div className="flex items-center justify-between font-dinPro font-medium">
                 <button
