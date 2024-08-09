@@ -57,6 +57,12 @@ const NetworkTopology = () => {
     fetchSubstationData();
   }, [selectedSubstationId]);
 
+  // Clear the location.state used for the breadcrumb when a new node is selected
+  useEffect(() => {
+    if (!selectedNode) return;
+    navigate(location.pathname, { replace: true })
+  }, [selectedNode])
+
   const handleAddTransformer = () => {
     const transformerCount = data.nodes.filter(
       (child) => child.type === "transformer"
