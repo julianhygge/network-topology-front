@@ -12,10 +12,12 @@ import React from "react";
 import ReactDOM from 'react-dom/client';
 import { BatteryProfile, EVProfile, Flags, PredefinedTemplates, SolarProfile, WindProfile } from "components/House/OtherHouseConfigurationOptions";
 import LoadProfile from "components/LoadProfile/LoadProfile";
+import Login from "components/Auth/Login";
 
 const router = createBrowserRouter(
   [
     { path: '/', element: <NetworkTopology /> },
+    { path: '/login', element: <Login /> },
     { path: "/grid", element: <Grid /> },
     { path: '/gridPage', element: <GridPage /> },
     { path: "/transformers/:substationId", element: <TransformerPage /> },

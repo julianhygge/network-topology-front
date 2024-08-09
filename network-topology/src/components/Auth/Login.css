@@ -1,0 +1,40 @@
+.login_form > form {
+    width: 80%;
+    height: fit-content;
+  }
+  
+  .login_form> form > * {
+    width: 100%;
+    border-radius: 0.5vw;
+  }
+
+
+
+
+ 
+  
+  .login_form-container h4 {
+    color: white;
+  }
+  
+  .login_form-container > form {
+    width: 80%;
+    height: fit-content;
+  }
+  
+  .login_form-container > form > * {
+    width: 100%;
+    border-radius: 0.5vw;
+  }
+  
+  label {
+    color: #FFFFFF;
+    font-size: 0.9vw;
+    font-weight: lighter;
+    line-height: 2vh;
+  }
+  input::placeholder {
+    font-size: 1vw;
+  }
+
+  
