@@ -263,7 +263,7 @@ const Login = () => {
               
               {otpError && <label className="text-orange-500 text-[1.5vw]">Invalid OTP</label>}
             </form>
-            <button type="submit" disabled={isLoading} className="text-[1.3vw] border-none w-4/5 h-[6vh] bg-[#F4B840] font-[400] rounded-[0.8vw] text-[#265B65] mb-[40px]">
+            <button onSubmit={handleSubmit(onOtpSubmit)} type="submit" disabled={isLoading} className="text-[1.3vw] border-none w-4/5 h-[6vh] bg-[#F4B840] font-[400] rounded-[0.8vw] text-[#265B65] mb-[40px]">
                 Login
               </button>
           </div>
