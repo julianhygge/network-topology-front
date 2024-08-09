@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import React, { useState, useRef,useEffect } from 'react'
-import { useForm, FormProvider} from "react-hook-form";
+import React, { useState, useRef, useEffect } from 'react'
+import { useForm, FormProvider } from "react-hook-form";
 import { requestOtp, verifyOtp } from 'services/Auth';
 import { setToken, setUser, setRole, setPhoneNumber } from 'services/LocalStorage'
 import { HTTP_STATUS_CODES } from 'services/Config'
@@ -23,7 +23,7 @@ const Login = () => {
     }
   });
 
- 
+
 
 
   const setRequestOtpState = () => {
@@ -90,10 +90,10 @@ const Login = () => {
 
   const onOtpInputKeyUp = (e, nextInputIndex, prevInputIndex) => {
     console.log(otpRefs.current);
-    
+
     if (e.key !== 'Backspace' && e.key !== "Tab") {
       setOtpError(false);
-      
+
       if (e.target.value && nextInputIndex !== -1) {
         otpRefs.current[nextInputIndex].focus();
       }
@@ -126,7 +126,7 @@ const Login = () => {
       }
       setRequestOtpState();
       setOtpError(true);
-      
+
     } catch (error) {
       processError(error);
     }
@@ -187,7 +187,7 @@ const Login = () => {
                 placeholder=""
                 {...register("phone_number", {
                   required: "Phone Number is required",
-                  maxLength:10,
+                  maxLength: 10,
                   pattern: /^[0-9]{10}$/
 
                 })}
@@ -228,44 +228,44 @@ const Login = () => {
 
           />
           <div className='login_form w-[30vw] h-[70vh] col-start-4 flex flex-col justify-evenly items-center bg-[#265B65] rounded-[2vw]'>
-          <img
-            loading="lazy"
-            src={`${process.env.PUBLIC_URL}/images/HyggeLogo.png`}
-            alt="Hygge Logo"
-            className='w-[5vw] mb-[-1vh]'
+            <img
+              loading="lazy"
+              src={`${process.env.PUBLIC_URL}/images/HyggeLogo.png`}
+              alt="Hygge Logo"
+              className='w-[5vw] mb-[-1vh]'
 
-          />
+            />
             <form onSubmit={handleSubmit(onOtpSubmit)}>
               <h4 className='text-white'>Enter OTP</h4>
               <label>Enter 6-digit verification code sent to your mobile number.</label>
-              <div className='flex justify-between w-full'>
+              <div className='w-full'>
 
                 {Array.from({ length: 6 }).map((_, i) => {
-                  let isFirst = i === 0;
-                  let isLast = i === 5;
-                  return(
-                  <input
-                    key={i}
-                    ref={(el) => (otpRefs.current[i] = el)}
-                    type="text"
-                    id={`otp${i + 1}`}
-                    name={`otp${i + 1}`}
-                    className='w-[15%] h-[55px] rounded-[14px] text-center border-none mt-[1vh] text-[25px]'
-                    maxLength="1"
-                    {...register(`otp${i + 1}`, { required: true })}
-                    onKeyUp={(e) => onOtpInputKeyUp(e, isLast ? -1 : i+1, isFirst ? -1 : i-1)}
-                  />
+                   let isLast;
+                   let isFirst
+                  return (
+                    <input
+                      key={i}
+                      ref={(el) => (otpRefs.current[i] = el)}
+                      type="text"
+                      id={`otp${i + 1}`}
+                      name={`otp${i + 1}`}
+                      className='w-[14%] h-[55px] rounded-[14px] text-center border-none mt-[1vh] text-[25px] mr-2'
+                      maxLength="1"
+                      {...register(`otp${i + 1}`, { required: true })}
+                      onKeyUp={(e) => onOtpInputKeyUp(e, isLast ? -1 : i + 1, isFirst ? -1 : i - 1)}
+                    />
                   );
-})}
+                })}
 
-                
+                <button type="submit" disabled={isLoading} className="mt-20 text-[1.3vw] border-none w-[95%] h-[6vh] bg-[#F4B840] font-[400] rounded-[0.8vw] text-[#265B65] mb-[40px]">
+                  Login
+                </button>
               </div>
-              
+
               {otpError && <label className="text-orange-500 text-[1.5vw]">Invalid OTP</label>}
             </form>
-            <button onSubmit={handleSubmit(onOtpSubmit)} type="submit" disabled={isLoading} className="text-[1.3vw] border-none w-4/5 h-[6vh] bg-[#F4B840] font-[400] rounded-[0.8vw] text-[#265B65] mb-[40px]">
-                Login
-              </button>
+
           </div>
         </div>
       )}
