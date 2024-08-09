@@ -400,6 +400,7 @@ const NetworkTopology = () => {
     setNodeToDelete(null);
     setNodeToDeleteName(null);
     setNodeType(null);
+    setSelectedNode(null);
   };
 
   const handleSelectedNode = (node) => {
