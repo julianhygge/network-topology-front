@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react";
-import { useParams } from "react-router-dom";
-import { uploadLoadProfile } from "services/LoadProfile";
+import { useParams, useNavigate } from "react-router-dom";
+import { uploadLoadProfile, fetchLoadProfiles } from "services/LoadProfile";
 
-const FileUpload = ({ onBack, attach15MinFile, onUploadSuccess }) => {
+const FileUpload = ({ attach15MinFile }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const fileInputRef = useRef(null);
   const { houseId } = useParams();
+  const navigate = useNavigate();
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -30,23 +31,47 @@ const FileUpload = ({ onBack, attach15MinFile, onUploadSuccess }) => {
   const handleFileUpload = async () => {
     if (selectedFile) {
       try {
-        await uploadLoadProfile(houseId, "Profile name", selectedFile, attach15MinFile);
-        onUploadSuccess();
+        const response = await uploadLoadProfile(
+          houseId,
+          "Profile name",
+          selectedFile,
+          false
+        );
+        await handleUploadSuccess(); // Fetch updated profiles
       } catch (error) {
         let errorMessage = "An error occurred while uploading the file.";
         if (error.response && error.response.data) {
-
-          errorMessage = error.response.data.detail || error.response.data.message || errorMessage;
+          errorMessage =
+            error.response.data.detail ||
+            error.response.data.message ||
+            errorMessage;
         }
         setErrorMessage(errorMessage);
       }
     }
   };
+
+  const handleUploadSuccess = async () => {
+    try {
+      const profiles = await fetchLoadProfiles(houseId);
+      navigate(`/config/${houseId}/load-profile/fileList`, {
+        state: { profiles },
+      });
+    } catch (error) {
+      console.error("Error fetching load profiles after upload:", error);
+    }
+  };
+
   const handleDeleteFile = () => {
     setSelectedFile(null);
     setErrorMessage("");
     fileInputRef.current.value = null;
   };
+
+  const onBack = () => {
+    navigate(`/config/${houseId}/load-profile/`);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
       <div>
@@ -80,8 +105,7 @@ const FileUpload = ({ onBack, attach15MinFile, onUploadSuccess }) => {
           ) : (
             <>
               Please browse and upload the <br />
-              {attach15MinFile ? " 15 Min data load profile" : ""} .csv
-              file from your computer
+              .csv file from your computer
             </>
           )}
         </div>
@@ -96,8 +120,9 @@ const FileUpload = ({ onBack, attach15MinFile, onUploadSuccess }) => {
           />
           <label
             htmlFor="file"
-            className={`flex justify-center items-center px-20 py-4 shadow-sm rounded-[33px] max-md:px-5 cursor-pointer ${selectedFile ? "bg-[#6AD1CE] opacity-50" : "bg-[#6AD1CE]"
-              }`}
+            className={`flex justify-center items-center px-20 py-4 shadow-sm rounded-[33px] max-md:px-5 cursor-pointer ${
+              selectedFile ? "bg-[#6AD1CE] opacity-50" : "bg-[#6AD1CE]"
+            }`}
           >
             Attach
           </label>

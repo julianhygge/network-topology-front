@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import DeleteConfirm from "components/LoadProfile/DeleteConfirm";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-const LoadProfileFileList = ({ profiles, onUploadAgain }) => {
+const LoadProfileFileList = ({ profiless, onUploadAgain }) => {
+  const location = useLocation();
+  const profiles = location.state?.profiles || profiless;
+  const navigate = useNavigate();
+  const { houseId } = useParams();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState("");
   const [selectedDeleteLink, setSelectedDeleteLink] = useState("");
@@ -39,7 +44,7 @@ const LoadProfileFileList = ({ profiles, onUploadAgain }) => {
       }
       console.log(`Deleted file: ${selectedFileName}`);
       setShowDeleteConfirm(false);
-      window.location.reload();
+      navigate(`/config/${houseId}/load-profile/`);
     } catch (error) {
       console.error("Failed to delete the file:", error);
     }

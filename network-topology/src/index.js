@@ -13,6 +13,8 @@ import ReactDOM from 'react-dom/client';
 import { BatteryProfile, EVProfile, Flags, SolarProfile, WindProfile } from "components/House/OtherHouseConfigurationOptions";
 import LoadProfile from "components/LoadProfile/LoadProfile";
 import PredefinedTemplates from "components/LoadProfile/PredefinedTemplates";
+import FileUpload from "components/LoadProfile/FileUpload";
+import LoadProfileFileList from "components/LoadProfile/LoadProfileFileList";
 
 const router = createBrowserRouter(
   [
@@ -28,6 +30,8 @@ const router = createBrowserRouter(
             { path: "builder", element: <LoadBuilder /> },
             { path: "generationEngine", element: <GenerationPage1 /> },
             { path: "predefinedTemplates", element: <PredefinedTemplates /> },
+            {path:"fileUpload",element:<FileUpload/>},
+            {path:"fileList",element:<LoadProfileFileList/>}
           ]
         },
         { path: "solar-profile", element: <SolarProfile /> },
