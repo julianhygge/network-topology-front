@@ -28,6 +28,7 @@ const PredefinedTemplates = () => {
           const data = await fetchLoadTemplate(houseId);
           setTemplateId(data.template_id);
           setProfileId(data.profile_id);
+          setIsSaved(true);
         }
       } catch (error) {
         console.error("Error fetching load profile:", error);
