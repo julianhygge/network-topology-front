@@ -1,0 +1,13 @@
+.scrollbar::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.scrollbar::-webkit-scrollbar:vertical {
+  width: 7px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  border: #E7FAFF;
+  background-color: #8BB6C2;
+}

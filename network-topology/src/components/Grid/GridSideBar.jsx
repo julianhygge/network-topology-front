@@ -5,6 +5,7 @@ import {
   deleteSubstation,
 } from "services/Substation";
 import Delete from "components/Common/DeleteConfirm";
+import "./GridSideBar.css"
 
 const GridSideBar = ({ onGridSelect, selectedGridId }) => {
   const [grids, setGrids] = useState([]);
@@ -116,14 +117,14 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
       <div className="flex flex-col">
         <div className="flex flex-col bg-sideBar w-[110px] h-full relative ">
           <div className="flex-1 overflow-hidden">
-            <div className="h-[80vh] overflow-auto no-scrollbar ">
+            <div className="h-[80vh] overflow-auto scrollbar">
               <div className="grid gap-y-5">
-                {grids.map((grid) => (
-                  <button
-                    key={grid.id}
-                    className={`flex flex-col  items-center py-5 justify-center cursor-pointer   ${
-                      selectedGrid === grid.id ? "bg-white  " : ""
-                    }`}
+                {grids.map((grid) => {
+                  return <button
+                    key={grid.id
+                    }
+                    className={`flex flex-col  items-center py-5 justify-center cursor-pointer   ${selectedGrid === grid.id ? "bg-white  " : ""
+                      }`}
                     onClick={() => handleGridClick(grid.id)}
                     onContextMenu={(event) => handleContextMenu(event, grid)}
                   >
@@ -134,16 +135,15 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
                       className="h-[52.81px] w-[46px]  "
                     />
                     <span
-                      className={`text-gridColor1   font-dinPro ${
-                        selectedGrid === grid.id
-                          ? "text-brown font-bold font-dinPro"
-                          : ""
-                      }`}
+                      className={`text-gridColor1   font-dinPro ${selectedGrid === grid.id
+                        ? "text-brown font-bold font-dinPro"
+                        : ""
+                        }`}
                     >
                       {grid.name}
                     </span>
                   </button>
-                ))}
+                })}
               </div>
             </div>
           </div>
@@ -160,27 +160,31 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
           </button>
         </div>
       </div>
-      {contextMenu.visible && (
-        <div
-          className="fixed z-10 context-menu"
-          style={{ top: contextMenu.y, left: contextMenu.x }}
-        >
-          <button
-            className="p-2 bg-white text-[#F21818] rounded"
-            onClick={() => setShowDeletePopup(true)}
+      {
+        contextMenu.visible && (
+          <div
+            className="fixed z-10 context-menu"
+            style={{ top: contextMenu.y, left: contextMenu.x }}
           >
-            Delete
-          </button>
-        </div>
-      )}
-      {showDeletePopup && contextMenu.grid && (
-        <Delete
-          onConfirm={handleConfirmDelete}
-          onClose={() => setShowDeletePopup(false)}
-          entityType="grid"
-          entityName={contextMenu.grid.name}
-        />
-      )}
+            <button
+              className="p-2 bg-white text-[#F21818] rounded"
+              onClick={() => setShowDeletePopup(true)}
+            >
+              Delete
+            </button>
+          </div>
+        )
+      }
+      {
+        showDeletePopup && contextMenu.grid && (
+          <Delete
+            onConfirm={handleConfirmDelete}
+            onClose={() => setShowDeletePopup(false)}
+            entityType="grid"
+            entityName={contextMenu.grid.name}
+          />
+        )
+      }
     </>
   );
 };
