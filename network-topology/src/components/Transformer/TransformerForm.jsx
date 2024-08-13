@@ -29,6 +29,10 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
   const onSubmit = async (data) => {
     console.log("transformer data: ", data);
     try {
+      // Otherwise, causes an error if backward_efficiency is not set to a number
+      if (!data.allow_export && !data.backward_efficiency) {
+        data.backward_efficiency = 0;
+      }
       const updatedTransformer = await updateTransformerData(transformer.id, data);
       onSave(updatedTransformer);
     } catch (error) {
@@ -39,6 +43,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
   const handleClose = () => {
     onClose();
   };
+
+  const validDecimalPattern = { value: /^\d*\.?\d{1,2}$/, message: "Invalid number" };
 
   const allowExport = watch("allow_export");
 
@@ -83,6 +89,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     {...register("name", {
                       required: "Name is required",
                       pattern: { value: /^[a-zA-Z0-9]*$/, message: "Name must not contain special characters." },
+                      maxLength: { value: 50, message: "Name should not exceed 50 characters" },
                     })}
                   />
                   {errors.name && <span className="text-red-500">{errors.name.message}</span>}
@@ -98,7 +105,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     placeholder="0.00"
                     {...register("max_capacity_kw", {
                       required: "Max capacity is required",
-                      pattern: { value: /^\d*\.?\d+$/, message: "Invalid number" }
+                      pattern: validDecimalPattern,
+                      max: { value: 999.99, message: "Max capacity should be less than or equal to 999.99" },
                     })}
                   />
                   {errors.max_capacity_kw && <span className="text-red-500">{errors.max_capacity_kw.message}</span>}
@@ -114,7 +122,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     placeholder="0"
                     {...register("years_of_service", {
                       required: "Years of service is required",
-                      pattern: { value: /^\d+$/, message: "Invalid number" }
+                      pattern: { value: /^\d+$/, message: "Invalid number" },
+                      max: { value: 999, message: "Years of service should be less than or equal to 999" },
                     })}
                   />
                   {errors.years_of_service && <span className="text-red-500">{errors.years_of_service.message}</span>}
@@ -130,7 +139,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     placeholder="0.00"
                     {...register("forward_efficiency", {
                       required: "Forward efficiency is required",
-                      pattern: { value: /^\d*\.?\d+$/, message: "Invalid number" }
+                      pattern: validDecimalPattern,
+                      max: { value: 100, message: "Forward efficiency should be less than or equal to 100" },
                     })}
                   />
                   {errors.forward_efficiency && <span className="text-red-500">{errors.forward_efficiency.message}</span>}
@@ -179,7 +189,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     disabled={!allowExport}
                     {...register("backward_efficiency", {
                       required: allowExport ? "Backward Efficiency is required" : false,
-                      pattern: { value: /^\d*\.?\d+$/, message: "Invalid number" }
+                      pattern: validDecimalPattern,
+                      max: { value: 100, message: "Backward efficiency should be less than or equal to 100" },
                     })}
                   />
                   {errors.backward_efficiency && <span className="text-red-500">{errors.backward_efficiency.message}</span>}
@@ -196,7 +207,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     placeholder="0.00"
                     {...register("primary_ampacity", {
                       required: "Primary Ampacity is required",
-                      pattern: { value: /^\d*\.?\d+$/, message: "Invalid number" }
+                      pattern: validDecimalPattern,
+                      max: { value: 999.99, message: "Primary Ampacity should be less than or equal to 999.99" },
                     })}
                   />
                   {errors.primary_ampacity && <span className="text-red-500">{errors.primary_ampacity.message}</span>}
@@ -212,8 +224,9 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     name="secondary_ampacity"
                     placeholder="0.00"
                     {...register("secondary_ampacity", {
-                      required: "Secondary ampacity is required",
-                      pattern: { value: /^\d*\.?\d+$/, message: "Invalid number" }
+                      required: "Secondary Ampacity is required",
+                      pattern: validDecimalPattern,
+                      max: { value: 999.99, message: "Secondary Ampacity should be less than or equal to 999.99" },
                     })}
                   />
                   {errors.secondary_ampacity && <span className="text-red-500">{errors.secondary_ampacity.message}</span>}
