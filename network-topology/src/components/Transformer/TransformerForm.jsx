@@ -4,6 +4,10 @@ import Breadcrumb from "components/Breadcrumb/Breadcrumb";
 import "components/Breadcrumb/Breadcrumb.css";
 import { useForm, FormProvider } from "react-hook-form";
 
+const MAX_TRANSFORMER_VALUE = 999.99;
+const MAX_TRANSFORMER_YEARS = 999;
+const MAX_TRANSFORMER_NAME_LENGTH = 50;
+
 const TransformerForm = ({ transformer, onSave, onClose }) => {
 
   useEffect(() => {
@@ -89,7 +93,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     {...register("name", {
                       required: "Name is required",
                       pattern: { value: /^[a-zA-Z0-9]*$/, message: "Name must not contain special characters." },
-                      maxLength: { value: 50, message: "Name should not exceed 50 characters" },
+                      maxLength: { value: MAX_TRANSFORMER_NAME_LENGTH, message: `Name should not exceed ${MAX_TRANSFORMER_NAME_LENGTH} characters` },
                     })}
                   />
                   {errors.name && <span className="text-red-500">{errors.name.message}</span>}
@@ -106,7 +110,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     {...register("max_capacity_kw", {
                       required: "Max capacity is required",
                       pattern: validDecimalPattern,
-                      max: { value: 999.99, message: "Max capacity should be less than or equal to 999.99" },
+                      max: { value: MAX_TRANSFORMER_VALUE, message: `Max capacity should be less than or equal to ${MAX_TRANSFORMER_VALUE}` },
                     })}
                   />
                   {errors.max_capacity_kw && <span className="text-red-500">{errors.max_capacity_kw.message}</span>}
@@ -123,7 +127,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     {...register("years_of_service", {
                       required: "Years of service is required",
                       pattern: { value: /^\d+$/, message: "Invalid number" },
-                      max: { value: 999, message: "Years of service should be less than or equal to 999" },
+                      max: { value: MAX_TRANSFORMER_YEARS, message: `Years of service should be less than or equal to ${MAX_TRANSFORMER_YEARS}` },
                     })}
                   />
                   {errors.years_of_service && <span className="text-red-500">{errors.years_of_service.message}</span>}
@@ -208,7 +212,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     {...register("primary_ampacity", {
                       required: "Primary Ampacity is required",
                       pattern: validDecimalPattern,
-                      max: { value: 999.99, message: "Primary Ampacity should be less than or equal to 999.99" },
+                      max: { value: MAX_TRANSFORMER_VALUE, message: `Primary Ampacity should be less than or equal to ${MAX_TRANSFORMER_VALUE}` },
                     })}
                   />
                   {errors.primary_ampacity && <span className="text-red-500">{errors.primary_ampacity.message}</span>}
@@ -226,7 +230,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     {...register("secondary_ampacity", {
                       required: "Secondary Ampacity is required",
                       pattern: validDecimalPattern,
-                      max: { value: 999.99, message: "Secondary Ampacity should be less than or equal to 999.99" },
+                      max: { value: MAX_TRANSFORMER_VALUE, message: `Secondary Ampacity should be less than or equal to ${MAX_TRANSFORMER_VALUE}` },
                     })}
                   />
                   {errors.secondary_ampacity && <span className="text-red-500">{errors.secondary_ampacity.message}</span>}
