@@ -427,7 +427,7 @@ const Login = () => {
               </label>
               <input
                 type="number"
-                maxLength="10"
+                maxLength={10}
                 className={`text-[30px] w-full h-[7vh] font-medium py-[1vh] px-[1vw] tracking-[8px] rounded-[0.8vw] mb-[-4vh] mt-[5px] text-center ${
                   errors.phone_number && "border-red-500"
                 }`}
@@ -435,17 +435,24 @@ const Login = () => {
                 placeholder=""
                 {...register("phone_number", {
                   required: "Phone Number is required",
-                  // pattern: /^[0-9]{10}$/,
-                  maxLength:10
+                  pattern: {
+                    value: /^[0-9]{10}$/,
+                    message: "Invalid phone number format",
+                  },
+                  maxLength: {
+                    value: 10,
+                    message: "Phone Number cannot exceed 10 digits",
+                  },
+                  
                 })}
               />
-              {errors.phone_number && (
-                <span className="text-red-500">
+               
+            </form>
+            {errors.phone_number && (
+                <span className="text-red-500 text-2xl">
                   {errors.phone_number.message}
                 </span>
               )}
-            </form>
-
             <button
               type="submit"
               disabled={isLoading || !watch("phone_number")}
