@@ -51,6 +51,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
   const validDecimalPattern = { value: /^\d*\.?\d{1,2}$/, message: "Invalid number" };
 
   const allowExport = watch("allow_export");
+  const name = watch("name");
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-customBackground bg-opacity-55 z-50">
@@ -242,7 +243,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
         <div className="flex justify-center items-center">
           <button
             type="submit"
-            className="bg-yellow-500 text-center mt-1 opacity-80 text-saveButtonColor font-semibold py-4 px-4 rounded-xl hover:bg-yellow-500 hover:opacity-100 w-[200px]"
+            className={`bg-yellow-500 text-center mt-1 text-saveButtonColor font-semibold py-4 px-4 rounded-xl w-[200px] ${name ? "opacity-80 hover:bg-yellow-500 hover:opacity-100" : "cursor-not-allowed opacity-15"}`}
+            disabled={!name}
             onClick={handleSubmit(onSubmit)}
           >
             SAVE
