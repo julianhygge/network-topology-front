@@ -256,8 +256,8 @@ const NetworkTopology = () => {
       });
     }
     setData((prev) => {
-      const tmp = { children: prev.nodes };
-      search(tmp);
+      const prevData = { children: prev.nodes };
+      search(prevData);
       return { ...prev };
     })
   }
