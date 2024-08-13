@@ -417,7 +417,7 @@ const Login = () => {
               alt="Hygge Logo"
             />
 
-            <form onSubmit={handleSubmit(onRequestOtp)} className="w-4/5 h-fit">
+            <form onSubmit={handleSubmit(onRequestOtp)} className="w-4/5 h-fit" noValidate>
               <h4 className="mb-[75px] font-medium text-[1.1vw] text-center text-white">
                 Enter the Mobile Number you have registered with us for this
                 platform
@@ -427,7 +427,7 @@ const Login = () => {
               </label>
               <input
                 type="number"
-                maxLength={10}
+                maxLength="10"
                 className={`text-[30px] w-full h-[7vh] font-medium py-[1vh] px-[1vw] tracking-[8px] rounded-[0.8vw] mb-[-4vh] mt-[5px] text-center ${
                   errors.phone_number && "border-red-500"
                 }`}
@@ -435,8 +435,8 @@ const Login = () => {
                 placeholder=""
                 {...register("phone_number", {
                   required: "Phone Number is required",
-                  maxLength: 10,
-                  pattern: /^[0-9]{10}$/,
+                  // pattern: /^[0-9]{10}$/,
+                  maxLength:10
                 })}
               />
               {errors.phone_number && (
@@ -482,7 +482,7 @@ const Login = () => {
             alt="Hygge Logo"
             className="ml-[15vw] w-[45vh]"
           />
-          <div className="login_form w-[30vw] h-[70vh] col-start-4 flex flex-col justify-evenly items-center bg-[#265B65] rounded-[2vw]">
+          <div className="login_form w-[31vw] h-[70vh] col-start-4 flex flex-col justify-evenly items-center bg-[#265B65] rounded-[2vw]">
             <img
               loading="lazy"
               src={`${process.env.PUBLIC_URL}/images/HyggeLogo.png`}
@@ -490,11 +490,11 @@ const Login = () => {
               className="w-[5vw] mb-[-1vh]"
             />
             <form onSubmit={handleSubmit(onOtpSubmit)}>
-              <h4 className="text-white">Enter OTP</h4>
+              <h4 className="text-white mb-3">Enter OTP</h4>
               <label>
                 Enter the 6-digit verification code sent to your mobile number.
               </label>
-              <div className="w-full flex justify-center">
+              <div className="w-full flex justify-center mt-4">
                 <OtpInput
                   value={otp}
                   onChange={setOtp}
@@ -503,11 +503,11 @@ const Login = () => {
                   shouldAutoFocus
                   renderInput={(props) => <input {...props} />}
                   inputStyle={{
-                    width: "50px",
-                    height: "50px",
-                    fontSize: "20px",
-                    borderRadius: "8px",
-                    border: "1px solid #ced4da",
+                    width: "14%",
+                    height: "55px",
+                    fontSize: "25px",
+                    borderRadius: "14px",
+                    border: "none",
                     marginRight: "8px",
                     textAlign: "center",
                   }}
