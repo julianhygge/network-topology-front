@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import NetworkGraph, { NODE_STATUS, getColor } from "components/Network/NetworkGraph";
+import NetworkGraph, { NODE_STATUS } from "components/Network/NetworkGraph";
 import Navbar from "components/Common/Navbar";
 import GridSideBar from "components/Grid/GridSideBar";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -469,7 +469,6 @@ const NetworkTopology = () => {
     </>
     )
   }
-  console.log("transformerDetails: ", transformerDetails);
 
   return (
     <div className="flex-col  box-border max-w-[1920px] h-full">
