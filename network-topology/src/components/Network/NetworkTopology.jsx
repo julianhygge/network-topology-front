@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import NetworkGraph, { NODE_STATUS } from "components/Network/NetworkGraph";
+import NetworkGraph, { NODE_STATUS, getColor } from "components/Network/NetworkGraph";
 import Navbar from "components/Common/Navbar";
 import GridSideBar from "components/Grid/GridSideBar";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -241,24 +241,34 @@ const NetworkTopology = () => {
   const handleCloseTransformerForm = () => {
     setTransformerDetails(null);
   };
+
+  // Updates the node with the given id and callback
+  const updateNode = (id, callback) => {
+    const search = (node) => {
+      if (!node) return;
+      if (node.id === id) {
+        callback(node);
+        return;
+      }
+      if (!node.children) return;
+      node.children.forEach(element => {
+        search(element)
+      });
+    }
+    setData((prev) => {
+      const tmp = { children: prev.nodes };
+      search(tmp);
+      return { ...prev };
+    })
+  }
+
   // Saves changes to a transformer and updates its state
   const handleTransformerSave = (updatedTransformer) => {
-    setData((prevData) => {
-      const updatedNodes = prevData.nodes.map((node) => {
-        if (node.id === updatedTransformer.id) {
-          const updatedNode = {
-            ...node,
-            status: updatedTransformer.status,
-          };
-          console.log("updated Node: ", updatedNode);
-          return updatedNode;
-        }
-        return node;
-      });
-      const newNodeData = { ...prevData, nodes: updatedNodes };
-      console.log("new node data: ", newNodeData);
-      return newNodeData;
-    });
+    console.log("handle transformer save: ", updatedTransformer)
+    const updateTransformerStatus = (node) => {
+      node.status = updatedTransformer.status;
+    }
+    updateNode(updatedTransformer.id, updateTransformerStatus);
     setTransformerDetails(null);
   };
   // Saves the network topology to the server
@@ -459,6 +469,7 @@ const NetworkTopology = () => {
     </>
     )
   }
+  console.log("transformerDetails: ", transformerDetails);
 
   return (
     <div className="flex-col  box-border max-w-[1920px] h-full">

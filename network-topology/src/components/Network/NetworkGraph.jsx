@@ -109,6 +109,14 @@ const SubConnectionLine = ({ transformer, params = {} }) => {
 };
 // NetworkGraph component renders the network of transformers and houses
 
+// Function to determine node color based on completion and new status
+export const getColor = (status, isNew) => {
+  if (isNew) return "Grey";
+  if (status === NODE_STATUS.COMPLETE) return "Green";
+  if (status === NODE_STATUS.IN_PROGRESS) return "Orange";
+  return "Black";
+};
+
 const NetworkGraph = ({
   onSelectedNode,
   onRightClickSelectedNode,
@@ -189,13 +197,6 @@ const NetworkGraph = ({
     return () => document.head.removeChild(style);
   }, []);
 
-  // Function to determine transformer color based on completion and new status
-  const getColor = (status, isNew) => {
-    if (isNew) return "Grey";
-    if (status === NODE_STATUS.COMPLETE) return "Green";
-    if (status === NODE_STATUS.IN_PROGRESS) return "Orange";
-    return "Black";
-  };
   // Function to fetch and configure the selected node
   const onConfigure = async (d) => {
     if (!d || !d.id) {
