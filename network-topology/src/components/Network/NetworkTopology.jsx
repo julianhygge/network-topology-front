@@ -242,12 +242,12 @@ const NetworkTopology = () => {
     setTransformerDetails(null);
   };
 
-  // Updates the node with the given id and callback
-  const updateNode = (id, callback) => {
+  // Updates the node with the given id and updater function 
+  const updateNode = (id, updater) => {
     const search = (node) => {
       if (!node) return;
       if (node.id === id) {
-        callback(node);
+        updater(node);
         return;
       }
       if (!node.children) return;
