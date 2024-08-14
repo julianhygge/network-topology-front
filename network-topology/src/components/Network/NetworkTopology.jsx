@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import NetworkGraph, { NODE_STATUS } from "components/Network/NetworkGraph";
+import NetworkGraph from "components/Network/NetworkGraph";
+import { NODE_STATUS } from "components/Network/NetworkUtils";
 import Navbar from "components/Common/Navbar";
 import GridSideBar from "components/Grid/GridSideBar";
 import { useLocation, useNavigate } from "react-router-dom";

@@ -1,4 +1,4 @@
-import { NODE_STATUS } from "components/Network/NetworkGraph";
+import { NODE_STATUS } from "components/Network/NetworkUtils";
 import React, { useState } from "react";
 import { updateHouseData } from "services/House";
 
