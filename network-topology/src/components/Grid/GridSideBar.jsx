@@ -22,7 +22,6 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
     const fetchGrids = async () => {
       try {
         const data = await getSubstations();
-        console.log("Data in sidebar: ", data)
         setGrids(data.items);
 
         if (!selectedGridId && data.items.length > 0) {
@@ -64,17 +63,9 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
         number_of_substations: 1,
       };
 
-      const newSubstations = await generateSubstation(payload);
-      console.log("new substations:", newSubstations)
-      // Add new substations to the existing list, ensuring no duplicates
-      const uniqueSubstations = [
-        ...grids,
-        ...newSubstations.items.filter(
-          (newSub) => !grids.some((existingSub) => existingSub.id === newSub.id)
-        ),
-      ];
-      console.log("unique substations:", uniqueSubstations)
-      setGrids(uniqueSubstations);
+      const data = await generateSubstation(payload);
+      const newSubstations = data.items;
+      setGrids(newSubstations);
     } catch (error) {
       console.error("Error generating substations:", error);
     }
@@ -116,7 +107,6 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
             <div className="h-[80vh] overflow-auto scrollbar">
               <div className="grid gap-y-5">
                 {grids.map((grid) => {
-                  // console.log("Grid in sidebar: ", grid)
                   return <button
                     key={grid.id
                     }
