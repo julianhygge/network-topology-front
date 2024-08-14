@@ -1,9 +1,5 @@
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './index.css';
-import Grid from "components/Grid/Grid";
-import GridPage from "components/Grid/GridPage";
-import TransformerPage from "components/Transformer/TransformerPage";
 import NetworkTopology from "components/Network/NetworkTopology";
 import UserConfiguration from "components/House/HouseConfiguration";
 import LoadBuilder from "components/LoadProfile/LoadBuilder";
@@ -19,9 +15,6 @@ import LoadProfileFileList from "components/LoadProfile/LoadProfileFileList";
 const router = createBrowserRouter(
   [
     { path: '/', element: <NetworkTopology /> },
-    { path: "/grid", element: <Grid /> },
-    { path: '/gridPage', element: <GridPage /> },
-    { path: "/transformers/:substationId", element: <TransformerPage /> },
     {
       path: "/config/:houseId", element: <UserConfiguration />,
       children: [
@@ -30,8 +23,8 @@ const router = createBrowserRouter(
             { path: "builder", element: <LoadBuilder /> },
             { path: "generationEngine", element: <GenerationPage1 /> },
             { path: "predefinedTemplates", element: <PredefinedTemplates /> },
-            {path:"fileUpload",element:<FileUpload/>},
-            {path:"fileList",element:<LoadProfileFileList/>}
+            { path: "fileUpload", element: <FileUpload /> },
+            { path: "fileList", element: <LoadProfileFileList /> }
           ]
         },
         { path: "solar-profile", element: <SolarProfile /> },
