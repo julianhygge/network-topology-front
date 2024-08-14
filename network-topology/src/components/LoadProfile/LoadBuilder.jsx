@@ -108,7 +108,7 @@ const LoadBuilder = () => {
       <div className="flex flex-col box-border max-w-[1920px] h-[100vh] font-dinPro">
         <div className='flex h-full w-full box-border'>
           <div className='flex flex-col flex-1'>
-            <div className='absolute top-0 right-0 mt-24 mr-2'>
+            <div className='absolute top-0 right-0 mt-24 mr-8'>
               <button
                 className="cursor-pointer border bg-[#49AC82] px-[50px] py-[5px] rounded-3xl text-white text-md font-medium border-[#49AC82]"
                 onClick={saveLoads}
