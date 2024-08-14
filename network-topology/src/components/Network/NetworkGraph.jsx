@@ -261,12 +261,12 @@ const NetworkGraph = ({
         className="context-menu"
         style={{ top: `${y - 20}px`, left: `${x + 20}px` }}
       >
-        <button
+        {!node.new && <button
           className="text-navColor font-dinPro font-medium "
           onClick={() => onConfigure(node)}
         >
           Configure
-        </button>
+        </button>}
         {node.type === "transformer" && (
           <button
             className="text-navColor font-dinPro font-medium"
