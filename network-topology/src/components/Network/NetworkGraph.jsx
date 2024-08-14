@@ -180,7 +180,7 @@ const NetworkGraph = ({
       return (
         <div
           key={node.id}
-          className="house-item cursor-pointer"
+          className=" cursor-pointer"
           onDoubleClick={() => {
             onConfigure(node);
           }}
@@ -189,10 +189,8 @@ const NetworkGraph = ({
           <House
             color={getColor(node.status, node.new)}
             onHouseClick={() => onSelectedNode(node)}
+            nomenclature={node.nomenclature}
           />
-          <span className="font-dinPro font-medium house-name text-navColor">
-            {node.nomenclature}
-          </span>
         </div>
       );
     }
