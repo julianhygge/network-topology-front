@@ -204,6 +204,11 @@ const NetworkGraph = ({
       return;
     }
 
+    // If the node is new, we don't allow it to be configured
+    if (d.new) {
+      return;
+    }
+
     try {
       if (d.type === "transformer") {
         const transformerDetails = await fetchTransformerDetails(d.id);
