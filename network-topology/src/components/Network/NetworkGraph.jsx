@@ -178,20 +178,16 @@ const NetworkGraph = ({
   const renderNode = (node, level = 0) => {
     if (node.type === "house") {
       return (
-        <div
-          key={node.id}
-          className=" cursor-pointer"
+        <House
+          color={getColor(node.status, node.new)}
+          onHouseClick={() => onSelectedNode(node)}
+          nomenclature={node.nomenclature}
           onDoubleClick={() => {
             onConfigure(node);
           }}
           onContextMenu={(e) => handleContextMenu(e, node)}
-        >
-          <House
-            color={getColor(node.status, node.new)}
-            onHouseClick={() => onSelectedNode(node)}
-            nomenclature={node.nomenclature}
-          />
-        </div>
+          key={node.id}
+        />
       );
     }
 

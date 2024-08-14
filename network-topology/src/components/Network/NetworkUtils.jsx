@@ -22,8 +22,8 @@ export const Transformer = ({ color, name, onTransformerClick }) => (
   </div>
 );
 // House component displays a house icon
-export const House = ({ color, onHouseClick, nomenclature }) => (
-  <div onClick={onHouseClick} className="house-item">
+export const House = ({ color, onHouseClick, nomenclature, onDoubleClick, onContextMenu }) => (
+  <div onClick={onHouseClick} className="house-item cursor-pointer" onDoubleClick={onDoubleClick} onContextMenu={onContextMenu}>
     <div className="cursor-pointer" >
       <img src={`/images/${color}House.png`} alt="House" className="icon house" />
     </div>
