@@ -7,10 +7,12 @@ export const NODE_STATUS = {
 }
 
 // Transformer component displays a transformer icon and name
-export const Transformer = ({ color, name, onTransformerClick }) => (
+export const Transformer = ({ color, nomenclature, onTransformerClick, onDoubleClick, onContextMenu }) => (
   <div
-    className="transformer-wrapper cursor-pointer"
+    className="transformer-header transformer-wrapper cursor-pointer"
     onClick={onTransformerClick}
+    onDoubleClick={onDoubleClick}
+    onContextMenu={onContextMenu}
   >
     <img
       src={`/images/${color}Transformer.png`}
@@ -18,7 +20,7 @@ export const Transformer = ({ color, name, onTransformerClick }) => (
       className={`icon transformer ${color === "Green" ? "green-transformer-icon" : ""
         }`}
     />
-    <span className="transformer-label">{name}</span>
+    <span className="font-dinPro font-medium text-navColor">{nomenclature}</span>
   </div>
 );
 // House component displays a house icon

@@ -197,21 +197,15 @@ const NetworkGraph = ({
         className="transformer-column"
         data-transformer-id={node.id}
       >
-        <div
-          className="transformer-header cursor-pointer"
+        <Transformer
+          color={getColor(node.status, node.new)}
+          onTransformerClick={() => onSelectedNode(node)}
+          onContextMenu={(e) => handleContextMenu(e, node)}
           onDoubleClick={() => {
             onConfigure(node);
           }}
-          onContextMenu={(e) => handleContextMenu(e, node)}
-        >
-          <Transformer
-            color={getColor(node.status, node.new)}
-            onTransformerClick={() => onSelectedNode(node)}
-          />
-          <span className="font-dinPro font-medium text-navColor">
-            {node.nomenclature}
-          </span>
-        </div>
+          nomenclature={node.nomenclature}
+        />
         <div className="transformer-node">
           <SubConnectionLine transformer={node} />
           <div className="houses-column">
