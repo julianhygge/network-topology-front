@@ -481,10 +481,10 @@ const NetworkTopology = () => {
         {data && (
           <div className="flex-col overflow-hidden box-border h-full w-full">
             <div className="flex justify-between items-center bg-breadcrumbBackgroundColor py-2 pr-[24px]">
-              <div className="flex mt-[6px]">
+              <div className="grow mt-[6px]">
                 {renderBreadcrumb()}
               </div>
-              <div className="flex items-center justify-between font-dinPro font-medium">
+              <div className="flex-none items-center justify-between font-dinPro font-medium">
                 <button
                   className="cursor-pointer border px-[65px] mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                   onClick={handleSaveTopology}
