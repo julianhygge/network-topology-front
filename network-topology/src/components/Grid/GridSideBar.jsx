@@ -22,10 +22,10 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
     const fetchGrids = async () => {
       try {
         const data = await getSubstations();
+        console.log("Data in sidebar: ", data)
         setGrids(data.items);
 
         if (!selectedGridId && data.items.length > 0) {
-          console.log("hello");
           const firstGridId = data.items[0].id;
           setSelectedGrid(firstGridId);
           onGridSelect(firstGridId);
@@ -36,13 +36,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
     };
 
     fetchGrids();
-  }, [selectedGridId, onGridSelect]);
-
-  useEffect(() => {
-    if (selectedGridId) {
-      setSelectedGrid(selectedGridId);
-    }
-  }, [selectedGridId]);
+  }, []);
 
   // Handle clicks outside of the context menu to close it
   useEffect(() => {
@@ -71,6 +65,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
       };
 
       const newSubstations = await generateSubstation(payload);
+      console.log("new substations:", newSubstations)
       // Add new substations to the existing list, ensuring no duplicates
       const uniqueSubstations = [
         ...grids,
@@ -78,6 +73,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
           (newSub) => !grids.some((existingSub) => existingSub.id === newSub.id)
         ),
       ];
+      console.log("unique substations:", uniqueSubstations)
       setGrids(uniqueSubstations);
     } catch (error) {
       console.error("Error generating substations:", error);
@@ -120,6 +116,7 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
             <div className="h-[80vh] overflow-auto scrollbar">
               <div className="grid gap-y-5">
                 {grids.map((grid) => {
+                  // console.log("Grid in sidebar: ", grid)
                   return <button
                     key={grid.id
                     }
