@@ -183,6 +183,7 @@ const NetworkGraph = ({
           onHouseClick={() => onSelectedNode(node)}
           nomenclature={node.nomenclature}
           onDoubleClick={() => {
+            if (node.new) return;
             onConfigure(node);
           }}
           onContextMenu={(e) => handleContextMenu(e, node)}
@@ -202,6 +203,7 @@ const NetworkGraph = ({
           onTransformerClick={() => onSelectedNode(node)}
           onContextMenu={(e) => handleContextMenu(e, node)}
           onDoubleClick={() => {
+            if (node.new) return;
             onConfigure(node);
           }}
           nomenclature={node.nomenclature}
