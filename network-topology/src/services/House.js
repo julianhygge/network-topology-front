@@ -1,12 +1,11 @@
-import axios from "axios";
-import { API_URL, TOKEN } from "services/Config";
+ 
+import axiosInstance from "interceptor/AuthInterceptor";
+// import { API_URL, TOKEN } from "services/Config";
 
 export const fetchHouseDetails = async (houseId) => {
   try {
-    const response = await axios.get(`${API_URL}/houses/${houseId}`, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
+    const response = await axiosInstance.get(`/houses/${houseId}`, {
+       
     });
     console.log(response.data);
     return response.data;
@@ -15,17 +14,13 @@ export const fetchHouseDetails = async (houseId) => {
     throw error;
   }
 };
+
 export const updateHouseData = async (houseId, houseData) => {
   try {
-    const response = await axios.put(
-      `${API_URL}/houses/${houseId}`,
+    const response = await axiosInstance.put(
+      `/houses/${houseId}`,
       houseData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      }
+       
     );
 
     return response.data;
@@ -34,3 +29,6 @@ export const updateHouseData = async (houseId, houseData) => {
     throw error;
   }
 };
+
+
+  

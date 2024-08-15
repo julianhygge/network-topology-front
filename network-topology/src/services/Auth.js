@@ -1,9 +1,10 @@
-import axios from "axios";
-import { API_URL } from "services/Config";
+ 
+import axiosInstance from "interceptor/AuthInterceptor";
+// import { API_URL } from "services/Config";
 
 export const requestOtp = async (phone_number) => {
     try {
-      const response = await axios.post(`${API_URL}/auth/user`, {phone_number, country_code:"91"
+      const response = await axiosInstance.post(`/auth/user`, {phone_number, country_code:"91"
          
       });
       console.log("Response", response)
@@ -16,7 +17,7 @@ export const requestOtp = async (phone_number) => {
 
 export const verifyOtp = async(state_token, otp) => {
   try {
-    const response = await axios.post(`${API_URL}/auth/${state_token}`, {state_token, otp});
+    const response = await axiosInstance.post(`/auth/${state_token}`, {state_token, otp});
     console.log('VerifyOtp', response)
     return response.data
   } catch (error) {
@@ -24,3 +25,5 @@ export const verifyOtp = async(state_token, otp) => {
     throw error;
   }
 }
+
+
