@@ -17,21 +17,18 @@ export const fetchHouseDetails = async (houseId) => {
 };
 export const updateHouseData = async (houseId, houseData) => {
   try {
-    const response = await fetch(`${API_URL}/houses/${houseId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${TOKEN}`,
-      },
-      body: JSON.stringify(houseData),
-    });
-    console.log(response);
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Network response was not ok: ${errorText}`);
-    }
-    const data = await response.json();
-    return data;
+    const response = await axios.put(
+      `${API_URL}/houses/${houseId}`,
+      houseData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      }
+    );
+
+    return response.data;
   } catch (error) {
     console.error("Error updating transformer data:", error);
     throw error;

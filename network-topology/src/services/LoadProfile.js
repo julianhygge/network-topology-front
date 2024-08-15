@@ -3,17 +3,20 @@ import { API_URL, TOKEN } from "services/Config";
 
 export const fetchLoadTemplate = async (houseId) => {
   try {
-    const response = await axios.get(`${API_URL}/load/houses/${houseId}/load-predefined-template`, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
-    });
+    const response = await axios.get(
+      `${API_URL}/load/houses/${houseId}/load-predefined-template`,
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching load template:", error);
     throw error;
   }
-}
+};
 
 export const saveLoadTemplate = async (houseId, templateId) => {
   try {
@@ -24,13 +27,14 @@ export const saveLoadTemplate = async (houseId, templateId) => {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
         },
-      });
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching houses details:", error);
     throw error;
   }
-}
+};
 
 export const fetchLoadTemplates = async () => {
   try {
@@ -44,35 +48,42 @@ export const fetchLoadTemplates = async () => {
     console.error("Error fetching load templates:", error);
     throw error;
   }
-}
+};
 
 export const fetchLoadProfileItems = async (houseId) => {
   try {
-    const response = await axios.get(`${API_URL}/load/houses/${houseId}/load-profile-items`, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
-    });
+    const response = await axios.get(
+      `${API_URL}/load/houses/${houseId}/load-profile-items`,
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching houses details:", error);
     throw error;
   }
-}
+};
 
 export const saveLoadProfileItems = async (houseId, loads) => {
   try {
-    const response = await axios.post(`${API_URL}/load/houses/${houseId}/load-profile-items`, { items: loads }, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
-    });
+    const response = await axios.post(
+      `${API_URL}/load/houses/${houseId}/load-profile-items`,
+      { items: loads },
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error saving load profile items:", error);
     throw error;
   }
-}
+};
 
 export const fetchLoadProfiles = async (houseId) => {
   try {
@@ -100,7 +111,6 @@ export const uploadLoadProfile = async (
   formData.append("file", file);
   formData.append("interval_15_minutes", interval15Minutes);
 
-
   try {
     const response = await axios.post(`${API_URL}/load/upload`, formData, {
       headers: {
@@ -127,27 +137,20 @@ export const deleteLoadProfile = async (profileId) => {
     console.error("Error deleting load profile:", error);
     throw error;
   }
-
-}
+};
 export const saveGenerationProfile = async (houseId, payload) => {
   try {
-    const response = await fetch(
+    const response = await axios.post(
       `${API_URL}/load/houses/${houseId}/generation-engine`,
+      payload,
       {
-        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${TOKEN}`,
         },
-        body: JSON.stringify(payload),
       }
     );
-
-    if (!response.ok) {
-      throw new Error("Failed to save profile");
-    }
-
-    return response.json();
+    return response.data;
   } catch (error) {
     console.error("Error uploading load profile:", error);
     throw error;
@@ -156,14 +159,15 @@ export const saveGenerationProfile = async (houseId, payload) => {
 
 export const fetchGenerationEngineProfile = async (houseId) => {
   try {
-    const response = await fetch(`${API_URL}/load/houses/${houseId}/generation-engine`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
-
-    });
-    return response.json();
+    const response = await axios.get(
+      `${API_URL}/load/houses/${houseId}/generation-engine`,
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      }
+    );
+    return response.data;
   } catch (error) {
     console.error("Error fetching generation engine profile:", error);
     throw error;
@@ -172,18 +176,13 @@ export const fetchGenerationEngineProfile = async (houseId) => {
 
 export const deleteGenerationProfile = async (profileId) => {
   try {
-    const response = await fetch(`${API_URL}/load/${profileId}/`, {
-      method: 'DELETE',
+    const response = await axios.delete(`${API_URL}/load/${profileId}/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${TOKEN}`,
       },
-
     });
-    console.log(response)
-    if (!response.ok) {
-      throw new Error('Failed to delete file');
-    }
+    console.log(response);
   } catch (error) {
     console.error("Failed to delete the file:", error);
   }
