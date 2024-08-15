@@ -20,21 +20,19 @@ export const fetchTransformerDetails = async (transformerId) => {
 };
 export const updateTransformerData = async (transformerId, transformerData) => {
   try {
-    const response = await fetch(`${API_URL}/transformers/${transformerId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${TOKEN}`,
-      },
-      body: JSON.stringify(transformerData),
-    });
+    const response = await axios.put(
+      `${API_URL}/transformers/${transformerId}`,
+      transformerData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      }
+    );
     console.log(response);
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Network response was not ok: ${errorText}`);
-    }
-    const data = await response.json();
-    return data;
+
+    return response.data;
   } catch (error) {
     console.error("Error updating transformer data:", error);
     throw error;
