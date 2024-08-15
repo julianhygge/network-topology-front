@@ -4,6 +4,10 @@ import Breadcrumb from "components/Breadcrumb/Breadcrumb";
 import "components/Breadcrumb/Breadcrumb.css";
 import { useForm, FormProvider } from "react-hook-form";
 
+const MAX_TRANSFORMER_VALUE = 999.99;
+const MAX_TRANSFORMER_YEARS = 999;
+const MAX_TRANSFORMER_NAME_LENGTH = 50;
+
 const TransformerForm = ({ transformer, onSave, onClose }) => {
 
   useEffect(() => {
@@ -29,6 +33,10 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
   const onSubmit = async (data) => {
     console.log("transformer data: ", data);
     try {
+      // Otherwise, causes an error if backward_efficiency is not set to a number
+      if (!data.allow_export && !data.backward_efficiency) {
+        data.backward_efficiency = 0;
+      }
       const updatedTransformer = await updateTransformerData(transformer.id, data);
       onSave(updatedTransformer);
     } catch (error) {
@@ -40,12 +48,15 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
     onClose();
   };
 
+  const validDecimalPattern = { value: /^\d*\.?\d{1,2}$/, message: "Invalid number" };
+
   const allowExport = watch("allow_export");
+  const name = watch("name");
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-customBackground bg-opacity-55 z-50">
       <div className="relative bg-white rounded-2xl pt-[100px] px-28 pb-8 w-full max-w-5xl border border-solid shadow-sm max-md:px-5 mt-36 mb-16 ml-28 z-10">
-        <div className="absolute top-4 left-0 right-0 z-1 text-[14px] text-black font-light">
+        <div className="absolute w-11/12 top-4 left-0 right-0 z-1 text-[14px] text-black font-light">
           {transformer && transformer.new !== true && (
             <Breadcrumb nodeId={transformer.id} onEditNode={() => { }} />
           )}
@@ -83,6 +94,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     {...register("name", {
                       required: "Name is required",
                       pattern: { value: /^[a-zA-Z0-9]*$/, message: "Name must not contain special characters." },
+                      maxLength: { value: MAX_TRANSFORMER_NAME_LENGTH, message: `Name should not exceed ${MAX_TRANSFORMER_NAME_LENGTH} characters` },
                     })}
                   />
                   {errors.name && <span className="text-red-500">{errors.name.message}</span>}
@@ -98,7 +110,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     placeholder="0.00"
                     {...register("max_capacity_kw", {
                       required: "Max capacity is required",
-                      pattern: { value: /^\d*\.?\d+$/, message: "Invalid number" }
+                      pattern: validDecimalPattern,
+                      max: { value: MAX_TRANSFORMER_VALUE, message: `Max capacity should be less than or equal to ${MAX_TRANSFORMER_VALUE}` },
                     })}
                   />
                   {errors.max_capacity_kw && <span className="text-red-500">{errors.max_capacity_kw.message}</span>}
@@ -114,7 +127,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     placeholder="0"
                     {...register("years_of_service", {
                       required: "Years of service is required",
-                      pattern: { value: /^\d+$/, message: "Invalid number" }
+                      pattern: { value: /^\d+$/, message: "Invalid number" },
+                      max: { value: MAX_TRANSFORMER_YEARS, message: `Years of service should be less than or equal to ${MAX_TRANSFORMER_YEARS}` },
                     })}
                   />
                   {errors.years_of_service && <span className="text-red-500">{errors.years_of_service.message}</span>}
@@ -130,7 +144,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     placeholder="0.00"
                     {...register("forward_efficiency", {
                       required: "Forward efficiency is required",
-                      pattern: { value: /^\d*\.?\d+$/, message: "Invalid number" }
+                      pattern: validDecimalPattern,
+                      max: { value: 100, message: "Forward efficiency should be less than or equal to 100" },
                     })}
                   />
                   {errors.forward_efficiency && <span className="text-red-500">{errors.forward_efficiency.message}</span>}
@@ -179,7 +194,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     disabled={!allowExport}
                     {...register("backward_efficiency", {
                       required: allowExport ? "Backward Efficiency is required" : false,
-                      pattern: { value: /^\d*\.?\d+$/, message: "Invalid number" }
+                      pattern: validDecimalPattern,
+                      max: { value: 100, message: "Backward efficiency should be less than or equal to 100" },
                     })}
                   />
                   {errors.backward_efficiency && <span className="text-red-500">{errors.backward_efficiency.message}</span>}
@@ -196,7 +212,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     placeholder="0.00"
                     {...register("primary_ampacity", {
                       required: "Primary Ampacity is required",
-                      pattern: { value: /^\d*\.?\d+$/, message: "Invalid number" }
+                      pattern: validDecimalPattern,
+                      max: { value: MAX_TRANSFORMER_VALUE, message: `Primary Ampacity should be less than or equal to ${MAX_TRANSFORMER_VALUE}` },
                     })}
                   />
                   {errors.primary_ampacity && <span className="text-red-500">{errors.primary_ampacity.message}</span>}
@@ -212,8 +229,9 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                     name="secondary_ampacity"
                     placeholder="0.00"
                     {...register("secondary_ampacity", {
-                      required: "Secondary ampacity is required",
-                      pattern: { value: /^\d*\.?\d+$/, message: "Invalid number" }
+                      required: "Secondary Ampacity is required",
+                      pattern: validDecimalPattern,
+                      max: { value: MAX_TRANSFORMER_VALUE, message: `Secondary Ampacity should be less than or equal to ${MAX_TRANSFORMER_VALUE}` },
                     })}
                   />
                   {errors.secondary_ampacity && <span className="text-red-500">{errors.secondary_ampacity.message}</span>}
@@ -225,7 +243,8 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
         <div className="flex justify-center items-center">
           <button
             type="submit"
-            className="bg-yellow-500 text-center mt-1 opacity-80 text-saveButtonColor font-semibold py-4 px-4 rounded-xl hover:bg-yellow-500 hover:opacity-100 w-[200px]"
+            className={`bg-yellow-500 text-center mt-1 text-saveButtonColor font-semibold py-4 px-4 rounded-xl w-[200px] ${name ? "opacity-80 hover:bg-yellow-500 hover:opacity-100" : "cursor-not-allowed opacity-15"}`}
+            disabled={!name}
             onClick={handleSubmit(onSubmit)}
           >
             SAVE

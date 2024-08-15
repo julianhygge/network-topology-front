@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NetworkGraph, { NODE_STATUS } from "components/Network/NetworkGraph";
 import Navbar from "components/Common/Navbar";
 import GridSideBar from "components/Grid/GridSideBar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   getSubstationById,
   updateSubstationTopology,
@@ -31,27 +31,37 @@ const NetworkTopology = () => {
   const [data, setData] = React.useState({
     nodes: [],
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!selectedSubstationId) return;
     // Fetch substation data when a substation is selected
-    if (selectedSubstationId) {
-      const fetchSubstationData = async () => {
-        try {
-          const data = await getSubstationById(selectedSubstationId);
+    const fetchSubstationData = async () => {
+      try {
+        const data = await getSubstationById(selectedSubstationId);
 
-          setData(data);
-          setTransformerCounter(
-            data.nodes.filter((node) => node.type === "transformer").length
-          );
-          setInitialSubstationData(data);
-        } catch (error) {
-          console.error("Error fetching substation data:", error);
+        setData(data);
+        setTransformerCounter(
+          data.nodes.filter((node) => node.type === "transformer").length
+        );
+        setInitialSubstationData(data);
+        setSelectedNode(null);
+        if (location.state?.substationId !== selectedSubstationId) {
+          navigate(location.pathname, { replace: true });
         }
-      };
-      setSelectedNode(null); // Reset selected node
-      fetchSubstationData();
-    }
+      } catch (error) {
+        console.error("Error fetching substation data:", error);
+        setSelectedNode(null);
+      }
+    };
+    fetchSubstationData();
   }, [selectedSubstationId]);
+
+  // Clear the location.state used for the breadcrumb when a new node is selected
+  useEffect(() => {
+    if (!selectedNode) return;
+    navigate(location.pathname, { replace: true })
+  }, [selectedNode])
 
   const handleAddTransformer = () => {
     const transformerCount = data.nodes.filter(
@@ -231,24 +241,34 @@ const NetworkTopology = () => {
   const handleCloseTransformerForm = () => {
     setTransformerDetails(null);
   };
+
+  // Updates the node with the given id and updater function 
+  const updateNode = (id, updater) => {
+    const search = (node) => {
+      if (!node) return;
+      if (node.id === id) {
+        updater(node);
+        return;
+      }
+      if (!node.children) return;
+      node.children.forEach(element => {
+        search(element)
+      });
+    }
+    setData((prev) => {
+      const prevData = { children: prev.nodes };
+      search(prevData);
+      return { ...prev };
+    })
+  }
+
   // Saves changes to a transformer and updates its state
   const handleTransformerSave = (updatedTransformer) => {
-    setData((prevData) => {
-      const updatedNodes = prevData.nodes.map((node) => {
-        if (node.id === updatedTransformer.id) {
-          const updatedNode = {
-            ...node,
-            status: updatedTransformer.status,
-          };
-          console.log("updated Node: ", updatedNode);
-          return updatedNode;
-        }
-        return node;
-      });
-      const newNodeData = { ...prevData, nodes: updatedNodes };
-      console.log("new node data: ", newNodeData);
-      return newNodeData;
-    });
+    console.log("handle transformer save: ", updatedTransformer)
+    const updateTransformerStatus = (node) => {
+      node.status = updatedTransformer.status;
+    }
+    updateNode(updatedTransformer.id, updateTransformerStatus);
     setTransformerDetails(null);
   };
   // Saves the network topology to the server
@@ -396,6 +416,7 @@ const NetworkTopology = () => {
     setNodeToDelete(null);
     setNodeToDeleteName(null);
     setNodeType(null);
+    setSelectedNode(null);
   };
 
   const handleSelectedNode = (node) => {
@@ -420,6 +441,35 @@ const NetworkTopology = () => {
     setNodeType(null);
   };
 
+  const renderBreadcrumb = () => {
+    if (selectedNode && !selectedNode.new) {
+      return (
+        <Breadcrumb
+          nodeId={selectedNode.id}
+          onEditNode={handleEditNode}
+        />
+      )
+    }
+    if (!selectedNode && location.state?.houseId) {
+      return (
+        <Breadcrumb
+          nodeId={location.state?.houseId}
+          onEditNode={handleEditNode}
+        />
+      )
+    }
+    return (<>
+      {selectedSubstationId && (!location.state?.houseId ||
+        !selectedNode || selectedNode.new) && (
+          <Breadcrumb
+            nodeId={selectedSubstationId}
+            onEditNode={handleEditNode}
+          />
+        )}
+    </>
+    )
+  }
+
   return (
     <div className="flex-col  box-border max-w-[1920px] h-full">
       <Navbar />
@@ -431,22 +481,10 @@ const NetworkTopology = () => {
         {data && (
           <div className="flex-col overflow-hidden box-border h-full w-full">
             <div className="flex justify-between items-center bg-breadcrumbBackgroundColor py-2 pr-[24px]">
-              <div className="flex mt-[6px]">
-                {selectedSubstationId &&
-                  (!selectedNode || selectedNode.new) && (
-                    <Breadcrumb
-                      nodeId={selectedSubstationId}
-                      onEditNode={handleEditNode}
-                    />
-                  )}
-                {selectedNode && !selectedNode.new && (
-                  <Breadcrumb
-                    nodeId={selectedNode.id}
-                    onEditNode={handleEditNode}
-                  />
-                )}
+              <div className="grow mt-[6px]">
+                {renderBreadcrumb()}
               </div>
-              <div className="flex items-center justify-between font-dinPro font-medium">
+              <div className="flex-none items-center justify-between font-dinPro font-medium">
                 <button
                   className="cursor-pointer border px-[65px] mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                   onClick={handleSaveTopology}

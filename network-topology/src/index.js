@@ -1,18 +1,17 @@
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './index.css';
-import Grid from "components/Grid/Grid";
-import GridPage from "components/Grid/GridPage";
-import TransformerPage from "components/Transformer/TransformerPage";
 import NetworkTopology from "components/Network/NetworkTopology";
 import UserConfiguration from "components/House/HouseConfiguration";
 import LoadBuilder from "components/LoadProfile/LoadBuilder";
 import GenerationPage1 from "components/LoadProfile/GenerationPage1";
 import React from "react";
 import ReactDOM from 'react-dom/client';
-import { BatteryProfile, EVProfile, Flags, PredefinedTemplates, SolarProfile, WindProfile } from "components/House/OtherHouseConfigurationOptions";
+import { BatteryProfile, EVProfile, Flags, SolarProfile, WindProfile } from "components/House/OtherHouseConfigurationOptions";
 import LoadProfile from "components/LoadProfile/LoadProfile";
 import Login from "components/Auth/Login";
+import PredefinedTemplates from "components/LoadProfile/PredefinedTemplates";
+import FileUpload from "components/LoadProfile/FileUpload";
+import LoadProfileFileList from "components/LoadProfile/LoadProfileFileList";
 
 const router = createBrowserRouter(
   [
@@ -29,6 +28,8 @@ const router = createBrowserRouter(
             { path: "builder", element: <LoadBuilder /> },
             { path: "generationEngine", element: <GenerationPage1 /> },
             { path: "predefinedTemplates", element: <PredefinedTemplates /> },
+            { path: "fileUpload", element: <FileUpload /> },
+            { path: "fileList", element: <LoadProfileFileList /> }
           ]
         },
         { path: "solar-profile", element: <SolarProfile /> },

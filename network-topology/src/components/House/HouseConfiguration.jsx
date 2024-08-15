@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "components/Common/Navbar";
-import { useLocation, useNavigate, useOutlet } from "react-router-dom";
+import { useLocation, useNavigate, useOutlet, useParams } from "react-router-dom";
+import Breadcrumb from "components/Breadcrumb/Breadcrumb";
+import { fetchBreadcrumbNavigationPath } from "services/Breadcrumb";
 
 const HOUSE_CONFIG_OPTIONS = [
   "Load Profile",
@@ -16,6 +18,7 @@ const HouseConfiguration = () => {
   const navigate = useNavigate();
   const outlet = useOutlet()
   const location = useLocation();
+  const { houseId } = useParams();
 
   useEffect(() => {
     setSelectedButton(HOUSE_CONFIG_OPTIONS.find((item) => location.pathname.includes(convertToPath(item))));
@@ -38,6 +41,18 @@ const HouseConfiguration = () => {
       </div>
     );
   };
+
+  const handleBackButtonClick = async () => {
+    try {
+      console.log("House ID:", houseId)
+      const data = await fetchBreadcrumbNavigationPath(houseId);
+      navigate("/", { state: { substationId: data.substation_id, houseId: houseId } });
+      return;
+    } catch (error) {
+      console.error("Error fetching breadcrumb navigation path details:", error.response);
+      navigate("/");
+    }
+  }
 
   return (
     <>
@@ -77,7 +92,7 @@ const HouseConfiguration = () => {
             </div>
           </div>
           <button className="absolute top mt-2 left-4 grid justify-center cursor-pointer hover:opacity-50">
-            <div className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1">
+            <div className="bg-[#FFF8E6] w-[80px] h-[38px] px-6 py-2 rounded-[50px] text-3xl text-gridColor1" onClick={handleBackButtonClick}>
               <img
                 loading="lazy"
                 src={`${process.env.PUBLIC_URL}/images/Arrow 2.png`}
@@ -86,7 +101,16 @@ const HouseConfiguration = () => {
             </div>
           </button>
         </div>
-        <div className="flex-1 overflow-auto">{renderContent()}</div>
+        <div className='flex flex-col flex-1'>
+          <div className='flex justify-between bg-breadcrumbBackgroundColor max-h-[60px]'>
+            <div className="text-[14px] text-black font-light mt-2">
+              {houseId && (
+                <Breadcrumb nodeId={houseId} onEditNode={() => { }} />
+              )}
+            </div>
+          </div>
+          <div className="flex-1 overflow-auto">{renderContent()}</div>
+        </div>
       </div>
     </>
   );

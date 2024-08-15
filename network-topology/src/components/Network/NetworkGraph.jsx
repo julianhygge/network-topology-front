@@ -109,6 +109,14 @@ const SubConnectionLine = ({ transformer, params = {} }) => {
 };
 // NetworkGraph component renders the network of transformers and houses
 
+// Function to determine node color based on completion and new status
+export const getColor = (status, isNew) => {
+  if (isNew) return "Grey";
+  if (status === NODE_STATUS.COMPLETE) return "Green";
+  if (status === NODE_STATUS.IN_PROGRESS) return "Orange";
+  return "Black";
+};
+
 const NetworkGraph = ({
   onSelectedNode,
   onRightClickSelectedNode,
@@ -189,17 +197,15 @@ const NetworkGraph = ({
     return () => document.head.removeChild(style);
   }, []);
 
-  // Function to determine transformer color based on completion and new status
-  const getColor = (status, isNew) => {
-    if (isNew) return "Grey";
-    if (status === NODE_STATUS.COMPLETE) return "Green";
-    if (status === NODE_STATUS.IN_PROGRESS) return "Orange";
-    return "Black";
-  };
   // Function to fetch and configure the selected node
   const onConfigure = async (d) => {
     if (!d || !d.id) {
       console.error("Node data is undefined or missing id:", d);
+      return;
+    }
+
+    // If the node is new, we don't allow it to be configured
+    if (d.new) {
       return;
     }
 
@@ -255,12 +261,12 @@ const NetworkGraph = ({
         className="context-menu"
         style={{ top: `${y - 20}px`, left: `${x + 20}px` }}
       >
-        <button
+        {!node.new && <button
           className="text-navColor font-dinPro font-medium "
           onClick={() => onConfigure(node)}
         >
           Configure
-        </button>
+        </button>}
         {node.type === "transformer" && (
           <button
             className="text-navColor font-dinPro font-medium"

@@ -1,46 +1,45 @@
 .breadcrumb-wrapper {
-    width: 720px;
-    max-width: 720px;
-    overflow-x: scroll;
-    padding-bottom: 8px;
+  max-width: 1580px;
+  overflow-x: scroll;
+  padding-bottom: 8px;
 }
 
 .breadcrumb-wrapper::-webkit-scrollbar {
-    -webkit-appearance: none;
+  -webkit-appearance: none;
 }
 
 .breadcrumb-wrapper::-webkit-scrollbar:horizontal {
-    height: 7px;
+  height: 7px;
 }
 
 .breadcrumb-wrapper::-webkit-scrollbar-thumb {
-    border-radius: 8px;
-    border:#E7FAFF;
-    background-color: #8BB6C2
+  border-radius: 8px;
+  border: #E7FAFF;
+  background-color: #8BB6C2
 }
 
 .breadcrumb-container {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    white-space: nowrap;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .breadcrumb-item {
-    text-align: center;
-    padding: 10px 25px;
-    z-index: 2;
-    margin: 0;
-    border-radius: 1px;
-    clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 0% 0%);
+  text-align: center;
+  padding: 10px 25px;
+  z-index: 2;
+  margin: 0;
+  border-radius: 1px;
+  clip-path: polygon(0px 0px, calc(100% - 10px) 0px, 100% 50%, calc(100% - 10px) 100%, 0px 100%, 0px 0px);
 }
 
-.breadcrumb-item:nth-child(1){
-    z-index: 40;
+.breadcrumb-item:nth-child(1) {
+  z-index: 40;
 }
 
-.breadcrumb-item:nth-child(2){
-    position: relative;
-    z-index: 20;
-    left: -15px;
+.breadcrumb-item:nth-child(2) {
+  position: relative;
+  z-index: 20;
+  left: -15px;
 }
