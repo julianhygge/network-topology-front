@@ -288,6 +288,7 @@ const Login = () => {
   const [unexpectedError, setUnexpectedError] = useState(false);
   const [stateToken, setStateToken] = useState("");
   const [otp, setOtp] = useState("");
+  const [phoneNumb, setPhoneNumb] = useState('');
 
   const methods = useForm({
     defaultValues: {
@@ -300,6 +301,15 @@ const Login = () => {
     setOtpRequested(true);
     setOtp("");
   };
+
+  const handleInput = (e) => {
+    const value = e.target.value;
+    const numericValue = value.replace(/\D/g, '');
+    if (numericValue.length <= 10) {
+      setPhoneNumb(numericValue)
+    }
+
+  }
 
   const setRequestPhoneState = () => {
     setMaxAttemptsReached(false);
@@ -333,12 +343,12 @@ const Login = () => {
     navigate("/");
   };
 
-  const onRequestOtp = async (data) => {
+  const onRequestOtp = async () => {
     setIsLoading(true);
-    const phoneNumber = data.phone_number;
+    // const phoneNumber = data.phone_number;
 
     try {
-      const res = await requestOtp(phoneNumber);
+      const res = await requestOtp(phoneNumb);
       if (res.status === "RESTRICTED") {
         setRequestPhoneState();
         setMaxAttemptsReached(true);
@@ -346,7 +356,7 @@ const Login = () => {
       }
       setRequestOtpState();
       setStateToken(res.state_token);
-      setPhoneNumber(phoneNumber);
+      setPhoneNumber(phoneNumb);
     } catch (error) {
       processError(error);
     }
@@ -417,7 +427,7 @@ const Login = () => {
               alt="Hygge Logo"
             />
 
-            <form onSubmit={handleSubmit(onRequestOtp)} className="w-4/5 h-fit" noValidate>
+            <form onSubmit={onRequestOtp} className="w-4/5 h-fit" noValidate>
               <h4 className="mb-[75px] font-medium text-[1.1vw] text-center text-white">
                 Enter the Mobile Number you have registered with us for this
                 platform
@@ -426,25 +436,27 @@ const Login = () => {
                 Enter Mobile Number
               </label>
               <input
-                type="number"
+                type="text"
+                value={phoneNumb}
+                onChange={handleInput}
                 maxLength={10}
                 className={`text-[30px] w-full h-[7vh] font-medium py-[1vh] px-[1vw] tracking-[8px] rounded-[0.8vw] mb-[-4vh] mt-[5px] text-center ${
                   errors.phone_number && "border-red-500"
                 }`}
                 name="phone_number"
                 placeholder=""
-                {...register("phone_number", {
-                  required: "Phone Number is required",
-                  pattern: {
-                    value: /^[0-9]{10}$/,
-                    message: "Invalid phone number format",
-                  },
-                  maxLength: {
-                    value: 10,
-                    message: "Phone Number cannot exceed 10 digits",
-                  },
+                // {...register("phone_number", {
+                //   required: "Phone Number is required",
+                //   pattern: {
+                //     value: /^[0-9]{10}$/,
+                //     message: "Invalid phone number format",
+                //   },
+                //   maxLength: {
+                //     value: 10,
+                //     message: "Phone Number cannot exceed 10 digits",
+                //   },
                   
-                })}
+                // })}
               />
                
             </form>
@@ -455,9 +467,9 @@ const Login = () => {
               )}
             <button
               type="submit"
-              disabled={isLoading || !watch("phone_number")}
+              disabled={isLoading || phoneNumb.length<10}
               className="text-[1.3vw] border-none w-[80%] h-[6vh] bg-[#F4B840] font-normal rounded-[0.8vw] text-[#265B65] mb-[40px]"
-              onClick={handleSubmit(onRequestOtp)}
+              onClick={onRequestOtp}
             >
               Next
             </button>

@@ -5,7 +5,7 @@ export const setToken = (token) => {
 }
 
 export const getToken = () => {
-    let item = localStorage.getItem(this.project_prefix + 'token') || "";
+    let item = localStorage.getItem(PROJECT_PREFIX + 'token') || "";
     if (item == "" || item == "undefined") { return "" }
     return item;
 }
