@@ -1,15 +1,14 @@
-import axios from "axios";
-import { API_URL, TOKEN } from "services/Config";
+ 
+import axiosInstance from "interceptor/AuthInterceptor";
+// import { API_URL, TOKEN } from "services/Config";
 
-console.log("Tokens:" + TOKEN);
-console.log("api url:" + API_URL);
+// console.log("Tokens:" + TOKEN);
+// console.log("api url:" + API_URL);
 
 export const getSubstations = async () => {
   try {
-    const response = await axios.get(`${API_URL}/substations`, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
+    const response = await axiosInstance.get(`/substations`, {
+      
     });
     return response.data;
   } catch (error) {
@@ -20,15 +19,10 @@ export const getSubstations = async () => {
 
 export const generateSubstation = async (payload) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/substations/generate`,
+    const response = await axiosInstance.post(
+      `/substations/generate`,
       payload,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      }
+      
     );
     return response.data;
   } catch (error) {
@@ -39,10 +33,8 @@ export const generateSubstation = async (payload) => {
 
 export const getSubstationById = async (substationId) => {
   try {
-    const response = await axios.get(`${API_URL}/substations/${substationId}`, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
+    const response = await axiosInstance.get(`/substations/${substationId}`, {
+      
     });
     return response.data;
   } catch (error) {
@@ -60,15 +52,10 @@ export const updateSubstationTopology = async (substationId, updatedData) => {
   console.log("Payload:", JSON.stringify(payload, null, 2));
 
   try {
-    const response = await axios.put(
-      `${API_URL}/substations/${substationId}`,
+    const response = await axiosInstance.put(
+      `/substations/${substationId}`,
       payload,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      }
+      
     );
 
     return await response.data;
@@ -80,15 +67,10 @@ export const updateSubstationTopology = async (substationId, updatedData) => {
 
 export const updateSubstationTransformers = async (substationId, payload) => {
   try {
-    const response = await axios.put(
-      `${API_URL}/substations/${substationId}`,
+    const response = await axiosInstance.put(
+      `/substations/${substationId}`,
       payload,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      }
+       
     );
 
     return await response.data;
@@ -103,14 +85,9 @@ export const updateSubstationTransformers = async (substationId, payload) => {
 
 export const deleteSubstation = async (substationId) => {
   try {
-    const response = await axios.delete(
-      `${API_URL}/substations/${substationId}/delete`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      }
+    const response = await axiosInstance.delete(
+      `/substations/${substationId}/delete`,
+      
     );
     return response.data;
   } catch (error) {
@@ -118,3 +95,10 @@ export const deleteSubstation = async (substationId) => {
     throw error;
   }
 };
+
+
+
+
+
+
+ 

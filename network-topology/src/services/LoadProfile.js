@@ -1,15 +1,12 @@
-import axios from "axios";
-import { API_URL, TOKEN } from "services/Config";
+ 
+import axiosInstance from "interceptor/AuthInterceptor";
+// import { API_URL, TOKEN } from "services/Config";
 
 export const fetchLoadTemplate = async (houseId) => {
   try {
-    const response = await axios.get(
-      `${API_URL}/load/houses/${houseId}/load-predefined-template`,
-      {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      }
+    const response = await axiosInstance.get(
+      `/load/houses/${houseId}/load-predefined-template`,
+       
     );
     return response.data;
   } catch (error) {
@@ -20,14 +17,10 @@ export const fetchLoadTemplate = async (houseId) => {
 
 export const saveLoadTemplate = async (houseId, templateId) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/load/houses/${houseId}/load-predefined-template`,
+    const response = await axiosInstance.post(
+      `/load/houses/${houseId}/load-predefined-template`,
       { template_id: templateId },
-      {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      }
+       
     );
     return response.data;
   } catch (error) {
@@ -38,10 +31,8 @@ export const saveLoadTemplate = async (houseId, templateId) => {
 
 export const fetchLoadTemplates = async () => {
   try {
-    const response = await axios.get(`${API_URL}/load/load_templates`, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
+    const response = await axiosInstance.get(`/load/load_templates`, {
+       
     });
     return response.data;
   } catch (error) {
@@ -52,13 +43,9 @@ export const fetchLoadTemplates = async () => {
 
 export const fetchLoadProfileItems = async (houseId) => {
   try {
-    const response = await axios.get(
-      `${API_URL}/load/houses/${houseId}/load-profile-items`,
-      {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      }
+    const response = await axiosInstance.get(
+      `/load/houses/${houseId}/load-profile-items`,
+       
     );
     return response.data;
   } catch (error) {
@@ -69,14 +56,10 @@ export const fetchLoadProfileItems = async (houseId) => {
 
 export const saveLoadProfileItems = async (houseId, loads) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/load/houses/${houseId}/load-profile-items`,
+    const response = await axiosInstance.post(
+      `/load/houses/${houseId}/load-profile-items`,
       { items: loads },
-      {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      }
+       
     );
     return response.data;
   } catch (error) {
@@ -87,10 +70,8 @@ export const saveLoadProfileItems = async (houseId, loads) => {
 
 export const fetchLoadProfiles = async (houseId) => {
   try {
-    const response = await axios.get(`${API_URL}/load/?house_id=${houseId}`, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
+    const response = await axiosInstance.get(`/load/?house_id=${houseId}`, {
+       
     });
 
     return response.data;
@@ -112,11 +93,11 @@ export const uploadLoadProfile = async (
   formData.append("interval_15_minutes", interval15Minutes);
 
   try {
-    const response = await axios.post(`${API_URL}/load/upload`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${TOKEN}`,
-      },
+    const response = await axiosInstance.post(`/load/upload`, formData, {
+      // headers: {
+      //   "Content-Type": "multipart/form-data",
+      //   Authorization: `Bearer ${TOKEN}`,
+      // },
     });
     return response.data;
   } catch (error) {
@@ -127,10 +108,8 @@ export const uploadLoadProfile = async (
 
 export const deleteLoadProfile = async (profileId) => {
   try {
-    const response = await axios.delete(`${API_URL}/load/${profileId}`, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
+    const response = await axiosInstance.delete(`/load/${profileId}`, {
+      
     });
     return response.data;
   } catch (error) {
@@ -140,15 +119,10 @@ export const deleteLoadProfile = async (profileId) => {
 };
 export const saveGenerationProfile = async (houseId, payload) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/load/houses/${houseId}/generation-engine`,
+    const response = await axiosInstance.post(
+      `/load/houses/${houseId}/generation-engine`,
       payload,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      }
+       
     );
     return response.data;
   } catch (error) {
@@ -159,13 +133,9 @@ export const saveGenerationProfile = async (houseId, payload) => {
 
 export const fetchGenerationEngineProfile = async (houseId) => {
   try {
-    const response = await axios.get(
-      `${API_URL}/load/houses/${houseId}/generation-engine`,
-      {
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      }
+    const response = await axiosInstance.get(
+      `/load/houses/${houseId}/generation-engine`,
+      
     );
     return response.data;
   } catch (error) {
@@ -176,14 +146,13 @@ export const fetchGenerationEngineProfile = async (houseId) => {
 
 export const deleteGenerationProfile = async (profileId) => {
   try {
-    const response = await axios.delete(`${API_URL}/load/${profileId}/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${TOKEN}`,
-      },
+    const response = await axiosInstance.delete(`/load/${profileId}/`, {
+      
     });
     console.log(response);
   } catch (error) {
     console.error("Failed to delete the file:", error);
   }
 };
+
+ 

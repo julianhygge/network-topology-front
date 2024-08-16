@@ -1,13 +1,12 @@
-import axios from "axios";
-import { API_URL, TOKEN } from "services/Config";
+
+import axiosInstance from "interceptor/AuthInterceptor";
+// import { API_URL, TOKEN } from "services/Config";
 
 export const fetchBreadcrumbNavigationPath = async (node_id) => {
   
   try {
-    const response = await axios.get(`${API_URL}/breadcrumb/nodes/${node_id}/breadcrumb`, {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
+    const response = await axiosInstance.get(`/breadcrumb/nodes/${node_id}/breadcrumb`, {
+      
     });
     return response.data;
   } catch (error) {
@@ -15,3 +14,5 @@ export const fetchBreadcrumbNavigationPath = async (node_id) => {
     throw error;
   }
 }
+
+ 
