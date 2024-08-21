@@ -81,19 +81,21 @@
 //     }
 //   };
 
-//   const onOtpInputKeyUp = (e, nextInputIndex, prevInputIndex) => {
-//     console.log(otpRefs.current);
+// const onOtpInputKeyUp = (e, nextInputIndex, prevInputIndex, id) => {
 
-//     if (e.key !== 'Backspace' && e.key !== "Tab") {
-//       setOtpError(false);
+  
+//   const inputs = document.querySelectorAll('input');
 
-//       if (e.target.value && nextInputIndex !== -1) {
-//         otpRefs.current[nextInputIndex].focus();
-//       }
-//     } else if (prevInputIndex !== -1) {
-//       otpRefs.current[prevInputIndex].focus();
+//   if (e.key !== 'Backspace' && e.key !== "Tab") {
+//     setOtpError(false);
+
+//     if (e.target.value && nextInputIndex !== -1 && inputs[nextInputIndex]) {
+//       inputs[nextInputIndex].focus();
 //     }
-//   };
+//   } else if (prevInputIndex !== -1 && inputs[prevInputIndex]) {
+//     inputs[prevInputIndex].focus();
+//   }
+// };
 
 //   const onOtpSubmit = async (data) => {
 //     setIsLoading(true);
