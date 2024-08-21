@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from "react-router-dom";
+import Logout from 'components/Auth/Logout';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export default function Navbar() {
         Shanti Niketan-1, S00011
       </span>
     </div>
+      <Logout />
       </header>
     </div>
   )
