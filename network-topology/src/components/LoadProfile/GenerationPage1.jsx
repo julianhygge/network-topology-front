@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./GenerationPage.css";
-import Navbar from "components/Common/Navbar";
 import {
   saveGenerationProfile,
   fetchGenerationEngineProfile,
@@ -160,133 +158,130 @@ const GenerationPage1 = () => {
 
   return (
     <>
-      <div className="flex h-[90vh] 2xl:h-[92vh] font-dinPro">
-        <div className="flex-1 overflow-auto">
-          <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
-            <div>
-              <span className="flex text-center text-navColor items-center text-[20px] font-medium">
-                Load profile generation is in process,
-                <br />
-                Please continue to do the configuration from below.
-              </span>
-            </div>
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col justify-center items-center w-[50vw] pt-8 pb-10 font-medium text-center text-navColor bg-white rounded-2xl max-w-[860px] shadow-[0px_5px_10px_rgba(169,218,198,1)] max-md:px-5"
-            >
-              <div className="relative text-[18px] max-md:mt-10">
-                {isSaved
-                  ? "Please edit the below details and Save"
-                  : "Please enter the below details and Save"}
-                {isSaved && (
-                  <button
-                    type="button"
-                    className="absolute right-[-12vw]"
-                    onClick={() => setShowDeletePopup(true)}
-                  >
-                    <img
-                      src={`${process.env.PUBLIC_URL}/images/DeleteButton.png`}
-                      className="w-[24px] h-[28px] cursor-pointer"
-                      alt="Delete Icon"
-                    />
-                  </button>
-                )}
-              </div>
-
-              <div className="flex flex-col items-center gap-5 mt-8 w-full max-w-lg">
-                <label className="flex flex-col items-start">
-                  Enter the Avg kWh consumed
-                  <div className="flex gap-20 mt-2 mb-2">
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        name="daily"
-                        checked={formValues.daily}
-                        onChange={handleInputChange}
-                        className="mr-2 custom-checkbox"
-                        disabled={isSaved}
-                      />
-                      Daily
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        name="monthly"
-                        checked={formValues.monthly}
-                        onChange={handleInputChange}
-                        className="mr-2 custom-checkbox"
-                        disabled={isSaved}
-                      />
-                      Monthly
-                    </label>
-                  </div>
-                  <input
-                    type="text"
-                    name="avgKWh"
-                    value={formValues.avgKWh}
-                    onChange={handleInputChange}
-                    className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl custom-input"
-                    disabled={isSaved}
-                  />
-                  {errors.avgKWh && <div className="text-red-500 mt-1">{errors.avgKWh}</div>}
-                </label>
-                <label className="flex flex-col items-start">
-                  Enter the Average Monthly Bill
-                  <input
-                    type="text"
-                    name="avgMonthlyBill"
-                    value={formValues.avgMonthlyBill}
-                    onChange={handleInputChange}
-                    className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl custom-input"
-                    disabled={isSaved}
-                  />
-                  {errors.avgMonthlyBill && <div className="text-red-500 mt-1">{errors.avgMonthlyBill}</div>}
-                </label>
-                <label className="flex flex-col items-start">
-                  Enter the Max demand (kW)
-                  <input
-                    type="text"
-                    name="maxDemand"
-                    value={formValues.maxDemand}
-                    onChange={handleInputChange}
-                    className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl custom-input"
-                    disabled={isSaved}
-                  />
-                  {errors.maxDemand && <div className="text-red-500 mt-1">{errors.maxDemand}</div>}
-                </label>
-              </div>
-              <div className="flex gap-6 justify-between mt-10 max-w-full text-xl tracking-normal text-white whitespace-nowrap max-md:mt-10">
+    <div className="flex h-[90vh] 2xl:h-[92vh] font-dinPro">
+      <div className="flex-1 overflow-auto">
+        <div className="flex flex-col items-center justify-center h-full bg-[#E7FAFF]">
+          <div>
+            <span className="flex text-center text-navColor items-center text-[20px] font-medium">
+              Load profile generation is in process,
+              <br />
+              Please continue to do the configuration from below.
+            </span>
+          </div>
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col justify-center items-center w-[50vw] pt-8 pb-10 font-medium text-center text-navColor bg-white rounded-2xl max-w-[860px] shadow-[0px_5px_10px_rgba(169,218,198,1)] max-md:px-5"
+          >
+            <div className="relative text-[18px] max-md:mt-10">
+              {isSaved
+                ? "Please edit the below details and Save"
+                : "Please enter the below details and Save"}
+              {isSaved && (
                 <button
                   type="button"
-                  className={`flex justify-center items-center px-14 py-3 shadow-sm rounded-[33px] max-md:px-5  bg-[#FFB600] text-[#563E04] ${isSaved
-                    ? " opacity-50 cursor-not-allowed"
-                    : "bg-[#FFB600] text-[#563E04]"
-                    }`}
-                  disabled={isSaved}
-                  onClick={() => window.location.reload()}
+                  className="absolute right-[-12vw]"
+                  onClick={() => setShowDeletePopup(true)}
                 >
-                  Cancel
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/DeleteButton.png`}
+                    className="w-[24px] h-[28px] cursor-pointer"
+                    alt="Delete Icon"
+                  />
                 </button>
-                <button
-                  type="submit"
-                  className={`flex justify-center items-center px-16 py-3 shadow-sm rounded-[33px] max-md:px-5  bg-[#74AA50] ${isSaved ? " opacity-50 cursor-not-allowed" : "bg-[#74AA50]"
-                    }`}
+              )}
+            </div>
+  
+            <div className="flex flex-col items-center gap-5 mt-8 w-full max-w-lg ">
+              <label className="flex flex-col items-start text-navColor font-[500] text-[15px]">
+                Enter the Avg kWh consumed
+                <div className="flex gap-20 mt-2 mb-2">
+                  <label className="flex items-center text-navColor font-[500] text-[15px]">
+                    <input
+                      type="checkbox"
+                      name="daily"
+                      checked={formValues.daily}
+                      onChange={handleInputChange}
+                      className="mr-2 appearance-none w-5 h-5 border border-[#204A56] rounded-full relative cursor-pointer checked:bg-white checked:after:content-[''] checked:after:w-3 checked:after:h-3 checked:after:bg-[#DEA309] checked:after:rounded-full checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 checked:after:transform checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+                      disabled={isSaved}
+                    />
+                    Daily
+                  </label>
+                  <label className="flex items-center text-navColor font-[500] text-[15px]">
+                    <input
+                      type="checkbox"
+                      name="monthly"
+                      checked={formValues.monthly}
+                      onChange={handleInputChange}
+                      className="mr-2 appearance-none w-5 h-5 border border-[#204A56] rounded-full relative cursor-pointer checked:bg-white checked:after:content-[''] checked:after:w-3 checked:after:h-3 checked:after:bg-[#DEA309] checked:after:rounded-full checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 checked:after:transform checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+                      disabled={isSaved}
+                    />
+                    Monthly
+                  </label>
+                </div>
+                <input
+                  type="text"
+                  name="avgKWh"
+                  value={formValues.avgKWh}
+                  onChange={handleInputChange}
+                  className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl focus:border-[#FCB712] focus:shadow-[0_0_5px_5px_rgba(252,183,18,0.5)] focus:outline-none"
                   disabled={isSaved}
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
+                />
+                {errors.avgKWh && <div className="text-red-500 mt-1">{errors.avgKWh}</div>}
+              </label>
+              <label className="flex flex-col items-start text-navColor font-[500] text-[15px]">
+                Enter the Average Monthly Bill
+                <input
+                  type="text"
+                  name="avgMonthlyBill"
+                  value={formValues.avgMonthlyBill}
+                  onChange={handleInputChange}
+                  className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl focus:border-[#FCB712] focus:shadow-[0_0_5px_5px_rgba(252,183,18,0.5)] focus:outline-none"
+                  disabled={isSaved}
+                />
+                {errors.avgMonthlyBill && <div className="text-red-500 mt-1">{errors.avgMonthlyBill}</div>}
+              </label>
+              <label className="flex flex-col items-start text-navColor font-[500] text-[15px]">
+                Enter the Max demand (kW)
+                <input
+                  type="text"
+                  name="maxDemand"
+                  value={formValues.maxDemand}
+                  onChange={handleInputChange}
+                  className="w-[420px] h-[55px] p-2 mt-2 border border-navColor rounded-xl focus:border-[#FCB712] focus:shadow-[0_0_5px_5px_rgba(252,183,18,0.5)] focus:outline-none"
+                  disabled={isSaved}
+                />
+                {errors.maxDemand && <div className="text-red-500 mt-1">{errors.maxDemand}</div>}
+              </label>
+            </div>
+            <div className="flex gap-6 justify-between mt-10 max-w-full text-xl tracking-normal text-white whitespace-nowrap max-md:mt-10">
+              <button
+                type="button"
+                className={`flex justify-center items-center px-14 py-3 shadow-sm rounded-[33px] max-md:px-5  ${isSaved ? "opacity-50 cursor-not-allowed bg-[#FFB600] text-[#563E04]" : "bg-[#FFB600] text-[#563E04]"}`}
+                disabled={isSaved}
+                onClick={() => window.location.reload()}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className={`flex justify-center items-center px-16 py-3 shadow-sm rounded-[33px] max-md:px-5  ${isSaved ? "opacity-50 cursor-not-allowed bg-[#74AA50]" : "bg-[#74AA50]"}`}
+                disabled={isSaved}
+              >
+                Save
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-      {showDeletePopup && (
-        <GenerationDeletePopup
-          onConfirm={handleDelete}
-          onCancel={() => setShowDeletePopup(false)}
-        />
-      )}
-    </>
+    </div>
+    {showDeletePopup && (
+      <GenerationDeletePopup
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeletePopup(false)}
+      />
+    )}
+  </>
+  
   );
 };
 
