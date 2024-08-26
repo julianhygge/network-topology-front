@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DeleteConfirm from "components/LoadProfile/DeleteConfirm";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { deleteFile, downloadFile } from "services/LoadProfile";
 
 const LoadProfileFileList = ({ profiless, onUploadAgain }) => {
   const location = useLocation();
@@ -24,25 +25,11 @@ const LoadProfileFileList = ({ profiless, onUploadAgain }) => {
   };
 
   const handleConfirmDelete = async () => {
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
-
     try {
-      const response = await fetch(
-        `https://hygge-test.ddns.net:8080/net-topology-api${selectedDeleteLink}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to delete file");
-      }
-      console.log(`Deleted file: ${selectedFileName}`);
+      const correctedDeleteLink = selectedDeleteLink.startsWith("/v1")
+        ? selectedDeleteLink.replace("/v1", "")
+        : selectedDeleteLink;
+      await deleteFile(correctedDeleteLink);
       setShowDeleteConfirm(false);
       navigate(`/config/${houseId}/load-profile/`);
     } catch (error) {
@@ -51,34 +38,18 @@ const LoadProfileFileList = ({ profiless, onUploadAgain }) => {
   };
 
   const handleDownload = async (downloadLink, filename) => {
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTgxMDE2MDgsImp0aSI6ImQwMzQ1OWM0LWJmZDktNDVmZS04MTI5LWY0YjA0NTRjN2JiOSIsImV4cCI6MTczMTA2MTYwOCwidXNlciI6Ijk0NTIyYTBhLWM4ZjEtNDBmOC1hMmU1LTlhZWQyZGMwMDAxMCIsInJvbGUiOlsiQ29uc3VtZXIiXSwicGVybWlzc2lvbnMiOlsicmV0cmlldmUtYmlkcyIsImRlbGV0ZS1iaWRzIiwicmV0cmlldmUtdXNlcnMiLCJyZXRyaWV2ZS10cmFuc2FjdGlvbnMiLCJjcmVhdGUtYmlkcyIsInVwZGF0ZS1iaWRzIiwic2VhcmNoLWJpZHMiXX0.tAMQrhw26ZJ385oeLSoLIpLwr9pheiGSygku-jny1fc";
-
-    const fullUrl = `https://hygge-test.ddns.net:8080/net-topology-api${downloadLink}`;
-
     setIsLoading(true);
     setErrorMessage("");
 
     try {
-      const response = await fetch(fullUrl, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const correctedDeleteLink = downloadLink.startsWith("/v1")
+        ? downloadLink.replace("/v1", "")
+        : downloadLink;
 
-      if (!response.ok) {
-        console.error(`Response status: ${response.status}`);
-        console.error(`Response status text: ${response.statusText}`);
-        throw new Error(`Failed to download file: ${response.statusText}`);
-      }
-
-      const blob = await response.blob();
+      const blob = await downloadFile(correctedDeleteLink);
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      console.log(filename);
       link.setAttribute("download", filename);
       document.body.appendChild(link);
       link.click();
