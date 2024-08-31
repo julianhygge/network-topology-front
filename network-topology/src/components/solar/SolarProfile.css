@@ -1,0 +1,31 @@
+/* Webkit browsers (Chrome, Safari) */
+.range-input::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, #3b82f6 var(--value), #e5e7eb var(--value)) !important;
+    height: 8px;
+    border-radius: 4px;
+  }
+  
+  /* Firefox */
+  .range-input::-moz-range-track {
+    background: linear-gradient(to right, #3b82f6 var(--value), #e5e7eb var(--value)) !important;
+    height: 8px;
+    border-radius: 4px;
+  }
+  
+  /* Adjusting the thumb style */
+  .range-input::-webkit-slider-thumb {
+    appearance: none !important;
+    width: 16px;
+    height: 16px;
+    background: #3b82f6;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  .range-input::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #3b82f6;
+    border-radius: 50%;
+    cursor: pointer;
+  }
