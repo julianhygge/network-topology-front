@@ -75,7 +75,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
         >
           &times;
         </button>
-        <h2 className="text-lg font-semibold text-center mb-11">
+        <h2 className="text-lg font-semibold text-center mb-11  text-customGrey  text-[15px]">
           Enter / Edit the Transformer Configurations
         </h2>
         <FormProvider {...methods}>
@@ -83,7 +83,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col mb-4 pr-4 border-r border-customBorderColor">
                 <div className="mb-4 flex flex-col items-start ml-7">
-                  <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">
+                  <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]  text-navColor ">
                     Name of Transformer
                   </label>
                   <input
@@ -100,7 +100,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                   {errors.name && <span className="text-red-500">{errors.name.message}</span>}
                 </div>
                 <div className="mb-4 flex flex-col items-start ml-7">
-                  <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">
+                  <label className="block text-customGrey text-[13px] ml-2 font-[500]">
                     Max Capacity ( kW )
                   </label>
                   <input
@@ -117,7 +117,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                   {errors.max_capacity_kw && <span className="text-red-500">{errors.max_capacity_kw.message}</span>}
                 </div>
                 <div className="mb-4 flex flex-col items-start ml-7">
-                  <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">
+                  <label className="block text-customGrey text-[13px] ml-2 font-[500]">
                     Years of Service
                   </label>
                   <input
@@ -134,7 +134,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                   {errors.years_of_service && <span className="text-red-500">{errors.years_of_service.message}</span>}
                 </div>
                 <div className="mb-4 flex flex-col items-start ml-7">
-                  <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">
+                  <label className="block text-customGrey text-[13px] ml-2 font-[500]">
                     Forward Efficiency ( % )
                   </label>
                   <input
@@ -161,7 +161,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                       {...register("allow_export")}
                       style={{ width: "20px", height: "20px" }}
                     />
-                    <label className="text-customGrey-700 text-[13px] whitespace-nowrap font-[500]">
+                    <label className="text-customGrey text-[13px] whitespace-nowrap font-[500]">
                       Allow Export
                     </label>
                   </div>
@@ -174,14 +174,14 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                       {...register("digital_twin_model")}
                       style={{ width: "20px", height: "20px" }}
                     />
-                    <label className="text-customGrey-700 text-[13px] font-[500]">
+                    <label className="text-customGrey text-[13px] font-[500]">
                       Digital Twin Model
                     </label>
                   </div>
                 </div>
                 <div className="mb-4 flex flex-col items-start ml-3">
                   <label
-                    className={`block text-customGrey-700 text-[13px] ml-2 font-[500] ${allowExport ? "" : "opacity-15"
+                    className={`block text-customGrey text-[13px] ml-2 font-[500] ${allowExport ? "" : "opacity-15"
                       }`}
                   >
                     Backward Efficiency ( % )
@@ -202,7 +202,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                 </div>
 
                 <div className="mb-4 flex flex-col items-start ml-3">
-                  <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">
+                  <label className="block text-customGrey text-[13px] ml-2 font-[500]">
                     Primary Ampacity ( A )
                   </label>
                   <input
@@ -220,7 +220,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                 </div>
 
                 <div className="mb-4 flex flex-col items-start ml-3">
-                  <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]">
+                  <label className="block text-customGrey text-[13px] ml-2 font-[500]">
                     Secondary Ampacity ( A )
                   </label>
                   <input
