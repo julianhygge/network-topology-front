@@ -6,13 +6,14 @@ import LoadBuilder from "components/LoadProfile/LoadBuilder";
 import GenerationPage1 from "components/LoadProfile/GenerationPage1";
 import React from "react";
 import ReactDOM from 'react-dom/client';
-import { BatteryProfile, EVProfile, Flags, SolarProfile, WindProfile } from "components/House/OtherHouseConfigurationOptions";
+import { BatteryProfile, EVProfile, Flags, WindProfile } from "components/House/OtherHouseConfigurationOptions";
 import LoadProfile from "components/LoadProfile/LoadProfile";
 import PredefinedTemplates from "components/LoadProfile/PredefinedTemplates";
 import FileUpload from "components/LoadProfile/FileUpload";
 import LoadProfileFileList from "components/LoadProfile/LoadProfileFileList";
 import Login from "components/Auth/Login";
 import AuthRoute from "ProtectedRoute/AuthRoute";
+import SolarProfile from "components/solar/SolarProfile";
 
 // const router = createBrowserRouter(
 //   [
