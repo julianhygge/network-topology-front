@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./NetworkGraph.css";
 import { fetchTransformerDetails } from "services/Tranformer";
 import { useNavigate } from "react-router-dom";
-import { getColor, House, Transformer, SubConnectionLine } from "./NetworkUtils";
+import {
+  getColor,
+  House,
+  Transformer,
+  SubConnectionLine,
+} from "./NetworkUtils";
+import RenameHouse from "./RenameHouse";
 
 // NetworkGraph component renders the network of transformers and houses
 const NetworkGraph = ({
@@ -19,6 +25,8 @@ const NetworkGraph = ({
 }) => {
   const [lineStyle, setLineStyle] = useState({});
   const [showLine, setShowLine] = useState(false);
+  const [showRenamePopup, setShowRenamePopup] = useState(false);
+  const [selectedHouse, setSelectedHouse] = useState(null);
   const [contextMenu, setContextMenu] = useState({
     visible: false,
     x: 0,
@@ -71,6 +79,17 @@ const NetworkGraph = ({
     window.addEventListener("resize", updateLineStyle);
     return () => window.removeEventListener("resize", updateLineStyle);
   }, [data.nodes]);
+  const handleRenameClick = (node) => {
+    console.log(node);
+    setSelectedHouse(node); // Set the selected house
+    setShowRenamePopup(true); // Show the rename popup
+  };
+
+  const handleRenameSubmit = (newNames) => {
+    console.log("New House Names:", newNames);
+
+    setShowRenamePopup(false);
+  };
 
   useEffect(() => {
     const style = document.createElement("style");
@@ -149,18 +168,28 @@ const NetworkGraph = ({
         className="context-menu"
         style={{ top: `${y - 20}px`, left: `${x + 20}px` }}
       >
-        {!node.new && <button
-          className="text-navColor font-dinPro font-medium "
-          onClick={() => onConfigure(node)}
-        >
-          Configure
-        </button>}
+        {!node.new && (
+          <button
+            className="text-navColor font-dinPro font-medium "
+            onClick={() => onConfigure(node)}
+          >
+            Configure
+          </button>
+        )}
         {node.type === "transformer" && (
           <button
             className="text-navColor font-dinPro font-medium"
             onClick={() => onAddSubTransformer(node.id)}
           >
             Add Sub-T
+          </button>
+        )}
+        {node.type === "house" && (
+          <button
+            className="text-navColor font-dinPro font-medium"
+            onClick={() => handleRenameClick(node)}
+          >
+            Rename
           </button>
         )}
         <button
@@ -217,7 +246,7 @@ const NetworkGraph = ({
           <SubConnectionLine transformer={node} />
           <div className="houses-column">
             {node.children &&
-              node.children.filter((child) => child.type === "house").length >
+            node.children.filter((child) => child.type === "house").length >
               0 ? (
               node.children
                 .filter((child) => child.type === "house")
@@ -313,6 +342,13 @@ const NetworkGraph = ({
         )}
       </React.Fragment>
       {contextMenu.visible && renderContextMenu()}
+      {showRenamePopup && (
+        <RenameHouse
+          house={selectedHouse}
+          onClose={() => setShowRenamePopup(false)}
+          onSubmit={handleRenameSubmit}
+        />
+      )}
     </div>
   );
 };
