@@ -14,6 +14,38 @@ import HouseForm from "components/House/HouseForm";
 import Breadcrumb from "components/Breadcrumb/Breadcrumb";
 import Delete from "components/Common/DeleteConfirm";
 
+// Helper function to generate nomenclature for a new transformer
+const generateTransformerNomenclature = (parentNode, existingSiblings) => {
+  const transformerCount = existingSiblings.filter(
+    (child) => child.type === "transformer"
+  ).length;
+
+  let parentPrefix;
+  if (parentNode.substation_name) {
+    const match = parentNode.substation_name.match(/(\d+)$/);
+    parentPrefix = match ? match[1] : 'X';
+  } else if (parentNode.nomenclature && parentNode.type === "transformer") {
+    parentPrefix = parentNode.nomenclature.split("-")[1];
+  } else {
+    console.error("Cannot determine parent prefix for transformer nomenclature:", parentNode);
+    parentPrefix = 'UNKNOWN';
+  }
+
+  return `T-${parentPrefix}.${transformerCount + 1}`;
+};
+
+// Helper function to generate nomenclature for a new house
+const generateHouseNomenclature = (parentNode, existingSiblings) => {
+  if (!parentNode.nomenclature || parentNode.type !== "transformer") {
+     console.error("Cannot generate house nomenclature for non-transformer parent:", parentNode);
+     return `H-UNKNOWN.1`;
+  }
+  const houseCount = existingSiblings.filter(
+    (child) => child.type === "house"
+  ).length;
+  const parentNomenclaturePart = parentNode.nomenclature.split("-")[1];
+  return `H.${parentNomenclaturePart}.${houseCount + 1}`;
+};
 const NetworkTopology = () => {
   const location = useLocation();
   const [selectedSubstationId, setSelectedSubstationId] = useState(
@@ -24,7 +56,6 @@ const NetworkTopology = () => {
   const [transformerDetails, setTransformerDetails] = useState(null);
   const [houseDetails, setHouseDetails] = useState(null);
   const [transformerCounter, setTransformerCounter] = useState(0);
-  const [deletedNodes, setDeletedNodes] = useState([]);
   const [nodeToDelete, setNodeToDelete] = useState(null);
   const [nodeToDeleteName, setNodeToDeleteName] = useState(null);
   const [nodeType, setNodeType] = useState(null);
@@ -65,27 +96,23 @@ const NetworkTopology = () => {
   }, [selectedNode])
 
   const handleAddTransformer = () => {
-    const transformerCount = data.nodes.filter(
-      (child) => child.type === "transformer"
-    ).length;
-    const match = data.substation_name.match(/(\d+)$/); // Extracts numeric part from substation name
-    const grid = parseInt(match[1], 10); // Parses grid number
+    const newNomenclature = generateTransformerNomenclature(data, data.nodes);
     const newTransformer = {
       ids: `temp-${transformerCounter}`,
       id: `Transformer-${transformerCounter}`,
-      label: `Transformer-${transformerCounter}`,
+      label: newNomenclature,
       type: "transformer",
       status: NODE_STATUS.EMPTY,
       new: true,
       action: "add",
-      nomenclature: `T-${grid}.${transformerCount + 1}`,
-      name: `T-${grid}.${transformerCount + 1}`,
-      children: [], // New transformer starts with no children
+      nomenclature: newNomenclature,
+      name: newNomenclature,
+      children: [],
     };
 
     setData((prevState) => ({
       ...prevState,
-      nodes: [...prevState.nodes, newTransformer], // Adds the new transformer to the graph
+      nodes: [...prevState.nodes, newTransformer],
     }));
     setTransformerCounter(transformerCounter + 1);
   };
@@ -133,23 +160,20 @@ const NetworkTopology = () => {
     // Recursive function to add a house to a specific transformer
     const addHouseRecursive = (node) => {
       if (node.id === transformerId) {
-        const houseCount = node.children.filter(
-          (child) => child.type === "house"
-        ).length;
-        let prev_nomenclature = node.nomenclature.split("-")[1];
+        const newNomenclature = generateHouseNomenclature(node, node.children);
         const newHouse = {
           id: crypto.randomUUID(),
           type: "house",
           status: NODE_STATUS.EMPTY,
           new: true,
-          nomenclature: `H.${prev_nomenclature}.${houseCount + 1}`,
-          name: `H.${prev_nomenclature}.${houseCount + 1}`,
+          nomenclature: newNomenclature,
+          name: newNomenclature,
           children: null,
           parentId: transformerId,
         };
         return {
           ...node,
-          children: [...node.children, newHouse], // Adds the new house to the transformer's children
+          children: [...node.children, newHouse],
         };
       }
       if (node.children && node.children.length > 0) {
@@ -163,7 +187,7 @@ const NetworkTopology = () => {
 
     setData((prevState) => ({
       ...prevState,
-      nodes: prevState.nodes.map(addHouseRecursive), // Updates the graph data
+      nodes: prevState.nodes.map(addHouseRecursive),
     }));
   };
   // Deletes a transformer node from the network
@@ -199,22 +223,19 @@ const NetworkTopology = () => {
   const handleAddSubTransformer = (transformerId) => {
     const addSubTransformerRecursive = (node) => {
       if (node.id === transformerId) {
-        const transformerCount = node.children.filter(
-          (child) => child.type === "transformer"
-        ).length;
-        const prev_nomenclature = node.nomenclature.split("-")[1];
+        const newNomenclature = generateTransformerNomenclature(node, node.children);
         const newSubTransformer = {
           id: crypto.randomUUID(),
           type: "transformer",
           new: true,
           status: NODE_STATUS.EMPTY,
-          nomenclature: `T-${prev_nomenclature}.${transformerCount + 1}`,
-          name: `T-${prev_nomenclature}.${transformerCount + 1}`,
+          nomenclature: newNomenclature,
+          name: newNomenclature,
           children: [],
         };
         return {
           ...node,
-          children: [...node.children, newSubTransformer], // Adds the sub-transformer to the node's children
+          children: [...node.children, newSubTransformer],
         };
       }
       if (node.children && node.children.length > 0) {
@@ -231,19 +252,12 @@ const NetworkTopology = () => {
       nodes: prevState.nodes.map(addSubTransformerRecursive),
     }));
   };
-  // Resets the form to the initial substation data
-  const handleCancel = () => {
-    setData(initialSubstationData);
-    setDeletedNodes([]);
-    setTransformerDetails(null);
-    setHouseDetails(null);
-  };
-  // Closes the transformer form
+
   const handleCloseTransformerForm = () => {
     setTransformerDetails(null);
   };
 
-  // Updates the node with the given id and updater function 
+  // Helper function to update a node anywhere in the nested structure
   const updateNode = (id, updater) => {
     const search = (node) => {
       if (!node) return;
@@ -274,7 +288,8 @@ const NetworkTopology = () => {
   };
   // Saves the network topology to the server
   const handleSaveTopology = async () => {
-    // Compares current and initial node states to determine changes
+    // Recursive function to compare current node state with initial state
+    // and determine necessary actions (add, update, delete) for the API payload.
     const compareNodes = (currentNode, initialNode) => {
       if (!initialNode) {
         return {
@@ -331,7 +346,8 @@ const NetworkTopology = () => {
 
       return null;
     };
-    // Finds nodes that were deleted in the current state
+
+    // Helper function to find nodes present in initialNodes but not in currentNodes
     const findDeletedNodes = (currentNodes, initialNodes) => {
       const currentNodeIds = new Set(currentNodes.map((node) => node.id));
       return initialNodes
@@ -355,8 +371,8 @@ const NetworkTopology = () => {
 
     try {
       console.log("updated data: ", updatedData);
-      await updateSubstationTopology(selectedSubstationId, updatedData); // Updates substation topology on the server
-      const data = await getSubstationById(selectedSubstationId); // Fetches updated data
+      await updateSubstationTopology(selectedSubstationId, updatedData);
+      const data = await getSubstationById(selectedSubstationId);
       setData(data);
       setInitialSubstationData(data);
     } catch (error) {
@@ -372,13 +388,13 @@ const NetworkTopology = () => {
   const handleHouseEdit = (houseDetails) => {
     setHouseDetails(houseDetails);
     setTransformerDetails(null);
-  };
-
-  const handleCloseHouseForm = () => {
+};
+const handleCloseHouseForm = () => {
     setHouseDetails(null);
   };
-
-  const handleHouseSave = (updatedHouse) => {
+const handleHouseSave = (updatedHouse) => {
+    // TODO: Implement logic to update the house data in the main state 'data'
+    // For now, just closing the form. Consider updating local state optimistically.
     setHouseDetails(null);
   };
   // Handles node editing logic based on the node type
@@ -389,10 +405,10 @@ const NetworkTopology = () => {
       const transformerDetails = await fetchTransformerDetails(node.id);
       handleTransformerEdit(transformerDetails);
     } else if (node.nomenclature.startsWith("H")) {
-      // TODO: make and implement the house form like transformer form
+      // TODO: Implement house form fetching and display similar to transformer form
       console.log("house node");
-      // const houseDetails = await fetchHouseDetails(node.id);
-      // handleHouseEdit(houseDetails);
+      // const houseDetails = await fetchHouseDetails(node.id); // Example API call
+      // handleHouseEdit(houseDetails); // Example state update
     }
   };
   // Deletes the selected node after confirmation
@@ -492,12 +508,6 @@ const NetworkTopology = () => {
                 >
                   SAVE
                 </button>
-                {/* <button
-                                        className="cursor-pointer border px-9 items-end bg-[#49AC82] rounded-2xl text-white text-lg font-sm w-[120] border-[#49AC82]"
-                                        onClick={handleCancel}
-                                    >
-                                        CANCEL
-                                    </button> */}
               </div>
             </div>
             <div className="overflow-auto  h-[79.7vh]  2xl:h-[83.5vh]">
