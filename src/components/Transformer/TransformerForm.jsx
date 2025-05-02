@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { updateTransformerData } from "services/Tranformer";
+import { updateTransformerData } from "services/Transformer";
 import Breadcrumb from "components/Breadcrumb/Breadcrumb";
 import "components/Breadcrumb/Breadcrumb.css";
 import { useForm, FormProvider } from "react-hook-form";

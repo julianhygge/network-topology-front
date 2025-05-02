@@ -8,7 +8,7 @@ import {
   getSubstationById,
   updateSubstationTopology,
 } from "services/Substation";
-import { fetchTransformerDetails } from "services/Tranformer";
+import { fetchTransformerDetails } from "services/Transformer";
 import TransformerForm from "components/Transformer/TransformerForm";
 import HouseForm from "components/House/HouseForm";
 import Breadcrumb from "components/Breadcrumb/Breadcrumb";

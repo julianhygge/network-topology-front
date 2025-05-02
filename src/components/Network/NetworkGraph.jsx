@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./NetworkGraph.css";
-import { fetchTransformerDetails } from "services/Tranformer";
+import { fetchTransformerDetails } from "services/Transformer";
 import { useNavigate } from "react-router-dom";
 import {
   getColor,
