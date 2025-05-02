@@ -488,10 +488,10 @@ const handleHouseSave = (updatedHouse) => {
   }
 
   return (
-    <div className="flex-col  box-border max-w-[1920px] h-full">
-      <Navbar />
-      <div className="flex h-full box-border ">
-        <GridSideBar
+    <div className="full-container">
+    <Navbar />
+    <div className="flex-col h-full topology-container">
+          <GridSideBar
           onGridSelect={setSelectedSubstationId}
           selectedGridId={selectedSubstationId}
         />
@@ -510,7 +510,7 @@ const handleHouseSave = (updatedHouse) => {
                 </button>
               </div>
             </div>
-            <div className="overflow-auto  h-[79.7vh]  2xl:h-[83.5vh]">
+            <div className="overflow-auto">
               <NetworkGraph
                 onSelectedNode={handleSelectedNode}
                 onRightClickSelectedNode={handleRightClickSelectedNode}
@@ -556,8 +556,10 @@ const handleHouseSave = (updatedHouse) => {
             </div>
           </div>
         )}
-      </div>
+
     </div>
+    </div>
+
   );
 };
 
