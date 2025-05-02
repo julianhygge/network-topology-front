@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { getToken } from 'services/LocalStorage';
 import { API_URL } from 'services/Config';
 
-const token = getToken()
-// const navigate = useNavigate();
 
 const axiosInstance = axios.create({
     baseURL:API_URL
@@ -12,6 +10,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     (config) => {
+        const token = getToken();
         console.log("COnfig", config)
         if(token){
             config.headers['Authorization'] = `Bearer ${token}`;
