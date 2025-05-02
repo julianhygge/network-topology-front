@@ -488,44 +488,48 @@ const handleHouseSave = (updatedHouse) => {
   }
 
   return (
-    <div className="full-container">
-    <Navbar />
-    <div className="flex-col h-full topology-container">
+    <div className="full-container flex flex-col h-screen">
+      <Navbar />
+      <div className="topology-container flex flex-row flex-1 overflow-hidden">
+        <div className="bg-sideBar h-full flex-shrink-0">
           <GridSideBar
-          onGridSelect={setSelectedSubstationId}
-          selectedGridId={selectedSubstationId}
-        />
-        {data && (
-          <div className="flex-col overflow-hidden box-border h-full w-full">
-            <div className="flex justify-between items-center bg-breadcrumbBackgroundColor py-2 pr-[24px]">
-              <div className="grow mt-[6px]">
-                {renderBreadcrumb()}
+            onGridSelect={setSelectedSubstationId}
+            selectedGridId={selectedSubstationId}
+          />
+        </div>
+        <div className="structure-container flex flex-col flex-1 overflow-hidden box-border w-full">
+          {data && (
+            <>
+              <div className="flex justify-between items-center bg-breadcrumbBackgroundColor py-2 pr-[24px] flex-shrink-0">
+                <div className="grow mt-[6px]">
+                  {renderBreadcrumb()}
+                </div>
+                <div className="flex-none items-center justify-between font-dinPro font-medium">
+                  <button
+                    className="cursor-pointer border px-[65px] mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
+                    onClick={handleSaveTopology}
+                  >
+                    SAVE
+                  </button>
+                </div>
               </div>
-              <div className="flex-none items-center justify-between font-dinPro font-medium">
-                <button
-                  className="cursor-pointer border px-[65px] mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
-                  onClick={handleSaveTopology}
-                >
-                  SAVE
-                </button>
+              <div className="flex-1 overflow-auto network-graph-container scrollbar">
+                <NetworkGraph
+                  onSelectedNode={handleSelectedNode}
+                  onRightClickSelectedNode={handleRightClickSelectedNode}
+                  data={data}
+                  onAddTransformer={handleAddTransformer}
+                  onAddHouse={handleAddHouse}
+                  onDeleteTransformer={handleDeleteTransformer}
+                  onAddSubTransformer={handleAddSubTransformer}
+                  onDeleteHouse={handleDeleteHouse}
+                  onTransformerEdit={handleTransformerEdit}
+                  onHouseEdit={handleHouseEdit}
+                />
               </div>
-            </div>
-            <div className="overflow-auto">
-              <NetworkGraph
-                onSelectedNode={handleSelectedNode}
-                onRightClickSelectedNode={handleRightClickSelectedNode}
-                data={data}
-                onAddTransformer={handleAddTransformer}
-                onAddHouse={handleAddHouse}
-                onDeleteTransformer={handleDeleteTransformer}
-                onAddSubTransformer={handleAddSubTransformer}
-                onDeleteHouse={handleDeleteHouse}
-                onTransformerEdit={handleTransformerEdit}
-                onHouseEdit={handleHouseEdit}
-              />
-            </div>
-          </div>
-        )}
+            </>
+          )}
+        </div>
         {showDeletePopup && (
           <Delete
             onClose={handleCloseDeletePopup}
@@ -556,8 +560,7 @@ const handleHouseSave = (updatedHouse) => {
             </div>
           </div>
         )}
-
-    </div>
+      </div>
     </div>
 
   );
