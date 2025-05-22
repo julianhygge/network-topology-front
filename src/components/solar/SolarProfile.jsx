@@ -90,17 +90,13 @@ const SolarProfile = () => {
   const onSubmit = (data) => {
     if (slider) {
       data["capacity_for_simulation_kw"] = simulationCapacity;
-    }
-    if (percentage) {
-      data["capacity_for_simulation_kw"] = perValue;
-    }
-
-    if (slider) {
       data["simulated_available_space_sqft"] = simulationSpace;
     }
     if (percentage) {
+      data["capacity_for_simulation_kw"] = perValue;
       data["simulated_available_space_sqft"] = sqftValue;
     }
+ 
 
     data["solar_available"] = data["solar_available"] === "true";
 
@@ -114,7 +110,6 @@ const SolarProfile = () => {
     console.log("data", data);
 
     if (solarDetails){
-      console.log("Hi", data['solar_available']===true);
       
         if (data['solar_available']===true){
           data["available_space_sqft"] = null
@@ -129,19 +124,29 @@ const SolarProfile = () => {
   };
 
   const onDecrease = () => {
-    setInitial(initial - 10);
-    calculatePercentage();
+    setInitial(prev => {
+      const newValue = Math.max(prev - 10, 0);
+      calculatePercentage(newValue);
+      return newValue;
+    });
   };
+  
   const onIncrease = () => {
-    setInitial(initial + 10);
-    calculatePercentage();
+    setInitial(prev => {
+      const newValue = prev + 10;
+      calculatePercentage(newValue);
+      return newValue;
+    });
   };
-
-  const calculatePercentage = () => {
-    let per = Math.round(installedCapacity * (1 + initial / 100));
-    let sqft = Math.round(availableSqft * (1 + initial / 100));
-    setPervalue(per);
-    setSqftvalue(sqft);
+  
+  const calculatePercentage = (value) => {
+    const percentageFactor = value / 100;
+  
+    if (solarAvailable) {
+      setPervalue(Math.round(installedCapacity * (1 + percentageFactor)));
+    } else {
+      setSqftvalue(Math.round(availableSqft * (1 + percentageFactor)));
+    }
   };
 
   const handleSlider = (e) => {
@@ -425,6 +430,7 @@ const SolarProfile = () => {
                           type="button"
                           onClick={onDecrease}
                           className="border border-solid border-[#204A56] rounded-xl w-10 text-center p-1"
+                          disabled={initial === 0}
                         >
                           -
                         </button>
