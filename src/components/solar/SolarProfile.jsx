@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useParams, useNavigate } from "react-router-dom";
-import { createSolarDetails, fetchSolarDetails } from "services/SolarProfile";
+import { useParams} from "react-router-dom";
+import { createSolarDetails, fetchSolarDetails, updateSolarData } from "services/SolarProfile";
 // import './SolarProfile.css'
 
 const SolarProfile = () => {
@@ -11,7 +11,12 @@ const SolarProfile = () => {
     watch,
     reset,
     formState: { errors, isValid },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      tilt_type: "fixed", 
+      solar_available:"true"
+    },
+  });
 
   const solarAvailable = watch("solar_available", "true") === "true";
   const enableSimulate = watch("simulate_using_different_capacity");
@@ -28,12 +33,22 @@ const SolarProfile = () => {
   const [sqftValue, setSqftvalue] = useState(availableSqft);
 
   const { houseId } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const fetchDetail = async (house_id) => {
     try {
       const res = await fetchSolarDetails(house_id);
-      setSolarDetails(res);
+      const transformedRes = {
+        ...res,
+        available_space_sqft: res.available_space_sqft ? Number(res.available_space_sqft) : null,
+        capacity_for_simulation_kw: res.capacity_for_simulation_kw ? Number(res.capacity_for_simulation_kw) : null,
+        installed_capacity_kw: res.installed_capacity_kw !== null ? Number(res.installed_capacity_kw) : null,
+        simulated_available_space_sqft: res.simulated_available_space_sqft !== null ? Number(res.simulated_available_space_sqft) : null,
+        years_since_installation: res.years_since_installation !== null ? Number(res.years_since_installation) : null,
+      };
+      
+      setSolarDetails(transformedRes);
+      
     } catch (err) {
       console.log("No data");
     }
@@ -43,13 +58,34 @@ const SolarProfile = () => {
     fetchDetail(houseId);
   }, [houseId]);
 
+  useEffect(() => {
+    if (solarDetails) {
+      // Transform values if needed (e.g., booleans to strings for radio buttons)
+      const transformedDetails = {
+        ...solarDetails,
+        solar_available: solarDetails.solar_available ? "true" : "false",
+        tilt_type: solarDetails.tilt_type || "fixed", 
+      };
+      reset(transformedDetails);
+    }
+  }, [solarDetails, reset]);
+
   const createSolarProfile = async (data) => {
     try {
-      const res = await createSolarDetails(data);
+      await createSolarDetails(data);
     } catch (err) {
       console.log("Error in creating Solar Detail");
     }
   };
+
+  const updateSolarProfile = async(houseId, data) =>{
+    try{
+      await updateSolarData(houseId, data)
+    }catch(err){
+      console.log('Error in updating solar profile');
+      
+    }
+  }
 
   const onSubmit = (data) => {
     if (slider) {
@@ -77,8 +113,19 @@ const SolarProfile = () => {
     data["house_id"] = houseId;
     console.log("data", data);
 
-    createSolarProfile(data);
-    navigate("/");
+    if (solarDetails){
+      console.log("Hi", data['solar_available']===true);
+      
+        if (data['solar_available']===true){
+          data["available_space_sqft"] = null
+          data["simulated_available_space_sqft"] = null
+        }
+        updateSolarProfile(houseId, data)
+    }
+    else{
+      createSolarProfile(data)
+    }
+
   };
 
   const onDecrease = () => {
@@ -108,7 +155,6 @@ const SolarProfile = () => {
 
   return (
     <>
-      {!solarDetails ? (
         <div className="bg-[#E7FAFF] h-full">
           <div className="text-center items-center text-[#204A56] text-2xl">
             Select the type of solar profile
@@ -123,8 +169,7 @@ const SolarProfile = () => {
                     className="w-6 h-6"
                     type="radio"
                     id="solar_available"
-                    value={true}
-                    defaultChecked
+                    value="true"
                     {...register("solar_available", { required: true })}
                   />
                   <label
@@ -140,7 +185,7 @@ const SolarProfile = () => {
                     className="w-6 h-6 absolute mt-[-8px]"
                     type="radio"
                     id="solar_not_available"
-                    value={false}
+                    value="false"
                     {...register("solar_available", { required: true })}
                   />
                   <label
@@ -216,7 +261,7 @@ const SolarProfile = () => {
                         className="ml-8  w-6 h-6 "
                         type="radio"
                         value="fixed"
-                        defaultChecked
+                        
                         {...register("tilt_type", { required: true })}
                       />
                       <label className="text-xl ml-1 text-[#204A56]">
@@ -433,16 +478,7 @@ const SolarProfile = () => {
             </form>
           </div>
         </div>
-      ) : (
-        <div>
-          Edit Solar with {solarDetails.house_id}
-          {Object.entries(solarDetails).map(([key, value]) => (
-            <p key={key}>
-              {key}: {value}
-            </p>
-          ))}
-        </div>
-      )}
+    
     </>
   );
 };
