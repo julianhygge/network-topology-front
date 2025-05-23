@@ -96,6 +96,19 @@ export const deleteSubstation = async (substationId) => {
   }
 };
 
+export const GetHouseProfile = async (substationId) => {
+  try{
+    const response = await axiosInstance.get(
+      `/substations/${substationId}/profiles/zip`,
+      { responseType: 'blob' } 
+    );
+    return response.data;
+  }catch(error){
+    console.log("error in downloading profile");
+    throw error
+  }
+}
+
 
 
 

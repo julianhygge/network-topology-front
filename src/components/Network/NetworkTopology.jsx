@@ -7,12 +7,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   getSubstationById,
   updateSubstationTopology,
+  GetHouseProfile,
 } from "services/Substation";
 import { fetchTransformerDetails } from "services/Transformer";
 import TransformerForm from "components/Transformer/TransformerForm";
 import HouseForm from "components/House/HouseForm";
 import Breadcrumb from "components/Breadcrumb/Breadcrumb";
 import Delete from "components/Common/DeleteConfirm";
+import { toast } from "sonner";
 
 // Helper function to generate nomenclature for a new transformer
 const generateTransformerNomenclature = (parentNode, existingSiblings) => {
@@ -23,12 +25,15 @@ const generateTransformerNomenclature = (parentNode, existingSiblings) => {
   let parentPrefix;
   if (parentNode.substation_name) {
     const match = parentNode.substation_name.match(/(\d+)$/);
-    parentPrefix = match ? match[1] : 'X';
+    parentPrefix = match ? match[1] : "X";
   } else if (parentNode.nomenclature && parentNode.type === "transformer") {
     parentPrefix = parentNode.nomenclature.split("-")[1];
   } else {
-    console.error("Cannot determine parent prefix for transformer nomenclature:", parentNode);
-    parentPrefix = 'UNKNOWN';
+    console.error(
+      "Cannot determine parent prefix for transformer nomenclature:",
+      parentNode
+    );
+    parentPrefix = "UNKNOWN";
   }
 
   return `T-${parentPrefix}.${transformerCount + 1}`;
@@ -37,8 +42,11 @@ const generateTransformerNomenclature = (parentNode, existingSiblings) => {
 // Helper function to generate nomenclature for a new house
 const generateHouseNomenclature = (parentNode, existingSiblings) => {
   if (!parentNode.nomenclature || parentNode.type !== "transformer") {
-     console.error("Cannot generate house nomenclature for non-transformer parent:", parentNode);
-     return `H-UNKNOWN.1`;
+    console.error(
+      "Cannot generate house nomenclature for non-transformer parent:",
+      parentNode
+    );
+    return `H-UNKNOWN.1`;
   }
   const houseCount = existingSiblings.filter(
     (child) => child.type === "house"
@@ -92,8 +100,49 @@ const NetworkTopology = () => {
   // Clear the location.state used for the breadcrumb when a new node is selected
   useEffect(() => {
     if (!selectedNode) return;
-    navigate(location.pathname, { replace: true })
-  }, [selectedNode])
+    navigate(location.pathname, { replace: true });
+  }, [selectedNode]);
+
+  const handleHouseProfile = async () => {
+    try {
+      const response = await GetHouseProfile(selectedSubstationId);
+
+      const blob = new Blob([response], { type: "application/zip" });
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `substation-${selectedSubstationId}-profile.zip`
+      );
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+
+      let message = "Unexpected error during download";
+
+      if (error?.response?.data instanceof Blob) {
+        // Try to read error blob as JSON
+        const errorText = await error.response.data.text();
+        try {
+          const errorJson = JSON.parse(errorText);
+          message = errorJson.detail || message;
+        } catch {
+          message = errorText;
+        }
+      } else if (error?.response?.data?.detail) {
+        message = error.response.data.detail;
+      }
+      toast.error(`Download Failed: ${message}`, {
+        duration: 4000,
+        style: { background: "white", color: "red" },
+      });
+    }
+  };
 
   const handleAddTransformer = () => {
     const newNomenclature = generateTransformerNomenclature(data, data.nodes);
@@ -223,7 +272,10 @@ const NetworkTopology = () => {
   const handleAddSubTransformer = (transformerId) => {
     const addSubTransformerRecursive = (node) => {
       if (node.id === transformerId) {
-        const newNomenclature = generateTransformerNomenclature(node, node.children);
+        const newNomenclature = generateTransformerNomenclature(
+          node,
+          node.children
+        );
         const newSubTransformer = {
           id: crypto.randomUUID(),
           type: "transformer",
@@ -266,23 +318,23 @@ const NetworkTopology = () => {
         return;
       }
       if (!node.children) return;
-      node.children.forEach(element => {
-        search(element)
+      node.children.forEach((element) => {
+        search(element);
       });
-    }
+    };
     setData((prev) => {
       const prevData = { children: prev.nodes };
       search(prevData);
       return { ...prev };
-    })
-  }
+    });
+  };
 
   // Saves changes to a transformer and updates its state
   const handleTransformerSave = (updatedTransformer) => {
-    console.log("handle transformer save: ", updatedTransformer)
+    console.log("handle transformer save: ", updatedTransformer);
     const updateTransformerStatus = (node) => {
       node.status = updatedTransformer.status;
-    }
+    };
     updateNode(updatedTransformer.id, updateTransformerStatus);
     setTransformerDetails(null);
   };
@@ -388,11 +440,11 @@ const NetworkTopology = () => {
   const handleHouseEdit = (houseDetails) => {
     setHouseDetails(houseDetails);
     setTransformerDetails(null);
-};
-const handleCloseHouseForm = () => {
+  };
+  const handleCloseHouseForm = () => {
     setHouseDetails(null);
   };
-const handleHouseSave = (updatedHouse) => {
+  const handleHouseSave = (updatedHouse) => {
     // TODO: Implement logic to update the house data in the main state 'data'
     // For now, just closing the form. Consider updating local state optimistically.
     setHouseDetails(null);
@@ -461,11 +513,8 @@ const handleHouseSave = (updatedHouse) => {
   const renderBreadcrumb = () => {
     if (selectedNode && !selectedNode.new) {
       return (
-        <Breadcrumb
-          nodeId={selectedNode.id}
-          onEditNode={handleEditNode}
-        />
-      )
+        <Breadcrumb nodeId={selectedNode.id} onEditNode={handleEditNode} />
+      );
     }
     if (!selectedNode && location.state?.houseId) {
       return (
@@ -473,19 +522,20 @@ const handleHouseSave = (updatedHouse) => {
           nodeId={location.state?.houseId}
           onEditNode={handleEditNode}
         />
-      )
+      );
     }
-    return (<>
-      {selectedSubstationId && (!location.state?.houseId ||
-        !selectedNode || selectedNode.new) && (
-          <Breadcrumb
-            nodeId={selectedSubstationId}
-            onEditNode={handleEditNode}
-          />
-        )}
-    </>
-    )
-  }
+    return (
+      <>
+        {selectedSubstationId &&
+          (!location.state?.houseId || !selectedNode || selectedNode.new) && (
+            <Breadcrumb
+              nodeId={selectedSubstationId}
+              onEditNode={handleEditNode}
+            />
+          )}
+      </>
+    );
+  };
 
   return (
     <div className="full-container flex flex-col h-screen">
@@ -501,15 +551,21 @@ const handleHouseSave = (updatedHouse) => {
           {data && (
             <>
               <div className="flex justify-between items-center bg-breadcrumbBackgroundColor py-2 pr-[24px] flex-shrink-0">
-                <div className="grow mt-[6px]">
-                  {renderBreadcrumb()}
-                </div>
+                <div className="grow mt-[6px]">{renderBreadcrumb()}</div>
                 <div className="flex-none items-center justify-between font-dinPro font-medium">
                   <button
-                    className="cursor-pointer border px-[65px] mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
+                    className="cursor-pointer border px-[50px] mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                     onClick={handleSaveTopology}
                   >
                     SAVE
+                  </button>
+                </div>
+                <div className="flex-none items-center justify-between font-dinPro font-medium">
+                  <button
+                    className="cursor-pointer border px-[50px] ml-1 mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
+                    onClick={handleHouseProfile}
+                  >
+                    DOWNLOAD
                   </button>
                 </div>
               </div>
@@ -562,7 +618,6 @@ const handleHouseSave = (updatedHouse) => {
         )}
       </div>
     </div>
-
   );
 };
 

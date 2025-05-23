@@ -14,6 +14,7 @@ import LoadProfileFileList from "components/LoadProfile/LoadProfileFileList";
 import Login from "components/Auth/Login";
 import AuthRoute from "ProtectedRoute/AuthRoute";
 import SolarProfile from "components/solar/SolarProfile";
+import { Toaster } from "sonner";
 
 // const router = createBrowserRouter(
 //   [
@@ -83,9 +84,32 @@ const router = createBrowserRouter([
   },
 ]);
 
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+// root.render(
+//   <React.StrictMode>
+//     <RouterProvider router={router} />
+//   </React.StrictMode>
+// );
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    {/* Wrap in fragment to add multiple components */}
+    <>
+      <RouterProvider router={router} />
+      <Toaster
+        position="top-center"
+        expand={false}
+        visibleToasts={3}
+        toastOptions={{
+          style: {
+            background: '#E7FAFF',
+            color: '#204A56',
+            border: '1px solid #204A56',
+            fontSize: '16px',
+          },
+          duration: 2000,
+        }}
+      />
+    </>
   </React.StrictMode>
 );
