@@ -14,6 +14,8 @@ import LoadProfileFileList from "components/LoadProfile/LoadProfileFileList";
 import Login from "components/Auth/Login";
 import AuthRoute from "ProtectedRoute/AuthRoute";
 import SolarProfile from "components/solar/SolarProfile";
+import LandingPage from "components/NetMeter/AlgorithmSelection";
+import NetMeterMenu from "components/NetMeter/NetMeterMenu";
 
 // const router = createBrowserRouter(
 //   [
@@ -81,6 +83,16 @@ const router = createBrowserRouter([
       }
     ]
   },
+  {
+    path:"/",
+     element: <AuthRoute />,
+     children:[
+      {path :"netmeter",element:<LandingPage/>},
+      {path:"netmeter/netMetering",element:<NetMeterMenu/>}
+    
+    
+     ]
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
