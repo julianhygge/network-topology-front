@@ -1,29 +1,39 @@
 import { useState } from "react";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import { useNavigate } from 'react-router-dom'
 import Navbar from "components/Common/Navbar";
 import GridSideBar from "components/Grid/GridSideBar";
+import { postNetMeteringPolicyParams } from 'services/netMeteringService'
+import { useParams } from "react-router-dom";
 
 export default function NetMeteringBillPage() {
+  
+  const {simulationRunId} = useParams();
+  const navigate = useNavigate()
   const [retailPrice, setRetailPrice] = useState("");
   const [fixedPrice, setFixedPrice] = useState("");
 
-  const handleGenerateBill = () => {
-    if (retailPrice) {
-      // Handle bill generation logic
-      console.log(
-        "Generating bill with retail price:",
-        retailPrice,
-        "and fixed price:",
-        fixedPrice
-      );
+  const handleGenerateBill = async () => {
+    try {
+        console.log(simulationRunId)
+      const res=await postNetMeteringPolicyParams({
+        simulationRunId,
+        retailPrice: +retailPrice,
+        fixedChargeRate: +fixedPrice
+      })
+      // after successful POST, maybe navigate to a summary or show toast
+      console.log(res)
+      navigate(`/config-summary/${simulationRunId}`)
+    } catch (e) {
+      console.error(e)
     }
-  };
+  }
 
   return (
     <div className="flex flex-col h-screen">
       <Navbar />
       <div className="flex flex-1">
-        <GridSideBar />
+        {/* <GridSideBar /> */}
         <div className="flex flex-1 flex-col items-center justify-center bg-[#E7FAFF]">
           <div className="text-center text-xl font-medium mb-8 text-navColor max-w-4xl px-4">
             You have selected Net Metering Policy, according to that policy

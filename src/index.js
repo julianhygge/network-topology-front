@@ -91,9 +91,9 @@ const router = createBrowserRouter([
      element: <AuthRoute />,
      children:[
       {path :"netmeter",element:<LandingPage/>},
-      {path:"netmeter/netMetering",element:<NetMeterMenu/>},
-      {path:"netmeter/netMetering/NetMetering",element:<BillingCycleSelection/>},
-      {path:"bill",element:<NetMeteringBillPage/>}
+      {path:"netmeter/netMetering/:simulationRunId",element:<NetMeterMenu/>},
+      {path:"netmeter/netMetering/NetMetering/:simulationRunId",element:<BillingCycleSelection/>},
+      {path:"/netMetering/bill/:simulationRunId",element:<NetMeteringBillPage/>}
     
     
      ]

@@ -1,11 +1,13 @@
 //For NetMetring
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate,useLocation, useParams } from "react-router-dom"
 import Navbar from "components/Common/Navbar"
 import GridSideBar from "components/Grid/GridSideBar"
 import { ChevronDown } from "lucide-react"
+import { updateBillingCycle } from 'services/netMeteringService'
 
 export default function BillingCycleSelection() {
+  const {simulationRunId }= useParams();
   const navigate = useNavigate()
   const [monthOpen, setMonthOpen] = useState(false)
   const [yearOpen, setYearOpen] = useState(false)
@@ -24,9 +26,18 @@ export default function BillingCycleSelection() {
     "2019","2020","2021","2022","2023","2024","2025"
   ]
 
-  const handleContinue = () => {
-    if (selectedMonth !== "Month" && selectedYear !== "Year") {
-      navigate("/bill")
+    const handleContinue = async () => {
+    try {
+      console.log(simulationRunId);
+      
+      await updateBillingCycle({
+        simulationRunId,
+        month: months.indexOf(selectedMonth) + 1,
+        year: +selectedYear
+      })
+      navigate(`/netMetering/bill/${simulationRunId}`)
+    } catch (e) {
+      console.error(e)
     }
   }
 
@@ -34,7 +45,7 @@ export default function BillingCycleSelection() {
     <div className="flex flex-col h-screen">
       <Navbar />
       <div className="flex flex-1">
-        <GridSideBar />
+        {/* <GridSideBar /> */}
         <div className="flex flex-col flex-1">
           <div className="flex flex-1 flex-col items-center justify-center bg-[#E7FAFF]">
             <div className="text-center text-2xl font-medium mb-6 text-navColor max-w-4xl">
