@@ -11,46 +11,79 @@ import {
 
 export default function NetMeterMenu() {
   const navigate = useNavigate()
- const { simulationRunId } = useParams()
+  const { simulationRunId } = useParams()
   const [loading2,setLoading2]=useState(false);
   const [policies, setPolicies]   = useState([])
   const [loading, setLoading]     = useState(true)
   const [popupInfo, setPopupInfo] = useState(null)
+
+// why are we checking for selected policy when we just need to display the active net metering policies first and then the user will selct
+
+// useEffect(() => {
+//   if (!simulationRunId) {
+//     navigate('/netmeter', { replace: true });
+//     return;
+//   }
+
+//   const checkSelectedPolicy = async () => {
+//     try {
+//       const selected = await fetchSelectedPolicy(simulationRunId);
+
+//       if (selected?.net_metering_policy_type_id) {
+//         const data = await fetchNetMeteringPolicies();
+//         const allPolicies = Array.isArray(data.items) ? data.items : [];
+//         const chosen = allPolicies.find(p => p.id === selected.net_metering_policy_type_id);
+
+//         if (chosen) {
+//           switch (chosen.display_name) {
+//             case 'Net Metering':
+//               navigate(`/netmeter/netMetering/NetMetering/${simulationRunId}`);
+//               break;
+//             case 'Gross Metering':
+//               navigate(`/netmeter/netMetering/GrossMetering/${simulationRunId}`);
+//               break;
+//             case 'TOU Rate Metering':
+//               navigate(`/netmeter/netMetering/TOURateMetering${simulationRunId}`);
+//               break;
+//             default:
+//               console.warn('Unknown policy type:', chosen.display_name);
+//           }
+//         }
+//       } else {
+//         // no policy selected, fetch all for manual selection
+//         const data = await fetchNetMeteringPolicies();
+//         setPolicies(Array.isArray(data.items) ? data.items : []);
+//       }
+//     } catch (error) {
+//       // handle 404 (not selected yet)
+//       if (error.response?.status === 400) {
+//         try {
+//           const data = await fetchNetMeteringPolicies();
+//           setPolicies(Array.isArray(data.items) ? data.items : []);
+//         } catch (innerErr) {
+//           console.error('Error fetching policy list:', innerErr);
+//         }
+//       } else {
+//         console.error('Error checking selected policy:', error);
+//       }
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   checkSelectedPolicy();
+// }, [simulationRunId, navigate]);
+
 useEffect(() => {
   if (!simulationRunId) {
     navigate('/netmeter', { replace: true });
     return;
   }
 
-  const checkSelectedPolicy = async () => {
+  const activePoliciesUnderSelectedPolicy = async () => {
     try {
-      const selected = await fetchSelectedPolicy(simulationRunId);
-
-      if (selected?.net_metering_policy_type_id) {
-        const data = await fetchNetMeteringPolicies();
-        const allPolicies = Array.isArray(data.items) ? data.items : [];
-        const chosen = allPolicies.find(p => p.id === selected.net_metering_policy_type_id);
-
-        if (chosen) {
-          switch (chosen.display_name) {
-            case 'Net Metering':
-              navigate(`/netmeter/netMetering/NetMetering/${simulationRunId}`);
-              break;
-            case 'Gross Metering':
-              navigate(`/netmeter/netMetering/GrossMetering/${simulationRunId}`);
-              break;
-            case 'TOU Rate Metering':
-              navigate(`/netmeter/netMetering/TOURateMetering${simulationRunId}`);
-              break;
-            default:
-              console.warn('Unknown policy type:', chosen.display_name);
-          }
-        }
-      } else {
-        // no policy selected, fetch all for manual selection
-        const data = await fetchNetMeteringPolicies();
-        setPolicies(Array.isArray(data.items) ? data.items : []);
-      }
+      const data = await fetchNetMeteringPolicies();
+      setPolicies(Array.isArray(data.items) ? data.items : []);
     } catch (error) {
       // handle 404 (not selected yet)
       if (error.response?.status === 400) {
@@ -68,8 +101,8 @@ useEffect(() => {
     }
   };
 
-  checkSelectedPolicy();
-}, [simulationRunId, navigate]);
+  activePoliciesUnderSelectedPolicy();
+}, [navigate, simulationRunId]);
 
 
   const handleSelect = async (policy) => {
@@ -83,11 +116,14 @@ useEffect(() => {
       })
       switch (policy.display_name) {
         case 'Net Metering':
-          navigate(`/netmeter/netMetering/NetMetering/${simulationRunId}`);
+          navigate(`/netmeter/netMetering/netMetering/${simulationRunId}`);
           break
         case 'Gross Metering':
+          navigate(`/netmeter/netMetering/grossMetering/${simulationRunId}`);
           break
         case 'TOU Rate Metering':
+          // todo: implement this route
+          // navigate(`/netmeter/netMetering/touMetering/${simulationRunId}`);
           break
 
         default:

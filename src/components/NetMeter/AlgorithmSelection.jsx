@@ -50,7 +50,7 @@ export default function AlgorithmSelection() {
       })
       console.log(res);
       const simulationRunId=res.id
-      navigate(`netMetering/${simulationRunId}`)
+      navigate(`/netmeter/netMetering/${simulationRunId}`)
      
     } catch (e) {
       console.error(e)

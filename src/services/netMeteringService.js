@@ -98,11 +98,35 @@ export const updateBillingCycle = async ({ simulationRunId, month, year }) => {
  * POST /v1/simulation/policy/net-metering
  * body: { simulation_run_id, retail_price_per_kwh, fixed_charge_tariff_rate_per_kw }
  */
-export const postNetMeteringPolicyParams = async ({ simulationRunId, retailPrice, fixedChargeRate }) => {
+export const generateNetMeteringPolicyBill = async ({ simulationRunId, retailPrice, fixedChargeRate }) => {
   try {
     const payload = {
       simulation_run_id: simulationRunId,
       retail_price_per_kwh: retailPrice,
+      fixed_charge_tariff_rate_per_kw: fixedChargeRate,
+    }
+    const response = await axiosInstance.post(
+      `${BASE_PATH}/policy/net-metering`,
+      payload
+    )
+    return response.data
+  } catch (error) {
+    console.error("Error posting net metering policy params:", error)
+    throw error
+  }
+}
+
+/**
+ * Submit gross metering policy parameters
+ * POST /v1/simulation/policy/net-metering
+ * body: { simulation_run_id, retail_price_per_kwh, export_wholesale_price_per_kwh, fixed_charge_tariff_rate_per_kw }
+ */
+export const generateGrossMeteringPolicyBill = async ({ simulationRunId, retailPrice, wholesalePrice, fixedChargeRate }) => {
+  try {
+    const payload = {
+      simulation_run_id: simulationRunId,
+      retail_price_per_kwh: retailPrice,
+      export_wholesale_price_per_kwh: wholesalePrice,
       fixed_charge_tariff_rate_per_kw: fixedChargeRate,
     }
     const response = await axiosInstance.post(

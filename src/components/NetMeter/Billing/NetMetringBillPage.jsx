@@ -3,7 +3,7 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import { useNavigate } from 'react-router-dom'
 import Navbar from "components/Common/Navbar";
 import GridSideBar from "components/Grid/GridSideBar";
-import { postNetMeteringPolicyParams } from 'services/netMeteringService'
+import { generateNetMeteringPolicyBill } from 'services/netMeteringService'
 import { useParams } from "react-router-dom";
 
 export default function NetMeteringBillPage() {
@@ -18,7 +18,7 @@ export default function NetMeteringBillPage() {
     setLoading(true);
     try {
         console.log(simulationRunId)
-      const res=await postNetMeteringPolicyParams({
+      const res=await generateNetMeteringPolicyBill({
         simulationRunId,
         retailPrice: +retailPrice,
         fixedChargeRate: +fixedPrice

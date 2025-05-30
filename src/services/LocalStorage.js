@@ -6,7 +6,7 @@ export const setToken = (token) => {
 
 export const getToken = () => {
     let item = localStorage.getItem(PROJECT_PREFIX + 'token') || "";
-    if (item == "" || item == "undefined") { return "" }
+    if (item === "" || item === "undefined") { return "" }
     return item;
 }
 
@@ -16,7 +16,7 @@ export const setUser = (user) => {
 
 export const getUser = () => {
     let item = localStorage.getItem(PROJECT_PREFIX + 'hygge_user') || "";
-    if (item == "" || item == "undefined") { return "" }
+    if (item === "" || item === "undefined") { return "" }
     return item;
 }
 
@@ -26,7 +26,7 @@ export const setRole = (role) => {
 
 export const getRole = () => {
     let item = localStorage.getItem(PROJECT_PREFIX + 'role') || ''
-    if (item == "" || item == "undefined") { return "" }
+    if (item === "" || item === "undefined") { return "" }
     return item;
 }
 
@@ -36,7 +36,7 @@ export const setPhoneNumber = (phone_number) => {
 
 export const getPhoneNumber = () => {
     let item = localStorage.getItem(PROJECT_PREFIX + 'phone_number') || ''
-    if (item == "" || item == "undefined") { return "" }
+    if (item === "" || item === "undefined") { return "" }
     return item;
 }
 

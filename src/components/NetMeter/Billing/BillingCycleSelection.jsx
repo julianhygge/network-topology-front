@@ -7,13 +7,13 @@ import { ChevronDown } from "lucide-react"
 import { updateBillingCycle } from 'services/netMeteringService'
 
 export default function BillingCycleSelection() {
-  const {simulationRunId }= useParams();
+  const { meteringType, simulationRunId } = useParams();
   const navigate = useNavigate()
   const [monthOpen, setMonthOpen] = useState(false)
   const [yearOpen, setYearOpen] = useState(false)
   const [selectedMonth, setSelectedMonth] = useState("Month")
   const [selectedYear, setSelectedYear] = useState("Year")
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
 
   const months = [
     "January","February","March","April","May","June",
@@ -37,7 +37,12 @@ export default function BillingCycleSelection() {
         month: months.indexOf(selectedMonth) + 1,
         year: +selectedYear
       })
-      navigate(`/netMetering/bill/${simulationRunId}`)
+      if(meteringType === "netMetering"){
+        navigate(`/netmeter/netMetering/bill/${simulationRunId}`)
+      }
+      if(meteringType === "grossMetering"){
+         navigate(`/netmeter/grossMetering/bill/${simulationRunId}`)
+      }
     } catch (e) {
       console.error(e)
     }
@@ -63,10 +68,15 @@ export default function BillingCycleSelection() {
         {/* <GridSideBar /> */}
         <div className="flex flex-col flex-1">
           <div className="flex flex-1 flex-col items-center justify-center bg-[#E7FAFF]">
-            <div className="text-center text-2xl font-medium mb-6 text-navColor max-w-4xl">
+            {meteringType === "netMetering" && <div className="text-center text-2xl font-medium mb-6 text-navColor max-w-4xl">
               You have selected Net Metering Policy, according to that policy billing of each house will be done as per
               the retail rate
-            </div>
+            </div>}
+
+             {meteringType === "grossMetering" && <div className="text-center text-2xl font-medium mb-6 text-navColor max-w-6xl">
+              You have selected Gross Metering Policy, according to this policy billing of imported energy 
+              will be as per the retail rate and energy exported will   billed  as per the wholesale rate
+            </div>}
 
             <div className="w-full max-w-3xl p-10 bg-white border border-[#BF6A02] rounded-2xl shadow-lg">
               <h2 className="text-center text-xl font-medium mb-12 text-navColor">

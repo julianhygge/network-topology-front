@@ -17,8 +17,9 @@ import SolarProfile from "components/solar/SolarProfile";
 import { Toaster } from "sonner";
 import LandingPage from "components/NetMeter/AlgorithmSelection";
 import NetMeterMenu from "components/NetMeter/NetMeterMenu";
-import BillingCycleSelection from "components/NetMeter/BillingCycleSelection";
-import NetMeteringBillPage from "components/NetMeter/NetMetringBillPage";
+import BillingCycleSelection from "components/NetMeter/Billing/BillingCycleSelection";
+import NetMeteringBillPage from "components/NetMeter/Billing/NetMetringBillPage";
+import GrossMeteringBillPage from "components/NetMeter/Billing/GrossMeteringBillPage";
 
 // const router = createBrowserRouter(
 //   [
@@ -91,11 +92,11 @@ const router = createBrowserRouter([
      element: <AuthRoute />,
      children:[
       {path :"netmeter",element:<LandingPage/>},
-      {path:"netmeter/netMetering/:simulationRunId",element:<NetMeterMenu/>},
-      {path:"netmeter/netMetering/NetMetering/:simulationRunId",element:<BillingCycleSelection/>},
-      {path:"/netMetering/bill/:simulationRunId",element:<NetMeteringBillPage/>}
-    
-    
+      {path:"/netmeter/netMetering/:simulationRunId",element:<NetMeterMenu/>},
+      {path:"/netmeter/netMetering/:meteringType/:simulationRunId",element:<BillingCycleSelection/>},
+      {path:"/netmeter/netMetering/bill/:simulationRunId",element:<NetMeteringBillPage/>},
+      {path:"/netmeter/grossMetering/bill/:simulationRunId",element:<GrossMeteringBillPage/>},
+      // {path:"/netmeter/touMetering/bill/:simulationRunId",element:<TouMeteringBillPage/>},
      ]
   }
 ]);
