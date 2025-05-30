@@ -16,6 +16,7 @@ export default function NetMeterMenu() {
   const [policies, setPolicies]   = useState([])
   const [loading, setLoading]     = useState(true)
   const [popupInfo, setPopupInfo] = useState(null)
+  const [error, setError] = useState("");
 
 // why are we checking for selected policy when we just need to display the active net metering policies first and then the user will selct
 
@@ -85,16 +86,12 @@ useEffect(() => {
       const data = await fetchNetMeteringPolicies();
       setPolicies(Array.isArray(data.items) ? data.items : []);
     } catch (error) {
-      // handle 404 (not selected yet)
       if (error.response?.status === 400) {
-        try {
-          const data = await fetchNetMeteringPolicies();
-          setPolicies(Array.isArray(data.items) ? data.items : []);
-        } catch (innerErr) {
-          console.error('Error fetching policy list:', innerErr);
-        }
+        console.warn("Not able to fetch policies under the chosen algorithm.");
+        setPolicies([]);
       } else {
-        console.error('Error checking selected policy:', error);
+        console.error('Unexpected error fetching policies for the chosen algorithm:', error);
+        setError(error);
       }
     } finally {
       setLoading(false);
@@ -130,6 +127,7 @@ useEffect(() => {
       }
     } catch (err) {
       console.error('Error selecting policy:', err)
+      setError(err.response.data.detail)
     }
     finally{
         setLoading2(false);
@@ -231,6 +229,11 @@ useEffect(() => {
                 ))}
               </div>
             </div>
+            {error && (
+              <div className="text-center text-md font-medium mt-6 text-red-600">
+                {error}
+              </div>
+            )}
           </div>
         </div>
       </div>
