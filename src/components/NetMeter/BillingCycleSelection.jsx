@@ -13,6 +13,7 @@ export default function BillingCycleSelection() {
   const [yearOpen, setYearOpen] = useState(false)
   const [selectedMonth, setSelectedMonth] = useState("Month")
   const [selectedYear, setSelectedYear] = useState("Year")
+  const [loading,setLoading]=useState(false);
 
   const months = [
     "January","February","March","April","May","June",
@@ -27,6 +28,7 @@ export default function BillingCycleSelection() {
   ]
 
     const handleContinue = async () => {
+      setLoading(true);
     try {
       console.log(simulationRunId);
       
@@ -39,7 +41,20 @@ export default function BillingCycleSelection() {
     } catch (e) {
       console.error(e)
     }
+    finally{
+      setLoading(false);
+    }
   }
+   if (loading) {
+        return (
+          <div className="flex flex-col h-screen">
+            <Navbar />
+            <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
+              <span className="text-navColor">Updating Bill</span>
+            </div>
+          </div>
+        )
+      }
 
   return (
     <div className="flex flex-col h-screen">

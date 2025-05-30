@@ -12,6 +12,7 @@ export default function AlgorithmSelection() {
   const navigate = useNavigate()
   const [algs, setAlgs] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loading2,setLoading2]=useState(false);
   const [error, setError] = useState(null)
 
   // map display_name → your local image file
@@ -40,6 +41,7 @@ export default function AlgorithmSelection() {
       // not yet wired up
       return
     }
+    setLoading2(true)
     try {
       const res = await createSimulationRun({
         topologyRootNodeId: "6e6e0f2e-8b9e-4f88-a758-401c8281898c",
@@ -54,7 +56,20 @@ export default function AlgorithmSelection() {
       console.error(e)
       setError('Failed to start simulation')
     }
+    finally {
+    setLoading2(false)
   }
+  }
+   if (loading2) {
+      return (
+        <div className="flex flex-col h-screen">
+          <Navbar />
+          <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
+            <span className="text-navColor">Creating Simulation</span>
+          </div>
+        </div>
+      )
+    }
 
    if (loading) {
       return (

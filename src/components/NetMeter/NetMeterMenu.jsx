@@ -12,8 +12,7 @@ import {
 export default function NetMeterMenu() {
   const navigate = useNavigate()
  const { simulationRunId } = useParams()
-
-
+  const [loading2,setLoading2]=useState(false);
   const [policies, setPolicies]   = useState([])
   const [loading, setLoading]     = useState(true)
   const [popupInfo, setPopupInfo] = useState(null)
@@ -76,6 +75,7 @@ useEffect(() => {
   const handleSelect = async (policy) => {
     console.log(policy.id)
     console.log(simulationRunId)
+    setLoading2(true);
     try {
         await selectNetMeteringPolicy({
         simulationRunId: simulationRunId,
@@ -96,6 +96,9 @@ useEffect(() => {
     } catch (err) {
       console.error('Error selecting policy:', err)
     }
+    finally{
+        setLoading2(false);
+    }
   }
 
   const handleIconClick = (policy) => {
@@ -106,6 +109,17 @@ useEffect(() => {
   }
 
   const closePopup = () => setPopupInfo(null)
+
+  if (loading2) {
+    return (
+      <div className="flex flex-col h-screen">
+        <Navbar />
+        <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
+          <span className="text-navColor">Loading</span>
+        </div>
+      </div>
+    )
+  }
 
   if (loading) {
     return (

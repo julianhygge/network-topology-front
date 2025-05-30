@@ -12,8 +12,10 @@ export default function NetMeteringBillPage() {
   const navigate = useNavigate()
   const [retailPrice, setRetailPrice] = useState("");
   const [fixedPrice, setFixedPrice] = useState("");
+  const [loading,setLoading]=useState(false);
 
   const handleGenerateBill = async () => {
+    setLoading(true);
     try {
         console.log(simulationRunId)
       const res=await postNetMeteringPolicyParams({
@@ -27,7 +29,20 @@ export default function NetMeteringBillPage() {
     } catch (e) {
       console.error(e)
     }
+    finally{
+        setLoading(false);
+    }
   }
+     if (loading) {
+          return (
+            <div className="flex flex-col h-screen">
+              <Navbar />
+              <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
+                <span className="text-navColor">Generating Bill</span>
+              </div>
+            </div>
+          )
+        }
 
   return (
     <div className="flex flex-col h-screen">
