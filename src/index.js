@@ -15,6 +15,10 @@ import Login from "components/Auth/Login";
 import AuthRoute from "ProtectedRoute/AuthRoute";
 import SolarProfile from "components/solar/SolarProfile";
 import { Toaster } from "sonner";
+import LandingPage from "components/NetMeter/AlgorithmSelection";
+import NetMeterMenu from "components/NetMeter/NetMeterMenu";
+import BillingCycleSelection from "components/NetMeter/BillingCycleSelection";
+import NetMeteringBillPage from "components/NetMeter/NetMetringBillPage";
 
 // const router = createBrowserRouter(
 //   [
@@ -82,6 +86,18 @@ const router = createBrowserRouter([
       }
     ]
   },
+  {
+    path:"/",
+     element: <AuthRoute />,
+     children:[
+      {path :"netmeter",element:<LandingPage/>},
+      {path:"netmeter/netMetering",element:<NetMeterMenu/>},
+      {path:"netmeter/netMetering/NetMetering",element:<BillingCycleSelection/>},
+      {path:"bill",element:<NetMeteringBillPage/>}
+    
+    
+     ]
+  }
 ]);
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
