@@ -122,8 +122,7 @@ useEffect(() => {
           navigate(`/netmeter/netMetering/grossMetering/${simulationRunId}`);
           break
         case 'TOU Rate Metering':
-          // todo: implement this route
-          // navigate(`/netmeter/netMetering/touMetering/${simulationRunId}`);
+          navigate(`/netmeter/netMetering/touMetering/${simulationRunId}`);
           break
 
         default:

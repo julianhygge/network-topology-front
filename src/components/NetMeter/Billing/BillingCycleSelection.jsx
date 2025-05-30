@@ -43,6 +43,9 @@ export default function BillingCycleSelection() {
       if(meteringType === "grossMetering"){
          navigate(`/netmeter/grossMetering/bill/${simulationRunId}`)
       }
+      if(meteringType === "touMetering"){
+         navigate(`/netmeter/touMetering/bill/${simulationRunId}`)
+      }
     } catch (e) {
       console.error(e)
     }
@@ -76,6 +79,11 @@ export default function BillingCycleSelection() {
              {meteringType === "grossMetering" && <div className="text-center text-2xl font-medium mb-6 text-navColor max-w-6xl">
               You have selected Gross Metering Policy, according to this policy billing of imported energy 
               will be as per the retail rate and energy exported will   billed  as per the wholesale rate
+            </div>}
+
+            {meteringType === "touMetering" && <div className="text-center text-2xl font-medium mb-6 text-navColor max-w-6xl">
+              You have selected Time of Use Metering Policy, according to this policy billing of imported energy 
+              will be as per the time distributed section of usages.
             </div>}
 
             <div className="w-full max-w-3xl p-10 bg-white border border-[#BF6A02] rounded-2xl shadow-lg">
