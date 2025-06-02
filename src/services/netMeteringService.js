@@ -140,6 +140,26 @@ export const generateGrossMeteringPolicyBill = async ({ simulationRunId, retailP
   }
 }
 
+export const generateTouMeteringPolicyBill = async ({ simulationRunId, startTime, endTime, retailPrice, wholesalePrice}) => {
+  try{
+    const payload = {
+      simulation_run_id: simulationRunId,
+      start_time: startTime,
+      end_time: endTime,
+      import_retail_rate_per_kwh: retailPrice,
+      export_wholesale_rate_per_kwh: wholesalePrice,
+    }
+    const response = await axiosInstance.post(
+      `${BASE_PATH}/policy/tou`,
+      payload
+    )
+    return response.data
+  }catch(error){
+    console.error("Error generating TOU rate metering bill:", error)
+    throw error
+  }
+}
+
 /**
  * Get Selected Simulation Policy
  * GET /v1/simulation//${simulation_run_id}/selected/policy
