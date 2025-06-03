@@ -1,91 +1,128 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import Navbar from "components/Common/Navbar";
 import GridSideBar from "components/Grid/GridSideBar";
-import { generateNetMeteringPolicyBill } from 'services/netMeteringService'
-import { useParams } from "react-router-dom";
+import { generateNetMeteringPolicyBill, fetchEnergySummary } from 'services/netMeteringService';
 
 export default function NetMeteringBillPage() {
-  
-  const {simulationRunId} = useParams();
-  const navigate = useNavigate()
+  const { simulationRunId } = useParams();
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const startDatetime = params.get('start');  // e.g. "2021-01-01 00:00"
+  const endDatetime = params.get('end');      // e.g. "2021-02-01 00:00"
+
+  const navigate = useNavigate();
   const [retailPrice, setRetailPrice] = useState("");
   const [fixedPrice, setFixedPrice] = useState("");
-  const [loading,setLoading]=useState(false);
+  const [totalImported, setTotalImported] = useState(null);
+  const [totalExported, setTotalExported] = useState(null);
+  const [summaryLoading, setSummaryLoading] = useState(true);
+  const [summaryError, setSummaryError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    //For now its hardcoded, we need to make it Dynamic
+    const nodeId = "6e6e0f2e-8b9e-4f88-a758-401c8281898c"; // Replace with actual node ID
+
+    if (!startDatetime || !endDatetime) {
+      console.error("Missing startDatetime or endDatetime");
+      setSummaryError("Date range not provided");
+      setSummaryLoading(false);
+      return;
+    }
+
+    fetchEnergySummary({ nodeId, startDatetime, endDatetime })
+      .then(data => {
+        console.log(data);
+        setTotalImported(data.total_imported_units);
+        setTotalExported(data.total_exported_units);
+      })
+      .catch(err => {
+        console.error(err);
+        setSummaryError("Failed to load energy summary");
+      })
+      .finally(() => setSummaryLoading(false));
+  }, [startDatetime, endDatetime]);
 
   const handleGenerateBill = async () => {
     setLoading(true);
     try {
-        console.log(simulationRunId)
-      const res=await generateNetMeteringPolicyBill({
+      const res = await generateNetMeteringPolicyBill({
         simulationRunId,
         retailPrice: +retailPrice,
         fixedChargeRate: +fixedPrice
-      })
-      // after successful POST, maybe navigate to a summary or show toast
-      console.log(res)
-      navigate(`/config-summary/${simulationRunId}`)
+      });
+      console.log(res);
+      navigate(`/config-summary/${simulationRunId}`);
     } catch (e) {
-      console.error(e)
+      console.error(e);
+    } finally {
+      setLoading(false);
     }
-    finally{
-        setLoading(false);
-    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col h-screen">
+        <Navbar />
+        <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
+          <span className="text-navColor">Generating Bill</span>
+        </div>
+      </div>
+    );
   }
-     if (loading) {
-          return (
-            <div className="flex flex-col h-screen">
-              <Navbar />
-              <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
-                <span className="text-navColor">Generating Bill</span>
-              </div>
-            </div>
-          )
-        }
 
   return (
     <div className="flex flex-col h-screen">
       <Navbar />
       <div className="flex flex-1">
-        {/* <GridSideBar /> */}
         <div className="flex flex-1 flex-col items-center justify-center bg-[#E7FAFF]">
           <div className="text-center text-xl font-medium mb-8 text-navColor max-w-4xl px-4">
             You have selected Net Metering Policy, according to that policy
             billing of each house will be done as per the retail rate
           </div>
 
-          <div className="w-full max-w-3xl py-14  px-28 bg-white border-2 border-[#BF6A02] rounded-2xl shadow-lg mx-4">
-            {/* Energy Summary Cards */}
+          <div className="w-full max-w-3xl py-14 px-28 bg-white border-2 border-[#BF6A02] rounded-2xl shadow-lg mx-4">
             <div className="flex justify-center gap-6 mb-10">
-              {/* Total Energy Imported */}
               <div className="bg-[#2BC5C0]/75 rounded-2xl p-6 min-w-[230px] text-center">
                 <h3 className="text-lg font-medium text-navColor mb-3">
                   Total Energy Imported
                 </h3>
-                <div className="flex items-center justify-center gap-2">
-                  <ArrowDown className="h-6 w-6 text-navColor" />
-                  <span className="text-2xl font-bold text-navColor">
-                    1750 kwh
-                  </span>
-                </div>
+                {summaryLoading ? (
+                  <span className="text-navColor">Loading…</span>
+                ) : summaryError ? (
+                  <span className="text-red-500">{summaryError}</span>
+                ) : (
+                  <div className="flex items-center justify-center gap-2">
+                    <ArrowDown className="h-6 w-6 text-navColor" />
+                    <span className="text-2xl font-bold text-navColor">
+                      {totalImported} kwh
+                    </span>
+                  </div>
+                )}
               </div>
 
-              {/* Total Energy Exported */}
               <div className="bg-[#74AA50]/75 rounded-2xl p-6 min-w-[230px] text-center">
                 <h3 className="text-lg font-medium text-navColor mb-3">
                   Total Energy Exported
                 </h3>
-                <div className="flex items-center justify-center gap-2">
-                  <ArrowUp className="h-6 w-6 text-navColor" />
-                  <span className="text-2xl font-bold text-navColor">950 kwh</span>
-                </div>
+                {summaryLoading ? (
+                  <span className="text-navColor">Loading…</span>
+                ) : summaryError ? (
+                  <span className="text-red-500">{summaryError}</span>
+                ) : (
+                  <div className="flex items-center justify-center gap-2">
+                    <ArrowUp className="h-6 w-6 text-navColor" />
+                    <span className="text-2xl font-bold text-navColor">
+                      {totalExported} kwh
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Input Fields */}
             <div className="space-y-6 mb-8">
-              {/* Retail Price Input */}
               <div>
                 <label className="block text-lg font-medium text-navColor mb-3">
                   Enter your retail price (in kwh) :
@@ -99,7 +136,6 @@ export default function NetMeteringBillPage() {
                 />
               </div>
 
-              {/* Fixed Price Input */}
               <div>
                 <label className="block text-lg font-medium text-navColor mb-3">
                   Enter fixed price if any (in kwh) :
@@ -114,7 +150,6 @@ export default function NetMeteringBillPage() {
               </div>
             </div>
 
-            {/* Generate Bill Button */}
             <div className="flex justify-center">
               <button
                 onClick={handleGenerateBill}

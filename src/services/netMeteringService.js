@@ -180,3 +180,26 @@ export const fetchSelectedPolicy = async (simulation_run_id) => {
     throw error;
   }
 };
+
+/**
+ * Fetch energy summary (total imported/exported) for a given node/time‐range.
+ * GET /v1/simulation/nodes/{node_id}/energy-summary?start_datetime=...&end_datetime=...
+ */
+export const fetchEnergySummary = async ({ nodeId, startDatetime, endDatetime }) => {
+  try {
+    const response = await axiosInstance.get(
+      `${BASE_PATH}/nodes/${nodeId}/energy-summary`,
+      {
+        params: {
+          start_datetime: startDatetime,
+          end_datetime:   endDatetime
+        }
+      }
+    );
+    // response.data should contain { total_imported_kwh: number, total_exported_kwh: number }
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching energy summary:', error);
+    throw error;
+  }
+};
