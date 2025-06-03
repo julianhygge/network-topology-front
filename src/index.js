@@ -21,6 +21,7 @@ import BillingCycleSelection from "components/NetMeter/Billing/BillingCycleSelec
 import NetMeteringBillPage from "components/NetMeter/Billing/NetMetringBillPage";
 import GrossMeteringBillPage from "components/NetMeter/Billing/GrossMeteringBillPage";
 import TimeOfUseMeteringBillPage from "components/NetMeter/Billing/TimeOfUseMeteringBillPage";
+import SimulationRunsPage from "components/SimulationRuns/SimulationRunsPage";
 
 // const router = createBrowserRouter(
 //   [
@@ -98,6 +99,8 @@ const router = createBrowserRouter([
       {path:"/netmeter/netMetering/bill/:simulationRunId",element:<NetMeteringBillPage/>},
       {path:"/netmeter/grossMetering/bill/:simulationRunId",element:<GrossMeteringBillPage/>},
       {path:"/netmeter/touMetering/bill/:simulationRunId",element:<TimeOfUseMeteringBillPage/>},
+
+      {path:"/simulation",element:<SimulationRunsPage/>},
      ]
   }
 ]);
