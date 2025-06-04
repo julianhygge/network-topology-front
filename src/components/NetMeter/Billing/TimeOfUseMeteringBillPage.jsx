@@ -13,7 +13,6 @@ const TimeOfUseMeteringBillPage = () => {
     const [rows, setRows] = useState([
         { id: 1, startTime: "00:00", endTime: "00:00", retail: 0, wholesale: 0 },
         { id: 2, startTime: "00:00", endTime: "00:00", retail: 0, wholesale: 0 },
-        { id: 3, startTime: "00:00", endTime: "00:00", retail: 0, wholesale: 0 },
     ]);
 
     const [isReadOnly, setIsReadOnly] = useState(false);
@@ -84,12 +83,12 @@ const TimeOfUseMeteringBillPage = () => {
         <Navbar />
             <div className="flex flex-1">
                 {/* <GridSideBar /> */}
-                <div className="flex flex-1 flex-col items-center justify-center bg-[#E7FAFF]">
+                <div className="flex flex-1 flex-col items-center justify-center bg-[#E7FAFF] px-2 py-2">
                     {<div className="text-center text-2xl font-medium mb-6 text-navColor max-w-6xl">
                     You have selected Time of Use Metering Policy, according to this policy billing of imported energy 
                     will be as per the time distributed section of usages.
                     </div>}
-                    <div className="w-full max-w-[1560px] py-6 px-6 md:px-20 bg-white border-2 border-[#BF6A02] rounded-2xl shadow-lg mx-4 relative">
+                    <div className="w-full max-w-7xl py-6 px-6 md:px-20 bg-white border-2 border-[#BF6A02] rounded-2xl shadow-lg mx-4 relative">
                         {/* Edit button */}
                         <div className="absolute top-5 right-16">
                             <button 
@@ -116,32 +115,38 @@ const TimeOfUseMeteringBillPage = () => {
                         <div>Time Period</div>
                         <div>↓ Import</div>
                         <div>↑ Export</div>
-                        <div>Amt Retail</div>
-                        <div>Amt Wholesale</div>
+                        <div>Retail Rate</div>
+                        <div>Wholesale Rate</div>
                         </div>
 
                         {/* Rows*/}
-                        <div className="w-full max-h-[300px] overflow-y-auto">
+                        <div className="w-full max-h-[330px] overflow-y-auto">
                             {rows.map((_, index) => (
                             <div key = {index}>
                                 <div className="grid grid-cols-5 gap-10 items-center px-4 mb-6">
                                     {/* Time Input */}
-                                    <div className="flex justify-center items-center gap-1">
-                                        <input
+                                    <div className="flex justify-center items-center gap-1 mt-7">
+                                        <div className="flex flex-col justify-center items-center">
+                                            <input
                                             type="time"
                                             value={rows[index].startTime}
                                             onChange={(e) => handleChange(index, "startTime", e.target.value)}
                                             readOnly={isReadOnly}
-                                            className="w-[130px] px-2 py-2 text-md border rounded-md text-center bg-[#FFB60033] text-black"
-                                        />
+                                            className="w-[6rem] px-2 py-2 text-md border rounded-md text-center bg-[#FFB60033] text-black"
+                                            />
+                                            <div>AM</div>
+                                        </div>
                                         <span className="mx-1 text-gray-500">-</span>
-                                        <input
-                                            type="time"
-                                            value={rows[index].endTime}
-                                            onChange={(e) => handleChange(index, "endTime", e.target.value)}
-                                            readOnly={isReadOnly}
-                                            className="w-[130px] px-2 py-2 text-md border rounded-md text-center bg-[#FFB60033] text-black"
-                                        />
+                                        <div className="flex flex-col justify-center items-center">
+                                            <input
+                                                type="time"
+                                                value={rows[index].endTime}
+                                                onChange={(e) => handleChange(index, "endTime", e.target.value)}
+                                                readOnly={isReadOnly}
+                                                className="w-[6rem] px-2 py-2 text-md border rounded-md text-center bg-[#FFB60033] text-black"
+                                            />
+                                            <div>PM</div>
+                                        </div>
                                     </div>
 
                                     {/* Import Icon */}
