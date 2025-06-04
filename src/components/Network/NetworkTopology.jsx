@@ -565,7 +565,7 @@ const NetworkTopology = () => {
                     className="cursor-pointer border px-[50px] ml-1 mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                     onClick={handleHouseProfile}
                   >
-                    DOWNLOAD
+                    DOWNLOAD PROFILE
                   </button>
                 </div>
               </div>

@@ -46,5 +46,16 @@ export const updateSolarData = async (houseId, solarData) => {
   }
 };
 
+export const deleteSolarProfile = async (house_id) => {
+  try {
+    const response = await axiosInstance.delete(`/solar/${house_id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting load profile:", error);
+    throw error;
+  }
+};
+
+
 
  
