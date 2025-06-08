@@ -8,6 +8,7 @@ import {
   getSubstationById,
   updateSubstationTopology,
   GetHouseProfile,
+  GetNetworkTopologyExportFile,
 } from "services/Substation";
 import { fetchTransformerDetails } from "services/Transformer";
 import TransformerForm from "components/Transformer/TransformerForm";
@@ -103,6 +104,50 @@ const NetworkTopology = () => {
     navigate(location.pathname, { replace: true });
   }, [selectedNode]);
 
+  const showError = async(error) => {
+    let message = "Unexpected error during download";
+    
+    if (error?.response?.data instanceof Blob) {
+      // Try to read error blob as JSON
+      const errorText = await error.response.data.text();
+      try {
+        const errorJson = JSON.parse(errorText);
+        message = errorJson.detail || message;
+      } catch {
+        message = errorText;
+      }
+    } else if (error?.response?.data?.detail) {
+      message = error.response.data.detail;
+    }
+
+    toast.error(`Download Failed: ${message}`, {
+      duration: 4000,
+      style: { background: "white", color: "red" },
+    });
+  }
+
+  const handleDownloadJson = async () => {
+    try{
+      const response = await GetNetworkTopologyExportFile(selectedSubstationId);
+      const blob = new Blob([response], {type:"application/json"})
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `network-topology-${selectedSubstationId}.json`
+      );
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }catch(e){
+      console.log("Download Failed", e);
+      showError(e)
+      
+    }
+  }
+
   const handleHouseProfile = async () => {
     try {
       const response = await GetHouseProfile(selectedSubstationId);
@@ -123,24 +168,7 @@ const NetworkTopology = () => {
     } catch (error) {
       console.error("Download failed:", error);
 
-      let message = "Unexpected error during download";
-
-      if (error?.response?.data instanceof Blob) {
-        // Try to read error blob as JSON
-        const errorText = await error.response.data.text();
-        try {
-          const errorJson = JSON.parse(errorText);
-          message = errorJson.detail || message;
-        } catch {
-          message = errorText;
-        }
-      } else if (error?.response?.data?.detail) {
-        message = error.response.data.detail;
-      }
-      toast.error(`Download Failed: ${message}`, {
-        duration: 4000,
-        style: { background: "white", color: "red" },
-      });
+       showError(error)
     }
   };
 
@@ -568,6 +596,17 @@ const NetworkTopology = () => {
                     DOWNLOAD PROFILE
                   </button>
                 </div>
+
+                <div className="flex-none items-center justify-between font-dinPro font-medium">
+                  <button
+                    className="cursor-pointer border px-[50px] ml-1 mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
+                    onClick={handleDownloadJson}
+                  >
+                    EXPORT TOPOLOGY
+                  </button>
+                </div>
+
+
               </div>
               <div className="flex-1 overflow-auto network-graph-container scrollbar">
                 <NetworkGraph

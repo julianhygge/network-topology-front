@@ -6,12 +6,22 @@ import {
 } from "services/Substation";
 import Delete from "components/Common/DeleteConfirm";
 import "./GridSideBar.css";
+import ImportGrid from "./ImportGrid";
 
 const GridSideBar = ({ onGridSelect, selectedGridId }) => {
   const [grids,       setGrids     ] = useState([]);
   const [selected,   setSelected   ] = useState(selectedGridId || null);
   const [contextMenu, setContext  ] = useState({ visible: false, x: 0, y: 0, grid: null });
   const [gridToDelete, setGridToDelete] = useState(null);
+  const [isImportPopupOpen, setIsImportPopupOpen] = useState(false);
+
+  const handleImportGrid = () => {
+    setIsImportPopupOpen(true);
+  };
+
+  const handleCloseImportPopUp = () => {
+    setIsImportPopupOpen(false);
+  };
 
   useEffect(() => {
     (async () => {
@@ -46,9 +56,11 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
       });
       setGrids(items);
     } catch (e) {
-      console.error(e);
+      console.error(e)
     }
   };
+
+ 
 
   const confirmDelete = async () => {
     try {
@@ -108,6 +120,28 @@ const GridSideBar = ({ onGridSelect, selectedGridId }) => {
             </p>
           </button>
         </div>
+
+        <div className="p-3 grid justify-center">
+          <button
+            className="grid justify-center cursor-pointer hover:opacity-50"
+            onClick={handleImportGrid}
+          >
+            <p className="flex justify-center items-center bg-[#FFF8E6] w-[80px] h-[50px] rounded-full text-3xl text-gridColor1 border-2 border-[#D59805]">
+              +
+            </p>
+            <p className="text-white text-sm mt-2 font-dinPro font-medium">
+              Import Grid
+            </p>
+          </button>
+    
+        </div>
+
+        {isImportPopupOpen && (
+ 
+    <ImportGrid isOpen={isImportPopupOpen} onClose={handleCloseImportPopUp} />
+  
+)}
+       
       </div>
 
       {contextMenu.visible && (

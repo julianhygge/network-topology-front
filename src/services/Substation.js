@@ -111,7 +111,31 @@ export const GetHouseProfile = async (substationId) => {
 
 
 
+export const GetNetworkTopologyExportFile = async(substationId) => {
+  try{
+    const response = await axiosInstance.get(
+      `/substations/${substationId}/export/json`,
+      { responseType: 'blob' } 
+    );
+    return response.data;
+  }catch(error){
+    console.log("error in downloading profile");
+    throw error
+  }
+}
 
 
-
+export const UploadNetworkTopologyFile = async(file) => {
+  const formdata = new FormData();
+  formdata.append("file", file)
+  try{
+    const response = await axiosInstance.post(
+      `/substations/import/json`, formdata
+    );
+    return response.data;
+  }catch(error){
+    console.log("error in uploading profile");
+    throw error
+  }
+}
  
