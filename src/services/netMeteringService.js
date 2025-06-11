@@ -140,6 +140,26 @@ export const generateGrossMeteringPolicyBill = async ({ simulationRunId, retailP
   }
 }
 
+export const generateTouMeteringPolicyBill = async ({ simulationRunId, startTime, endTime, retailPrice, wholesalePrice}) => {
+  try{
+    const payload = {
+      simulation_run_id: simulationRunId,
+      start_time: startTime,
+      end_time: endTime,
+      import_retail_rate_per_kwh: retailPrice,
+      export_wholesale_rate_per_kwh: wholesalePrice,
+    }
+    const response = await axiosInstance.post(
+      `${BASE_PATH}/policy/tou`,
+      payload
+    )
+    return response.data
+  }catch(error){
+    console.error("Error generating TOU rate metering bill:", error)
+    throw error
+  }
+}
+
 /**
  * Get Selected Simulation Policy
  * GET /v1/simulation//${simulation_run_id}/selected/policy
@@ -157,6 +177,29 @@ export const fetchSelectedPolicy = async (simulation_run_id) => {
       return null;
     }
     console.error("Error fetching selected policy:", error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch energy summary (total imported/exported) for a given node/time‐range.
+ * GET /v1/simulation/nodes/{node_id}/energy-summary?start_datetime=...&end_datetime=...
+ */
+export const fetchEnergySummary = async ({ nodeId, startDatetime, endDatetime }) => {
+  try {
+    const response = await axiosInstance.get(
+      `${BASE_PATH}/nodes/${nodeId}/energy-summary`,
+      {
+        params: {
+          start_datetime: startDatetime,
+          end_datetime:   endDatetime
+        }
+      }
+    );
+    // response.data should contain { total_imported_kwh: number, total_exported_kwh: number }
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching energy summary:', error);
     throw error;
   }
 };
