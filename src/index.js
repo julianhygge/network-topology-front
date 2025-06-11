@@ -21,6 +21,7 @@ import BillingCycleSelection from "components/NetMeter/Billing/BillingCycleSelec
 import NetMeteringBillPage from "components/NetMeter/Billing/NetMetringBillPage";
 import GrossMeteringBillPage from "components/NetMeter/Billing/GrossMeteringBillPage";
 import TimeOfUseMeteringBillPage from "components/NetMeter/Billing/TimeOfUseMeteringBillPage";
+import SimulationDashboard from "components/NetMeter/DashBoard/SimulationDashboard";
 
 // const router = createBrowserRouter(
 //   [
@@ -92,6 +93,7 @@ const router = createBrowserRouter([
     path:"/",
      element: <AuthRoute />,
      children:[
+      {path:"/dash",element:<SimulationDashboard/>},
       {path :"/netmeter",element:<LandingPage/>},
       {path:"/netmeter/netMetering/:simulationRunId",element:<NetMeterMenu/>},
       {path:"/netmeter/netMetering/:meteringType/:simulationRunId",element:<BillingCycleSelection/>},
