@@ -6,18 +6,19 @@ import {
   ArrowRight,
   ChevronLeft,
   ChevronRight,
+  MapPin
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from './Navbar'
 
 const sampleRuns = [
 
-  { id: 'A1B2C', title: 'Net Metering Test', description: 'Analyzing the Grid performance under extreme winter to  identify vulnerability', versions: { completed: 4, draft: 2, error: 1 }, topologyFile: 'Something.json', created: '10/04/2025', modified: '15/04/2025' },
-  { id: 'D3E4F', title: 'Autonomous Bidding Test', description: 'Analyzing the Grid performance under extreme winter to  identify vulnerability', versions: { completed: 3, draft: 1, error: 0 }, topologyFile: 'TopologyA.json', created: '12/04/2025', modified: '16/04/2025' },
-  { id: 'G5H6I', title: 'Special Groups Test', description: 'Analyzing the Grid performance under extreme winter to  identify vulnerability', versions: { completed: 5, draft: 0, error: 0 }, topologyFile: 'Groups.json', created: '14/04/2025', modified: '18/04/2025' },
-  { id: 'G5H6I', title: 'Special Groups Test', description: 'Analyzing the Grid performance under extreme winter to  identify vulnerability', versions: { completed: 5, draft: 0, error: 0 }, topologyFile: 'Groups.json', created: '14/04/2025', modified: '18/04/2025' },
-  { id: 'G5H6I', title: 'Special Groups Test', description: 'Analyzing the Grid performance under extreme winter to  identify vulnerability', versions: { completed: 5, draft: 0, error: 0 }, topologyFile: 'Groups.json', created: '14/04/2025', modified: '18/04/2025' },
-  { id: 'G5H6I', title: 'Special Groups Test', description: 'Analyzing the Grid performance under extreme winter to  identify vulnerability', versions: { completed: 5, draft: 0, error: 0 }, topologyFile: 'Groups.json', created: '14/04/2025', modified: '18/04/2025' },
+  { id: 'A1B2C', title: 'Net Metering Test', description: 'Analyzing the Grid performance under extreme winter to  identify vulnerability', versions: { completed: 4, draft: 2, error: 1 }, topologyFile: 'Something.json',location:'Shanti Niketan-1,  S00011', created: '10/04/2025', modified: '15/04/2025' },
+  { id: 'D3E4F', title: 'Autonomous Bidding Test', description: 'Analyzing the Grid performance under extreme winter to  identify vulnerability', versions: { completed: 3, draft: 1, error: 0 }, topologyFile: 'TopologyA.json',location:'Shanti Niketan-1,  S00011', created: '12/04/2025', modified: '16/04/2025' },
+  { id: 'G5H6I', title: 'Special Groups Test', description: 'Analyzing the Grid performance under extreme winter to  identify vulnerability', versions: { completed: 5, draft: 0, error: 0 }, topologyFile: 'Groups.json',location:'Shanti Niketan-1,  S00011', created: '14/04/2025', modified: '18/04/2025' },
+  { id: 'G5H6I', title: 'Special Groups Test', description: 'Analyzing the Grid performance under extreme winter to  identify vulnerability', versions: { completed: 5, draft: 0, error: 0 }, topologyFile: 'Groups.json',location:'Shanti Niketan-1,  S00011', created: '14/04/2025', modified: '18/04/2025' },
+  { id: 'G5H6I', title: 'Special Groups Test', description: 'Analyzing the Grid performance under extreme winter to  identify vulnerability', versions: { completed: 5, draft: 0, error: 0 }, topologyFile: 'Groups.json',location:'Shanti Niketan-1,  S00011', created: '14/04/2025', modified: '18/04/2025' },
+  { id: 'G5H6I', title: 'Special Groups Test', description: 'Analyzing the Grid performance under extreme winter to  identify vulnerability', versions: { completed: 5, draft: 0, error: 0 }, topologyFile: 'Groups.json',location:'Shanti Niketan-1,  S00011', created: '14/04/2025', modified: '18/04/2025' },
 
 ]
 
@@ -135,6 +136,16 @@ export default function SimulationDashboard() {
                         <p>{run.topologyFile}</p>
                         <button className="p-1 rounded-full hover:bg-gray-100">
                           <Download className="h-5 w-5" />
+                        </button>
+                      </div>
+                    </div>
+
+                     <div className="mt-4">
+                      <h4 className="font-semibold">Location:</h4>
+                      <div className="flex justify-between items-center">
+                        <p>{run.location}</p>
+                        <button className="p-1 rounded-full hover:bg-gray-100">
+                          <MapPin className="h-5 w-5" />
                         </button>
                       </div>
                     </div>

@@ -44,9 +44,11 @@ export default function AlgorithmSelection() {
     setLoading2(true)
     try {
       const res = await createSimulationRun({
+        simulation_container_id:"3a00ecd1-23af-4cd2-abf5-ecc5696d7675",
         topologyRootNodeId: "6e6e0f2e-8b9e-4f88-a758-401c8281898c",
         algorithmTypeId:   alg.id,
-        localityId:"94522a0a-c8f1-40f8-a2e5-9aed2dc55555"
+        localityId:"94522a0a-c8f1-40f8-a2e5-9aed2dc55555",
+        description:"Creation"
       })
       console.log(res);
       const simulationRunId=res.id

@@ -23,6 +23,8 @@ import GrossMeteringBillPage from "components/NetMeter/Billing/GrossMeteringBill
 import TimeOfUseMeteringBillPage from "components/NetMeter/Billing/TimeOfUseMeteringBillPage";
 import SimulationDashboard from "components/NetMeter/DashBoard/SimulationDashboard";
 
+import SimulationList from "components/NetMeter/DashBoard/SimulationList";
+
 // const router = createBrowserRouter(
 //   [
 //     { path: '/login', element: <Login /> },
@@ -93,6 +95,7 @@ const router = createBrowserRouter([
     path:"/",
      element: <AuthRoute />,
      children:[
+      {path:"/dash/sim",element:<SimulationList/>},
       {path:"/dash",element:<SimulationDashboard/>},
       {path :"/netmeter",element:<LandingPage/>},
       {path:"/netmeter/netMetering/:simulationRunId",element:<NetMeterMenu/>},

@@ -21,9 +21,11 @@ export const fetchAlgorithms = async () => {
  * POST /v1/simulation/simulations-runs
  * body: { topology_root_node_id, simulation_algorithm_type_id }
  */
-export const createSimulationRun = async ({ topologyRootNodeId, algorithmTypeId ,localityId}) => {
+export const createSimulationRun = async ({simulation_container_id, description,topologyRootNodeId, algorithmTypeId ,localityId}) => {
   try {
     const payload = {
+      description:description,
+      simulation_container_id:simulation_container_id,
       topology_root_node_id: topologyRootNodeId,
       simulation_algorithm_type_id: algorithmTypeId,
       locality_id: localityId,
