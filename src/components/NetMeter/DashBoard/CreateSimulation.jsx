@@ -1,22 +1,27 @@
-import React, { useState } from 'react'
-import Navbar from './Navbar'
+import React, { useState } from "react";
+import Navbar from "./Navbar";
 
 export default function SimulatorSettings() {
-  const [timeStep, setTimeStep] = useState('5')
-  const [powerUnit, setPowerUnit] = useState('Watt')
-  const [algorithmEngine, setAlgorithmEngine] = useState('')
-  const [profile, setProfile] = useState({ name: '', location: '', description: '' })
+  const [timeStep, setTimeStep] = useState("5");
+  const [powerUnit, setPowerUnit] = useState("Watt");
+  const [algorithmEngine, setAlgorithmEngine] = useState("");
+  const [profile, setProfile] = useState({
+    name: "",
+    location: "",
+    description: "",
+  });
 
-  const handleProfileChange = e =>
-    setProfile(p => ({ ...p, [e.target.name]: e.target.value }))
+  const handleProfileChange = (e) =>
+    setProfile((p) => ({ ...p, [e.target.name]: e.target.value }));
 
   const handleReset = () => {
-    setTimeStep('5')
-    setPowerUnit('Watt')
-    setAlgorithmEngine('')
-    setProfile({ name: '', location: '', description: '' })
-  }
-  const handleSave = () => console.log({ timeStep, powerUnit, algorithmEngine, ...profile })
+    setTimeStep("5");
+    setPowerUnit("Watt");
+    setAlgorithmEngine("");
+    setProfile({ name: "", location: "", description: "" });
+  };
+  const handleSave = () =>
+    console.log({ timeStep, powerUnit, algorithmEngine, ...profile });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#6CCECD] to-[#356770] flex flex-col">
@@ -33,18 +38,22 @@ export default function SimulatorSettings() {
         </div>
 
         <div className="mx-auto w-full max-w-4xl bg-[#F6FFFF]/50 rounded-2xl  shadow-lg p-10 px-14">
-          <h2 className="text-3xl  font-bold text-black mb-6">Simulator Settings</h2>
+          <h2 className="text-3xl  font-bold text-black mb-6">
+            Simulator Settings
+          </h2>
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Left Column */}
             <div className="flex-1 pr-6 space-y-6">
               <div>
-                <p className=" text-2xl text-black font-medium mb-2">Time Step</p>
+                <p className=" text-2xl text-black font-medium mb-2">
+                  Time Step
+                </p>
                 <div className="grid grid-cols-2 gap-4">
                   {[
-                    ['5', '5 min'],
-                    ['15','15 min'],
-                    ['30','30 min'],
-                    ['custom','Custom'],
+                    ["5", "5 min"],
+                    ["15", "15 min"],
+                    ["30", "30 min"],
+                    ["custom", "Custom"],
                   ].map(([val, label]) => (
                     <label key={val} className="inline-flex items-center gap-3">
                       <input
@@ -53,19 +62,23 @@ export default function SimulatorSettings() {
                         value={val}
                         checked={timeStep === val}
                         onChange={() => setTimeStep(val)}
-                        className="form-radio text-yellow-400 size-4"
+                        className="custom-radio"
                       />
-                      <span className="text-black text-lg font-normal">{label}</span>
+                      <span className="text-black text-lg font-normal">
+                        {label}
+                      </span>
                     </label>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="block text-2xl text-black font-medium mb-3">Power Unit</label>
+                <label className="block text-2xl text-black font-medium mb-3">
+                  Power Unit
+                </label>
                 <select
                   value={powerUnit}
-                  onChange={e => setPowerUnit(e.target.value)}
+                  onChange={(e) => setPowerUnit(e.target.value)}
                   className="w-full bg-white border border-yellow-400 rounded-xl px-3 py-3  outline-none"
                 >
                   <option>Watt</option>
@@ -75,10 +88,12 @@ export default function SimulatorSettings() {
               </div>
 
               <div>
-                <label className="block text-2xl text-black font-medium mb-3">Algorithm Engine</label>
+                <label className="block text-2xl text-black font-medium mb-3">
+                  Algorithm Engine
+                </label>
                 <select
                   value={algorithmEngine}
-                  onChange={e => setAlgorithmEngine(e.target.value)}
+                  onChange={(e) => setAlgorithmEngine(e.target.value)}
                   disabled
                   className="w-full bg-[#8D9090]/88 border border-yellow-400 rounded-xl px-3 py-3 outline-none cursor-not-allowed "
                 >
@@ -89,14 +104,18 @@ export default function SimulatorSettings() {
                 </select>
               </div>
             </div>
-              <div className="w-[2px] bg-gradient-to-b from-[#FCB712] to-[#916600] rounded-full" />
+            <div className="w-[2px] bg-gradient-to-b from-[#FCB712] to-[#916600] rounded-full" />
 
             {/* Right Column */}
             <div className="flex-1 pl-6 space-y-6">
-              <h3 className="text-2xl text-black font-medium ">Profile Details</h3>
+              <h3 className="text-2xl text-black font-medium ">
+                Profile Details
+              </h3>
 
               <div>
-                <label className="block text-black text-xl  font-normal  ">Name</label>
+                <label className="block text-black text-xl  font-normal  ">
+                  Name
+                </label>
                 <input
                   name="name"
                   value={profile.name}
@@ -106,7 +125,9 @@ export default function SimulatorSettings() {
               </div>
 
               <div>
-                <label className="block text-black text-xl  font-normal">Location</label>
+                <label className="block text-black text-xl  font-normal">
+                  Location
+                </label>
                 <input
                   name="location"
                   value={profile.location}
@@ -116,7 +137,9 @@ export default function SimulatorSettings() {
               </div>
 
               <div>
-                <label className="block text-black text-xl  font-normal   ">Description</label>
+                <label className="block text-black text-xl  font-normal   ">
+                  Description
+                </label>
                 <textarea
                   name="description"
                   rows={2}
@@ -146,5 +169,5 @@ export default function SimulatorSettings() {
         </div>
       </main>
     </div>
-  )
+  );
 }
