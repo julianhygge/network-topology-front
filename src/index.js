@@ -24,6 +24,7 @@ import TimeOfUseMeteringBillPage from "components/NetMeter/Billing/TimeOfUseMete
 import SimulationDashboard from "components/NetMeter/DashBoard/SimulationDashboard";
 
 import SimulationList from "components/NetMeter/DashBoard/SimulationList";
+import SimulatorSettings from "components/NetMeter/DashBoard/CreateSimulation";
 
 // const router = createBrowserRouter(
 //   [
@@ -95,6 +96,7 @@ const router = createBrowserRouter([
     path:"/",
      element: <AuthRoute />,
      children:[
+      {path:"/create",element:<SimulatorSettings/>},
       {path:"/dash/sim",element:<SimulationList/>},
       {path:"/dash",element:<SimulationDashboard/>},
       {path :"/netmeter",element:<LandingPage/>},
