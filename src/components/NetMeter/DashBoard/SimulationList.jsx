@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 export default function SimulationList() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [menuOpenFor, setMenuOpenFor] = useState(null);
+  const [isViewProgress, setIsViewProgress] = useState(false);
 
   const sims = [
     {
@@ -41,8 +42,26 @@ export default function SimulationList() {
         "Models the grid impact of a 40% increase in household EV chargers and tests the 'Smart Charging' allocation strategy to mitigate evening peak loads.",
       status: "Completed",
     },
+    {
+      id: "SM-06",
+      title: "Preferential Partial Allocation",
+      description:
+        "Models the grid impact of a 40% increase in household EV chargers and tests the 'Smart Charging' allocation strategy to mitigate evening peak loads.",
+      status: "Completed",
+    },
+    {
+      id: "SM-07",
+      title: "Preferential Partial Allocation",
+      description:
+        "Models the grid impact of a 40% increase in household EV chargers and tests the 'Smart Charging' allocation strategy to mitigate evening peak loads.",
+      status: "Completed",
+    },
   
   ];
+
+  const handleViewAndEditProgress = () => {
+    setIsViewProgress(true);
+  }
 
   const badgeColor = {
     Completed: "bg-[#74AA50]/30 text-[#4A890B]",
@@ -55,7 +74,7 @@ export default function SimulationList() {
     <div className="min-h-screen bg-gradient-to-br from-[#6CCECD] to-[#356770]">
       <Navbar />
 
-      <main className="flex flex-col pt-24 px-6 h-screen">
+      <main className="flex flex-col pt-24 px-6">
         {/* Search + Filter */}
         <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 mb-8 shrink-0">
           {/* back */}
@@ -105,7 +124,7 @@ export default function SimulationList() {
         {/* Header + Add */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4 shrink-0">
           <div>
-            <p className="text-[#000505] text-sm mb-1">Versions</p>
+            <p className="text-[#000505] text-2xl mb-1">Versions</p>
             <h1 className="text-[#000505] text-4xl font-bold">
               Net Metering Test
             </h1>
@@ -115,83 +134,190 @@ export default function SimulationList() {
             Add New Version
           </button>
         </div>
+        
+          {isViewProgress ? (
+            <div className="flex w-full h-full">
+              {/* left side view */}
+              <div className="w-[520px]">
+                <div className="grid grid-cols-[80px_1.5fr] px-4 py-2 text-white font-semibold rounded-t-2xl">
+                  <div className="px-1">ID</div>
+                  <div className="px-5">Title</div>
+                </div>
 
-        {/* Column Labels */}
-        <div
-          className="grid grid-cols-[80px_2fr_5fr_auto]    
-                        px-4 py-2 text-white font-semibold
-                        rounded-t-2xl "
-        >
-          <div className="px-1"  >ID</div>
-          <div className="px-5" >Title</div>
-          <div className="px-24">Description</div>
-          <div className=" px-72 justify-self-start">Status</div>
-        </div>
+                <div className="h-[420px] overflow-y-auto space-y-2 hide-scrollbar">
+                  {/* hide WebKit scrollbar */}
+                  <style>{`
+                    .hide-scrollbar::-webkit-scrollbar { display: none; }
+                    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                  `}</style>
 
-        {/* List (grows, scrollbar only here) */}
-        <div className="flex-1 overflow-y-auto space-y-2 py-4 hide-scrollbar">
-          {/* hide WebKit scrollbar */}
-          <style>{`
-            .hide-scrollbar::-webkit-scrollbar { display: none; }
-            .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-          `}</style>
-
-          {sims.map((s, i) => (
-            <div
-              key={s.id}
-              className="grid grid-cols-[80px_2fr_5fr_auto]
-                             items-center 
-                             divide-x divide-[#E0A800]
-                             bg-white/75 rounded-2xl
-                             p-4 hover:bg-white transition"
-            >
-              <div className="font-bold text-[#000505]">{s.id}</div>
-              <div className="pl-4 font-bold text-[#000505]">{s.title}</div>
-              <div className="px-4 text-[#000505] text-sm">{s.description}</div>
-              <div className="flex items-center justify-start gap-2 pl-4">
-                <span
-                  className={`${
-                    badgeColor[s.status]
-                  } w-28 text-center  font-semibold py-1 rounded-full`}
-                >
-                  {s.status}
-                </span>
-                <button
-                  className="bg-[#FFB600] hover:bg-[#E9AB09]
-                                   text-[#070C21] font-medium text-sm
-                                   rounded-2xl px-4 py-2 flex items-center gap-1"
-                >
-                  View &amp; Edit Progress
-                  <img
-                    src="/images/Frame 230.png"
-                    className="w-4 h-4"
-                    alt="Edit"
-                  />
-                </button>
-                <div className="relative">
-                  <button
-                    onClick={() => setMenuOpenFor((o) => (o === i ? null : i))}
-                    className="p-2 rounded-full hover:bg-gray-100"
-                  >
-                    <img src="/images/Frame 610.png" alt="Menu" />
-                  </button>
-                  {menuOpenFor === i && (
-                    <div className="absolute flex  flex-col z-10 items-center border-1 border-[#8E8E8E]/80 right-0 mt-2 w-36 p-2 bg-white rounded-lg shadow border">
-                      {["Edit Version", "Clone","Download File", "Delete"].map((opt) => (
+                  {sims.map((s, i) => (
+                    <div
+                      key={s.id}
+                      className="grid grid-cols-[80px_300px_100px] items-center  divide-x divide-[#E0A800] bg-white/75 rounded-2xl p-4 hover:bg-white transition">
+                      <div className="font-semibold text-[#000505] text-lg">{s.id}</div>
+                      <div>
+                        <div className="pl-4 font-semibold text-[#000505] text-lg">{s.title}</div>
+                      </div>
+                      <div className="flex items-center justify-start gap-2 pl-4">
                         <button
-                          key={opt}
-                          className="block w-full px-2 rounded-md  py-2 text-sm text-navColor hover:bg-[#D3DDDE]"
-                        >
-                          {opt}
+                          // onClick={handleEdit}
+                          className="bg-[#FFB600] hover:bg-[#E9AB09] text-[#070C21] font-medium text-sm rounded-2xl px-4 py-2 flex items-center gap-1">
+                          Edit
+                          <img
+                            src="/images/Frame 230.png"
+                            className="w-4 h-4"
+                            alt="Edit"
+                          />
                         </button>
-                      ))}
+                      </div>
                     </div>
-                  )}
+                  ))}
+                </div>
+              </div>
+              {/* vertical bar */}
+              <div className="w-[2px] bg-gradient-to-b from-[#FFB600] to-[#996D00] mx-2 rounded-full mt-12"></div>
+
+              {/* right side view */}
+              <div className="flex-1">
+                <div className="grid grid-cols-[1fr] px-4 py-2 text-white font-semibold rounded-t-2xl">
+                  <div className="px-1">Progress</div>
+                </div>
+                <div className="h-[413px] w-full bg-white/75 mt-[7px] border border-[#9A9A9A] rounded-2xl">
+                    <div className="flex flex-col justify-center items-center p-4 gap-[60px]">
+                      <div>
+                        Preferential  Partial Allocation (SM-01)
+                      </div>
+                      {/* steps */}
+                      <div className="flex gap-28">
+                        <div className="flex flex-col">
+                          <div>
+                           {/* put image */}
+                          </div>
+                          <div>
+                            Network Topology
+                          </div>
+                        </div>
+
+                         <div className="flex flex-col">
+                          <div>
+                           {/* put image */}
+                          </div>
+                          <div>
+                            Allocation Engine
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col">
+                          <div>
+                             {/* put image */}
+                          </div>
+                          <div>
+                            Result
+                          </div>
+                        </div>
+                      </div>
+                      {/* cards */}
+                      <div className="flex">
+                        <div className="flex flex-col">
+                          <div>Define or Modify the grid, assets, and profiles for this versions</div>
+                          <button>Quick View</button>
+                          <button>Configure Topology</button>
+                        </div>
+
+                        <div className="flex flex-col">
+                          <div>Define Allocation parameter for this version</div>
+                          <button>Add Allocation Engine</button>
+                        </div>
+
+                        <div className="flex flex-col">
+                          <div>Review Simulation output and visualizations</div>
+                          <button>Run Simulation</button>
+                        </div>
+                      </div>
+                      {/* buttons */}
+                      <div className="flex gap-2">
+                        <button className="bg-[#E63C3C]/50 text-[#46000080] font-semibold px-14 py-3 rounded-lg shadow-md shadow-black/25">
+                          Reset
+                        </button>
+                       <button className="bg-[#1BA13D]/50 text-white font-semibold px-14 py-3 rounded-lg shadow-md shadow-black/25">
+                        Save
+                      </button>
+                      </div>
+                    </div>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+            
+          ) : (
+           
+           <>
+              <div
+                className="grid grid-cols-[80px_2fr_5fr_auto]    
+                            px-4 py-2 text-white font-semibold
+                            rounded-t-2xl ">
+                <div className="px-1"  >ID</div>
+                <div className="px-5" >Title</div>
+                <div className="px-24">Description</div>
+                <div className=" px-72 justify-self-start">Status</div>
+              </div>
+
+              {/* List (grows, scrollbar only here) */}
+              <div className="h-[420px] overflow-y-auto space-y-2 pb-2 hide-scrollbar">
+                {/* hide WebKit scrollbar */}
+                <style>{`
+                  .hide-scrollbar::-webkit-scrollbar { display: none; }
+                  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                `}</style>
+
+                {sims.map((s, i) => (
+                  <div
+                    key={s.id}
+                    className="grid grid-cols-[80px_2fr_5fr_auto] items-center  divide-x divide-[#E0A800] bg-white/75 rounded-2xl p-4 hover:bg-white transition">
+                    <div className="font-bold text-[#000505]">{s.id}</div>
+                    <div className="pl-4 font-bold text-[#000505]">{s.title}</div>
+                    <div className="px-4 text-[#000505] text-sm">{s.description}</div>
+                    <div className="flex items-center justify-start gap-2 pl-4">
+                      <span
+                        className={`${ badgeColor[s.status]} w-28 text-center  font-semibold py-1 rounded-full`}>
+                        {s.status}
+                      </span>
+                      <button
+                        onClick={handleViewAndEditProgress}
+                        className="bg-[#FFB600] hover:bg-[#E9AB09] text-[#070C21] font-medium text-sm rounded-2xl px-4 py-2 flex items-center gap-1">
+                        View &amp; Edit Progress
+                        <img
+                          src="/images/Frame 230.png"
+                          className="w-4 h-4"
+                          alt="Edit"
+                        />
+                      </button>
+                      <div className="relative">
+                        <button
+                          onClick={() => setMenuOpenFor((o) => (o === i ? null : i))}
+                          className="p-2 rounded-full hover:bg-gray-100"
+                        >
+                          <img src="/images/Frame 610.png" alt="Menu" />
+                        </button>
+                        {menuOpenFor === i && (
+                          <div className="absolute flex  flex-col z-10 items-center border-1 border-[#8E8E8E]/80 right-0 mt-2 w-36 p-2 bg-white rounded-lg shadow border">
+                            {["Edit Version", "Clone","Download File", "Delete"].map((opt) => (
+                              <button
+                                key={opt}
+                                className="block w-full px-2 rounded-md  py-2 text-sm text-navColor hover:bg-[#D3DDDE]"
+                              >
+                                {opt}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
       </main>
     </div>
   );

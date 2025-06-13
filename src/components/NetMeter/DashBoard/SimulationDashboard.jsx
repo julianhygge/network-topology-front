@@ -70,7 +70,7 @@ export default function SimulationDashboard() {
       <Navbar />
 
       {/* Main Content */}
-      <main className="flex flex-col mx-auto px-16 pt-36">
+      <main className="flex flex-col mx-auto px-16 pt-28">
         <div className="flex justify-between items-center mb-10">
           <h2 className="text-4xl font-bold text-black">Simulation Runs</h2>
           <button
@@ -167,7 +167,7 @@ export default function SimulationDashboard() {
         </div>
 
         {/* Pagination Arrows */}
-        <div className="flex justify-center mt-12 gap-4">
+        <div className="flex justify-center mt-6 gap-4 pb-2">
           <button
             onClick={prev}
             disabled={offset === 0}

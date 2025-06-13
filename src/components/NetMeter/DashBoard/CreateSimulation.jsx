@@ -27,17 +27,17 @@ export default function SimulatorSettings() {
     <div className="min-h-screen bg-gradient-to-br from-[#6CCECD] to-[#356770] flex flex-col">
       <Navbar />
 
-      <main className="flex-1 overflow-auto p-10 ">
-        <div className="mb-4 mt-16 ">
+      <main className="p-5">
+        <div className="mb-4 mt-20">
           <button
             onClick={() => window.history.back()}
-            className="w-20 h-12 rounded-full border-[1px] border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center transition-colors shadow"
+            className="w-24 h-12 rounded-full border-[1px] border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center transition-colors shadow"
           >
             <img src="/images/Arrow 3.png" alt="Back" className="w-6 h-6" />
           </button>
         </div>
 
-        <div className="mx-auto w-full max-w-4xl bg-[#F6FFFF]/50 rounded-2xl  shadow-lg p-10 px-14">
+        <div className="mx-auto w-full max-w-4xl bg-[#F6FFFF]/50 rounded-2xl  shadow-lg pt-10 pb-5 px-14">
           <h2 className="text-3xl  font-bold text-black mb-6">
             Simulator Settings
           </h2>
