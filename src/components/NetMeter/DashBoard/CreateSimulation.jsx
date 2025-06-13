@@ -23,7 +23,6 @@ export default function SimulatorSettings() {
       <Navbar />
 
       <main className="flex-1 overflow-auto p-10 ">
-        {/* Back Button (inside main for visibility) */}
         <div className="mb-4 mt-16 ">
           <button
             onClick={() => window.history.back()}
@@ -70,7 +69,7 @@ export default function SimulatorSettings() {
                   className="w-full bg-white border border-yellow-400 rounded-xl px-3 py-3  outline-none"
                 >
                   <option>Watt</option>
-                  <option>kW</option>
+                  <option>KW</option>
                   <option>MW</option>
                 </select>
               </div>

@@ -59,7 +59,8 @@ export default function SimulationList() {
         {/* Search + Filter */}
         <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 mb-8 shrink-0">
           {/* back */}
-          <button className="w-20 h-12 rounded-full bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center">
+          <button className="w-20 h-12 rounded-full bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center"
+           onClick={() => window.history.back()}>
             <img src="/images/Arrow 3.png" className="w-8 h-6" alt="" />
           </button>
           {/* search */}
@@ -69,7 +70,8 @@ export default function SimulationList() {
               placeholder="Search a simulation version"
               className="w-full bg-white/90 rounded-full border-none py-3 px-6 pr-16 placeholder-[#9E9E9E]"
             />
-            <button className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-10 rounded-full bg-[#FFB600] hover:bg-[#E9AB09] flex items-center justify-center">
+            <button className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-10 rounded-full bg-[#FFB600] hover:bg-[#E9AB09] flex items-center justify-center"
+            >
               <img src="/images/Line 155.png" className="mt-1 w-6 h-5" alt="" />
             </button>
           </div>
@@ -85,11 +87,11 @@ export default function SimulationList() {
                 <img src="/images/Vector (2).png" className="w-3 h-2" alt="" />
               </button>
               {filterOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow border">
+                <div className=" bg-white rounded-lg shadow border absolute flex  flex-col z-10 items-center border-1 border-[#8E8E8E]/80 right-0 mt-2 w-40 p-2 ">
                   {["Recently Added", "Oldest First", "Status"].map((opt) => (
                     <button
                       key={opt}
-                      className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className=" block w-full px-4 rounded-md  py-2 text-sm text-navColor hover:bg-[#D3DDDE]"
                     >
                       {opt}
                     </button>
@@ -116,14 +118,14 @@ export default function SimulationList() {
 
         {/* Column Labels */}
         <div
-          className="grid grid-cols-[80px_2fr_5fr_auto]
-                        px-4 py-3 text-white font-semibold
+          className="grid grid-cols-[80px_2fr_5fr_auto]    
+                        px-4 py-2 text-white font-semibold
                         rounded-t-2xl "
         >
-          <div>ID</div>
-          <div>Title</div>
-          <div>Description</div>
-          <div className="justify-self-start">Status</div>
+          <div className="px-1"  >ID</div>
+          <div className="px-5" >Title</div>
+          <div className="px-24">Description</div>
+          <div className=" px-72 justify-self-start">Status</div>
         </div>
 
         {/* List (grows, scrollbar only here) */}
@@ -138,7 +140,7 @@ export default function SimulationList() {
             <div
               key={s.id}
               className="grid grid-cols-[80px_2fr_5fr_auto]
-                             items-center
+                             items-center 
                              divide-x divide-[#E0A800]
                              bg-white/75 rounded-2xl
                              p-4 hover:bg-white transition"
@@ -174,11 +176,11 @@ export default function SimulationList() {
                     <img src="/images/Frame 610.png" alt="Menu" />
                   </button>
                   {menuOpenFor === i && (
-                    <div className="absolute z-10 right-0 mt-2 w-40 bg-white rounded-lg shadow border">
-                      {["Edit", "Duplicate", "Delete"].map((opt) => (
+                    <div className="absolute flex  flex-col z-10 items-center border-1 border-[#8E8E8E]/80 right-0 mt-2 w-36 p-2 bg-white rounded-lg shadow border">
+                      {["Edit Version", "Clone","Download File", "Delete"].map((opt) => (
                         <button
                           key={opt}
-                          className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="block w-full px-2 rounded-md  py-2 text-sm text-navColor hover:bg-[#D3DDDE]"
                         >
                           {opt}
                         </button>

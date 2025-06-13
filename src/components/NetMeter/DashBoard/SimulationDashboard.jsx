@@ -54,7 +54,7 @@ export default function SimulationDashboard() {
             </p>
 
             <button
-              onClick={() => navigate("/create-simulation")}
+              onClick={() => navigate("/create")}
               className="mx-auto flex items-center justify-center border-1 shadow-lg  border-navColor bg-[#FFB600] hover:bg-[#E0A800] text-black font-medium px-6 py-2 rounded-lg gap-2"
             >
               <Plus size={20} /> Create New Simulation
@@ -74,7 +74,7 @@ export default function SimulationDashboard() {
         <div className="flex justify-between items-center mb-10">
           <h2 className="text-4xl font-bold text-black">Simulation Runs</h2>
           <button
-            onClick={() => navigate('/create-simulation')}
+            onClick={() => navigate('/create')}
             className="bg-[#FFB600] hover:bg-amber-500 text-black font-medium px-6 py-2 rounded-lg flex items-center gap-2"
           >
             <Plus size={20} /> Create New Simulation
@@ -155,7 +155,8 @@ export default function SimulationDashboard() {
                       <p>Last Modified : {run.modified}</p>
                     </div>
 
-                    <button className="w-full mt-4 bg-[#FFB600] hover:bg-amber-500 text-black font-medium py-2 rounded-md flex items-center justify-center gap-2">
+                    <button className="w-full mt-4 bg-[#FFB600] hover:bg-amber-500 text-black font-medium py-2 rounded-md flex items-center justify-center gap-2" 
+                      onClick={() => navigate('/dash/sim')}>
                       Open Simulation <ArrowRight className="h-5 w-5" />
                     </button>
                   </div>
