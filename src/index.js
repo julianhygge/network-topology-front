@@ -97,7 +97,7 @@ const router = createBrowserRouter([
      element: <AuthRoute />,
      children:[
       {path:"/create",element:<SimulatorSettings/>},
-      {path:"/dash/sim",element:<SimulationList/>},
+      {path:"/dash/sim/:simulationId",element:<SimulationList/>},
       {path:"/dash",element:<SimulationDashboard/>},
       {path :"/netmeter",element:<LandingPage/>},
       {path:"/netmeter/netMetering/:simulationRunId",element:<NetMeterMenu/>},

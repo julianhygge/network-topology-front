@@ -205,3 +205,30 @@ export const fetchEnergySummary = async ({ nodeId, startDatetime, endDatetime })
     throw error;
   }
 };
+
+export const fetchSimulationContainers = async () => {
+  try {
+    const response = await axiosInstance.get(`${BASE_PATH}/containers`)
+
+    return response.data
+  } catch (error) {
+    console.error("Error fetching simulation containers:", error)
+    
+    throw error
+  }
+}
+
+/**
+ * Create a new simulation container
+ * POST /v1/simulation/container
+ */
+export const createSimulationContainer = async (payload) => {
+  try {
+    const response = await axiosInstance.post(`${BASE_PATH}/container`, payload)
+    console.log(response);
+    return response.data
+  } catch (error) {
+    console.error("Error creating simulation container:", error)
+    throw error
+  }
+}
