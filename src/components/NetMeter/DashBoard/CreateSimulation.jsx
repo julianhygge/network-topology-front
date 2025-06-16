@@ -76,7 +76,7 @@ export default function SimulatorSettings() {
                       value={val}
                       checked={timeStep === val}
                       onChange={() => setTimeStep(val)}
-                      className="form-radio text-yellow-400"
+                      className="custom-radio"
                     />
                     <span className="text-black text-lg font-normal">{label}</span>
                   </label>
