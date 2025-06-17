@@ -232,3 +232,21 @@ export const createSimulationContainer = async (payload) => {
     throw error
   }
 }
+
+/**
+ * Fetch all simulation runs (versions) for a given container.
+ * GET /v1/simulation/{container_id}/simulation-runs
+ */
+export const fetchSimulationRunsByContainer = async (containerId) => {
+  try {
+    console.log(containerId);
+    const response = await axiosInstance.get(
+      `${BASE_PATH}/${containerId}/simulations-runs`
+    );
+    // response.data is expected an array of run objects
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching simulation runs:", error);
+    throw error;
+  }
+};
