@@ -250,3 +250,21 @@ export const fetchSimulationRunsByContainer = async (containerId) => {
     throw error;
   }
 };
+
+
+//For creating version
+
+export const createVersion = async ({simulation_container_id, description,run_name}) => {
+  try {
+    const payload = {
+      simulation_container_id:simulation_container_id,
+      run_name:run_name,
+      description:description
+    }
+    const response = await axiosInstance.post(`${BASE_PATH}/simulations-runs`, payload)
+    return response.data
+  } catch (error) {
+    console.error("Error creating simulation run:", error)
+    throw error
+  }
+}

@@ -25,6 +25,7 @@ import SimulationDashboard from "components/NetMeter/DashBoard/SimulationDashboa
 
 import SimulationList from "components/NetMeter/DashBoard/SimulationList";
 import SimulatorSettings from "components/NetMeter/DashBoard/CreateSimulation";
+import CreateVersion from "components/NetMeter/DashBoard/CreateVersion";
 
 // const router = createBrowserRouter(
 //   [
@@ -98,6 +99,7 @@ const router = createBrowserRouter([
      children:[
       {path:"/create",element:<SimulatorSettings/>},
       {path:"/dash/sim/:simulationId",element:<SimulationList/>},
+      {path:"/create/version/:simulationId",element:<CreateVersion/>},
       {path:"/dash",element:<SimulationDashboard/>},
       {path :"/netmeter",element:<LandingPage/>},
       {path:"/netmeter/netMetering/:simulationRunId",element:<NetMeterMenu/>},

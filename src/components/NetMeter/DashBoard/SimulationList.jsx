@@ -62,23 +62,30 @@ export default function SimulationList() {
       <div className="min-h-screen bg-gradient-to-br from-[#6CCECD] to-[#356770]">
         <Navbar />
         <main className="flex flex-col h-[calc(100vh-4rem)] pt-20">
-          <div className="px-6 pt-6">
+          <div className="flex flex-row gap-16 px-6 pt-6">
             <button
               onClick={() => navigate(-1)}
-              className="w-20 h-12 rounded-full border-[1px] border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center transition-colors shadow"
+              className=" w-20 h-12 rounded-full border-[1px] border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex  items-center justify-center transition-colors shadow"
             >
               <img src="/images/Arrow 3.png" alt="Back" className="w-6 h-6" />
+         
+              
             </button>
+             <div>
+            <p className="text-[#000505] text-2xl mb-1">Versions</p>
+            <h1 className="text-[#000505] text-4xl font-bold">{simulationId.slice(0, 4)}</h1>
+          </div>
           </div>
           <div className="flex flex-1 items-center justify-center px-14">
             <div className="bg-[#F6FFFF]/50 rounded-lg shadow-lg p-10 max-w-xl w-full text-center">
+             <img src="/images/NoSim.png" alt="No Simulations" className="mx-auto mb-8" />
               <h2 className="text-4xl font-bold mb-6">No Versions Yet!</h2>
               <p className="mb-10 text-gray-700">
                 Click below to start your first simulation version
               </p>
               <button
-                onClick={() => navigate(`/create/ver?container=${simulationId}`)}
-                className="mx-auto bg-[#FFB600] hover:bg-[#E0A800] text-black font-medium px-6 py-2 rounded-lg flex items-center gap-2"
+                onClick={() => navigate(`/create/version/${simulationId}`)}
+                className="mx-auto bg-[#FFB600] hover:bg-[#E0A800] text-black font-medium px-9 py-3 rounded-lg flex items-center gap-2"
               >
                 <Plus size={20} /> Add New Version
               </button>
@@ -145,7 +152,8 @@ export default function SimulationList() {
             <p className="text-[#000505] text-2xl mb-1">Versions</p>
             <h1 className="text-[#000505] text-4xl font-bold">{simulationId.slice(0, 4)}</h1>
           </div>
-          <button className="bg-[#FFB600] hover:bg-[#E9AB09] text-[#23474F] font-semibold rounded-lg py-3 px-4 flex items-center gap-6 shadow">
+          <button className="bg-[#FFB600] hover:bg-[#E9AB09] text-[#23474F] font-semibold rounded-lg py-3 px-4 flex items-center gap-6 shadow" 
+           onClick={() => navigate(`/create/version/${simulationId}`)}>
             <img src="/images/Icon.png" className="w-5 h-5" alt="" />
             Add New Version
           </button>
