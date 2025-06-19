@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import Navbar from "./Navbar"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, useSearchParams  } from "react-router-dom"
 import { Plus } from "lucide-react"
 import { fetchSimulationRunsByContainer } from "services/netMeteringService"
 
@@ -16,6 +16,8 @@ export default function SimulationList() {
   const [runs, setRuns] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [search]       = useSearchParams()
+  const simulationName = search.get("name") || ""
 
   useEffect(() => {
     fetchSimulationRunsByContainer(simulationId)
@@ -73,7 +75,7 @@ export default function SimulationList() {
             </button>
              <div>
             <p className="text-[#000505] text-2xl mb-1">Versions</p>
-            <h1 className="text-[#000505] text-4xl font-bold">{simulationId.slice(0, 4)}</h1>
+            <h1 className="text-[#000505] text-4xl font-bold">  {simulationName}</h1>
           </div>
           </div>
           <div className="flex flex-1 items-center justify-center px-14">
@@ -84,7 +86,7 @@ export default function SimulationList() {
                 Click below to start your first simulation version
               </p>
               <button
-                onClick={() => navigate(`/create/version/${simulationId}`)}
+                onClick={() => navigate(`/create/version/${simulationId}?name=${encodeURIComponent(simulationName)}`)}
                 className="mx-auto bg-[#FFB600] hover:bg-[#E0A800] text-black font-medium px-9 py-3 rounded-lg flex items-center gap-2"
               >
                 <Plus size={20} /> Add New Version
@@ -150,10 +152,10 @@ export default function SimulationList() {
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4 shrink-0">
           <div>
             <p className="text-[#000505] text-2xl mb-1">Versions</p>
-            <h1 className="text-[#000505] text-4xl font-bold">{simulationId.slice(0, 4)}</h1>
+            <h1 className="text-[#000505] text-4xl font-bold"> {simulationName}</h1>
           </div>
           <button className="bg-[#FFB600] hover:bg-[#E9AB09] text-[#23474F] font-semibold rounded-lg py-3 px-4 flex items-center gap-6 shadow" 
-           onClick={() => navigate(`/create/version/${simulationId}`)}>
+           onClick={() =>navigate(`/create/version/${simulationId}?name=${encodeURIComponent(simulationName)}`)}>
             <img src="/images/Icon.png" className="w-5 h-5" alt="" />
             Add New Version
           </button>
@@ -263,7 +265,7 @@ export default function SimulationList() {
                   key={r.id}
                   className="grid grid-cols-[80px_2fr_5fr_auto] items-center divide-x divide-[#E0A800] bg-white/75 rounded-2xl p-4 hover:bg-white transition"
                 >
-                  <div className="font-bold text-[#000505]">{r.id.slice(0, 4)}</div>
+                  <div className="font-bold text-[#000505]">{r.run_sequence_identifier.toUpperCase()}</div>
                   <div className="pl-4 font-bold text-[#000505]">{r.run_name}</div>
                   <div className="px-4 text-[#000505] text-sm">{r.description}</div>
                   <div className="flex items-center justify-start gap-2 pl-4">

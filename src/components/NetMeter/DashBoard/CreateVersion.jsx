@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams,useSearchParams } from 'react-router-dom'
 import Navbar from './Navbar'
 import { createVersion } from 'services/netMeteringService'
 
 export default function CreateVersion() {
   const navigate = useNavigate()
   const { simulationId } = useParams()
+    const [search]       = useSearchParams()
+    const simulationName = search.get("name") || ""
 
   const [version, setVersion] = useState({ title: '', description: '' })
   const [saving, setSaving] = useState(false)
@@ -51,7 +53,7 @@ export default function CreateVersion() {
           <div>
             <p className="text-[#000505] text-2xl mb-1">Versions</p>
             <h1 className="text-[#000505] text-4xl font-bold">
-              {simulationId.slice(0, 4)}
+              {simulationName}
             </h1>
           </div>
         </div>

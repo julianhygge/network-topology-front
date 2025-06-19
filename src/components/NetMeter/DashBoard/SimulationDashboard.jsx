@@ -182,7 +182,7 @@ export default function SimulationDashboard() {
 
                       <button
                         className="w-full mt-4 bg-[#FFB600] hover:bg-amber-500 text-black py-2 rounded-md flex items-center justify-center gap-2"
-                        onClick={() => navigate(`/dash/sim/${run.id}`)}
+                        onClick={() => navigate(`/dash/sim/${run.id}?name=${encodeURIComponent(run.name)}`)  }
                       >
                         Open Simulation <ArrowRight className="h-5 w-5" />
                       </button>
