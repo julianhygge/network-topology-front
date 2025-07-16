@@ -22,7 +22,7 @@ const Login = () => {
   const [unexpectedError, setUnexpectedError] = useState(false);
   const [stateToken, setStateToken] = useState("");
   const [otp, setOtp] = useState("");
-  const [phoneNumb, setPhoneNumb] = useState('');
+  const [phoneNumb, setPhoneNumb] = useState("");
 
   const methods = useForm({
     defaultValues: {
@@ -38,12 +38,11 @@ const Login = () => {
 
   const handleInput = (e) => {
     const value = e.target.value;
-    const numericValue = value.replace(/\D/g, '');
+    const numericValue = value.replace(/\D/g, "");
     if (numericValue.length <= 10) {
-      setPhoneNumb(numericValue)
+      setPhoneNumb(numericValue);
     }
-
-  }
+  };
 
   const setRequestPhoneState = () => {
     setMaxAttemptsReached(false);
@@ -74,7 +73,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   const HandleClick = () => {
-    navigate("/");
+    navigate("/dash", { replace: true });
   };
 
   const onRequestOtp = async () => {
@@ -106,7 +105,7 @@ const Login = () => {
         setToken(res.session_token);
         setUser(res.name);
         setRole(res.role);
-        navigate("/");
+        navigate("/dash", { replace: true });
         return;
       }
       if (res.status === "OTP_RESTRICTED") {
@@ -180,16 +179,15 @@ const Login = () => {
                 name="phone_number"
                 placeholder=""
               />
-               
             </form>
             {errors.phone_number && (
-                <span className="text-red-500 text-2xl">
-                  {errors.phone_number.message}
-                </span>
-              )}
+              <span className="text-red-500 text-2xl">
+                {errors.phone_number.message}
+              </span>
+            )}
             <button
               type="submit"
-              disabled={isLoading || phoneNumb.length<10}
+              disabled={isLoading || phoneNumb.length < 10}
               className="text-[1.3vw] border-none w-[80%] h-[6vh] bg-[#F4B840] font-normal rounded-[0.8vw] text-[#265B65] mb-[40px]"
               onClick={onRequestOtp}
             >

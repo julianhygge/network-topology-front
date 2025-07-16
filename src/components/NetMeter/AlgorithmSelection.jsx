@@ -1,89 +1,87 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import Navbar from 'components/Common/Navbar'
-import GridSideBar from 'components/Grid/GridSideBar'
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Navbar from "components/Common/Navbar";
+import GridSideBar from "components/Grid/GridSideBar";
 import {
   fetchAlgorithms,
-  createSimulationRun
-} from 'services/netMeteringService'
+  createSimulationRun,
+} from "services/netMeteringService";
 
 export default function AlgorithmSelection() {
-  const { houseId } = useParams()
-  const navigate = useNavigate()
-  const [algs, setAlgs] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [loading2,setLoading2]=useState(false);
-  const [error, setError] = useState(null)
+  const { houseId } = useParams();
+  const navigate = useNavigate();
+  const [algs, setAlgs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(false);
+  const [error, setError] = useState(null);
 
   // map display_name → your local image file
   const logoMap = {
-    'Net Metering':     '/images/NetMeter.png',
-    'Autonomous Bidding':'/images/Autonomous.png',
-    'Special Groups':   '/images/SpecialGroup.png',
-    'Option -4':        '/images/Option.png',
-  }
+    "Net Metering": "/images/NetMeter.png",
+    "Autonomous Bidding": "/images/Autonomous.png",
+    "Special Groups": "/images/SpecialGroup.png",
+    "Option -4": "/images/Option.png",
+  };
 
   useEffect(() => {
     fetchAlgorithms()
       .then((data) => {
         if (Array.isArray(data.items)) {
-          setAlgs(data.items)
+          setAlgs(data.items);
         } else {
-          throw new Error('Invalid response format: expected data.items[]')
+          throw new Error("Invalid response format: expected data.items[]");
         }
       })
-      .catch((err) => setError(err.message || 'Unable to load algorithms'))
-      .finally(() => setLoading(false))
-  }, [])
+      .catch((err) => setError(err.message || "Unable to load algorithms"))
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleSelect = async (alg) => {
-    if (alg.display_name !== 'Net Metering') {
+    if (alg.display_name !== "Net Metering") {
       // not yet wired up
-      return
+      return;
     }
-    setLoading2(true)
+    setLoading2(true);
     try {
       const res = await createSimulationRun({
-        simulation_container_id:"3a00ecd1-23af-4cd2-abf5-ecc5696d7675",
+        simulation_container_id: "786f2437-c1b6-4e2c-9b9e-998cc28010bd",
         topologyRootNodeId: "6e6e0f2e-8b9e-4f88-a758-401c8281898c",
-        algorithmTypeId:   alg.id,
-        localityId:"94522a0a-c8f1-40f8-a2e5-9aed2dc55555",
-        description:"Creation"
-      })
+        algorithmTypeId: alg.id,
+        localityId: "94522a0a-c8f1-40f8-a2e5-9aed2dc55555",
+        description: "Creation",
+      });
       console.log(res);
-      const simulationRunId=res.id
-      navigate(`/netmeter/netMetering/${simulationRunId}`)
-     
+      const simulationRunId = res.id;
+      navigate(`/netmeter/netMetering/${simulationRunId}`);
     } catch (e) {
-      console.error(e)
-      setError('Failed to start simulation')
+      console.error(e);
+      setError("Failed to start simulation");
+    } finally {
+      setLoading2(false);
     }
-    finally {
-    setLoading2(false)
-  }
-  }
-   if (loading2) {
-      return (
-        <div className="flex flex-col h-screen">
-          <Navbar />
-          <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
-            <span className="text-navColor">Creating Simulation</span>
-          </div>
+  };
+  if (loading2) {
+    return (
+      <div className="flex flex-col h-screen">
+        <Navbar />
+        <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
+          <span className="text-navColor">Creating Simulation</span>
         </div>
-      )
-    }
+      </div>
+    );
+  }
 
-   if (loading) {
-      return (
-        <div className="flex flex-col h-screen">
-          <Navbar />
-          <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
-            <span className="text-navColor">Loading Algorithms…</span>
-          </div>
+  if (loading) {
+    return (
+      <div className="flex flex-col h-screen">
+        <Navbar />
+        <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
+          <span className="text-navColor">Loading Algorithms…</span>
         </div>
-      )
-    }
-  if (error)   return <div className="p-8 text-red-500">{error}</div>
+      </div>
+    );
+  }
+  if (error) return <div className="p-8 text-red-500">{error}</div>;
 
   return (
     <div className="flex flex-col h-screen">
@@ -92,7 +90,8 @@ export default function AlgorithmSelection() {
         {/* <GridSideBar /> */}
         <div className="flex flex-1 flex-col items-center justify-center bg-[#E7FAFF] p-8">
           <div className="text-center text-2xl font-medium mb-6 text-navColor">
-            The allocation engine currently uses these algorithms to simulate energy flow
+            The allocation engine currently uses these algorithms to simulate
+            energy flow
           </div>
           <div className="w-full max-w-5xl p-12 bg-white border border-[#BF6A02] rounded-2xl shadow-lg">
             <h2 className="text-center text-xl font-medium mb-20 text-navColor">
@@ -100,7 +99,8 @@ export default function AlgorithmSelection() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {algs.map((alg) => {
-                const logoSrc = logoMap[alg.display_name] || '/images/default-logo.png'
+                const logoSrc =
+                  logoMap[alg.display_name] || "/images/default-logo.png";
                 return (
                   <button
                     key={alg.id}
@@ -122,12 +122,12 @@ export default function AlgorithmSelection() {
                       {alg.display_name}
                     </span>
                   </button>
-                )
+                );
               })}
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

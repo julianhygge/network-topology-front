@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Navbar from "components/Common/Navbar";
 import GridSideBar from "components/Grid/GridSideBar";
-import { generateNetMeteringPolicyBill, fetchEnergySummary } from 'services/netMeteringService';
+import {
+  generateNetMeteringPolicyBill,
+  fetchEnergySummary,
+} from "services/netMeteringService";
 
 export default function NetMeteringBillPage() {
   const { simulationRunId } = useParams();
   const { search } = useLocation();
   const params = new URLSearchParams(search);
-  const startDatetime = params.get('start');  // e.g. "2021-01-01 00:00"
-  const endDatetime = params.get('end');      // e.g. "2021-02-01 00:00"
+  const startDatetime = params.get("start"); // e.g. "2021-01-01 00:00"
+  const endDatetime = params.get("end"); // e.g. "2021-02-01 00:00"
 
   const navigate = useNavigate();
   const [retailPrice, setRetailPrice] = useState("");
@@ -33,12 +36,12 @@ export default function NetMeteringBillPage() {
     }
 
     fetchEnergySummary({ nodeId, startDatetime, endDatetime })
-      .then(data => {
+      .then((data) => {
         console.log(data);
         setTotalImported(data.total_imported_units);
         setTotalExported(data.total_exported_units);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setSummaryError("Failed to load energy summary");
       })
@@ -51,7 +54,7 @@ export default function NetMeteringBillPage() {
       const res = await generateNetMeteringPolicyBill({
         simulationRunId,
         retailPrice: +retailPrice,
-        fixedChargeRate: +fixedPrice
+        fixedChargeRate: +fixedPrice,
       });
       console.log(res);
       navigate(`/config-summary/${simulationRunId}`);
