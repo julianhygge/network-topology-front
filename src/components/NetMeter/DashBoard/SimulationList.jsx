@@ -204,12 +204,12 @@ export default function SimulationList() {
         {isViewProgress ? (
           <div className="flex w-full h-full">
             {/* left side view */}
-            <div className="w-[520px]">
+            <div className="w-[20vw]">
               <div className="grid grid-cols-[80px_1.5fr] px-4 py-2 text-white font-semibold rounded-t-2xl">
                 <div className="px-1">ID</div>
                 <div className="px-5">Title</div>
               </div>
-              <div className="h-[420px] overflow-y-auto space-y-2 hide-scrollbar">
+              <div className="h-[40vh] overflow-y-auto space-y-2 hide-scrollbar">
                 {runs.map((r) => {
                   const isSelected = r.id === selectedRunId;
                   return (
@@ -268,7 +268,7 @@ export default function SimulationList() {
               <div className="grid grid-cols-[1fr] px-4 py-2 text-white font-semibold rounded-t-2xl">
                 <div className="px-1">Progress</div>
               </div>
-              <div className="h-[530px] w-full bg-white/75 mt-[7px] border border-[#9A9A9A] rounded-2xl">
+              <div className="h-[40vh] w-full bg-white/75 mt-[7px] border border-[#9A9A9A] rounded-2xl">
                 <div className="flex flex-col justify-center items-center p-8 gap-8 w-full">
                   <div className="w-full text-center text-2xl font-semibold">
                     {selectedRunProgressTitle}
@@ -286,7 +286,7 @@ export default function SimulationList() {
                       <div className="font-semibold text-2xl">
                         Network Topology
                       </div>
-                      <div className="w-[280px] h-[210px] bg-white border-[#498D07] rounded-2xl border-2 p-4 space-y-8 shadow">
+                      <div className="w-[13.5vw] h-[15vh] bg-white border-[#498D07] rounded-2xl border-2 p-4 space-y-8 shadow">
                         <p className="text-[#000505]">
                           Define or Modify the grid, assets, and profiles for
                           this version
@@ -329,7 +329,7 @@ export default function SimulationList() {
                         <div className="font-semibold text-2xl">
                           Allocation Engine
                         </div>
-                        <div className="w-[280px] h-[210px] bg-white rounded-2xl border border-gray-300 p-6 flex flex-col shadow-sm">
+                        <div className="w-[13.5vw] h-[15vh] bg-white rounded-2xl border border-gray-300 p-6 flex flex-col shadow-sm">
                           <p className="text-[#000505]">
                             Define allocation parameters for this version.
                           </p>
@@ -357,7 +357,7 @@ export default function SimulationList() {
                           />
                         </div>
                         <div className="font-semibold text-2xl">Results</div>
-                        <div className="w-[280px] h-[210px] bg-white rounded-2xl border border-gray-300 p-6 flex flex-col shadow-sm">
+                        <div className="w-[13.5vw] h-[15vh] bg-white rounded-2xl border border-gray-300 p-6 flex flex-col shadow-sm">
                           <p className="text-[#000505]">
                             Review simulation output and visualizations.
                           </p>
@@ -374,7 +374,7 @@ export default function SimulationList() {
                     </div>
                   </div>
                   {/* action buttons */}
-                  <div className="flex gap-6">
+                  <div className="flex gap-6 mt-4">
                     <button className="bg-[#E63C3C]/50 hover:bg-[#E63C3C]/75 text-xl text-[#46000080] font-semibold px-14 py-3 rounded-lg shadow-md shadow-black/25">
                       Reset
                     </button>
