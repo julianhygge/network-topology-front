@@ -10,15 +10,15 @@ export default function HouseBill() {
 
   const { simulationId } = useParams();
 
-  const billingMonth = firstItem?.bill_details?.billing_cycle_month;
-  const billingYear = firstItem?.bill_details?.billing_cycle_year;
-  const imported_charges = firstItem?.bill_details?.imported_energy_charges
-  const exported_charge = firstItem?.bill_details?.exported_energy_credit
-  const fixed_charge = firstItem?.bill_details?.fixed_charges
-  const total_energy_imported = firstItem?.total_energy_imported_kwh
-  const total_energy_exported = firstItem?.total_energy_exported_kwh
-  const net_energy_balance = firstItem?.net_energy_balance_kwh
-  const total_bill = firstItem?.calculated_bill_amount
+  const billingMonth = firstItem?.bill_details?.billing_cycle_month || 1;
+  const billingYear = firstItem?.bill_details?.billing_cycle_year || 1990;
+  const imported_charges = firstItem?.bill_details?.imported_energy_charges || 0
+  const exported_charge = firstItem?.bill_details?.exported_energy_credit || 0
+  const fixed_charge = firstItem?.bill_details?.fixed_charges || 0
+  const total_energy_imported = firstItem?.total_energy_imported_kwh || 0
+  const total_energy_exported = firstItem?.total_energy_exported_kwh || 0
+  const net_energy_balance = firstItem?.net_energy_balance_kwh || 0
+  const total_bill = firstItem?.calculated_bill_amount || 0
 
 
   const monthNames = [
