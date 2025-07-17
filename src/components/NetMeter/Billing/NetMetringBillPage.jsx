@@ -28,7 +28,7 @@ export default function NetMeteringBillPage() {
 
   useEffect(() => {
     //For now its hardcoded, we need to make it Dynamic
-   const nodeId = simulationRunId
+   const nodeId = "6e6e0f2e-8b9e-4f88-a758-401c8281898c"; 
 
 
     if (!startDatetime || !endDatetime) {

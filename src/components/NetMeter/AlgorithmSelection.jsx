@@ -46,7 +46,7 @@ export default function AlgorithmSelection() {
     try {
       const res = await updateRunFromVersion({
         simulation_run_id: simulationId,
-       // topology_root_node_id: "6e6e0f2e-8b9e-4f88-a758-401c8281898c",
+        topology_root_node_id: "6e6e0f2e-8b9e-4f88-a758-401c8281898c",
         simulation_algorithm_type_id: alg.id,
       });
       console.log(res);
