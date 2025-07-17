@@ -8,6 +8,7 @@ import {
   fetchNetMeteringPolicy,
   updateNetMeteringBill,
   fetchSelectedPolicy,
+  triggerBillCalculation,
 } from "services/netMeteringService";
 
 export default function NetMeteringBillPage() {
@@ -105,7 +106,8 @@ export default function NetMeteringBillPage() {
         });
       }
 
-
+     const res=await triggerBillCalculation(simulationRunId);
+      console.log(res);
       navigate(`/housebill/${simulationRunId}`);
     } catch (e) {
       console.error("Error generating/updating net‐metering policy:", e);

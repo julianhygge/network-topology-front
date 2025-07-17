@@ -8,6 +8,7 @@ import {
   fetchGrossMeteringPolicy,
   updateGrossMeteringPolicy,
   fetchSelectedPolicy,
+  triggerBillCalculation,
 } from "services/netMeteringService";
 import { useParams, useLocation } from "react-router-dom";
 
@@ -108,7 +109,7 @@ const GrossMeteringBillPage = () => {
           fixedChargeRate: +fixedPrice,
         });
       }
-
+      await triggerBillCalculation(simulationRunId);
       navigate(`/housebill/${simulationRunId}`);
     } catch (e) {
       console.error("Error generating/updating gross‐metering policy:", e);

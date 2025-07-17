@@ -6,6 +6,7 @@ import GridSideBar from "components/Grid/GridSideBar";
 import {
   fetchTouPolicies,
   generateTouMeteringPolicyBill,
+  triggerBillCalculation,
   updateTouPolicy,
 } from "services/netMeteringService";
 import { useParams } from "react-router-dom";
@@ -119,7 +120,8 @@ const TimeOfUseMeteringBillPage = () => {
         });
       }
 
-      // 3) navigate on success
+      const res=await triggerBillCalculation(simulationRunId);
+      console.log(res);
       navigate(`/housebill/${simulationRunId}`);
     } catch (e) {
       console.error("Error generating/updating TOU policy:", e);

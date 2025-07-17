@@ -127,12 +127,13 @@ export const generateGrossMeteringPolicyBill = async ({ simulationRunId, retailP
   try {
     const payload = {
       simulation_run_id: simulationRunId,
-      retail_price_per_kwh: retailPrice,
+      import_retail_price_per_kwh: retailPrice,
       export_wholesale_price_per_kwh: wholesalePrice,
       fixed_charge_tariff_rate_per_kw: fixedChargeRate,
     }
+    console.log(payload)
     const response = await axiosInstance.post(
-      `${BASE_PATH}/policy/net-metering`,
+      `${BASE_PATH}/policy/gross-metering`,
       payload
     )
     return response.data
@@ -419,3 +420,15 @@ export const updateTouPolicy = async ({
     throw err;
   }
 };
+
+export const triggerBillCalculation = async (simulationRunId) => {
+  try {
+    const response = await axiosInstance.post(
+      `${BASE_PATH}/simulation-runs/${simulationRunId}/calculate-bills`
+    )
+    return response.data
+  } catch (error) {
+    console.error("Error triggering bill calculation:", error)
+    throw error
+  }
+}
