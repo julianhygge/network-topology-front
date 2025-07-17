@@ -120,7 +120,7 @@ const TimeOfUseMeteringBillPage = () => {
       }
 
       // 3) navigate on success
-      navigate("/housebill");
+      navigate(`/housebill/${simulationRunId}`);
     } catch (e) {
       console.error("Error generating/updating TOU policy:", e);
       // TODO: show user‐facing error state

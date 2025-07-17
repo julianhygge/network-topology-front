@@ -105,8 +105,8 @@ export default function NetMeteringBillPage() {
         });
       }
 
-      // 3) proceed
-      navigate(`/housebill`);
+
+      navigate(`/housebill/${simulationRunId}`);
     } catch (e) {
       console.error("Error generating/updating net‐metering policy:", e);
       // you may set an error state here

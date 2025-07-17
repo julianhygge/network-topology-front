@@ -109,7 +109,7 @@ const GrossMeteringBillPage = () => {
         });
       }
 
-      navigate(`/housebill`);
+      navigate(`/housebill/${simulationRunId}`);
     } catch (e) {
       console.error("Error generating/updating gross‐metering policy:", e);
     } finally {

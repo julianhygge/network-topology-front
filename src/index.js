@@ -108,7 +108,7 @@ const router = createBrowserRouter([
       {path:"/netmeter/netMetering/bill/:simulationRunId",element:<NetMeteringBillPage/>},
       {path:"/netmeter/grossMetering/bill/:simulationRunId",element:<GrossMeteringBillPage/>},
       {path:"/netmeter/touMetering/bill/:simulationRunId",element:<TimeOfUseMeteringBillPage/>},
-      {path:"/housebill", element:<HouseBill />}
+      {path:"/housebill/:simulationId", element:<HouseBill />}
      ]
   }
 ]);
