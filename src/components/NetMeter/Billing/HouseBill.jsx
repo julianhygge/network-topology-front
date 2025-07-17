@@ -190,7 +190,8 @@ export default function HouseBill() {
                   <>
                     <div className="flex justify-between items-center border-b border-gray-200">
                       <span className="text-sm text-gray-600">
-                        Retail Charges ({formatNumber(net_energy_balance_kwh)} kWh @ ₹{formatNumber(bill_details.import_retail_price_per_kwh)}/kWh)
+                        Retail Charges ({formatNumber(net_energy_balance_kwh)} kWh @ ₹{formatNumber(bill_details.retail_rate_per_kwh)}/kWh)
+
                       </span>
                       <span className="font-medium text-gray-800">
                         ₹ {formatNumber(bill_details.energy_charges)}
