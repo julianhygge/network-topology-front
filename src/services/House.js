@@ -30,5 +30,17 @@ export const updateHouseData = async (houseId, houseData) => {
   }
 };
 
+export const GetHouseBill = async (houseId) => {
+  try{
+    const response = await axiosInstance.get(
+      `/simulation/${houseId}/house-bill`
+    );
+    return response.data
+  }catch(error){
+    console.log("Error in getting house bill", error)
+    throw error;
+  }
+}
+
 
   

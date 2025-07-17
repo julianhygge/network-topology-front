@@ -26,6 +26,7 @@ import SimulationDashboard from "components/NetMeter/DashBoard/SimulationDashboa
 import SimulationList from "components/NetMeter/DashBoard/SimulationList";
 import SimulatorSettings from "components/NetMeter/DashBoard/CreateSimulation";
 import CreateVersion from "components/NetMeter/DashBoard/CreateVersion";
+import HouseBill from "components/NetMeter/Billing/HouseBill";
 
 // const router = createBrowserRouter(
 //   [
@@ -107,6 +108,7 @@ const router = createBrowserRouter([
       {path:"/netmeter/netMetering/bill/:simulationRunId",element:<NetMeteringBillPage/>},
       {path:"/netmeter/grossMetering/bill/:simulationRunId",element:<GrossMeteringBillPage/>},
       {path:"/netmeter/touMetering/bill/:simulationRunId",element:<TimeOfUseMeteringBillPage/>},
+      {path:"/housebill", element:<HouseBill />}
      ]
   }
 ]);
