@@ -15,7 +15,6 @@ import Login from "components/Auth/Login";
 import AuthRoute from "ProtectedRoute/AuthRoute";
 import SolarProfile from "components/solar/SolarProfile";
 import { Toaster } from "sonner";
-import LandingPage from "components/NetMeter/AlgorithmSelection";
 import NetMeterMenu from "components/NetMeter/NetMeterMenu";
 import BillingCycleSelection from "components/NetMeter/Billing/BillingCycleSelection";
 import NetMeteringBillPage from "components/NetMeter/Billing/NetMetringBillPage";
@@ -26,6 +25,7 @@ import SimulationDashboard from "components/NetMeter/DashBoard/SimulationDashboa
 import SimulationList from "components/NetMeter/DashBoard/SimulationList";
 import SimulatorSettings from "components/NetMeter/DashBoard/CreateSimulation";
 import CreateVersion from "components/NetMeter/DashBoard/CreateVersion";
+import AlgorithmSelection from "components/NetMeter/AlgorithmSelection";
 import HouseBill from "components/NetMeter/Billing/HouseBill";
 
 // const router = createBrowserRouter(
@@ -102,7 +102,7 @@ const router = createBrowserRouter([
       {path:"/dash/sim/:simulationId",element:<SimulationList/>},
       {path:"/create/version/:simulationId",element:<CreateVersion/>},
       {path:"/dash",element:<SimulationDashboard/>},
-      {path :"/netmeter",element:<LandingPage/>},
+      {path :"/netmeter/:simulationId",element:<AlgorithmSelection/>},
       {path:"/netmeter/netMetering/:simulationRunId",element:<NetMeterMenu/>},
       {path:"/netmeter/netMetering/:meteringType/:simulationRunId",element:<BillingCycleSelection/>},
       {path:"/netmeter/netMetering/bill/:simulationRunId",element:<NetMeteringBillPage/>},

@@ -268,3 +268,25 @@ export const createVersion = async ({simulation_container_id, description,run_na
     throw error
   }
 }
+export const updateRunFromVersion = async ({
+  simulation_run_id,
+  topology_root_node_id,
+  simulation_algorithm_type_id,
+}) => {
+  try {
+    const payload = {
+      topology_root_node_id,
+      simulation_algorithm_type_id,
+    };
+
+    const response = await axiosInstance.put(
+      `${BASE_PATH}/${simulation_run_id}/simulations-runs`,
+      payload
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating simulation run from version:", error);
+    throw error;
+  }
+};

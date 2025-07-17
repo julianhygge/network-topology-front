@@ -4,11 +4,12 @@ import Navbar from "components/Common/Navbar";
 import GridSideBar from "components/Grid/GridSideBar";
 import {
   fetchAlgorithms,
-  createSimulationRun,
+  updateRunFromVersion,
 } from "services/netMeteringService";
 
 export default function AlgorithmSelection() {
   const { houseId } = useParams();
+  const {simulationId}=useParams();
   const navigate = useNavigate();
   const [algs, setAlgs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,16 +44,13 @@ export default function AlgorithmSelection() {
     }
     setLoading2(true);
     try {
-      const res = await createSimulationRun({
-        simulation_container_id: "786f2437-c1b6-4e2c-9b9e-998cc28010bd",
-        topologyRootNodeId: "6e6e0f2e-8b9e-4f88-a758-401c8281898c",
-        algorithmTypeId: alg.id,
-        localityId: "94522a0a-c8f1-40f8-a2e5-9aed2dc55555",
-        description: "Creation",
+      const res = await updateRunFromVersion({
+        simulation_run_id: simulationId,
+       // topology_root_node_id: "6e6e0f2e-8b9e-4f88-a758-401c8281898c",
+        simulation_algorithm_type_id: alg.id,
       });
       console.log(res);
-      const simulationRunId = res.id;
-      navigate(`/netmeter/netMetering/${simulationRunId}`);
+      navigate(`/netmeter/netMetering/${simulationId}`);
     } catch (e) {
       console.error(e);
       setError("Failed to start simulation");

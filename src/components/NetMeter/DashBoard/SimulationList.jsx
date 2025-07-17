@@ -49,7 +49,7 @@ export default function SimulationList() {
   };
 
   const handleAlgorithmsPageRoute = () => {
-    navigate("/netmeter");
+    navigate(`/netmeter/${selectedRunId}`);
   };
 
   // Loading
@@ -204,19 +204,19 @@ export default function SimulationList() {
         {isViewProgress ? (
           <div className="flex w-full h-full">
             {/* left side view */}
-            <div className="w-[20vw]">
+            <div className="flex-shrink-0 basis-1/3 max-w-sm lg:basis-1/4 lg:max-w-md">
               <div className="grid grid-cols-[80px_1.5fr] px-4 py-2 text-white font-semibold rounded-t-2xl">
                 <div className="px-1">ID</div>
                 <div className="px-5">Title</div>
               </div>
-              <div className="h-[40vh] overflow-y-auto space-y-2 hide-scrollbar">
+              <div className="max-h-[60vh] md:max-h-[50vh] overflow-y-auto space-y-2 hide-scrollbar">
                 {runs.map((r) => {
                   const isSelected = r.id === selectedRunId;
                   return (
                     <div
                       key={r.id}
                       className={`
-                    grid grid-cols-[80px_300px_100px]
+                    grid grid-cols-[80px_250px_100px]
                     items-center divide-x divide-[#E0A800]
                     bg-white/75 rounded-2xl p-4
                     hover:bg-white transition cursor-pointer 
@@ -264,29 +264,28 @@ export default function SimulationList() {
             <div className="w-[2px] bg-gradient-to-b from-[#FFB600] to-[#996D00] mx-2 rounded-full mt-12"></div>
 
             {/* right side view */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <div className="grid grid-cols-[1fr] px-4 py-2 text-white font-semibold rounded-t-2xl">
                 <div className="px-1">Progress</div>
               </div>
-              <div className="h-[40vh] w-full bg-white/75 mt-[7px] border border-[#9A9A9A] rounded-2xl">
-                <div className="flex flex-col justify-center items-center p-8 gap-8 w-full">
+              <div className="w-full bg-white/75 border border-[#9A9A9A] rounded-2xl max-h-[80vh] md:max-h-[60vh] overflow-y-auto">
+                <div className="flex flex-col justify-center items-center p-5 gap-8 w-full">
                   <div className="w-full text-center text-2xl font-semibold">
                     {selectedRunProgressTitle}
                   </div>
                   {/* steps */}
-                  <div className="flex items-center justify-between w-full">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+                    {/* Network Topology */}
                     <div className="flex flex-col items-center gap-4">
-                      <div>
-                        <img
-                          src="/images/network_topology.svg"
-                          alt="network topology icon"
-                          className="w-12 h-12"
-                        />
-                      </div>
+                      <img
+                        src="/images/network_topology.svg"
+                        alt="network topology icon"
+                        className="w-12 h-12"
+                      />
                       <div className="font-semibold text-2xl">
                         Network Topology
                       </div>
-                      <div className="w-[13.5vw] h-[15vh] bg-white border-[#498D07] rounded-2xl border-2 p-4 space-y-8 shadow">
+                      <div className="w-full bg-white border-2 border-[#498D07] rounded-2xl p-4 space-y-4 shadow">
                         <p className="text-[#000505]">
                           Define or Modify the grid, assets, and profiles for
                           this version
@@ -317,64 +316,60 @@ export default function SimulationList() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col">
-                      <div className="flex flex-col items-center gap-4">
-                        <div>
+
+                    {/* Allocation Engine */}
+                    <div className="flex flex-col items-center gap-4">
+                      <img
+                        src="/images/allocation_icon.svg"
+                        alt="allocation engine icon"
+                        className="w-12 h-12"
+                      />
+                      <div className="font-semibold text-2xl">
+                        Allocation Engine
+                      </div>
+                      <div className="w-full bg-white border border-gray-300 rounded-2xl p-6 flex flex-col shadow-sm">
+                        <p className="text-[#000505]">
+                          Define allocation parameters for this version.
+                        </p>
+                        <button
+                          onClick={handleAlgorithmsPageRoute}
+                          className="mt-2 flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#070C21] font-semibold py-2 rounded-lg"
+                        >
                           <img
-                            src="/images/allocation_icon.svg"
-                            alt="network topology icon"
-                            className="w-12 h-12"
+                            src="/images/plus_circle_icon.svg"
+                            className="w-5 h-5"
+                            alt=""
                           />
-                        </div>
-                        <div className="font-semibold text-2xl">
-                          Allocation Engine
-                        </div>
-                        <div className="w-[13.5vw] h-[15vh] bg-white rounded-2xl border border-gray-300 p-6 flex flex-col shadow-sm">
-                          <p className="text-[#000505]">
-                            Define allocation parameters for this version.
-                          </p>
-                          <button
-                            onClick={handleAlgorithmsPageRoute}
-                            className="mt-auto flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#070C21] font-semibold py-2 rounded-lg"
-                          >
-                            <img
-                              src="/images/plus_circle_icon.svg"
-                              className="w-5 h-5"
-                              alt=""
-                            />
-                            Add Allocation Engine
-                          </button>
-                        </div>
+                          Add Allocation Engine
+                        </button>
                       </div>
                     </div>
-                    <div className="flex flex-col">
-                      <div className="flex flex-col items-center gap-4">
-                        <div>
+
+                    {/* Results */}
+                    <div className="flex flex-col items-center gap-4">
+                      <img
+                        src="/images/results_icon.svg"
+                        alt="results icon"
+                        className="w-12 h-12"
+                      />
+                      <div className="font-semibold text-2xl">Results</div>
+                      <div className="w-full bg-white border border-gray-300 rounded-2xl p-6 flex flex-col shadow-sm">
+                        <p className="text-[#000505]">
+                          Review simulation output and visualizations.
+                        </p>
+                        <button className="mt-auto flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#070C21] font-semibold py-2 rounded-lg">
                           <img
-                            src="/images/results_icon.svg"
-                            alt="network topology icon"
-                            className="w-12 h-12"
+                            src="/images/play_icon.svg"
+                            className="w-5 h-5"
+                            alt=""
                           />
-                        </div>
-                        <div className="font-semibold text-2xl">Results</div>
-                        <div className="w-[13.5vw] h-[15vh] bg-white rounded-2xl border border-gray-300 p-6 flex flex-col shadow-sm">
-                          <p className="text-[#000505]">
-                            Review simulation output and visualizations.
-                          </p>
-                          <button className="mt-auto flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#070C21] font-semibold py-2 rounded-lg">
-                            <img
-                              src="/images/play_icon.svg"
-                              className="w-5 h-5"
-                              alt=""
-                            />
-                            Run Simulation
-                          </button>
-                        </div>
+                          Run Simulation
+                        </button>
                       </div>
                     </div>
                   </div>
                   {/* action buttons */}
-                  <div className="flex gap-6 mt-4">
+                  <div className="flex gap-6 mt-1">
                     <button className="bg-[#E63C3C]/50 hover:bg-[#E63C3C]/75 text-xl text-[#46000080] font-semibold px-14 py-3 rounded-lg shadow-md shadow-black/25">
                       Reset
                     </button>
