@@ -6,6 +6,9 @@ import GridSideBar from "components/Grid/GridSideBar";
 import {
   generateGrossMeteringPolicyBill,
   fetchEnergySummary,
+  fetchGrossMeteringPolicy,
+  updateGrossMeteringPolicy,
+  fetchSelectedPolicy,
 } from "services/netMeteringService";
 import { useParams, useLocation } from "react-router-dom";
 
@@ -49,25 +52,78 @@ const GrossMeteringBillPage = () => {
       .finally(() => setSummaryLoading(false));
   }, [startDatetime, endDatetime]);
 
+  // const handleGenerateBill = async () => {
+  //   setLoading(true);
+  //   try {
+  //     // see if a policy already exists
+  //   //  const existing = await fetchGrossMeteringPolicy(simulationRunId);
+  //    const existing=await  fetchSelectedPolicy(simulationRunId);
+  //     let res;
+  //     if (existing ) {
+  //       // update
+  //       res = await updateGrossMeteringPolicy({
+  //         simulation_run_id: simulationRunId,
+  //         import_retail_price_per_kwh:  +retailPrice,
+  //         export_wholesale_price_per_kwh: +wholesalePrice,
+  //         fixed_charge_tariff_rate_per_kw: +fixedPrice
+  //       });
+  //     } else {
+  //       // create new
+  //       res = await generateGrossMeteringPolicyBill({
+  //         simulationRunId,
+  //         retailPrice:  +retailPrice,
+  //         wholesalePrice: +wholesalePrice,
+  //         fixedChargeRate: +fixedPrice
+  //       });
+  //     }
+  //     console.log(res);
+  //     navigate("/housebill");
+  //   } catch (e) {
+  //     console.error(e);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleGenerateBill = async () => {
     setLoading(true);
     try {
-      console.log(simulationRunId);
-      const res = await generateGrossMeteringPolicyBill({
-        simulationRunId,
-        retailPrice: +retailPrice,
-        wholesalePrice: +wholesalePrice,
-        fixedChargeRate: +fixedPrice,
-      });
-      // after successful POST, maybe navigate to a summary or show toast
-      console.log(res);
+      // 1) check for existing gross‐metering policy
+      let existing = null;
+      try {
+        existing = await fetchGrossMeteringPolicy(simulationRunId);
+      } catch (err) {
+        if (err.response?.status !== 400) throw err;
+      }
+
+      if (existing) {
+        // 2a) update
+        await updateGrossMeteringPolicy({
+          simulation_run_id: simulationRunId,
+          import_retail_price_per_kwh: +retailPrice,
+          export_wholesale_price_per_kwh: +wholesalePrice,
+          fixed_charge_tariff_rate_per_kw: +fixedPrice,
+        });
+      } else {
+        // 2b) create
+        await generateGrossMeteringPolicyBill({
+          simulationRunId,
+          retailPrice: +retailPrice,
+          wholesalePrice: +wholesalePrice,
+          fixedChargeRate: +fixedPrice,
+        });
+      }
+
+      // 3) proceed
       navigate(`/housebill`);
     } catch (e) {
-      console.error(e);
+      console.error("Error generating/updating gross‐metering policy:", e);
     } finally {
       setLoading(false);
     }
   };
+
+
+
   if (loading) {
     return (
       <div className="flex flex-col h-screen">

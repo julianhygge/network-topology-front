@@ -189,6 +189,7 @@ export const fetchSelectedPolicy = async (simulation_run_id) => {
  */
 export const fetchEnergySummary = async ({ nodeId, startDatetime, endDatetime }) => {
   try {
+    console.log(nodeId)
     const response = await axiosInstance.get(
       `${BASE_PATH}/nodes/${nodeId}/energy-summary`,
       {
@@ -268,6 +269,7 @@ export const createVersion = async ({simulation_container_id, description,run_na
     throw error
   }
 }
+
 export const updateRunFromVersion = async ({
   simulation_run_id,
   topology_root_node_id,
@@ -288,5 +290,132 @@ export const updateRunFromVersion = async ({
   } catch (error) {
     console.error("Error updating simulation run from version:", error);
     throw error;
+  }
+};
+
+export const updateNetMeteringPolicy = async ({ simulation_run_id, net_metering_policy_type_id }) => {
+  try {
+    const payload = { net_metering_policy_type_id }
+    const res = await axiosInstance.put(
+      `${BASE_PATH}/${simulation_run_id}/policies`,
+      payload
+    )
+    return res.data
+  } catch (err) {
+    console.error('Error updating selected policy:', err)
+    throw err
+  }
+}
+
+export const updateNetMeteringBill = async ({
+  simulation_run_id,
+  retail_price_per_kwh,
+  fixed_charge_tariff_rate_per_kw
+}) => {
+  try {
+    const payload = { retail_price_per_kwh, fixed_charge_tariff_rate_per_kw };
+    const res = await axiosInstance.put(
+      `${BASE_PATH}/${simulation_run_id}/net-metering`,
+      payload
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Error updating net metering policy:", err);
+    throw err;
+  }
+};
+
+export const fetchNetMeteringPolicy = async (simulation_run_id) => {
+  try {
+    const res = await axiosInstance.get(
+      `${BASE_PATH}/${simulation_run_id}/policy/net-metering`
+    );
+    return res.data; 
+  } catch (err) {
+    if (err.response?.status === 404) {
+     
+      return null;
+    }
+    console.error("Error fetching net metering policy:", err);
+    throw err;
+  }
+};
+
+export const fetchGrossMeteringPolicy = async (simulationRunId) => {
+  try {
+    const response = await axiosInstance.get(
+      `${BASE_PATH}/${simulationRunId}/policy/gross-metering`
+    );
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.status === 404) {
+      // no existing policy
+      return null;
+    }
+    console.error("Error fetching gross metering policy:", err);
+    throw err;
+  }
+};
+
+export const updateGrossMeteringPolicy = async ({
+  simulation_run_id,
+  import_retail_price_per_kwh,
+  export_wholesale_price_per_kwh,
+  fixed_charge_tariff_rate_per_kw,
+}) => {
+  try {
+    const payload = {
+      import_retail_price_per_kwh,
+      export_wholesale_price_per_kwh,
+      fixed_charge_tariff_rate_per_kw,
+    };
+    const response = await axiosInstance.put(
+      `${BASE_PATH}/${simulation_run_id}/gross-metering`,
+      payload
+    );
+    return response.data;
+  } catch (err) {
+    console.error("Error updating gross metering policy:", err);
+    throw err;
+  }
+};
+
+export const fetchTouPolicies = async (simulationRunId) => {
+  try {
+    const res = await axiosInstance.get(
+      `${BASE_PATH}/${simulationRunId}/policy/tou`
+    );
+    return res.data;
+  } catch (err) {
+    if (err.response?.status === 404) {
+      return [];
+    }
+    console.error("Error fetching TOU policies:", err);
+    throw err;
+  }
+};
+
+export const updateTouPolicy = async ({
+  touId,
+  startTime,
+  endTime,
+  importRetailRatePerKwh,
+  exportWholesaleRatePerKwh,
+}) => {
+  try {
+    const payload = {
+      start_time: startTime,
+      end_time: endTime,
+      import_retail_rate_per_kwh: importRetailRatePerKwh,
+      export_wholesale_rate_per_kwh: exportWholesaleRatePerKwh,
+    };
+    const res = await axiosInstance.put(
+      `${BASE_PATH}/tou/${touId}`,
+      payload
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Error updating TOU policy row:", err);
+    throw err;
   }
 };

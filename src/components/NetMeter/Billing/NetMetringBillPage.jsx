@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Navbar from "components/Common/Navbar";
-import GridSideBar from "components/Grid/GridSideBar";
 import {
   generateNetMeteringPolicyBill,
   fetchEnergySummary,
+  fetchNetMeteringPolicy,
+  updateNetMeteringBill,
+  fetchSelectedPolicy,
 } from "services/netMeteringService";
 
 export default function NetMeteringBillPage() {
@@ -26,7 +28,8 @@ export default function NetMeteringBillPage() {
 
   useEffect(() => {
     //For now its hardcoded, we need to make it Dynamic
-    const nodeId = "6e6e0f2e-8b9e-4f88-a758-401c8281898c"; // Replace with actual node ID
+   const nodeId = simulationRunId
+
 
     if (!startDatetime || !endDatetime) {
       console.error("Missing startDatetime or endDatetime");
@@ -48,18 +51,68 @@ export default function NetMeteringBillPage() {
       .finally(() => setSummaryLoading(false));
   }, [startDatetime, endDatetime]);
 
-  const handleGenerateBill = async () => {
+  // const handleGenerateBill = async () => {
+  //   setLoading(true)
+  //   try {
+  //     // check for existing policy
+  //     //const existing = await fetchNetMeteringPolicy(simulationRunId)
+  //     const existing=await  fetchSelectedPolicy(simulationRunId);
+  //     let res
+  //     if (existing) {
+  //       // update existing
+  //       res = await updateNetMeteringBill({
+  //         simulation_run_id: simulationRunId,
+  //         retail_price_per_kwh: +retailPrice,
+  //         fixed_charge_tariff_rate_per_kw: +fixedPrice
+  //       })
+  //     } else {
+  //       // create new
+  //       res = await generateNetMeteringPolicyBill({
+  //         simulationRunId,
+  //         retailPrice: +retailPrice,
+  //         fixedChargeRate: +fixedPrice
+  //       })
+  //     }
+  //     console.log(res)
+  //     navigate('/housebill')
+  //   } catch (e) {
+  //     console.error(e)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+   const handleGenerateBill = async () => {
     setLoading(true);
     try {
-      const res = await generateNetMeteringPolicyBill({
-        simulationRunId,
-        retailPrice: +retailPrice,
-        fixedChargeRate: +fixedPrice,
-      });
-      console.log(res);
+      // 1) check for existing policy
+      let existing = null;
+      try {
+        existing = await fetchNetMeteringPolicy(simulationRunId);
+      } catch (err) {
+        if (err.response?.status !== 400) throw err;
+      }
+
+      if (existing) {
+        // 2a) update existing
+        await updateNetMeteringBill({
+          simulation_run_id: simulationRunId,
+          retail_price_per_kwh: +retailPrice,
+          fixed_charge_tariff_rate_per_kw: +fixedPrice,
+        });
+      } else {
+        // 2b) create new
+        await generateNetMeteringPolicyBill({
+          simulationRunId,
+          retailPrice: +retailPrice,
+          fixedPrice: +fixedPrice,
+        });
+      }
+
+      // 3) proceed
       navigate(`/housebill`);
     } catch (e) {
-      console.error(e);
+      console.error("Error generating/updating net‐metering policy:", e);
+      // you may set an error state here
     } finally {
       setLoading(false);
     }
