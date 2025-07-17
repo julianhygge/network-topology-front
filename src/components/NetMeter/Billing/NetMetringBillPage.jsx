@@ -57,7 +57,7 @@ export default function NetMeteringBillPage() {
         fixedChargeRate: +fixedPrice,
       });
       console.log(res);
-      navigate(`/config-summary/${simulationRunId}`);
+      navigate(`/housebill`);
     } catch (e) {
       console.error(e);
     } finally {

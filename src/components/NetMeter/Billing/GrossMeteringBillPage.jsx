@@ -61,7 +61,7 @@ const GrossMeteringBillPage = () => {
       });
       // after successful POST, maybe navigate to a summary or show toast
       console.log(res);
-      navigate(`/config-summary/${simulationRunId}`);
+      navigate(`/housebill`);
     } catch (e) {
       console.error(e);
     } finally {

@@ -274,7 +274,7 @@ export default function SimulationList() {
                     {selectedRunProgressTitle}
                   </div>
                   {/* steps */}
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8  w-full max-w-[1200px] mx-auto">
                     {/* Network Topology */}
                     <div className="flex flex-col items-center gap-4">
                       <img
@@ -285,34 +285,36 @@ export default function SimulationList() {
                       <div className="font-semibold text-2xl">
                         Network Topology
                       </div>
-                      <div className="w-full bg-white border-2 border-[#498D07] rounded-2xl p-4 space-y-4 shadow">
-                        <p className="text-[#000505]">
-                          Define or Modify the grid, assets, and profiles for
-                          this version
-                        </p>
-                        <div className="flex flex-col gap-3">
-                          <button
-                            onClick={handleNetworkTopologyPageRoute}
-                            className="flex items-center justify-center gap-2 bg-[#71E8E8] hover:bg-teal-400 font-medium py-2 rounded-xl"
-                          >
-                            <img
-                              src="/images/eye_icon.svg"
-                              className="w-5 h-5"
-                              alt=""
-                            />
-                            Quick View
-                          </button>
-                          <button
-                            onClick={handleNetworkTopologyPageRoute}
-                            className="flex items-center justify-center gap-2 bg-[#FFB600] hover:bg-[#E0A800] font-medium py-2 rounded-xl"
-                          >
-                            <img
-                              src="/images/gear_icon.svg"
-                              className="w-5 h-5"
-                              alt=""
-                            />
-                            Configure Topology
-                          </button>
+                      <div className="w-full bg-white border-2 border-[#498D07] rounded-2xl p-4 shadow min-h-[215px] flex flex-col flex-1">
+                        <div className="space-y-4">
+                          <p className="text-[#000505]">
+                            Define or Modify the grid, assets, and profiles for
+                            this version
+                          </p>
+                          <div className="flex flex-col gap-3  mt-auto">
+                            <button
+                              onClick={handleNetworkTopologyPageRoute}
+                              className="flex items-center justify-center gap-2 bg-[#71E8E8] hover:bg-teal-400 font-medium py-2 rounded-xl"
+                            >
+                              <img
+                                src="/images/eye_icon.svg"
+                                className="w-5 h-5"
+                                alt=""
+                              />
+                              Quick View
+                            </button>
+                            <button
+                              onClick={handleNetworkTopologyPageRoute}
+                              className="flex items-center justify-center gap-2 bg-[#FFB600] hover:bg-[#E0A800] font-medium py-2 rounded-xl"
+                            >
+                              <img
+                                src="/images/gear_icon.svg"
+                                className="w-5 h-5"
+                                alt=""
+                              />
+                              Configure Topology
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -327,13 +329,13 @@ export default function SimulationList() {
                       <div className="font-semibold text-2xl">
                         Allocation Engine
                       </div>
-                      <div className="w-full bg-white border border-gray-300 rounded-2xl p-6 flex flex-col shadow-sm">
+                      <div className="w-full bg-white border border-gray-300 rounded-2xl p-6 shadow-sm min-h-[215px] flex flex-col justify-between">
                         <p className="text-[#000505]">
                           Define allocation parameters for this version.
                         </p>
                         <button
                           onClick={handleAlgorithmsPageRoute}
-                          className="mt-2 flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#070C21] font-semibold py-2 rounded-lg"
+                          className="flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#070C21] font-semibold py-2 rounded-lg"
                         >
                           <img
                             src="/images/plus_circle_icon.svg"
@@ -353,11 +355,11 @@ export default function SimulationList() {
                         className="w-12 h-12"
                       />
                       <div className="font-semibold text-2xl">Results</div>
-                      <div className="w-full bg-white border border-gray-300 rounded-2xl p-6 flex flex-col shadow-sm">
+                      <div className="w-full bg-white border border-gray-300 rounded-2xl p-6 shadow-sm min-h-[215px] flex flex-col justify-between">
                         <p className="text-[#000505]">
                           Review simulation output and visualizations.
                         </p>
-                        <button className="mt-auto flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#070C21] font-semibold py-2 rounded-lg">
+                        <button className="flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#070C21] font-semibold py-2 rounded-lg">
                           <img
                             src="/images/play_icon.svg"
                             className="w-5 h-5"
@@ -368,6 +370,7 @@ export default function SimulationList() {
                       </div>
                     </div>
                   </div>
+
                   {/* action buttons */}
                   <div className="flex gap-6 mt-1">
                     <button className="bg-[#E63C3C]/50 hover:bg-[#E63C3C]/75 text-xl text-[#46000080] font-semibold px-14 py-3 rounded-lg shadow-md shadow-black/25">

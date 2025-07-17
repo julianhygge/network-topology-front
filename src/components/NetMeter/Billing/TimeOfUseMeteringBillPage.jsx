@@ -60,7 +60,7 @@ const TimeOfUseMeteringBillPage = () => {
             });
             console.log(res);
         }
-        navigate(`/config-summary/${simulationRunId}`)
+        navigate(`/housebill`)
         } catch (e) {
             console.error(e)
         }
