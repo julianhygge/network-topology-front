@@ -84,7 +84,6 @@ export default function NetMeteringBillPage() {
    const handleGenerateBill = async () => {
     setLoading(true);
     try {
-      // 1) check for existing policy
       let existing = null;
       try {
         existing = await fetchNetMeteringPolicy(simulationRunId);
@@ -93,14 +92,12 @@ export default function NetMeteringBillPage() {
       }
 
       if (existing) {
-        // 2a) update existing
         await updateNetMeteringBill({
           simulation_run_id: simulationRunId,
           retail_price_per_kwh: +retailPrice,
           fixed_charge_tariff_rate_per_kw: +fixedPrice,
         });
       } else {
-        // 2b) create new
         await generateNetMeteringPolicyBill({
           simulationRunId,
           retailPrice: +retailPrice,

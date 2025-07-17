@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "components/Common/Navbar";
-import GridSideBar from "components/Grid/GridSideBar";
 import {
   generateGrossMeteringPolicyBill,
   fetchEnergySummary,
@@ -87,7 +86,6 @@ const GrossMeteringBillPage = () => {
   const handleGenerateBill = async () => {
     setLoading(true);
     try {
-      // 1) check for existing gross‐metering policy
       let existing = null;
       try {
         existing = await fetchGrossMeteringPolicy(simulationRunId);
@@ -96,7 +94,6 @@ const GrossMeteringBillPage = () => {
       }
 
       if (existing) {
-        // 2a) update
         await updateGrossMeteringPolicy({
           simulation_run_id: simulationRunId,
           import_retail_price_per_kwh: +retailPrice,
@@ -104,7 +101,6 @@ const GrossMeteringBillPage = () => {
           fixed_charge_tariff_rate_per_kw: +fixedPrice,
         });
       } else {
-        // 2b) create
         await generateGrossMeteringPolicyBill({
           simulationRunId,
           retailPrice: +retailPrice,
@@ -113,7 +109,6 @@ const GrossMeteringBillPage = () => {
         });
       }
 
-      // 3) proceed
       navigate(`/housebill`);
     } catch (e) {
       console.error("Error generating/updating gross‐metering policy:", e);
