@@ -15,6 +15,12 @@ export default function HouseBill() {
   const imported_charges = firstItem?.bill_details?.imported_energy_charges
   const exported_charge = firstItem?.bill_details?.exported_energy_credit
   const fixed_charge = firstItem?.bill_details?.fixed_charges
+  const total_energy_imported = firstItem?.total_energy_imported_kwh
+  const total_energy_exported = firstItem?.total_energy_exported_kwh
+  const net_energy_balance = firstItem?.net_energy_balance_kwh
+  const total_bill = firstItem?.calculated_bill_amount
+
+
   const monthNames = [
     "Jan",
     "Feb",
@@ -173,7 +179,7 @@ export default function HouseBill() {
                     Total Imported Energy
                   </span>
                   <span className="font-medium text-gray-800">
-                    {formatNumber(totals.totalEnergyImported)} kWh
+                    {formatNumber(total_energy_imported)} kWh
                   </span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200">
@@ -181,7 +187,7 @@ export default function HouseBill() {
                     Total Exported Energy
                   </span>
                   <span className="font-medium text-gray-800">
-                    {formatNumber(totals.totalEnergyExported)} kWh{" "}
+                    {formatNumber(total_energy_exported)} kWh{" "}
                   </span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200">
@@ -189,7 +195,7 @@ export default function HouseBill() {
                     Net Energy Consumed
                   </span>
                   <span className="font-medium ">
-                    {formatNumber(totals.totalNetEnergyBalance)} kWh
+                    {formatNumber(net_energy_balance)} kWh
                   </span>
                 </div>
               </div>
@@ -239,11 +245,11 @@ export default function HouseBill() {
             <div className="rounded-lg p-4 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold">Total Amount Due</h2>
-                <p className="text-sm ">Due by June</p>
+                {/* <p className="text-sm ">Due by June</p> */}
               </div>
 
               <div>
-                <p className="text-2xl font-bold">₹ {totals.totalBillAmount}</p>
+                <p className="text-2xl font-bold">₹ {total_bill}</p>
               </div>
             </div>
           </div>
