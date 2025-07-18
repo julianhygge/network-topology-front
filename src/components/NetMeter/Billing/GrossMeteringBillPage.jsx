@@ -31,7 +31,7 @@ const GrossMeteringBillPage = () => {
   const [summaryError, setSummaryError] = useState(null);
 
   useEffect(() => {
-    const nodeId = "6e6e0f2e-8b9e-4f88-a758-401c8281898c"; // replace with actual node ID
+    const nodeId = "420f29da-f8e3-44f8-8245-9964d10e62cd"; // replace with actual node ID
     if (!startDatetime || !endDatetime) {
       console.error("Missing startDatetime or endDatetime");
       setSummaryError("Date range not provided");

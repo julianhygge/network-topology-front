@@ -29,7 +29,7 @@ export default function NetMeteringBillPage() {
 
   useEffect(() => {
     //For now its hardcoded, we need to make it Dynamic
-   const nodeId = "6e6e0f2e-8b9e-4f88-a758-401c8281898c"; 
+   const nodeId = "420f29da-f8e3-44f8-8245-9964d10e62cd"; 
 
 
     if (!startDatetime || !endDatetime) {

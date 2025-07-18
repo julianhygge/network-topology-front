@@ -192,7 +192,7 @@ export const fetchEnergySummary = async ({ nodeId, startDatetime, endDatetime })
   try {
     console.log(nodeId)
     const response = await axiosInstance.get(
-      `${BASE_PATH}/nodes/${nodeId}/energy-summary`,
+      `${BASE_PATH}/houses/${nodeId}/energy-summary`,
       {
         params: {
           start_datetime: startDatetime,

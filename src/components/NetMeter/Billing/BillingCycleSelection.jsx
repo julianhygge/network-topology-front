@@ -73,7 +73,7 @@ export default function BillingCycleSelection() {
       const monthIndex = months.indexOf(selectedMonth); // 0-based
       const yearNum = +selectedYear;
       const startDate = new Date(yearNum, monthIndex, 1, 0, 0);
-      const nextMonth = new Date(yearNum, monthIndex + 1, 1, 0, 0);
+      const nextMonth = new Date(yearNum, monthIndex + 1, 0, 23, 59);
 
       const startISO =
         [
