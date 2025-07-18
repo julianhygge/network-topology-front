@@ -90,37 +90,53 @@ const TimeOfUseMeteringBillPage = () => {
       let existing = null;
       try {
         existing = await fetchTouPolicies(simulationRunId);
+        const rowsWithUuid = existing.map((policy, i) => ({
+          ...rows[i],
+          uuid: policy.id,
+        }));
+        setRows(rowsWithUuid);
+        console.log(simulationRunId);
+        console.log("existing: ", existing);
       } catch (err) {
         if (err.response?.status !== 400) throw err;
       }
 
-      if (existing) {
+      if (existing && existing.length > 0) {
+        await Promise.all(
+          rows.map((row) => {
+            const label = `Period ${row.id}`;
+            const policy = existing.find((p) => p.time_period_label === label);
+
+            if (!policy) {
+              throw new Error(`No TOU policy found for ${label}`);
+            }
+
+            return updateTouPolicy({
+              touId: policy.id, // ← UUID from the server
+              timePeriodLabel: label,
+              startTime: row.startTime,
+              endTime: row.endTime,
+              importRetailRatePerKwh: +row.retail,
+              exportWholesaleRatePerKwh: +row.wholesale,
+            });
+          })
+        );
+      } else {
         await Promise.all(
           rows.map((row) =>
-            updateTouPolicy({
-              tou_id: row.id, // your TOU‐record ID
-              time_period_label: row.label || `Period ${row.id}`,
-              start_time: row.startTime,
-              end_time: row.endTime,
-              import_retail_rate_per_kwh: +row.retail,
-              export_wholesale_rate_per_kwh: +row.wholesale,
+            generateTouMeteringPolicyBill({
+              simulationRunId,
+              timePeriodLabel: `Period ${row.id}`,
+              startTime: row.startTime,
+              endTime: row.endTime,
+              retailPrice: +row.retail,
+              wholesalePrice: +row.wholesale,
             })
           )
         );
-      } else {
-        await generateTouMeteringPolicyBill({
-          simulationRunId,
-          periods: rows.map((r) => ({
-            time_period_label: r.label || `Period ${r.id}`,
-            start_time: r.startTime,
-            end_time: r.endTime,
-            retailPrice: +r.retail,
-            wholesalePrice: +r.wholesale,
-          })),
-        });
       }
 
-      const res=await triggerBillCalculation(simulationRunId);
+      const res = await triggerBillCalculation(simulationRunId);
       console.log(res);
       navigate(`/housebill/${simulationRunId}`);
     } catch (e) {

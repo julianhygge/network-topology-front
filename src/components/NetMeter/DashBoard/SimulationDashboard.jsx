@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import {
   Plus,
   MoreVertical,
@@ -6,37 +6,37 @@ import {
   ArrowRight,
   ChevronLeft,
   ChevronRight,
-  MapPin
-} from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import Navbar from './Navbar'
-import { fetchSimulationContainers } from 'services/netMeteringService'
+  MapPin,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
+import { fetchSimulationContainers } from "services/netMeteringService";
 
 export default function SimulationDashboard() {
-  const navigate = useNavigate()
-  const perPage = 3
+  const navigate = useNavigate();
+  const perPage = 3;
 
-  const [runs, setRuns]       = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError]     = useState(null)
-  const [offset, setOffset]   = useState(0)
+  const [runs, setRuns] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [offset, setOffset] = useState(0);
 
   useEffect(() => {
     fetchSimulationContainers()
       .then((data) => {
-        setRuns(Array.isArray(data.items) ? data.items : [])
+        setRuns(Array.isArray(data.items) ? data.items : []);
       })
       .catch((err) => {
-        console.error(err)
-        setError('Failed to load simulations')
+        console.error(err);
+        setError("Failed to load simulations");
       })
-      .finally(() => setLoading(false))
-  }, [])
+      .finally(() => setLoading(false));
+  }, []);
 
   // carousel math
-  const maxOffset = Math.max(0, runs.length - perPage) * (100 / perPage)
-  const prev = () => setOffset(o => Math.max(o - 100 / perPage, 0))
-  const next = () => setOffset(o => Math.min(o + 100 / perPage, maxOffset))
+  const maxOffset = Math.max(0, runs.length - perPage) * (100 / perPage);
+  const prev = () => setOffset((o) => Math.max(o - 100 / perPage, 0));
+  const next = () => setOffset((o) => Math.min(o + 100 / perPage, maxOffset));
 
   if (loading) {
     return (
@@ -46,7 +46,7 @@ export default function SimulationDashboard() {
           <span className="text-black">Loading…</span>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -57,7 +57,7 @@ export default function SimulationDashboard() {
           {error}
         </div>
       </div>
-    )
+    );
   }
 
   if (runs.length === 0) {
@@ -66,11 +66,17 @@ export default function SimulationDashboard() {
         <Navbar />
         <main className="flex items-center justify-center h-[calc(100vh-4rem)] px-14">
           <div className="bg-[#F6FFFF]/50 rounded-lg shadow-lg p-10 max-w-xl w-full text-center">
-            <img src="/images/NoSim.png" alt="No Simulations" className="mx-auto mb-8" />
+            <img
+              src="/images/NoSim.png"
+              alt="No Simulations"
+              className="mx-auto mb-8"
+            />
             <h2 className="text-4xl font-bold mb-6">No Simulations Yet!</h2>
-            <p className="mb-10 text-gray-700">Click below to start your first simulation</p>
+            <p className="mb-10 text-gray-700">
+              Click below to start your first simulation
+            </p>
             <button
-              onClick={() => navigate('/create')}
+              onClick={() => navigate("/create")}
               className="mx-auto bg-[#FFB600] hover:bg-[#E0A800] text-black px-6 py-2 rounded-lg flex items-center gap-2"
             >
               <Plus size={20} /> Create New Simulation
@@ -78,7 +84,7 @@ export default function SimulationDashboard() {
           </div>
         </main>
       </div>
-    )
+    );
   }
 
   return (
@@ -89,7 +95,7 @@ export default function SimulationDashboard() {
         <div className="flex justify-between items-center mb-10">
           <h2 className="text-4xl font-bold text-black">Simulation Runs</h2>
           <button
-            onClick={() => navigate('/create')}
+            onClick={() => navigate("/create")}
             className="bg-[#FFB600] hover:bg-amber-500 text-black px-6 py-2 rounded-lg flex items-center gap-2"
           >
             <Plus size={20} /> Create New Simulation
@@ -102,21 +108,21 @@ export default function SimulationDashboard() {
             className="flex transition-transform duration-500"
             style={{ transform: `translateX(-${offset}%)` }}
           >
-            {runs.map(run => {
-              const statusObj     = run.status || {}
-              const completedCount = statusObj.COMPLETED   || 0
-              const pendingCount   = statusObj.PENDING     || 0
-              const errorCount     = statusObj.ERROR       || 0
-              const totalVersions = completedCount + pendingCount + errorCount
+            {runs.map((run) => {
+              const statusObj = run.status || {};
+              const completedCount = statusObj.COMPLETED || 0;
+              const pendingCount = statusObj.PENDING || 0;
+              const errorCount = statusObj.ERROR || 0;
+              const totalVersions = completedCount + pendingCount + errorCount;
 
-              const topology = run.topologyFile    || 'Something.json'
-              const location = run.location_name   || 'Unknown location'
-              const created  = run.created_on
+              const topology = run.topologyFile || "Something.json";
+              const location = run.location_name || "Unknown location";
+              const created = run.created_on
                 ? new Date(run.created_on).toLocaleDateString()
-                : 'N/A'
+                : "N/A";
               const modified = run.modified_on
                 ? new Date(run.modified_on).toLocaleDateString()
-                : 'N/A'
+                : "N/A";
 
               return (
                 <div key={run.id} className="flex-shrink-0 w-1/3 px-2">
@@ -182,14 +188,20 @@ export default function SimulationDashboard() {
 
                       <button
                         className="w-full mt-4 bg-[#FFB600] hover:bg-amber-500 text-black py-2 rounded-md flex items-center justify-center gap-2"
-                        onClick={() => navigate(`/dash/sim/${run.id}?name=${encodeURIComponent(run.name)}`)  }
+                        onClick={() =>
+                          navigate(
+                            `/dash/sim/${run.id}?name=${encodeURIComponent(
+                              run.name
+                            )}`
+                          )
+                        }
                       >
                         Open Simulation <ArrowRight className="h-5 w-5" />
                       </button>
                     </div>
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
         </div>
@@ -213,5 +225,5 @@ export default function SimulationDashboard() {
         </div>
       </main>
     </div>
-  )
+  );
 }
