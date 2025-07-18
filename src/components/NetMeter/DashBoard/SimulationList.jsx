@@ -178,7 +178,7 @@ export default function SimulationList() {
         </div>
 
         {/* Header + Add */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4 shrink-0">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-3 gap-4 shrink-0">
           <div>
             <p className="text-[#000505] text-2xl mb-1">Versions</p>
             <h1 className="text-[#000505] text-4xl font-bold">
@@ -268,8 +268,8 @@ export default function SimulationList() {
               <div className="grid grid-cols-[1fr] px-4 py-2 text-white font-semibold rounded-t-2xl">
                 <div className="px-1">Progress</div>
               </div>
-              <div className="w-full bg-white/75 border border-[#9A9A9A] rounded-2xl max-h-[80vh] md:max-h-[60vh] overflow-y-auto">
-                <div className="flex flex-col justify-center items-center p-5 gap-8 w-full">
+              <div className="w-full bg-white/75 border border-[#9A9A9A] rounded-2xl max-h-[80vh] md:max-h-[65vh] overflow-y-auto">
+                <div className="flex flex-col justify-center items-center p-5 gap-7 w-full">
                   <div className="w-full text-center text-2xl font-semibold">
                     {selectedRunProgressTitle}
                   </div>
@@ -372,11 +372,11 @@ export default function SimulationList() {
                   </div>
 
                   {/* action buttons */}
-                  <div className="flex gap-6 mt-1">
-                    <button className="bg-[#E63C3C]/50 hover:bg-[#E63C3C]/75 text-xl text-[#46000080] font-semibold px-14 py-3 rounded-lg shadow-md shadow-black/25">
+                  <div className="flex gap-6 ">
+                    <button className="bg-[#E63C3C]/50 hover:bg-[#E63C3C]/75 text-xl text-[#46000080] font-semibold px-14 py-2 rounded-lg shadow-md shadow-black/25">
                       Reset
                     </button>
-                    <button className="bg-[#1BA13D]/50 hover:bg-[#1BA13D] text-xl text-white font-semibold px-14 py-3 rounded-lg shadow-md shadow-black/25">
+                    <button className="bg-[#1BA13D]/50 hover:bg-[#1BA13D] text-xl text-white font-semibold px-14 py-2 rounded-lg shadow-md shadow-black/25">
                       Save
                     </button>
                   </div>

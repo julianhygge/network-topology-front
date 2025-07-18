@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "components/Common/Navbar";
-import GridSideBar from "components/Grid/GridSideBar";
 import {
   fetchAlgorithms,
   updateRunFromVersion,
 } from "services/netMeteringService";
 
 export default function AlgorithmSelection() {
-  const { houseId } = useParams();
   const {simulationId}=useParams();
   const navigate = useNavigate();
   const [algs, setAlgs] = useState([]);

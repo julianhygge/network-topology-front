@@ -7,7 +7,6 @@ import {
   fetchEnergySummary,
   fetchGrossMeteringPolicy,
   updateGrossMeteringPolicy,
-  fetchSelectedPolicy,
   triggerBillCalculation,
 } from "services/netMeteringService";
 import { useParams, useLocation } from "react-router-dom";

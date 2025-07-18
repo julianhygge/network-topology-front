@@ -7,7 +7,6 @@ import {
   fetchEnergySummary,
   fetchNetMeteringPolicy,
   updateNetMeteringBill,
-  fetchSelectedPolicy,
   triggerBillCalculation,
 } from "services/netMeteringService";
 
