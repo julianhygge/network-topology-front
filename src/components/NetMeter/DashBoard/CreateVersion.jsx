@@ -29,7 +29,7 @@ export default function CreateVersion() {
         run_name: version.title,
         description: version.description
       })
-      navigate(`/dash/sim/${simulationId}`)
+      navigate(`/dash/sim/${simulationId}?name=${encodeURIComponent(simulationName)}`)
     } catch (err) {
       console.error(err)
       setError('Failed to create version')
