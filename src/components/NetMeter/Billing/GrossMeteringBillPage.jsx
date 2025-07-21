@@ -131,11 +131,11 @@ const GrossMeteringBillPage = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen pt-20 bg-[#E7FAFF]">
       <Navbar />
       <div className="flex flex-1">
         {/* <GridSideBar /> */}
-        <div className="flex flex-1 flex-col items-center justify-center bg-[#E7FAFF]">
+        <div className="flex flex-1 flex-col items-center justify-center ">
           <div className="text-center text-2xl font-medium mb-6 text-navColor max-w-6xl">
             You have selected Gross Metering Policy, according to this policy
             billing of imported energy will be as per the retail rate and energy

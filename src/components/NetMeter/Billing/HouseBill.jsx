@@ -100,7 +100,7 @@ export default function HouseBill() {
       : "N/A";
 
   return (
-    <div className="bg-[#E7FAFF] h-screen">
+    <div className="bg-[#E7FAFF] h-screen pt-20 ">
       <Navbar />
 
       <div className="bg-white rounded-2xl border shadow-sm h-[80vh] p-6 mt-10 mr-40 ml-40">

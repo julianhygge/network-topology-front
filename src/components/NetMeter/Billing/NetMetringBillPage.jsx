@@ -118,9 +118,9 @@ export default function NetMeteringBillPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen pt-20 bg-[#E7FAFF]">
         <Navbar />
-        <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
+        <div className="flex flex-1 items-center justify-center ">
           <span className="text-navColor">Generating Bill</span>
         </div>
       </div>
