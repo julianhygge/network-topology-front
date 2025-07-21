@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./NetworkGraph.css";
 import { fetchTransformerDetails } from "services/Transformer";
 import { useNavigate } from "react-router-dom";
+import { Plus } from "lucide-react";
 import {
   getColor,
   House,
@@ -272,7 +273,7 @@ const NetworkGraph = ({
             )}
             <div className="absolute bottom-1">
               <button className="add-house" onClick={() => onAddHouse(node.id)}>
-                +
+                <Plus size={30} color="white" />
               </button>
             </div>
           </div>
@@ -309,24 +310,22 @@ const NetworkGraph = ({
         {data && data.nodes && data.nodes.length > 0 ? (
           <div className="transformers-row">
             {data.nodes.map((node) => renderNode(node))}
-            <button
-              className="min-w-[90px] add-transformer"
-              onClick={onAddTransformer}
-            >
-              +
-            </button>
-            <label className="min-w-[90px] text-navColor text-sm mt-[50px] ml-[-80px]">
-              Add-T
-            </label>
+
+            <div className="add-transformer-wrapper">
+              <button className="add-transformer" onClick={onAddTransformer}>
+                <Plus size={30} color="white" />
+              </button>
+              <label className="add-label">Add-T</label>
+            </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-36 h-screen text-center">
+          <div className="flex flex-col items-center gap-36 text-center">
             <div className="add-transformer-top-part flex flex-col gap-1">
               <button
                 className="add-transformer-empty-grid"
                 onClick={onAddTransformer}
               >
-                +
+                <Plus size={30} color="white" />
               </button>
               <div>Add - T</div>
             </div>

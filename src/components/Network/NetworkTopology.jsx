@@ -104,9 +104,9 @@ const NetworkTopology = () => {
     navigate(location.pathname, { replace: true });
   }, [selectedNode]);
 
-  const showError = async(error) => {
+  const showError = async (error) => {
     let message = "Unexpected error during download";
-    
+
     if (error?.response?.data instanceof Blob) {
       // Try to read error blob as JSON
       const errorText = await error.response.data.text();
@@ -124,12 +124,12 @@ const NetworkTopology = () => {
       duration: 4000,
       style: { background: "white", color: "red" },
     });
-  }
+  };
 
   const handleDownloadJson = async () => {
-    try{
+    try {
       const response = await GetNetworkTopologyExportFile(selectedSubstationId);
-      const blob = new Blob([response], {type:"application/json"})
+      const blob = new Blob([response], { type: "application/json" });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -141,12 +141,11 @@ const NetworkTopology = () => {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-    }catch(e){
+    } catch (e) {
       console.log("Download Failed", e);
-      showError(e)
-      
+      showError(e);
     }
-  }
+  };
 
   const handleHouseProfile = async () => {
     try {
@@ -168,7 +167,7 @@ const NetworkTopology = () => {
     } catch (error) {
       console.error("Download failed:", error);
 
-       showError(error)
+      showError(error);
     }
   };
 
@@ -566,53 +565,58 @@ const NetworkTopology = () => {
   };
 
   return (
-    <div className="full-container flex flex-col h-screen">
+    <div className="full-container flex flex-col  h-screen bg-gradient-to-br from-[#6CCECD] to-[#356770] pt-20">
       <Navbar />
-      <div className="topology-container flex flex-row flex-1 overflow-hidden">
-        <div className="bg-sideBar h-full flex-shrink-0">
+
+      <div className="flex flex-1 m-4 rounded-l-2xl  overflow-hidden">
+        <div className="bg-sideBar flex-shrink-0  overflow-y-auto ">
           <GridSideBar
             onGridSelect={setSelectedSubstationId}
             selectedGridId={selectedSubstationId}
           />
         </div>
-        <div className="structure-container flex flex-col flex-1 overflow-hidden box-border w-full">
+
+        <div
+          className="
+            flex flex-col flex-1
+            bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_99.11%,rgba(141,144,144,0.5)_99.11%)]
+            overflow-auto
+            box-border
+          "
+        >
           {data && (
             <>
-              <div className="flex justify-between items-center bg-breadcrumbBackgroundColor py-2 pr-[24px] flex-shrink-0">
-                <div className="grow mt-[6px]">{renderBreadcrumb()}</div>
-                <div className="flex-none items-center justify-between font-dinPro font-medium">
+              {/* Breadcrumb + controls */}
+              <div className="flex justify-between items-center py-2 px-6  pl-0 flex-shrink-0">
+                <div className="grow">{renderBreadcrumb()}</div>
+                <div className="flex gap-2">
                   <button
-                    className="cursor-pointer border px-[50px] mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                     onClick={handleSaveTopology}
+                    className="px-6 py-2 bg-[#1BA13D] rounded-3xl text-white"
                   >
                     SAVE
                   </button>
-                </div>
-                <div className="flex-none items-center justify-between font-dinPro font-medium">
                   <button
-                    className="cursor-pointer border px-[50px] ml-1 mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                     onClick={handleHouseProfile}
+                    className="px-6 py-2 bg-[#1BA13D] rounded-3xl text-white"
                   >
                     DOWNLOAD PROFILE
                   </button>
-                </div>
-
-                <div className="flex-none items-center justify-between font-dinPro font-medium">
                   <button
-                    className="cursor-pointer border px-[50px] ml-1 mt-[-12px] py-[8px] items-end bg-[#49AC82] rounded-3xl text-white text-lg font-sm w-[120] border-[#49AC82]"
                     onClick={handleDownloadJson}
+                    className="px-6 py-2 bg-[#1BA13D] rounded-3xl text-white"
                   >
                     EXPORT TOPOLOGY
                   </button>
                 </div>
-
-
               </div>
-              <div className="flex-1 overflow-auto network-graph-container scrollbar">
+
+              {/* Topology graph */}
+              <div className="flex-1 overflow-auto network-graph-container ">
                 <NetworkGraph
+                  data={data}
                   onSelectedNode={handleSelectedNode}
                   onRightClickSelectedNode={handleRightClickSelectedNode}
-                  data={data}
                   onAddTransformer={handleAddTransformer}
                   onAddHouse={handleAddHouse}
                   onDeleteTransformer={handleDeleteTransformer}
@@ -625,37 +629,38 @@ const NetworkTopology = () => {
             </>
           )}
         </div>
-        {showDeletePopup && (
-          <Delete
-            onClose={handleCloseDeletePopup}
-            onConfirm={handleDelete}
-            entity={selectedNode}
-            entityId={nodeToDelete}
-            entityName={nodeToDeleteName}
-            entityType={nodeType}
-          />
-        )}
-        {transformerDetails && (
-          <TransformerForm
-            transformer={transformerDetails}
-            onSave={handleTransformerSave}
-            onClose={handleCloseTransformerForm}
-          />
-        )}
-        {houseDetails && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-4 rounded">
-              <span
-                className="cursor-pointer float-right"
-                onClick={handleCloseHouseForm}
-              >
-                Close
-              </span>
-              <HouseForm house={houseDetails} onSave={handleHouseSave} />
-            </div>
-          </div>
-        )}
       </div>
+      {showDeletePopup && (
+        <Delete
+          onClose={handleCloseDeletePopup}
+          onConfirm={handleDelete}
+          entity={selectedNode}
+          entityId={nodeToDelete}
+          entityName={nodeToDeleteName}
+          entityType={nodeType}
+        />
+      )}
+      {transformerDetails && (
+        <TransformerForm
+          transformer={transformerDetails}
+          onSave={handleTransformerSave}
+          onClose={handleCloseTransformerForm}
+        />
+      )}
+
+      {houseDetails && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-4 rounded">
+            <span
+              className="cursor-pointer float-right"
+              onClick={handleCloseHouseForm}
+            >
+              Close
+            </span>
+            <HouseForm house={houseDetails} onSave={handleHouseSave} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

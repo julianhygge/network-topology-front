@@ -7,7 +7,7 @@
 .connection-line {
   position: absolute;
   height: 4px;
-  background-color: #8BB6C2;
+  background-color: #000000;
   z-index: 1;
   transition: "none";
 }
@@ -18,7 +18,7 @@
   position: absolute;
   width: 2px;
   height: 10px;
-  background-color: #8BB6C2;
+  background-color: #000000;
 }
 
 .connection-line::before {
@@ -44,7 +44,6 @@
   align-items: center;
   border-radius: 8px;
   padding: 10px;
-  background-color: white;
   padding-left: 0px;
   padding-right: 0px;
 }
@@ -63,7 +62,7 @@
   content: "";
   position: absolute;
   width: 4px;
-  background-color: #8BB6C2;
+  background-color: #000000;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -97,12 +96,13 @@
   margin-top: 5px;
   padding: 20px 20px 50px 20px;
   min-width: 160px;
-  border-style: solid;
-  border-width: 0.8px;
+  border: 1px solid #B4B4B4;
   border-radius: 11px;
-  border-width: 1px;
   min-height: 270px;
-  border-color: rgba(77, 120, 132, 0.4);
+  background: linear-gradient(135.88deg, rgba(246, 255, 255, 0.88) 99.12%, rgba(141, 144, 144, 0.88) 99.12%);
+
+
+ 
 }
 
 .house-item {
@@ -128,20 +128,18 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  background-color: white;
-  border-style: solid;
   border-width: 1px;
-  border-radius: 18px;
-  height: 35px;
-  width: 90px;
+  border-radius:50%;
+  height: 50px;
+  width: 50px;
   font-size: 1.875rem;
-  border-color: #D59805;
-  color: #FCB712;
+  background: linear-gradient(38.79deg, #FFC429 14.85%, #EF403D 84.64%);
+
 }
 
 .add-transformer {
   display: flex;
-  width: 90px;
+  width: 50px;
   align-self: flex-start;
   margin-top: 10px;
   position: relative;
@@ -153,15 +151,13 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  background-color: white;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 18px;
-  height: 35px;
-  width: 85px;
+  background: linear-gradient(38.79deg, #FFC429 14.85%, #EF403D 84.64%);
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
   font-size: 1.875rem;
   border-color: #D59805;
-  color: #FCB712;
+  color: white;
   align-self: flex-start;
   margin-top: 10px;
   position: relative;
@@ -217,7 +213,7 @@
   justify-content: space-around;
   border-radius: 8px;
   padding: 10px;
-  background-color: white;
+  /* background-color: white; */
   min-width: 200px;
   gap: 1px;
   margin-top: -10px;
@@ -232,7 +228,7 @@
 
 .sub-connection-line {
   position: absolute;
-  background-color: #8BB6C2;
+  background-color: #000000;
   z-index: 1;
   transition: "none";
   width: 4px;
@@ -244,7 +240,7 @@
   position: absolute;
   width: 4px;
   height: 10px;
-  background-color: #8BB6C2;
+  background-color: #000000;
   top: 2px;
 }
 
@@ -292,11 +288,17 @@
   margin-top: 5px;
   font-size: 12px;
 }
-
 .add-transformer-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 5px; /* spacing between button and label */
+  width: 50px;
+}
+.add-label {
+  color: black; /* or your existing text-navColor */
+  font-size: 15px;
+  text-align: center;
 }
 
 .context-menu {

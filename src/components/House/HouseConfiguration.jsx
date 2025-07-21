@@ -57,7 +57,7 @@ const HouseConfiguration = () => {
   return (
     <>
       <Navbar />
-      <div className="flex h-[90vh] 2xl:h-[92vh] font-dinPro">
+      <div className="flex h-screen font-dinPro pt-20 ">
         <div className="flex flex-col bg-sideBar w-[120px] h-full relative">
           <div className="flex-1 overflow-hidden">
             <div className="h-[calc(100%_-_80px)] mt-20">

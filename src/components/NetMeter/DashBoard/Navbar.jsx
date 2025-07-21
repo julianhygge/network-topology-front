@@ -19,7 +19,7 @@ export default function Navbar() {
         Welcome to Hygge Power Trading Simulator
       </h1>
       <div className="flex items-center gap-3">
-        <span className="text-sm md:text-base">parjanya_02</span>
+        <span className="text-sm md:text-base">sid_02</span>
         <button className="p-1 rounded-full hover:bg-teal-800">
           <User className="h-6 w-6" />
         </button>
