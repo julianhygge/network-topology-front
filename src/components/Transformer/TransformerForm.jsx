@@ -28,7 +28,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
     }
   });
 
-  const { register, handleSubmit, watch, formState: { errors } } = methods;
+  const { register, handleSubmit, watch,reset, formState: { errors } } = methods;
 
   const onSubmit = async (data) => {
     console.log("transformer data: ", data);
@@ -43,6 +43,9 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
       console.error("Error updating transformer data:", error);
     }
   };
+  const handleReset = () => {
+    reset();
+  };
 
   const handleClose = () => {
     onClose();
@@ -54,40 +57,40 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
   const name = watch("name");
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-customBackground bg-opacity-55 z-50">
-      <div className="relative bg-white rounded-2xl pt-[100px] px-28 pb-8 w-full max-w-5xl border border-solid shadow-sm max-md:px-5 mt-36 mb-16 ml-28 z-10">
+    <div className="fixed inset-0 flex items-center justify-center bg-[#F6FFFF]  bg-opacity-20 z-50">
+      <div className="relative bg-gradient-to-br from-[#F6FFFF] from-[99.11%] to-[#8D9090] to-[100%] rounded-2xl pt-[100px] px-28 pb-8 w-full max-w-[1000px] border border-solid border-[#9A9A9A] shadow-sm max-md:px-5 mt-36 mb-16 ml-28 z-10">
         <div className="absolute w-11/12 top-4 left-0 right-0 z-1 text-[14px] text-black font-light">
           {transformer && transformer.new !== true && (
             <Breadcrumb nodeId={transformer.id} onEditNode={() => { }} />
           )}
         </div>
-        <div
+        {/* <div
           className="absolute inset-0 bg-no-repeat bg-center bg-contain opacity-15 right-4 top-4"
           style={{
             backgroundImage: `url(${process.env.PUBLIC_URL}/images/HyggeLogo.png)`,
             backgroundSize: "210px 210px",
             zIndex: -1,
           }}
-        ></div>
+        ></div> */}
         <button
           className="cursor-pointer absolute top-1 right-5 p-2 text-4xl font-thin"
           onClick={handleClose}
         >
           &times;
         </button>
-        <h2 className="text-lg font-semibold text-center mb-11  text-customGrey  text-[15px]">
+        <h2 className="text-lg font-semibold text-center mb-11  text-customGrey  text-[22px]">
           Enter / Edit the Transformer Configurations
         </h2>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-4" noValidate>
             <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col mb-4 pr-4 border-r border-customBorderColor">
+              <div className="flex flex-col mb-4 pr-4 border-r border-[#916600]">
                 <div className="mb-4 flex flex-col items-start ml-7">
-                  <label className="block text-customGrey-700 text-[13px] ml-2 font-[500]  text-navColor ">
+                  <label className="block text-customGrey-700 text-[15px] ml-2 font-[500]  text-black ">
                     Name of Transformer
                   </label>
                   <input
-                    className={`border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${errors.name && "border-red-500"}`}
+                    className={`border border-[#916600]  bg-gradient-to-br from-[#F6FFFF] from-[99.11%] to-[#8D9090] rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${errors.name && "border-red-500"}`}
                     type="text"
                     name="name"
                     placeholder="Enter name of transformer"
@@ -100,11 +103,11 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                   {errors.name && <span className="text-red-500">{errors.name.message}</span>}
                 </div>
                 <div className="mb-4 flex flex-col items-start ml-7">
-                  <label className="block text-customGrey text-[13px] ml-2 font-[500]">
+                  <label className="block text-black text-[15px] ml-2 font-[500]">
                     Max Capacity ( kW )
                   </label>
                   <input
-                    className={`border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${errors.max_capacity_kw && "border-red-500"}`}
+                    className={`border border-[#916600]  bg-gradient-to-br from-[#F6FFFF] from-[99.11%] to-[#8D9090]  rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${errors.max_capacity_kw && "border-red-500"}`}
                     type="text"
                     name="max_capacity_kw"
                     placeholder="0.00"
@@ -117,11 +120,11 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                   {errors.max_capacity_kw && <span className="text-red-500">{errors.max_capacity_kw.message}</span>}
                 </div>
                 <div className="mb-4 flex flex-col items-start ml-7">
-                  <label className="block text-customGrey text-[13px] ml-2 font-[500]">
+                  <label className="block text-black text-[15px] ml-2 font-[500]">
                     Years of Service
                   </label>
                   <input
-                    className={`border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${errors.years_of_service && "border-red-500"}`}
+                    className={`border border-[#916600]  bg-gradient-to-br from-[#F6FFFF] from-[99.11%] to-[#8D9090]  rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${errors.years_of_service && "border-red-500"}`}
                     type="text"
                     name="years_of_service"
                     placeholder="0"
@@ -134,11 +137,11 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                   {errors.years_of_service && <span className="text-red-500">{errors.years_of_service.message}</span>}
                 </div>
                 <div className="mb-4 flex flex-col items-start ml-7">
-                  <label className="block text-customGrey text-[13px] ml-2 font-[500]">
+                  <label className="block text-black text-[15px] ml-2 font-[500]">
                     Forward Efficiency ( % )
                   </label>
                   <input
-                    className={`border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${errors.forward_efficiency && "border-red-500"}`}
+                    className={`border border-[#916600]  bg-gradient-to-br from-[#F6FFFF] from-[99.11%] to-[#8D9090]  rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${errors.forward_efficiency && "border-red-500"}`}
                     type="text"
                     name="forward_efficiency"
                     placeholder="0.00"
@@ -152,42 +155,88 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                 </div>
               </div>
               <div className="flex flex-col mb-4 pl-4">
-                <div className="grid grid-cols-2 mb-7 mt-9 ml-3">
-                  <div className="flex items-center">
-                    <input
-                      className="mr-2"
-                      type="checkbox"
-                      name="allow_export"
-                      {...register("allow_export")}
-                      style={{ width: "20px", height: "20px" }}
-                    />
-                    <label className="text-customGrey text-[13px] whitespace-nowrap font-[500]">
-                      Allow Export
-                    </label>
-                  </div>
+                  
+                {/* stacked toggles */}
+                <div className="space-y-4 ml-4 mb-4">
+                  {/** Allow Export toggle */}
+                 {/* Allow Export toggle */}
+<div className="flex items-center justify-between">
+  {/* Text is NOT part of the label */}
+  <span className="font-medium text-black text-[15px]">Allow Export</span>
 
-                  <div className="flex items-center">
-                    <input
-                      className="mr-2"
-                      type="checkbox"
-                      name="digital_twin_model"
-                      {...register("digital_twin_model")}
-                      style={{ width: "20px", height: "20px" }}
-                    />
-                    <label className="text-customGrey text-[13px] font-[500]">
-                      Digital Twin Model
-                    </label>
-                  </div>
+  {/* Wrap only the switch in a label for htmlFor/inp interaction */}
+  <label
+    htmlFor="allowExport"
+    className="relative cursor-pointer hover:opacity-80"
+  >
+    <input
+      id="allowExport"
+      type="checkbox"
+      {...register("allow_export")}
+      className="sr-only peer"
+    />
+
+    {/* track */}
+    <div className="
+      w-12 h-6 rounded-full
+      bg-gray-200 border-2 border-[#FFC429]
+    " />
+
+    {/* thumb */}
+    <div className="
+      absolute top-0 left-0
+      w-6 h-6 rounded-full
+      bg-[#E53E3E] peer-checked:bg-[#49AC82]
+      border-2 border-[#FFC429]
+      transition-transform transform
+      peer-checked:translate-x-6
+    "/>
+  </label>
+</div>
+
+{/* Digital Twin Model toggle */}
+<div className="flex items-center justify-between">
+  <span className="font-medium text-black text-[15px]">Digital Twin Model</span>
+
+  <label
+    htmlFor="digitalTwin"
+    className="relative cursor-pointer hover:opacity-80"
+  >
+    <input
+      id="digitalTwin"
+      type="checkbox"
+      {...register("digital_twin_model")}
+      className="sr-only peer"
+    />
+
+    {/* track */}
+    <div className="
+      w-12 h-6 rounded-full
+      bg-gray-200 border-2 border-[#FFC429]
+    " />
+
+    {/* thumb */}
+    <div className="
+      absolute top-0 left-0
+      w-6 h-6 rounded-full
+      bg-[#E53E3E] peer-checked:bg-[#49AC82]
+      border-2 border-[#FFC429]
+      transition-transform transform
+      peer-checked:translate-x-6
+    "/>
+  </label>
+</div>
+
                 </div>
                 <div className="mb-4 flex flex-col items-start ml-3">
                   <label
-                    className={`block text-customGrey text-[13px] ml-2 font-[500] ${allowExport ? "" : "opacity-15"
+                    className={`block text-black text-[15px] ml-2 font-[500] ${allowExport ? "" : "opacity-15"
                       }`}
                   >
                     Backward Efficiency ( % )
                   </label>
                   <input
-                    className={`border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${!allowExport && "opacity-15"}`}
+                    className={`border border-[#916600]  bg-gradient-to-br from-[#F6FFFF] from-[99.11%] to-[#8D9090]  rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${!allowExport && "opacity-15"}`}
                     type="text"
                     name="backward_efficiency"
                     placeholder="0.00"
@@ -202,11 +251,11 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                 </div>
 
                 <div className="mb-4 flex flex-col items-start ml-3">
-                  <label className="block text-customGrey text-[13px] ml-2 font-[500]">
+                  <label className="block text-black text-[15px] ml-2 font-[500]">
                     Primary Ampacity ( A )
                   </label>
                   <input
-                    className={`border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${errors.primary_ampacity && "border-red-500"}`}
+                    className={`border border-[#916600]  bg-gradient-to-br from-[#F6FFFF] from-[99.11%] to-[#8D9090] rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${errors.primary_ampacity && "border-red-500"}`}
                     type="text"
                     name="primary_ampacity"
                     placeholder="0.00"
@@ -220,11 +269,11 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
                 </div>
 
                 <div className="mb-4 flex flex-col items-start ml-3">
-                  <label className="block text-customGrey text-[13px] ml-2 font-[500]">
+                  <label className="block text-black text-[15px] ml-2 font-[500]">
                     Secondary Ampacity ( A )
                   </label>
                   <input
-                    className={`border border-black rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${errors.secondary_ampacity && "border-red-500"}`}
+                    className={`border border-[#916600]  bg-gradient-to-br from-[#F6FFFF] from-[99.11%] to-[#8D9090]  rounded-xl w-80 py-2.5 px-3 mt-1 text-sm ${errors.secondary_ampacity && "border-red-500"}`}
                     type="text"
                     name="secondary_ampacity"
                     placeholder="0.00"
@@ -240,7 +289,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
             </div>
           </form>
         </FormProvider>
-        <div className="flex justify-center items-center">
+        {/* <div className="flex justify-center items-center">
           <button
             type="submit"
             className={`bg-yellow-500 text-center mt-1 text-saveButtonColor font-semibold py-4 px-4 rounded-xl w-[200px] ${name ? "opacity-80 hover:bg-yellow-500 hover:opacity-100" : "cursor-not-allowed opacity-15"}`}
@@ -249,7 +298,23 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
           >
             SAVE
           </button>
-        </div>
+        </div> */}
+        <div className="mt-8 flex justify-center gap-4">
+            <button
+               onClick={handleReset}
+               disabled={!name}
+              className="bg-[#E63C3C] hover:bg-red-600 text-[#460000] font-bold px-14 py-3.5 rounded-lg transition shadow-[0px_4px_4px_0px_#00000040] "
+            >
+              Reset
+            </button>
+            <button
+              disabled={!name}
+              onClick={handleSubmit(onSubmit)}
+              className="bg-[#1BA13D] hover:bg-green-700 disabled:opacity-50 text-white font-bold px-16 py-3.5 rounded-lg transition shadow-[0px_4px_4px_0px_#00000040] "
+            >
+              Save
+            </button>
+          </div>
       </div>
     </div>
   );

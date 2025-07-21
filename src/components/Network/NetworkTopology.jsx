@@ -579,7 +579,7 @@ const NetworkTopology = () => {
         <div
           className="
             flex flex-col flex-1
-            bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_99.11%,rgba(141,144,144,0.5)_99.11%)]
+            bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_100%,rgba(141,144,144,0.5)_100%)]
             overflow-auto
             box-border
           "
