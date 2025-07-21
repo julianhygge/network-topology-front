@@ -179,7 +179,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
     {/* track */}
     <div className="
       w-12 h-6 rounded-full
-      bg-gray-200 border-2 border-[#FFC429]
+      bg-gray-200 
     " />
 
     {/* thumb */}
@@ -187,7 +187,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
       absolute top-0 left-0
       w-6 h-6 rounded-full
       bg-[#E53E3E] peer-checked:bg-[#49AC82]
-      border-2 border-[#FFC429]
+       border-2 border-[#FFC429]
       transition-transform transform
       peer-checked:translate-x-6
     "/>
@@ -212,7 +212,7 @@ const TransformerForm = ({ transformer, onSave, onClose }) => {
     {/* track */}
     <div className="
       w-12 h-6 rounded-full
-      bg-gray-200 border-2 border-[#FFC429]
+      bg-gray-200
     " />
 
     {/* thumb */}
