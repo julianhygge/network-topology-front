@@ -58,10 +58,10 @@ export default function AlgorithmSelection() {
   };
   if (loading2) {
     return (
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen ">
         <Navbar />
-        <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
-          <span className="text-navColor">Creating Simulation</span>
+        <div className="flex flex-1 items-center justify-center  bg-gradient-to-br from-[#6CCECD] to-[#356770]">
+          <span className="text-navColor">Updating Simulation</span>
         </div>
       </div>
     );
@@ -69,9 +69,9 @@ export default function AlgorithmSelection() {
 
   if (loading) {
     return (
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen ">
         <Navbar />
-        <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
+        <div className="flex flex-1 items-center justify-center bg-gradient-to-br from-[#6CCECD] to-[#356770]">
           <span className="text-navColor">Loading Algorithms…</span>
         </div>
       </div>
@@ -80,18 +80,18 @@ export default function AlgorithmSelection() {
   if (error) return <div className="p-8 text-red-500">{error}</div>;
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen  bg-gradient-to-br from-[#6CCECD] to-[#356770]">
       <Navbar />
       <div className="flex flex-1">
         {/* <GridSideBar /> */}
-        <div className="flex flex-1 flex-col items-center justify-center bg-[#E7FAFF] p-8">
-          <div className="text-center text-2xl font-medium mb-6 text-navColor">
+        <div className="flex flex-1 flex-col items-center justify-center  p-8">
+          {/* <div className="text-center text-2xl font-medium mb-6 text-navColor">
             The allocation engine currently uses these algorithms to simulate
             energy flow
-          </div>
-          <div className="w-full max-w-5xl p-12 bg-white border border-[#BF6A02] rounded-2xl shadow-lg">
+          </div> */}
+          <div className="w-full max-w-5xl p-12  bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_100%,rgba(141,144,144,0.5)_100%)]  rounded-2xl  shadow-[0px_-2px_8px_0px_#00000040]">
             <h2 className="text-center text-xl font-medium mb-20 text-navColor">
-              Please select one of the following algorithms
+              Please select one of the following algorithms to simulate the energy flow
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {algs.map((alg) => {
@@ -104,8 +104,8 @@ export default function AlgorithmSelection() {
                     className="
                       flex flex-row gap-3 items-center justify-center
                       w-full h-24 p-6 rounded-lg shadow transition
-                      bg-[#FFB600] bg-opacity-30 text-navColor
-                      hover:bg-opacity-100 hover:cursor-pointer
+                      bg-[#F0DBA4]  text-navColor
+                      hover:bg-[#FFB600] hover:cursor-pointer
                     "
                   >
                     <img

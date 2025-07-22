@@ -32,7 +32,7 @@
 //   )
 // }
 // src/components/Common/Navbar.jsx
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Menu, User, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { clear, getUser } from "services/LocalStorage";
@@ -40,11 +40,24 @@ import { clear, getUser } from "services/LocalStorage";
 export default function Navbar() {
   const navigate = useNavigate();
   const userName = getUser();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
   const handleLogout = () => {
     clear();
     navigate("/login");
   };
+
+  // close menu when clicking outside
+  useEffect(() => {
+    const onClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
 
   return (
     <header
@@ -53,8 +66,7 @@ export default function Navbar() {
         px-6 flex items-center justify-between 
         rounded-2xl shadow-lg z-20"
     >
-      {/* Left section: Logo + Menu + Title */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 relative" ref={menuRef}>
         <button onClick={() => navigate("/")}>
           <img
             src="/images/Logo.png"
@@ -64,32 +76,110 @@ export default function Navbar() {
         </button>
 
         <button
-          onClick={() => {
-         
-          }}
+          onClick={() => setMenuOpen((open) => !open)}
           className="p-2 hover:bg-teal-800 rounded"
           aria-label="Open menu"
         >
           <Menu size={24} />
         </button>
 
-        <h1 className="text-xl md:text-2xl font-medium">
-          Network Topology
-        </h1>
+        {/* Dropdown menu */}
+        {menuOpen && (
+          <div
+            className="
+              absolute top-full mt-2 left-14
+              bg-gradient-to-br from-[#6CCECD] to-[#356770]
+              rounded-xl shadow-lg overflow-hidden z-30
+              w-45
+            "
+          >
+            {/* Home */}
+            <div className="px-3 py-2">
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate("/");
+                }}
+                className="
+                  w-full text-left
+                  py-2 px-2
+                  text-white
+                  font-bold
+                  rounded-md
+                  hover:bg-gradient-to-r from-[#6F8284] to-[#1A1E1E] 
+                  transition-colors duration-150
+                "
+              >
+                Home
+              </button>
+            </div>
+
+            {/* Divider */}
+            <div className="px-4 ">
+              <div className="border-t border-navColor" />
+            </div>
+
+            {/* Progress bar */}
+            <div className="px-3 py-1">
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate("/progress");
+                }}
+                className="
+                  w-full text-left
+                  py-2 px-2
+                  text-white
+                  font-bold
+                  rounded-md
+                  hover:bg-gradient-to-r from-[#6F8284] to-[#1A1E1E] 
+                  transition-colors duration-150
+                "
+              >
+                Progress bar
+              </button>
+            </div>
+
+            {/* Divider */}
+            <div className="px-4 ">
+              <div className="border-t border-navColor" />
+            </div>
+
+            {/* Allocation Engine */}
+            <div className="px-3 py-2">
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate("/allocation");
+                }}
+                className="
+                  w-full text-left
+                  py-2 px-2
+                  text-white
+                  font-bold
+                  rounded-md
+                  hover:bg-gradient-to-r from-[#6F8284] to-[#1A1E1E] 
+                  transition-colors duration-150
+                "
+              >
+                Allocation Engine
+              </button>
+            </div>
+          </div>
+        )}
+
+        <h1 className="text-xl md:text-2xl font-medium">Network Topology</h1>
       </div>
 
- 
+      {/* Right: user + settings */}
       <div className="flex items-center gap-3">
         <span className="text-sm md:text-base font-medium">{userName}</span>
-
         <button
           className="p-2 hover:bg-teal-800 rounded-full"
           aria-label="Profile"
         >
           <User size={20} />
         </button>
-
-
         <button
           className="p-2 hover:bg-teal-800 rounded-full"
           aria-label="Logout"

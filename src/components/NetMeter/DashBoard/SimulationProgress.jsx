@@ -175,7 +175,7 @@ export default function SimulationProgress() {
               <div className="px-1">ID</div>
               <div className="px-5">Title</div>
             </div>
-            <div className="max-h-[60vh] md:max-h-[50vh] overflow-y-auto space-y-2 hide-scrollbar">
+            <div className="max-h-[60vh]  overflow-y-auto space-y-2 hide-scrollbar">
               {runs.map((r) => {
                 const isSelected = r.id === selectedRunId;
                 return (
