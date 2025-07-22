@@ -565,10 +565,10 @@ const NetworkTopology = () => {
   };
 
   return (
-    <div className="full-container flex flex-col  h-screen bg-gradient-to-br from-[#6CCECD] to-[#356770] pt-20">
+    <div className="full-container flex flex-col   h-screen bg-gradient-to-br from-[#6CCECD] to-[#356770] pt-20">
       <Navbar />
 
-      <div className="flex flex-1 m-4 rounded-l-2xl  overflow-hidden">
+      <div className="flex flex-1 m-4 rounded-2xl  overflow-hidden">
         <div className="bg-sideBar flex-shrink-0  overflow-y-auto ">
           <GridSideBar
             onGridSelect={setSelectedSubstationId}

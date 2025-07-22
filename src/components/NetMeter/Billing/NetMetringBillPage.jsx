@@ -128,10 +128,10 @@ export default function NetMeteringBillPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen pt-20 bg-[#E7FAFF]">
       <Navbar />
       <div className="flex flex-1">
-        <div className="flex flex-1 flex-col items-center justify-center bg-[#E7FAFF]">
+        <div className="flex flex-1 flex-col items-center justify-center ">
           <div className="text-center text-xl font-medium mb-8 text-navColor max-w-4xl px-4">
             You have selected Net Metering Policy, according to that policy
             billing of each house will be done as per the retail rate

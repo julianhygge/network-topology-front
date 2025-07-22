@@ -1,45 +1,67 @@
+
 .breadcrumb-wrapper {
-  max-width: 1580px;
-  overflow-x: scroll;
+  width: 100%;
+  overflow-x: auto;
   padding-bottom: 8px;
 }
-
 .breadcrumb-wrapper::-webkit-scrollbar {
-  -webkit-appearance: none;
-}
-
-.breadcrumb-wrapper::-webkit-scrollbar:horizontal {
   height: 7px;
 }
-
+.breadcrumb-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
 .breadcrumb-wrapper::-webkit-scrollbar-thumb {
+  background-color: #8bb6c2;
   border-radius: 8px;
-  border: #E7FAFF;
-  background-color: #8BB6C2
 }
 
+/* 2) Container: no extra left padding */
 .breadcrumb-container {
   display: flex;
-  flex: 1;
   align-items: center;
   white-space: nowrap;
 }
 
-.breadcrumb-item {
-  text-align: center;
-  padding: 10px 25px;
-  z-index: 2;
-  margin: 0;
-  border-radius: 1px;
-  border-radius: 0 32px 32px 0; 
-}
-
-.breadcrumb-item:nth-child(1) {
-  z-index: 40;
-}
-
-.breadcrumb-item:nth-child(2) {
+/* 3) Base pill styling with right‐side overlap */
+.breadcrumb-item,
+.breadcrumb-item-small,
+.breadcrumb-item-small-transformer {
+  --bg-color: var(--bg);
+  background: var(--bg-color);
   position: relative;
-  z-index: 20;
-  left: -15px;
+  display: inline-block;
+  padding: 10px 22px;
+  margin-right: -16px;           
+  text-align: center;
+  cursor: pointer;
+  outline: 2px solid rgba(0, 0, 0, 0.1);
+  outline-offset: -2px;
+  /* round only right corners */
+  border-radius: 0 24px 24px 0;
+  z-index: 1;
+}
+.breadcrumb-item:last-child,
+.breadcrumb-item-small:last-child,
+.breadcrumb-item-small-transformer:last-child {
+  margin-right: 0;
+  border-radius: 0 24px 24px 0;
+  z-index: 9;
+}
+
+.breadcrumb-item:nth-child(1)  { z-index: 10; }
+.breadcrumb-item:nth-child(2)  { z-index: 9; }
+.breadcrumb-item:nth-child(3)  { z-index: 8; }
+.breadcrumb-item:nth-child(4)  { z-index: 7; }
+.breadcrumb-item:nth-child(5)  { z-index: 6; }
+.breadcrumb-item:nth-child(6)  { z-index: 5; }
+.breadcrumb-item:nth-child(7)  { z-index: 4; }
+.breadcrumb-item:nth-child(n+8){ z-index: 3; }
+
+.breadcrumb-item-small {
+  padding: 6px 16px;
+  border-radius: 0 20px 20px 0;
+}
+.breadcrumb-item-small-transformer {
+  padding: 4px 12px;
+  border-radius: 0 16px 16px 0;
 }
