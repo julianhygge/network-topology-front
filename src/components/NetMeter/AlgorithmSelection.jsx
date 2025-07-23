@@ -80,43 +80,31 @@ export default function AlgorithmSelection() {
   if (error) return <div className="p-8 text-red-500">{error}</div>;
 
   return (
-    <div className="flex flex-col h-screen  bg-gradient-to-br from-[#6CCECD] to-[#356770]">
+     <div className="relative flex flex-col h-screen bg-gradient-to-br from-[#6CCECD] to-[#356770]">
       <Navbar />
-      <div className="flex flex-1">
-        {/* <GridSideBar /> */}
-        <div className="flex flex-1 flex-col items-center justify-center  p-8">
-          {/* <div className="text-center text-2xl font-medium mb-6 text-navColor">
-            The allocation engine currently uses these algorithms to simulate
-            energy flow
-          </div> */}
-          <div className="w-full max-w-5xl p-12  bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_100%,rgba(141,144,144,0.5)_100%)]  rounded-2xl  shadow-[0px_-2px_8px_0px_#00000040]">
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-24 left-4 w-20 h-12 rounded-full border border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center transition-colors shadow-[0px_5px_10px_0px_#00000040]"
+      >
+        <img src="/images/Arrow 3.png" alt="Back" className="w-6 h-6" />
+      </button>
+      <div className="flex flex-1 pt-20">
+        <div className="flex flex-1 flex-col items-center justify-center p-8">
+          <div className="w-full max-w-5xl p-12 bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_100%,rgba(141,144,144,0.5)_100%)] rounded-2xl shadow-[0px_-2px_8px_0px_#00000040]">
             <h2 className="text-center text-xl font-medium mb-20 text-navColor">
               Please select one of the following algorithms to simulate the energy flow
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {algs.map((alg) => {
-                const logoSrc =
-                  logoMap[alg.display_name] || "/images/default-logo.png";
+                const logoSrc = logoMap[alg.display_name] || "/images/default-logo.png";
                 return (
                   <button
                     key={alg.id}
                     onClick={() => handleSelect(alg)}
-                    className="
-                      flex flex-row gap-3 items-center justify-center
-                      w-full h-24 p-6 rounded-lg shadow transition
-                      bg-[#F0DBA4]  text-navColor
-                      hover:bg-[#FFB600] hover:cursor-pointer
-                    "
+                    className="flex flex-row gap-3 items-center justify-center w-full h-24 p-6 rounded-lg  shadow-[0px_5px_10px_0px_#00000040] transition bg-[#F0DBA4] text-navColor hover:bg-[#FFB600] hover:cursor-pointer"
                   >
-                    <img
-                      loading="lazy"
-                      src={logoSrc}
-                      alt={alg.display_name}
-                      className="w-5 h-5"
-                    />
-                    <span className="text-center font-semibold">
-                      {alg.display_name}
-                    </span>
+                    <img loading="lazy" src={logoSrc} alt={alg.display_name} className="w-5 h-5" />
+                    <span className="text-center font-semibold">{alg.display_name}</span>
                   </button>
                 );
               })}

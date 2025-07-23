@@ -126,9 +126,9 @@ export default function BillingCycleSelection() {
   };
   if (loading) {
     return (
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen  bg-gradient-to-br from-[#6CCECD] to-[#356770]">
         <Navbar />
-        <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
+        <div className="flex flex-1 items-center justify-center ">
           <span className="text-navColor">Updating Bill</span>
         </div>
       </div>
@@ -136,21 +136,27 @@ export default function BillingCycleSelection() {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="relative flex flex-col h-screen  bg-gradient-to-br from-[#6CCECD] to-[#356770]">
       <Navbar />
+       <button
+        onClick={() => navigate(-1)}
+        className="absolute top-24 left-4 w-20 h-12 rounded-full border border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center transition-colors  shadow-[0px_5px_10px_0px_#00000040]"
+      >
+        <img src="/images/Arrow 3.png" alt="Back" className="w-6 h-6" />
+      </button>
       <div className="flex flex-1">
         {/* <GridSideBar /> */}
         <div className="flex flex-col flex-1">
-          <div className="flex flex-1 flex-col items-center justify-center bg-[#E7FAFF]">
+          <div className="flex flex-1 flex-col items-center justify-center ">
             {meteringType === "netMetering" && (
-              <div className="text-center text-2xl font-medium mb-6 text-navColor max-w-4xl">
+              <div className="text-center text-2xl font-medium mb-6 text-black max-w-4xl">
                 You have selected Net Metering Policy, according to that policy
                 billing of each house will be done as per the retail rate
               </div>
             )}
 
             {meteringType === "grossMetering" && (
-              <div className="text-center text-2xl font-medium mb-6 text-navColor max-w-6xl">
+              <div className="text-center text-2xl font-medium mb-6 text-black max-w-6xl">
                 You have selected Gross Metering Policy, according to this
                 policy billing of imported energy will be as per the retail rate
                 and energy exported will billed as per the wholesale rate
@@ -158,15 +164,15 @@ export default function BillingCycleSelection() {
             )}
 
             {meteringType === "touMetering" && (
-              <div className="text-center text-2xl font-medium mb-6 text-navColor max-w-6xl">
+              <div className="text-center text-2xl font-medium mb-6 text-black max-w-6xl">
                 You have selected Time of Use Metering Policy, according to this
                 policy billing of imported energy will be as per the time
                 distributed section of usages.
               </div>
             )}
 
-            <div className="w-full max-w-3xl p-10 bg-white border border-[#BF6A02] rounded-2xl shadow-lg">
-              <h2 className="text-center text-xl font-medium mb-12 text-navColor">
+            <div className="w-full max-w-3xl p-10  bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_100%,rgba(141,144,144,0.5)_100%)] rounded-2xl shadow-[0px_-2px_8px_0px_#00000040]">
+              <h2 className="text-center text-xl font-medium mb-12 text-black">
                 Please select the billing cycle to continue bill generation
               </h2>
 
@@ -178,16 +184,16 @@ export default function BillingCycleSelection() {
                       setMonthOpen(!monthOpen);
                       setYearOpen(false);
                     }}
-                    className={`w-full h-12 px-4 flex items-center justify-between border rounded-xl transition 
+                    className={`w-full h-12 px-6 flex items-center justify-between border rounded-3xl transition 
                        ${
                          selectedMonth !== "Month"
-                           ? "bg-[#6AD1CE]/50 border-[#000000] rounded-xl"
-                           : "bg-white border-navColor hover:bg-gray-50"
+                           ? "bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_100%,rgba(141,144,144,0.5)_100%)] border-[#000000] rounded-3xl"
+                           : "bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_100%,rgba(141,144,144,0.5)_100%)] border-black "
                        }
                       `}
                   >
-                    <span className="text-navColor">{selectedMonth}</span>
-                    <ChevronDown className="h-5 w-5 text-navColor" />
+                    <span className="text-black">{selectedMonth}</span>
+                    <ChevronDown className="h-5 w-5 text-black" />
                   </button>
 
                   {monthOpen && (
@@ -215,11 +221,11 @@ export default function BillingCycleSelection() {
                       setYearOpen(!yearOpen);
                       setMonthOpen(false);
                     }}
-                    className={`w-full h-12 px-4 flex items-center justify-between border rounded-xl transition
+                    className={`w-full h-12 px-4 flex items-center justify-between border rounded-3xl transition
                        ${
                          selectedYear !== "Year"
-                           ? "bg-[#6AD1CE]/50  border-[#000000] rounded-xl"
-                           : "bg-white border-navColor hover:bg-gray-50"
+                           ? "bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_100%,rgba(141,144,144,0.5)_100%)] border-[#000000] rounded-3xl"
+                           : "bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_100%,rgba(141,144,144,0.5)_100%)] border-navColor"
                        }
                       `}
                   >
@@ -253,11 +259,11 @@ export default function BillingCycleSelection() {
                   disabled={
                     selectedMonth === "Month" || selectedYear === "Year"
                   }
-                  className={`px-8 py-3 rounded-full font-medium transition
+                  className={`px-14 py-3 rounded-full font-medium transition
                      ${
                        selectedMonth !== "Month" && selectedYear !== "Year"
-                         ? "bg-[#FFB600] text-navColor hover:bg-[#FFB600]/90 cursor-pointer"
-                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                         ? "bg-[#FFB600] text-black hover:bg-[#FFB600]/90 cursor-pointer"
+                         : "bg-[#FFB600] text-black cursor-not-allowed"
                      }
                     `}
                 >

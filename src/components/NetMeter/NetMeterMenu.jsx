@@ -152,7 +152,7 @@ export default function NetMeterMenu() {
     return (
       <div className="flex flex-col h-screen">
         <Navbar />
-        <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
+        <div className="flex flex-1 items-center justify-center  bg-gradient-to-br from-[#6CCECD] to-[#356770]">
           <span className="text-navColor">Loading</span>
         </div>
       </div>
@@ -163,7 +163,7 @@ export default function NetMeterMenu() {
     return (
       <div className="flex flex-col h-screen">
         <Navbar />
-        <div className="flex flex-1 items-center justify-center bg-[#E7FAFF]">
+        <div className="flex flex-1 items-center justify-center  bg-gradient-to-br from-[#6CCECD] to-[#356770]">
           <span className="text-navColor">Loading policies…</span>
         </div>
       </div>
@@ -171,27 +171,27 @@ export default function NetMeterMenu() {
   }
 
   return (
-    <div className="flex flex-col h-screen">
-      {/* Navbar */}
+    <div className="relative flex flex-col h-screen  bg-gradient-to-br from-[#6CCECD] to-[#356770]">
+   
       <Navbar />
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-24 left-4 w-20 h-12 rounded-full border border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center transition-colors  shadow-[0px_5px_10px_0px_#00000040]"
+      >
+        <img src="/images/Arrow 3.png" alt="Back" className="w-6 h-6" />
+      </button>
 
       <div className="flex flex-1">
-        {/* Sidebar */}
-        {/* <GridSideBar /> */}
-
-        {/* Main Content */}
+       
         <div className="flex flex-col flex-1">
-          <div className="flex flex-1 flex-col items-center justify-center bg-[#E7FAFF]">
-            <div className="text-center text-2xl font-medium mb-6 text-navColor">
-              Net metering algorithm has three types of policies
-            </div>
+          <div className="flex flex-1 flex-col items-center justify-center ">
 
-            <div className="flex flex-col justify-center items-center w-full max-w-3xl p-12 bg-white border border-[#BF6A02] rounded-2xl shadow-lg">
-              <h2 className="text-center text-xl font-medium mb-20 text-navColor">
-                Please select one of the desired policies
+            <div className="flex flex-col justify-center items-center w-full max-w-5xl p-12 bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_100%,rgba(141,144,144,0.5)_100%)] rounded-2xl shadow-[0px_-2px_8px_0px_#00000040]">
+              <h2 className="text-center text-xl font-medium mb-20 text-black">
+                Please select one of the desired policy for net metering algorithm
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
                 {policies.map((policy) => (
                   <button
                     key={policy.id}
@@ -200,9 +200,8 @@ export default function NetMeterMenu() {
                       relative
                       group
                       flex flex-row gap-3 items-center justify-center
-                      w-full h-24 p-6 rounded-lg shadow transition
-                      bg-[#FFB600] bg-opacity-30 text-navColor
-                      hover:bg-opacity-100 hover:cursor-pointer
+                      w-full h-24 p-6 rounded-lg  shadow-[0px_5px_10px_0px_#00000040] transition
+                    bg-[#F0DBA4] text-navColor hover:bg-[#FFB600] hover:cursor-pointer
                     "
                   >
                     {/* Info Icon (visible on hover) */}
