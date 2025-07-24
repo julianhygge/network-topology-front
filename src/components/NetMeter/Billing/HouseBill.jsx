@@ -45,27 +45,43 @@ export default function HouseBill() {
     }).format(num);
   };
 
-  if (isLoading) {
-    return (
-      <div className="bg-[#E7FAFF] h-screen flex items-center justify-center">
-        <p className="text-xl font-semibold">Loading Bill...</p>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="bg-[#E7FAFF] h-screen flex items-center justify-center">
+  //       <p className="text-xl font-semibold">Loading Bill...</p>
+  //     </div>
+  //   );
+  // }
+    if (isLoading) {
+      return (
+        <div className="flex flex-col h-screen pt-20  bg-gradient-to-br from-[#6CCECD] to-[#356770]">
+          <Navbar />
+          <div className="flex flex-1 items-center justify-center ">
+            <span className="text-navColor">Loading Bill...</span>
+          </div>
+        </div>
+      );
+    }
 
   if (error) {
     return (
-      <div className="bg-[#E7FAFF] h-screen flex items-center justify-center">
-        <p className="text-xl font-semibold text-red-500">{error}</p>
-      </div>
+     <div className="flex flex-col h-screen pt-20  bg-gradient-to-br from-[#6CCECD] to-[#356770]">
+          <Navbar />
+          <div className="flex flex-1 items-center justify-center ">
+            <span className="text-navColor">{error}</span>
+          </div>
+        </div>
     );
   }
 
   if (!billData) {
     return (
-      <div className="bg-[#E7FAFF] h-screen flex items-center justify-center">
-        <p className="text-xl font-semibold">No bill data available.</p>
-      </div>
+       <div className="flex flex-col h-screen pt-20  bg-gradient-to-br from-[#6CCECD] to-[#356770]">
+          <Navbar />
+          <div className="flex flex-1 items-center justify-center ">
+            <span className="text-navColor">No Bid Data available.</span>
+          </div>
+        </div>
     );
   }
 
@@ -100,56 +116,57 @@ export default function HouseBill() {
       : "N/A";
 
   return (
-    <div className="bg-[#E7FAFF] h-screen pt-20 ">
+    <div className=" flex flex-col  bg-gradient-to-br from-[#6CCECD] to-[#356770] h-screen pt-20 ">
       <Navbar />
 
-      <div className="bg-white rounded-2xl border shadow-sm h-[80vh] p-6 mt-10 mr-40 ml-40">
-        <div className="flex items-center justify-between mb-8 pb-4 border-b-2 border-[#C4C4C4]">
+      <div className="flex flex-1 flex-col items-center justify-center   ">
+        <div className="w-full max-w-6xl   bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_100%,rgba(141,144,144,0.5)_100%)] rounded-2xl shadow-[0px_-2px_8px_0px_#00000040]  ">
+        <div className="flex items-center justify-between py-3  border-b-2 border-[#916600]">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 flex items-center justify-center">
+            <div className="w-12 h-12 flex items-center justify-center ml-3">
               <img
                 loading="lazy"
                 src={`${process.env.PUBLIC_URL}/images/HyggeLogo.png`}
                 alt="Hygge Logo"
-                className="shrink-0 w-[50px] cursor-pointer"
+                className="shrink-0 w-[40px] cursor-pointer"
               />
             </div>
-            <h1 className="text-2xl font-bold text-gray-800">Utility Bill</h1>
+            <h1 className="text-2xl font-bold text-black   ">Utility Bill</h1>
           </div>
 
-          <div className="flex item-center">
-            <p className=" text-gray-800 mr-2">Bill ID:</p>
-            <p className=" text-gray-800">INV-2025-00123</p>
+          <div className="flex item-center mr-6">
+            <p className=" text-black mr-2">Bill ID:</p>
+            <p className=" text-black">INV-2025-00123</p>
           </div>
           
         </div>
 
-        <div className="flex gap-6">
-          <div className="flex-1 bg-gray-100 rounded-xl p-6 border-2 border-[#C4C4C4] ">
-            <div className="mb-8">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-[#C4C4C4]">
+        <div className="flex gap-6 p-11 ">
+          <div className="flex-1  bg-[linear-gradient(135.13deg,rgba(246,255,255,0.88)_100%,rgba(141,144,144,0.88)_100%)] rounded-xl p-6  ">
+            <div className="mb-10">
+              <h2 className="text-lg font-semibold text-black mb-6 pb-2 border-b-2 border-[#916600]">
                 Account Information
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-6">
                 <div className="flex justify-between items-center border-b border-gray-200 ">
-                  <span className="text-sm text-gray-600 ">Customer Name</span>
-                  <span className="font-medium text-gray-800">
+                  <span className="text-sm text-black ">Customer Name</span>
+                  <span className="font-bold text-black">
                     Abhinav Monohar
                   </span>
                 </div>
                 <div className="flex justify-between items-center  border-b border-gray-200">
-                  <span className="text-sm text-gray-600">Address</span>
-                  <span className="font-medium text-gray-800">
+                  <span className="text-sm text-black">Address</span>
+                  <span className="font-bold text-black">
                     Krishna Apartment, Dwaraka, IN 851101
                   </span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200">
-                  <span className="text-sm text-gray-600">Customer ID</span>
-                  <span className="font-medium text-gray-800">1234567890</span>
+                  <span className="text-sm text-black">Customer ID</span>
+                  <span className="font-bold text-black">1234567890</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200">
-                  <span className="text-sm text-gray-600">Billing Period</span>
-                  <span className="font-medium text-gray-800">
+                  <span className="text-sm text-black">Billing Period</span>
+                  <span className="font-bold text-black">
                     {formattedPeriod}
                   </span>
                 </div>
@@ -157,37 +174,37 @@ export default function HouseBill() {
             </div>
 
             <div>
-              <h2 className="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-[#C4C4C4]">
+              <h2 className="text-lg font-semibold text-black mb-6 pb-2 border-b-2 border-[#916600]">
                 Energy Usage
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-5">
                 <div className="flex justify-between items-center border-b border-gray-200">
-                  <span className="text-sm text-gray-600">Meter Number</span>
-                  <span className="font-medium text-gray-800">
+                  <span className="text-sm text-black">Meter Number</span>
+                  <span className="font-bold text-black">
                     MTR-ELE-98762
                   </span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200">
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-black">
                     Total Imported Energy
                   </span>
-                  <span className="font-medium text-gray-800">
+                  <span className="font-bold text-black">
                     {formatNumber(total_energy_imported_kwh)} kWh
                   </span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200">
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-black">
                     Total Exported Energy
                   </span>
-                  <span className="font-medium text-gray-800">
+                  <span className="font-bold text-black">
                     {formatNumber(total_energy_exported_kwh)} kWh{" "}
                   </span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200">
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-black">
                     Net Energy Consumed
                   </span>
-                  <span className="font-medium ">
+                  <span className="font-bold ">
                     {formatNumber(net_energy_balance_kwh)} kWh
                   </span>
                 </div>
@@ -195,21 +212,21 @@ export default function HouseBill() {
             </div>
           </div>
 
-          <div className="flex-1 bg-gray-100 rounded-xl p-6  border-2 border-[#C4C4C4]">
+          <div className="flex-1 bg-[linear-gradient(135.13deg,rgba(246,255,255,0.88)_100%,rgba(141,144,144,0.88)_100%)] rounded-xl p-6 ">
             <div className="mb-8">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4 pb-2  border-b-2 border-[#C4C4C4]">
+              <h2 className="text-lg font-semibold text-black mb-4 pb-2  border-b-2 border-[#916600]">
                 Total Bill Summary
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-8 mt-6">
                 {bill_details.policy_type === "SIMPLE_NET" && (
                   <>
                     <div className="flex justify-between items-center border-b border-gray-200">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-black">
                         Retail Charges ({formatNumber(net_energy_balance_kwh)}{" "}
                         kWh @ ₹{formatNumber(bill_details.retail_rate_per_kwh)}
                         /kWh)
                       </span>
-                      <span className="font-medium text-gray-800">
+                      <span className="font-bold text-black">
                         ₹ {formatNumber(bill_details.energy_charges)}
                       </span>
                     </div>
@@ -219,56 +236,57 @@ export default function HouseBill() {
                 {bill_details.policy_type === "GROSS_METERING" && (
                   <>
                     <div className="flex justify-between items-center border-b border-gray-200">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-black">
                         Retail Charges (
                         {formatNumber(total_energy_imported_kwh)} kWh @ ₹
                         {formatNumber(bill_details.import_retail_price_per_kwh)}
                         /kWh)
                       </span>
-                      <span className="font-medium text-gray-800">
+                      <span className="font-bold text-black">
                         ₹ {formatNumber(bill_details.imported_energy_charges)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center border-b border-gray-200">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-black">
                         Wholesale Charges (
                         {formatNumber(total_energy_exported_kwh)} kWh @ ₹
                         {formatNumber(bill_details.exp_whole_price_kwh)}/kWh)
                       </span>
-                      <span className="font-medium text-gray-800">
+                      <span className="font-bold text-black">
                         - ₹ {formatNumber(bill_details.exported_energy_credit)}
                       </span>
                     </div>
                   </>
                 )}
                 <div className="flex justify-between items-center border-b border-gray-200">
-                  <span className="text-sm text-gray-600">Fixed Charge</span>
-                  <span className="font-medium text-gray-800">
+                  <span className="text-sm text-black">Fixed Charge</span>
+                  <span className="font-bold text-black ">
                     ₹ {formatNumber(bill_details.fixed_charges)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center border-b border-gray-200">
-                  <span className="text-sm text-gray-600">Tax on Energy</span>
-                  <span className="font-medium text-gray-800">
+                  <span className="text-bold text-black">Tax on Energy</span>
+                  <span className="font-bold text-black">
                     ₹ {formatNumber(bill_details.tax_amount_on_energy)}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 border-1 bg-[#DBDBDB]">
+            <div className="p-4 border-1 bg-[#CFDBDB]">
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl text-navColor font-semibold">
+                <h2 className="text-2xl text-black font-semibold">
                   Total Amount Due
                 </h2>
-                <p className="text-2xl text-navColor font-bold">
+                <p className="text-2xl text-black font-bold">
                   ₹ {formatNumber(calculated_bill_amount)}
                 </p>
               </div>
-              <p className="text-sm text-gray-700 ">Due by: June 15, 2025</p>
+              <p className="text-sm text-black ">Due by: June 15, 2025</p>
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
