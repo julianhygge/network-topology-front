@@ -98,7 +98,7 @@ export default function SimulationProgress() {
             onClick={goBack}
             className="w-20 h-12 rounded-full bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center"
           >
-            <img src="/images/Arrow 3.png" className="w-8 h-6" alt="Back" />
+            <img src={`${process.env.PUBLIC_URL}/images/Arrow 3.png`} className="w-8 h-6" alt="Back" />
           </button>
           <div className="flex-1 relative">
             <input
@@ -108,7 +108,7 @@ export default function SimulationProgress() {
             />
             <button className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-10 rounded-full bg-[#FFB600] hover:bg-[#E9AB09] flex items-center justify-center">
               <img
-                src="/images/Line 155.png"
+                src= {`${process.env.PUBLIC_URL}/images/Line 155.png`}
                 className="mt-1 w-6 h-5"
                 alt="Search"
               />
@@ -123,7 +123,7 @@ export default function SimulationProgress() {
               >
                 <span className="text-navColor">Recently Added</span>
                 <img
-                  src="/images/Vector (2).png"
+                  src={`${process.env.PUBLIC_URL}/images/Vector (2).png`}
                   className="w-3 h-2"
                   alt="▼"
                 />
@@ -206,7 +206,7 @@ export default function SimulationProgress() {
                       >
                         Edit
                         <img
-                          src="/images/Frame 230.png"
+                          src= {`${process.env.PUBLIC_URL}/images/Frame 230.png`}
                           className="w-4 h-4"
                           alt="Edit"
                         />
@@ -235,7 +235,7 @@ export default function SimulationProgress() {
                   {/* Network Topology */}
                   <div className="flex flex-col items-center gap-4">
                     <img
-                      src="/images/network_topology.svg"
+                      src={`${process.env.PUBLIC_URL}/images/network_topology.svg`}
                       alt="network topology icon"
                       className="w-12 h-12"
                     />
@@ -254,7 +254,7 @@ export default function SimulationProgress() {
                             className="flex items-center justify-center gap-2 bg-[#71E8E8] hover:bg-teal-400 font-medium py-2 rounded-xl"
                           >
                             <img
-                              src="/images/eye_icon.svg"
+                              src={`${process.env.PUBLIC_URL}/images/eye_icon.svg`}
                               className="w-5 h-5"
                               alt=""
                             />
@@ -265,7 +265,7 @@ export default function SimulationProgress() {
                             className="flex items-center justify-center gap-2 bg-[#FFB600] hover:bg-[#E0A800] font-medium py-2 rounded-xl"
                           >
                             <img
-                              src="/images/gear_icon.svg"
+                              src={`${process.env.PUBLIC_URL}/images/gear_icon.svg`}
                               className="w-5 h-5"
                               alt=""
                             />
@@ -279,7 +279,7 @@ export default function SimulationProgress() {
                   {/* Allocation Engine */}
                   <div className="flex flex-col items-center gap-4">
                     <img
-                      src="/images/allocation_icon.svg"
+                      src={`${process.env.PUBLIC_URL}/images/allocation_icon.svg`}
                       alt="allocation engine icon"
                       className="w-12 h-12"
                     />
@@ -295,7 +295,7 @@ export default function SimulationProgress() {
                         className="flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#070C21] font-semibold py-2 rounded-lg"
                       >
                         <img
-                          src="/images/plus_circle_icon.svg"
+                          src= {`${process.env.PUBLIC_URL}/images/plus_circle_icon.svg`}
                           className="w-5 h-5"
                           alt=""
                         />
@@ -307,7 +307,7 @@ export default function SimulationProgress() {
                   {/* Results */}
                   <div className="flex flex-col items-center gap-4">
                     <img
-                      src="/images/results_icon.svg"
+                      src={`${process.env.PUBLIC_URL}/images/results_icon.svg`}
                       alt="results icon"
                       className="w-12 h-12"
                     />
@@ -318,7 +318,7 @@ export default function SimulationProgress() {
                       </p>
                       <button className="flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#070C21] font-semibold py-2 rounded-lg">
                         <img
-                          src="/images/play_icon.svg"
+                          src={`${process.env.PUBLIC_URL}/images/play_icon.svg`}
                           className="w-5 h-5"
                           alt=""
                         />

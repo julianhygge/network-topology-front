@@ -93,7 +93,7 @@ export default function SimulationList() {
               onClick={() => navigate(-1)}
               className=" w-20 h-12 rounded-full border-[1px] border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex  items-center justify-center transition-colors shadow"
             >
-              <img src="/images/Arrow 3.png" alt="Back" className="w-6 h-6" />
+              <img src={`${process.env.PUBLIC_URL}/images/Arrow 3.png`} alt="Back" className="w-6 h-6" />
             </button>
             <div>
               <p className="text-[#000505] text-2xl mb-1">Versions</p>
@@ -106,7 +106,7 @@ export default function SimulationList() {
           <div className="flex flex-1 items-center justify-center px-14">
             <div className="bg-[#F6FFFF]/50 rounded-lg shadow-lg p-10 max-w-xl w-full text-center">
               <img
-                src="/images/NoSim.png"
+                src={`${process.env.PUBLIC_URL}/images/NoSim.png`}
                 alt="No Simulations"
                 className="mx-auto mb-8"
               />
@@ -145,7 +145,7 @@ export default function SimulationList() {
             className="w-20 h-12 rounded-full bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center"
             onClick={() => window.history.back()}
           >
-            <img src="/images/Arrow 3.png" className="w-8 h-6" alt="" />
+            <img src={`${process.env.PUBLIC_URL}/images/Arrow 3.png`} className="w-8 h-6" alt="" />
           </button>
           <div className="flex-1 relative">
             <input
@@ -154,7 +154,7 @@ export default function SimulationList() {
               className="w-full bg-white/90 rounded-full border-none py-3 px-6 pr-16 placeholder-[#9E9E9E]"
             />
             <button className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-10 rounded-full bg-[#FFB600] hover:bg-[#E9AB09] flex items-center justify-center">
-              <img src="/images/Line 155.png" className="mt-1 w-6 h-5" alt="" />
+              <img src={`${process.env.PUBLIC_URL}/images/Line 155.png`} className="mt-1 w-6 h-5" alt="" />
             </button>
           </div>
           <div className="flex items-center gap-1 bg-[#557377] rounded-full shrink-0">
@@ -165,7 +165,7 @@ export default function SimulationList() {
                 className="bg-[#FFF8E6] hover:bg-[#FFF3D7] rounded-full py-2 px-4 flex items-center gap-3"
               >
                 <span className="text-navColor">Recently Added</span>
-                <img src="/images/Vector (2).png" className="w-3 h-2" alt="" />
+                <img src={`${process.env.PUBLIC_URL}/images/Vector (2).png`} className="w-3 h-2" alt="" />
               </button>
               {filterOpen && (
                 <div className="bg-white rounded-lg shadow border absolute flex flex-col z-10 items-center border-1 border-[#8E8E8E]/80 right-0 mt-2 w-40 p-2">
@@ -202,7 +202,7 @@ export default function SimulationList() {
               )
             }
           >
-            <img src="/images/Icon.png" className="w-5 h-5" alt="" />
+            <img src={`${process.env.PUBLIC_URL}/images/Icon.png`} className="w-5 h-5" alt="" />
             Add New Version
           </button>
         </div>
@@ -255,7 +255,7 @@ export default function SimulationList() {
                     >
                       View &amp; Edit Progress
                       <img
-                        src="/images/Frame 230.png"
+                        src={`${process.env.PUBLIC_URL}/images/Frame 230.png`}
                         className="w-4 h-4"
                         alt="Edit"
                       />
@@ -267,7 +267,7 @@ export default function SimulationList() {
                         }
                         className="p-2 rounded-full hover:bg-gray-100"
                       >
-                        <img src="/images/Frame 610.png" alt="Menu" />
+                        <img src={`${process.env.PUBLIC_URL}/images/Frame 610.png`} alt="Menu" />
                       </button>
                       {menuOpenFor === i && (
                         <div className="absolute flex flex-col z-10 items-center border-1 border-[#8E8E8E]/80 right-0 mt-2 w-36 p-2 bg-white rounded-lg shadow border">

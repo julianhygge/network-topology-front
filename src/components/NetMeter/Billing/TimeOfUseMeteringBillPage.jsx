@@ -175,7 +175,7 @@ const TimeOfUseMeteringBillPage = () => {
             <div className="absolute top-5 right-16">
               <button onClick={handleEdit} disabled={!isReadOnly}>
                 <img
-                  src="/images/Icon.svg"
+                  src={`${process.env.PUBLIC_URL}/images/Icon.svg`}
                   alt="Edit"
                   className="w-6 h-6 hover:opacity-70"
                 />

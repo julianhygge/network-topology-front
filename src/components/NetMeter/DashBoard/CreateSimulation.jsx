@@ -51,7 +51,7 @@ export default function SimulatorSettings() {
             onClick={() => window.history.back()}
             className="w-24 h-12 rounded-full border-[1px] border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center transition-colors shadow"
           >
-            <img src="/images/Arrow 3.png" alt="Back" className="w-6 h-6" />
+            <img src={`${process.env.PUBLIC_URL}/images/Arrow 3.png`} alt="Back" className="w-6 h-6" />
           </button>
         </div>
         <div className="mx-auto w-full max-w-4xl bg-[#F6FFFF]/50 rounded-2xl shadow-lg pt-10 pb-5 px-14">

@@ -15,7 +15,7 @@ export const Transformer = ({ color, nomenclature, onTransformerClick, onDoubleC
     onContextMenu={onContextMenu}
   >
     <img
-      src={`/images/${color}Transformer.png`}
+      src={`${process.env.PUBLIC_URL}/images/${color}Transformer.png`}
       alt="Transformer"
       className={`icon transformer ${color === "Green" ? "green-transformer-icon" : ""
         }`}
@@ -27,7 +27,7 @@ export const Transformer = ({ color, nomenclature, onTransformerClick, onDoubleC
 export const House = ({ color, onHouseClick, nomenclature, onDoubleClick, onContextMenu }) => (
   <div onClick={onHouseClick} className="house-item cursor-pointer" onDoubleClick={onDoubleClick} onContextMenu={onContextMenu}>
     <div className="cursor-pointer" >
-      <img src={`/images/${color}House.png`} alt="House" className="icon house" />
+      <img src={`${process.env.PUBLIC_URL}/images/${color}House.png`} alt="House" className="icon house" />
     </div>
     <span className="font-dinPro font-medium house-name text-navColor">
       {nomenclature}

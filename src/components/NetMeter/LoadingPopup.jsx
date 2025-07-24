@@ -34,7 +34,7 @@ export default function LoadingPopup({
         <div className=" relative p-4 max-w-lg flex items-start">
             <div className='flex flex-row  justify-centerm items-center gap-3'>
                  <img
-            src="/images/Info.png"
+            src={`${process.env.PUBLIC_URL}/images/info.png`}
             alt=""
             className="w-6 h-6 items-center flex-shrink-0 text-navColor"
           />

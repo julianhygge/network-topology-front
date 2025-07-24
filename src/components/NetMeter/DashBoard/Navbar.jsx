@@ -1,6 +1,8 @@
 import React from "react";
 import { Home, User, Settings } from "lucide-react";
 
+console.log('PUBLIC_URL:', process.env.PUBLIC_URL);
+
 export default function Navbar() {
   return (
     <header
@@ -9,7 +11,7 @@ export default function Navbar() {
         rounded-2xl shadow-lg z-2 ">
       <div className="flex items-center gap-4">
         <div className="text-amber-400">
-          <img className=" size-10" src="/images/Logo.png" alt="logo" />
+          <img className=" size-10" src={`${process.env.PUBLIC_URL}/images/Logo.png`} alt="logo" />
         </div>
         <button href="/" className="text-white p-2 hover:bg-teal-800">
           <Home size={24}></Home>

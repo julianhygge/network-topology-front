@@ -67,7 +67,7 @@ export default function SimulationDashboard() {
         <main className="flex items-center justify-center h-[calc(100vh-4rem)] px-14">
           <div className="bg-[#F6FFFF]/50 rounded-lg shadow-lg p-10 max-w-xl w-full text-center">
             <img
-              src="/images/NoSim.png"
+              src={`${process.env.PUBLIC_URL}/images/NoSim.png`}
               alt="No Simulations"
               className="mx-auto mb-8"
             />

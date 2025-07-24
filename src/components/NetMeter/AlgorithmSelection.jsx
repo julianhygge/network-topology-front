@@ -16,10 +16,10 @@ export default function AlgorithmSelection() {
 
   // map display_name → your local image file
   const logoMap = {
-    "Net Metering": "/images/NetMeter.png",
-    "Autonomous Bidding": "/images/Autonomous.png",
-    "Special Groups": "/images/SpecialGroup.png",
-    "Option -4": "/images/Option.png",
+    "Net Metering": `${process.env.PUBLIC_URL}/images/NetMeter.png`,
+    "Autonomous Bidding":`${process.env.PUBLIC_URL}/images/Autonomous.png`,
+    "Special Groups": `${process.env.PUBLIC_URL}/images/SpecialGroup.png`,
+    "Option -4": `${process.env.PUBLIC_URL}/images/Option.png`,
   };
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export default function AlgorithmSelection() {
         onClick={() => navigate(-1)}
         className="absolute top-24 left-4 w-20 h-12 rounded-full border border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center transition-colors shadow-[0px_5px_10px_0px_#00000040]"
       >
-        <img src="/images/Arrow 3.png" alt="Back" className="w-6 h-6" />
+        <img src={`${process.env.PUBLIC_URL}/images/Arrow 3.png`} alt="Back" className="w-6 h-6" />
       </button>
       <div className="flex flex-1 pt-20">
         <div className="flex flex-1 flex-col items-center justify-center p-8">
@@ -96,7 +96,7 @@ export default function AlgorithmSelection() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {algs.map((alg) => {
-                const logoSrc = logoMap[alg.display_name] || "/images/default-logo.png";
+                const logoSrc = logoMap[alg.display_name] ||`${process.env.PUBLIC_URL}/images/default-logo.png`;
                 return (
                   <button
                     key={alg.id}

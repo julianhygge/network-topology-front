@@ -69,7 +69,7 @@ export default function Navbar() {
       <div className="flex items-center gap-4 relative" ref={menuRef}>
         <button onClick={() => navigate("/")}>
           <img
-            src="/images/Logo.png"
+            src={`${process.env.PUBLIC_URL}/images/Logo.png`}
             alt="Hygge logo"
             className="h-10 w-auto"
           />

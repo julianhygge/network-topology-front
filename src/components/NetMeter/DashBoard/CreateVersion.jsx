@@ -48,7 +48,7 @@ export default function CreateVersion() {
             onClick={() => navigate(-1)}
             className="w-20 h-12 rounded-full border-[1px] border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center transition-colors shadow"
           >
-            <img src="/images/Arrow 3.png" alt="Back" className="w-6 h-6" />
+            <img src={`${process.env.PUBLIC_URL}/images/Arrow 3.png`} alt="Back" className="w-6 h-6" />
           </button>
           <div>
             <p className="text-[#000505] text-2xl mb-1">Versions</p>

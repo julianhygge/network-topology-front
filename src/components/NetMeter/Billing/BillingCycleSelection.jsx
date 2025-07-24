@@ -142,7 +142,7 @@ export default function BillingCycleSelection() {
         onClick={() => navigate(-1)}
         className="absolute top-24 left-4 w-20 h-12 rounded-full border border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center transition-colors  shadow-[0px_5px_10px_0px_#00000040]"
       >
-        <img src="/images/Arrow 3.png" alt="Back" className="w-6 h-6" />
+        <img src={`${process.env.PUBLIC_URL}/images/Arrow 3.png`} alt="Back" className="w-6 h-6" />
       </button>
       <div className="flex flex-1">
         {/* <GridSideBar /> */}
