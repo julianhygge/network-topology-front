@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Plus } from "lucide-react";
-import { fetchSimulationRunsByContainer } from "services/netMeteringService";
+import { toast } from "sonner";
+import {
+  fetchSimulationRunsByContainer,
+  updateRunFromVersion,
+} from "services/netMeteringService";
+import { getSubstations } from "services/Substation";
 
 export default function SimulationProgress() {
   const { simulationId } = useParams();
@@ -21,6 +26,43 @@ export default function SimulationProgress() {
   // Which run to show
   const [selectedRunId, setSelectedRunId] = useState(null);
   const [selectedRunProgressTitle, setSelectedRunProgressTitle] = useState("");
+
+  // Grid (topology root) selection for the selected run
+  const [substations, setSubstations] = useState([]);
+  const [savingGrid, setSavingGrid] = useState(false);
+
+  useEffect(() => {
+    getSubstations()
+      .then((data) => setSubstations(data?.items || []))
+      .catch((err) => console.error("Error fetching substations:", err));
+  }, []);
+
+  const selectedRun = runs.find((r) => r.id === selectedRunId);
+  const selectedGridId = selectedRun?.topology_root_node_id || "";
+
+  const handleGridChange = async (gridId) => {
+    if (!gridId || !selectedRunId) return;
+    setSavingGrid(true);
+    try {
+      await updateRunFromVersion({
+        simulation_run_id: selectedRunId,
+        topology_root_node_id: gridId,
+      });
+      setRuns((prev) =>
+        prev.map((r) =>
+          r.id === selectedRunId
+            ? { ...r, topology_root_node_id: gridId }
+            : r
+        )
+      );
+      const grid = substations.find((s) => s.id === gridId);
+      toast.success(`Topology set to ${grid?.name || "selected grid"}`);
+    } catch (err) {
+      toast.error("Failed to update the topology for this version");
+    } finally {
+      setSavingGrid(false);
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -248,6 +290,26 @@ export default function SimulationProgress() {
                           Define or Modify the grid, assets, and profiles for
                           this version
                         </p>
+                        <div>
+                          <label className="block text-sm font-semibold text-[#000505] mb-1">
+                            Grid used by this version:
+                          </label>
+                          <select
+                            value={selectedGridId}
+                            disabled={savingGrid}
+                            onChange={(e) => handleGridChange(e.target.value)}
+                            className="w-full h-10 px-2 border border-gray-400 rounded-lg bg-white text-[#000505] disabled:opacity-50"
+                          >
+                            <option value="" disabled>
+                              Select a grid…
+                            </option>
+                            {substations.map((s) => (
+                              <option key={s.id} value={s.id}>
+                                {s.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
                         <div className="flex flex-col gap-3 mt-auto">
                           <button
                             onClick={handleNetworkTopologyPageRoute}

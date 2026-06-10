@@ -9,8 +9,12 @@ import {
   MapPin,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import Navbar from "./Navbar";
-import { fetchSimulationContainers } from "services/netMeteringService";
+import {
+  fetchSimulationContainers,
+  deleteSimulationContainer,
+} from "services/netMeteringService";
 
 export default function SimulationDashboard() {
   const navigate = useNavigate();
@@ -20,6 +24,28 @@ export default function SimulationDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [offset, setOffset] = useState(0);
+  const [menuOpenFor, setMenuOpenFor] = useState(null);
+
+  const handleDeleteContainer = async (run) => {
+    if (
+      !window.confirm(
+        `Delete simulation "${run.name}" and all its versions? This cannot be undone.`
+      )
+    ) {
+      setMenuOpenFor(null);
+      return;
+    }
+    try {
+      await deleteSimulationContainer(run.id);
+      setRuns((prev) => prev.filter((x) => x.id !== run.id));
+      setOffset(0);
+      toast.success(`Simulation "${run.name}" deleted`);
+    } catch (err) {
+      toast.error("Failed to delete the simulation");
+    } finally {
+      setMenuOpenFor(null);
+    }
+  };
 
   useEffect(() => {
     fetchSimulationContainers()
@@ -133,9 +159,28 @@ export default function SimulationDashboard() {
                           <h3 className="text-xl font-bold">{run.name}</h3>
                           <p className="text-gray-600">Run ID: {run.id}</p>
                         </div>
-                        <button className="p-1 rounded-full hover:bg-gray-100">
-                          <MoreVertical className="h-5 w-5" />
-                        </button>
+                        <div className="relative">
+                          <button
+                            className="p-1 rounded-full hover:bg-gray-100"
+                            onClick={() =>
+                              setMenuOpenFor((o) =>
+                                o === run.id ? null : run.id
+                              )
+                            }
+                          >
+                            <MoreVertical className="h-5 w-5" />
+                          </button>
+                          {menuOpenFor === run.id && (
+                            <div className="absolute flex flex-col z-10 items-center border-1 border-[#8E8E8E]/80 right-0 mt-2 w-36 p-2 bg-white rounded-lg shadow border">
+                              <button
+                                onClick={() => handleDeleteContainer(run)}
+                                className="block w-full px-2 rounded-md py-2 text-sm text-red-600 hover:bg-[#D3DDDE]"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <div className="border-t border-[#9CAAAD] my-4" />

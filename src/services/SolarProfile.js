@@ -19,7 +19,7 @@ export const fetchSolarDetails = async (houseId) => {
 export const createSolarDetails = async (solarData) => {
     try {
       const response = await axiosInstance.post(
-        `/solar`, solarData
+        `/solar/`, solarData
          
       );
       console.log(response.data);
@@ -58,4 +58,4 @@ export const deleteSolarProfile = async (house_id) => {
 
 
 
- 
+  

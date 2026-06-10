@@ -190,8 +190,9 @@ const TimeOfUseMeteringBillPage = () => {
 
             {/* Title */}
             <div className="text-center text-2xl font-semibold mb-10">
-              Please select the time period and enter the retail and wholesale
-              amount
+              Define the time-of-use periods and their rates. Import = what
+              the house pays per kWh consumed in that period; Export = credit
+              per kWh injected to the grid.
             </div>
 
             {/* Table Header */}
@@ -199,8 +200,8 @@ const TimeOfUseMeteringBillPage = () => {
               <div>Time Period</div>
               <div>↓ Import</div>
               <div>↑ Export</div>
-              <div>Amt Retail</div>
-              <div>Amt Wholesale</div>
+              <div>Retail rate (₹/kWh)</div>
+              <div>Wholesale rate (₹/kWh)</div>
             </div>
 
             {/* Rows*/}

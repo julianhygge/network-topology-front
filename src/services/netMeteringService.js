@@ -228,9 +228,8 @@ export const fetchEnergySummary = async ({
   endDatetime,
 }) => {
   try {
-    console.log(nodeId);
     const response = await axiosInstance.get(
-      `${BASE_PATH}/houses/${nodeId}/energy-summary`,
+      `${BASE_PATH}/nodes/${nodeId}/energy-summary`,
       {
         params: {
           start_datetime: startDatetime,
@@ -280,6 +279,38 @@ export const createSimulationContainer = async (payload) => {
  * Fetch all simulation runs (versions) for a given container.
  * GET /v1/simulation/{container_id}/simulation-runs
  */
+/**
+ * Check whether all houses under a topology root are ready for simulation
+ * GET /v1/simulation/topology/{rootNodeId}/readiness
+ */
+export const fetchTopologyReadiness = async (rootNodeId) => {
+  try {
+    const response = await axiosInstance.get(
+      `${BASE_PATH}/topology/${rootNodeId}/readiness`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error checking topology readiness:", error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch a single simulation run (includes topology_root_node_id)
+ * GET /v1/simulation/simulations-runs/{runId}
+ */
+export const fetchSimulationRun = async (runId) => {
+  try {
+    const response = await axiosInstance.get(
+      `${BASE_PATH}/simulations-runs/${runId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching simulation run:", error);
+    throw error;
+  }
+};
+
 export const fetchSimulationRunsByContainer = async (containerId) => {
   try {
     console.log(containerId);
@@ -290,6 +321,38 @@ export const fetchSimulationRunsByContainer = async (containerId) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching simulation runs:", error);
+    throw error;
+  }
+};
+
+/**
+ * Delete a simulation container (and all its runs, cascade)
+ * DELETE /v1/simulation/container/{containerId}
+ */
+export const deleteSimulationContainer = async (containerId) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${BASE_PATH}/container/${containerId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting simulation container:", error);
+    throw error;
+  }
+};
+
+/**
+ * Delete a simulation run
+ * DELETE /v1/simulation/{simulationRunId}/simulations-runs
+ */
+export const deleteSimulationRun = async (simulationRunId) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${BASE_PATH}/${simulationRunId}/simulations-runs`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting simulation run:", error);
     throw error;
   }
 };
@@ -461,7 +524,7 @@ export const updateTouPolicy = async ({
       import_retail_rate_per_kwh: importRetailRatePerKwh,
       export_wholesale_rate_per_kwh: exportWholesaleRatePerKwh,
     };
-    const res = await axiosInstance.put(`${BASE_PATH}/${touId}/tou/`, payload);
+    const res = await axiosInstance.put(`${BASE_PATH}/${touId}/tou`, payload);
     return res.data;
   } catch (err) {
     console.error("Error updating TOU policy row:", err);

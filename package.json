@@ -1,5 +1,5 @@
 {
-  "homepage": "/nt-int/",
+  "homepage": "/simulator-int",
   "name": "network-topology",
   "version": "0.1.0",
   "private": true,
@@ -31,6 +31,7 @@
     "yarik": "env-cmd -f ./environments/.env.yarik react-scripts start",
     "build:development": "env-cmd -f ./environments/.env.development react-scripts build",
     "build:production": "env-cmd -f ./environments/.env.production react-scripts build",
+    "build:int": "env-cmd -f ./environments/.env.int react-scripts build",
     "build:test": "env-cmd -f ./environments/.env.test react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

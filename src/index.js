@@ -113,7 +113,7 @@ const router = createBrowserRouter([
       {path:"/housebill/:simulationId", element:<HouseBill />}
      ]
   }
-],{basename:"/nt-int"});
+],{basename:"/simulator-int"});
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(

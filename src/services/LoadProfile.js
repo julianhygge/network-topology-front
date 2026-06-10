@@ -120,7 +120,7 @@ export const uploadLoadProfile = async (
 
 export const deleteLoadProfile = async (profileId) => {
   try {
-    const response = await axiosInstance.delete(`/load/${profileId}`, {});
+    const response = await axiosInstance.delete(`/load/${profileId}/`, {});
     return response.data;
   } catch (error) {
     console.error("Error deleting load profile:", error);

@@ -117,19 +117,19 @@ export default function NetMeterMenu() {
         });
       }
 
-      // 3) navigate as before
-      switch (policy.display_name) {
-        case "Net Metering":
+      // 3) navigate based on the stable policy_code
+      switch (policy.policy_code) {
+        case "net_metering_standard":
           navigate(`/netmeter/netMetering/netMetering/${simulationRunId}`);
           break;
-        case "Gross Metering":
+        case "gross_metering_standard":
           navigate(`/netmeter/netMetering/grossMetering/${simulationRunId}`);
           break;
-        case "TOU Rate Metering":
+        case "tou_rate_standard":
           navigate(`/netmeter/netMetering/touMetering/${simulationRunId}`);
           break;
         default:
-          console.warn('Unknown policy selected:', policy.display_name)
+          console.warn("Unknown policy selected:", policy.policy_code);
       }
     } catch (err) {
       console.error("Error selecting/updating policy:", err);

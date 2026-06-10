@@ -6,9 +6,11 @@ import {
   generateGrossMeteringPolicyBill,
   fetchEnergySummary,
   fetchGrossMeteringPolicy,
+  fetchSimulationRun,
   updateGrossMeteringPolicy,
   triggerBillCalculation,
 } from "services/netMeteringService";
+import { getSubstations } from "services/Substation";
 import { useParams, useLocation } from "react-router-dom";
 
 const GrossMeteringBillPage = () => {
@@ -19,9 +21,9 @@ const GrossMeteringBillPage = () => {
   const endDatetime = params.get("end"); // e.g. "2021-02-01 00:00"
 
   const navigate = useNavigate();
-  const [retailPrice, setRetailPrice] = useState(0);
-  const [wholesalePrice, setWholesalePrice] = useState(0);
-  const [fixedPrice, setFixedPrice] = useState(0);
+  const [retailPrice, setRetailPrice] = useState("");
+  const [wholesalePrice, setWholesalePrice] = useState("");
+  const [fixedPrice, setFixedPrice] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [totalImported, setTotalImported] = useState(null);
@@ -30,7 +32,6 @@ const GrossMeteringBillPage = () => {
   const [summaryError, setSummaryError] = useState(null);
 
   useEffect(() => {
-    const nodeId = "420f29da-f8e3-44f8-8245-9964d10e62cd"; // replace with actual node ID
     if (!startDatetime || !endDatetime) {
       console.error("Missing startDatetime or endDatetime");
       setSummaryError("Date range not provided");
@@ -38,9 +39,21 @@ const GrossMeteringBillPage = () => {
       return;
     }
 
-    fetchEnergySummary({ nodeId, startDatetime, endDatetime })
+    // Aggregate energy for the topology assigned to this simulation run;
+    // fall back to the first substation if the run has none.
+    fetchSimulationRun(simulationRunId)
+      .then((run) => run?.topology_root_node_id || null)
+      .catch(() => null)
+      .then(async (rootId) => {
+        let nodeId = rootId;
+        if (!nodeId) {
+          const data = await getSubstations();
+          nodeId = data?.items?.[0]?.id;
+        }
+        if (!nodeId) throw new Error("No substation found");
+        return fetchEnergySummary({ nodeId, startDatetime, endDatetime });
+      })
       .then((data) => {
-        console.log(data);
         setTotalImported(data.total_imported_units);
         setTotalExported(data.total_exported_units);
       })
@@ -49,7 +62,7 @@ const GrossMeteringBillPage = () => {
         setSummaryError("Failed to load energy summary");
       })
       .finally(() => setSummaryLoading(false));
-  }, [startDatetime, endDatetime]);
+  }, [startDatetime, endDatetime, simulationRunId]);
 
   // const handleGenerateBill = async () => {
   //   setLoading(true);
@@ -195,26 +208,26 @@ const GrossMeteringBillPage = () => {
               {/* Retail Price Input */}
               <div>
                 <label className="block text-lg font-medium text-black mb-3">
-                  Enter your retail price (in kwh) :
+                  Retail price — what the house pays per imported kWh (₹/kWh) :
                 </label>
                 <input
                   type="text"
                   value={retailPrice}
                   onChange={(e) => setRetailPrice(e.target.value)}
-                  placeholder="eg. 12.5"
+                  placeholder="eg. 8"
                   className="w-full h-12 px-4 border-1 border-navColor rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:border-[#6AD1CE] transition-colors"
                 />
               </div>
               {/* Wholsale Price Input */}
               <div>
                 <label className="block text-lg font-medium text-black mb-3">
-                  Enter your wholesale price (in kwh) :
+                  Wholesale price — credit per exported kWh (₹/kWh) :
                 </label>
                 <input
                   type="number"
                   value={wholesalePrice}
                   onChange={(e) => setWholesalePrice(e.target.value)}
-                  placeholder="eg. 12.5"
+                  placeholder="eg. 3"
                   className="w-full h-12 px-4 border-1 border-navColor rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:border-[#6AD1CE] transition-colors"
                 />
               </div>
@@ -222,13 +235,13 @@ const GrossMeteringBillPage = () => {
               {/* Fixed Price Input */}
               <div>
                 <label className="block text-lg font-medium text-black mb-3">
-                  Enter fixed price if any (in kwh) :
+                  Fixed charge (₹ per kW of sanctioned load, per month) :
                 </label>
                 <input
                   type="number"
                   value={fixedPrice}
                   onChange={(e) => setFixedPrice(e.target.value)}
-                  placeholder="eg. 12.5"
+                  placeholder="eg. 100"
                   className="w-full h-12 px-4 border-1 border-navColor rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:border-[#6AD1CE] transition-colors"
                 />
               </div>

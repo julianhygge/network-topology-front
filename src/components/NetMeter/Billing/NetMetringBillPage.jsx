@@ -6,9 +6,11 @@ import {
   generateNetMeteringPolicyBill,
   fetchEnergySummary,
   fetchNetMeteringPolicy,
+  fetchSimulationRun,
   updateNetMeteringBill,
   triggerBillCalculation,
 } from "services/netMeteringService";
+import { getSubstations } from "services/Substation";
 
 export default function NetMeteringBillPage() {
   const { simulationRunId } = useParams();
@@ -27,10 +29,6 @@ export default function NetMeteringBillPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    //For now its hardcoded, we need to make it Dynamic
-   const nodeId = "420f29da-f8e3-44f8-8245-9964d10e62cd"; 
-
-
     if (!startDatetime || !endDatetime) {
       console.error("Missing startDatetime or endDatetime");
       setSummaryError("Date range not provided");
@@ -38,9 +36,21 @@ export default function NetMeteringBillPage() {
       return;
     }
 
-    fetchEnergySummary({ nodeId, startDatetime, endDatetime })
+    // Aggregate energy for the topology assigned to this simulation run;
+    // fall back to the first substation if the run has none.
+    fetchSimulationRun(simulationRunId)
+      .then((run) => run?.topology_root_node_id || null)
+      .catch(() => null)
+      .then(async (rootId) => {
+        let nodeId = rootId;
+        if (!nodeId) {
+          const data = await getSubstations();
+          nodeId = data?.items?.[0]?.id;
+        }
+        if (!nodeId) throw new Error("No substation found");
+        return fetchEnergySummary({ nodeId, startDatetime, endDatetime });
+      })
       .then((data) => {
-        console.log(data);
         setTotalImported(data.total_imported_units);
         setTotalExported(data.total_exported_units);
       })
@@ -49,7 +59,7 @@ export default function NetMeteringBillPage() {
         setSummaryError("Failed to load energy summary");
       })
       .finally(() => setSummaryLoading(false));
-  }, [startDatetime, endDatetime]);
+  }, [startDatetime, endDatetime, simulationRunId]);
 
   // const handleGenerateBill = async () => {
   //   setLoading(true)
@@ -187,26 +197,26 @@ export default function NetMeteringBillPage() {
             <div className="space-y-6 mb-8">
               <div>
                 <label className="block text-lg font-medium text-black mb-3">
-                  Enter your retail price (in kwh) :
+                  Retail price (₹ per kWh) :
                 </label>
                 <input
                   type="text"
                   value={retailPrice}
                   onChange={(e) => setRetailPrice(e.target.value)}
-                  placeholder="eg. 12.5"
+                  placeholder="eg. 8"
                   className="w-full h-12 px-4 border-1 border-navColor rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:border-[#6AD1CE] transition-colors"
                 />
               </div>
 
               <div>
                 <label className="block text-lg font-medium text-black mb-3">
-                  Enter fixed price if any (in kwh) :
+                  Fixed charge (₹ per kW of sanctioned load, per month) :
                 </label>
                 <input
                   type="text"
                   value={fixedPrice}
                   onChange={(e) => setFixedPrice(e.target.value)}
-                  placeholder="eg. 12.5"
+                  placeholder="eg. 100"
                   className="w-full h-12 px-4 border-1 border-navColor rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:border-[#6AD1CE] transition-colors"
                 />
               </div>

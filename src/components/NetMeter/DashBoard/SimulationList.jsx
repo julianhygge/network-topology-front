@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Plus } from "lucide-react";
-import { fetchSimulationRunsByContainer } from "services/netMeteringService";
+import { toast } from "sonner";
+import {
+  fetchSimulationRunsByContainer,
+  deleteSimulationRun,
+} from "services/netMeteringService";
 
 export default function SimulationList() {
   const { simulationId } = useParams();
@@ -52,6 +56,26 @@ export default function SimulationList() {
 
   const handleNetworkTopologyPageRoute = () => {
     navigate("/");
+  };
+
+  const handleDeleteRun = async (run) => {
+    if (
+      !window.confirm(
+        `Delete simulation version "${run.run_name}"? This cannot be undone.`
+      )
+    ) {
+      setMenuOpenFor(null);
+      return;
+    }
+    try {
+      await deleteSimulationRun(run.id);
+      setRuns((prev) => prev.filter((x) => x.id !== run.id));
+      toast.success(`Version "${run.run_name}" deleted`);
+    } catch (err) {
+      toast.error("Failed to delete the simulation version");
+    } finally {
+      setMenuOpenFor(null);
+    }
   };
 
   const handleAlgorithmsPageRoute = () => {
@@ -279,7 +303,16 @@ export default function SimulationList() {
                           ].map((opt) => (
                             <button
                               key={opt}
-                              className="block w-full px-2 rounded-md py-2 text-sm text-navColor hover:bg-[#D3DDDE]"
+                              onClick={
+                                opt === "Delete"
+                                  ? () => handleDeleteRun(r)
+                                  : undefined
+                              }
+                              className={`block w-full px-2 rounded-md py-2 text-sm hover:bg-[#D3DDDE] ${
+                                opt === "Delete"
+                                  ? "text-red-600"
+                                  : "text-navColor"
+                              }`}
                             >
                               {opt}
                             </button>

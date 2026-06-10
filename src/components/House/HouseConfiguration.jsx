@@ -3,6 +3,8 @@ import Navbar from "components/Common/Navbar";
 import { useLocation, useNavigate, useOutlet, useParams } from "react-router-dom";
 import Breadcrumb from "components/Breadcrumb/Breadcrumb";
 import { fetchBreadcrumbNavigationPath } from "services/Breadcrumb";
+import { fetchHouseDetails, updateHouseData } from "services/House";
+import { toast } from "sonner";
 
 const HOUSE_CONFIG_OPTIONS = [
   "Load Profile",
@@ -15,6 +17,8 @@ const HOUSE_CONFIG_OPTIONS = [
 
 const HouseConfiguration = () => {
   const [selectedButton, setSelectedButton] = useState();
+  const [connectionKw, setConnectionKw] = useState("");
+  const [savingKw, setSavingKw] = useState(false);
   const navigate = useNavigate();
   const outlet = useOutlet()
   const location = useLocation();
@@ -23,6 +27,29 @@ const HouseConfiguration = () => {
   useEffect(() => {
     setSelectedButton(HOUSE_CONFIG_OPTIONS.find((item) => location.pathname.includes(convertToPath(item))));
   }, [location.pathname])
+
+  useEffect(() => {
+    if (!houseId) return;
+    fetchHouseDetails(houseId)
+      .then((data) => setConnectionKw(data.connection_kw ?? ""))
+      .catch((err) => console.error("Error fetching house details:", err));
+  }, [houseId]);
+
+  const handleSaveConnectionKw = async () => {
+    if (connectionKw === "" || isNaN(+connectionKw) || +connectionKw <= 0) {
+      toast.error("Enter a valid connection kW value");
+      return;
+    }
+    setSavingKw(true);
+    try {
+      await updateHouseData(houseId, { connection_kw: +connectionKw });
+      toast.success("Connection kW updated");
+    } catch (err) {
+      toast.error("Failed to update connection kW");
+    } finally {
+      setSavingKw(false);
+    }
+  };
 
   // Ex. converts `Load Profile` to `load-profile`
   const convertToPath = (value) => {
@@ -107,6 +134,27 @@ const HouseConfiguration = () => {
               {houseId && (
                 <Breadcrumb nodeId={houseId} onEditNode={() => { }} />
               )}
+            </div>
+            <div className="flex items-center gap-2 mr-4 text-[14px] text-black">
+              <label className="font-medium whitespace-nowrap">
+                Connection / Sanctioned load (kW):
+              </label>
+              <input
+                type="number"
+                min="0"
+                step="0.5"
+                value={connectionKw}
+                onChange={(e) => setConnectionKw(e.target.value)}
+                placeholder="eg. 10"
+                className="w-20 h-8 px-2 border border-gray-400 rounded-md"
+              />
+              <button
+                onClick={handleSaveConnectionKw}
+                disabled={savingKw}
+                className="h-8 px-3 bg-[#74AA50] text-white rounded-md hover:bg-[#7CB342] disabled:opacity-50"
+              >
+                {savingKw ? "Saving…" : "Save"}
+              </button>
             </div>
           </div>
           <div className="flex-1 overflow-auto">{renderContent()}</div>

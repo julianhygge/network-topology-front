@@ -75,13 +75,15 @@ const SolarProfile = () => {
   const handleResetProfile = async() => {
     try{
       if(houseId){
-
-        await deleteSolarProfile(houseId)
-        navigate(`/config/${houseId}`);
+        if (solarDetails) {
+          await deleteSolarProfile(houseId);
+        }
+        setSolarDetails(null);
+        reset({ tilt_type: "fixed", solar_available: "true" });
       }
     }catch(err){
       console.log("Error in deleting solar profile");
-      
+
     }
   }
 
@@ -343,7 +345,8 @@ const SolarProfile = () => {
                 )}
                 <div className="flex px-24 mt-4 mb-2">
                   <button
-                    onClick={reset}
+                    type="button"
+                    onClick={handleResetProfile}
                     className="flex justify-center items-center mr-6 px-14 py-4 bg-[#FF763C] shadow-sm rounded-[33px] max-md:px-5"
                   >
                     Reset

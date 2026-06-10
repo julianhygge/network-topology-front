@@ -36,7 +36,7 @@ axiosInstance.interceptors.response.use(
         //     localStorage.clear();
         //     navigate('/login')
         // }
-        if (error.response.status===500){
+        if (error.response?.status===500){
             console.log("Server Error")
         }
         return Promise.reject(error)
