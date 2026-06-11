@@ -106,6 +106,33 @@ export default function SimulationProgress() {
   const handleNetworkTopologyPageRoute = () => navigate("/");
   const handleAlgorithmsPageRoute = () => navigate(`/netmeter/${selectedRunId}`);
 
+  const handleDeleteAllocation = async () => {
+    if (
+      !window.confirm(
+        "Delete the configured allocation engine for this version? You will be able to configure it again."
+      )
+    ) {
+      return;
+    }
+    try {
+      await updateRunFromVersion({
+        simulation_run_id: selectedRunId,
+        simulation_algorithm_type_id: null,
+      });
+      setRuns((prev) =>
+        prev.map((r) =>
+          r.id === selectedRunId
+            ? { ...r, simulation_algorithm_type_id: null }
+            : r
+        )
+      );
+      toast.success("Allocation engine removed for this version");
+    } catch (err) {
+      console.error("Error deleting allocation engine:", err);
+      toast.error("Failed to remove the allocation engine");
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#6CCECD] to-[#356770]">
@@ -379,10 +406,10 @@ export default function SimulationProgress() {
                               View House Bills
                             </button>
                             <button
-                              onClick={handleAlgorithmsPageRoute}
-                              className="text-sm text-[#23474F] underline hover:text-black"
+                              onClick={handleDeleteAllocation}
+                              className="text-sm text-red-600 underline hover:text-red-800"
                             >
-                              Change allocation engine
+                              Delete configured allocation engine
                             </button>
                           </div>
                         </>
