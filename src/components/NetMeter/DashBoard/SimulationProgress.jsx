@@ -4,6 +4,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import {
+  fetchAlgorithms,
   fetchSimulationRunsByContainer,
   updateRunFromVersion,
 } from "services/netMeteringService";
@@ -30,15 +31,24 @@ export default function SimulationProgress() {
   // Grid (topology root) selection for the selected run
   const [substations, setSubstations] = useState([]);
   const [savingGrid, setSavingGrid] = useState(false);
+  const [algorithms, setAlgorithms] = useState([]);
 
   useEffect(() => {
     getSubstations()
       .then((data) => setSubstations(data?.items || []))
       .catch((err) => console.error("Error fetching substations:", err));
+    fetchAlgorithms()
+      .then((data) => setAlgorithms(Array.isArray(data.items) ? data.items : []))
+      .catch((err) => console.error("Error fetching algorithms:", err));
   }, []);
 
   const selectedRun = runs.find((r) => r.id === selectedRunId);
   const selectedGridId = selectedRun?.topology_root_node_id || "";
+  const configuredAlgorithm = selectedRun?.simulation_algorithm_type_id
+    ? algorithms.find(
+        (a) => a.id === selectedRun.simulation_algorithm_type_id
+      ) || { display_name: "Allocation engine" }
+    : null;
 
   const handleGridChange = async (gridId) => {
     if (!gridId || !selectedRunId) return;
@@ -349,20 +359,51 @@ export default function SimulationProgress() {
                       Allocation Engine
                     </div>
                     <div className="w-full bg-white border border-gray-300 rounded-2xl p-6 shadow-sm min-h-[215px] flex flex-col justify-between">
-                      <p className="text-[#000505]">
-                        Define allocation parameters for this version.
-                      </p>
-                      <button
-                        onClick={handleAlgorithmsPageRoute}
-                        className="flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#070C21] font-semibold py-2 rounded-lg"
-                      >
-                        <img
-                          src= {`${process.env.PUBLIC_URL}/images/plus_circle_icon.svg`}
-                          className="w-5 h-5"
-                          alt=""
-                        />
-                        Add Allocation Engine
-                      </button>
+                      {configuredAlgorithm ? (
+                        <>
+                          <div>
+                            <p className="text-[#000505] mb-2">
+                              Allocation engine configured:
+                            </p>
+                            <p className="font-bold text-lg text-[#23474F]">
+                              {configuredAlgorithm.display_name}
+                            </p>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <button
+                              onClick={() =>
+                                navigate(`/housebill/${selectedRunId}`)
+                              }
+                              className="flex items-center justify-center gap-2 bg-[#74AA50] hover:bg-[#7CB342] text-white font-semibold py-2 rounded-lg"
+                            >
+                              View House Bills
+                            </button>
+                            <button
+                              onClick={handleAlgorithmsPageRoute}
+                              className="text-sm text-[#23474F] underline hover:text-black"
+                            >
+                              Change allocation engine
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-[#000505]">
+                            Define allocation parameters for this version.
+                          </p>
+                          <button
+                            onClick={handleAlgorithmsPageRoute}
+                            className="flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-[#070C21] font-semibold py-2 rounded-lg"
+                          >
+                            <img
+                              src={`${process.env.PUBLIC_URL}/images/plus_circle_icon.svg`}
+                              className="w-5 h-5"
+                              alt=""
+                            />
+                            Add Allocation Engine
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
 

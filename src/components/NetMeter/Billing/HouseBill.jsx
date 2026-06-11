@@ -1,14 +1,47 @@
 import Navbar from "components/Common/Navbar";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GetBill } from "services/House";
+
+// Builds a single synthetic "bill" out of every house bill in the run,
+// summing the energy figures and every additive charge. The rates and the
+// billing cycle are taken from the first bill (they are the same for the
+// whole simulation run).
+const aggregateBills = (bills) => {
+  const sum = (sel) =>
+    bills.reduce((acc, b) => acc + (Number(sel(b)) || 0), 0);
+  const first = bills[0];
+  return {
+    house_node_id: null,
+    total_energy_imported_kwh: sum((b) => b.total_energy_imported_kwh),
+    total_energy_exported_kwh: sum((b) => b.total_energy_exported_kwh),
+    net_energy_balance_kwh: sum((b) => b.net_energy_balance_kwh),
+    calculated_bill_amount: sum((b) => b.calculated_bill_amount),
+    bill_details: {
+      ...first.bill_details,
+      house_name: `All houses (${bills.length})`,
+      energy_charges: sum((b) => b.bill_details?.energy_charges),
+      imported_energy_charges: sum(
+        (b) => b.bill_details?.imported_energy_charges
+      ),
+      exported_energy_credit: sum(
+        (b) => b.bill_details?.exported_energy_credit
+      ),
+      fixed_charges: sum((b) => b.bill_details?.fixed_charges),
+      fac_charges: sum((b) => b.bill_details?.fac_charges),
+      tax_amount_on_energy: sum((b) => b.bill_details?.tax_amount_on_energy),
+    },
+  };
+};
 
 export default function HouseBill() {
   const [billData, setBillData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const { simulationId } = useParams();
+  const { simulationId, houseNodeId } = useParams();
+  const isCumulative = !houseNodeId;
 
   useEffect(() => {
     const fetchHouseBill = async (simId) => {
@@ -16,7 +49,13 @@ export default function HouseBill() {
         setIsLoading(true);
         const res = await GetBill(simId);
         if (res && res.length > 0) {
-          setBillData(res[0]);
+          if (houseNodeId) {
+            setBillData(
+              res.find((b) => b.house_node_id === houseNodeId) || null
+            );
+          } else {
+            setBillData(aggregateBills(res));
+          }
         } else {
           setBillData(null);
         }
@@ -33,7 +72,7 @@ export default function HouseBill() {
     if (simulationId) {
       fetchHouseBill(simulationId);
     }
-  }, [simulationId]);
+  }, [simulationId, houseNodeId]);
 
   const formatNumber = (num) => {
     if (typeof num !== "number") {
@@ -118,6 +157,16 @@ export default function HouseBill() {
   return (
     <div className=" flex flex-col  bg-gradient-to-br from-[#6CCECD] to-[#356770] h-screen pt-20 ">
       <Navbar />
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-24 left-4 w-20 h-12 rounded-full border border-[#D59805] bg-[#FFF8E6] hover:bg-[#FFF3D7] flex items-center justify-center transition-colors shadow-[0px_5px_10px_0px_#00000040] z-10"
+      >
+        <img
+          src={`${process.env.PUBLIC_URL}/images/Arrow 3.png`}
+          alt="Back"
+          className="w-6 h-6"
+        />
+      </button>
 
       <div className="flex flex-1 flex-col items-center justify-center   ">
         <div className="w-full max-w-6xl   bg-[linear-gradient(135.13deg,rgba(246,255,255,0.5)_100%,rgba(141,144,144,0.5)_100%)] rounded-2xl shadow-[0px_-2px_8px_0px_#00000040]  ">
@@ -131,7 +180,9 @@ export default function HouseBill() {
                 className="shrink-0 w-[40px] cursor-pointer"
               />
             </div>
-            <h1 className="text-2xl font-bold text-black   ">Utility Bill</h1>
+            <h1 className="text-2xl font-bold text-black   ">
+              {isCumulative ? "Cumulative Utility Bill" : "Utility Bill"}
+            </h1>
           </div>
 
           <div className="flex item-center mr-6">
@@ -149,9 +200,11 @@ export default function HouseBill() {
               </h2>
               <div className="space-y-6">
                 <div className="flex justify-between items-center border-b border-gray-200 ">
-                  <span className="text-sm text-black ">Customer Name</span>
+                  <span className="text-sm text-black ">
+                    {isCumulative ? "Houses" : "House"}
+                  </span>
                   <span className="font-bold text-black">
-                    Abhinav Monohar
+                    {bill_details.house_name || "—"}
                   </span>
                 </div>
                 <div className="flex justify-between items-center  border-b border-gray-200">
