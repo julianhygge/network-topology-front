@@ -357,6 +357,24 @@ export const deleteSimulationRun = async (simulationRunId) => {
   }
 };
 
+/**
+ * Reset a simulation run's configuration: deletes the generated house
+ * bills, the selected policy and its parameters, and clears the
+ * configured allocation algorithm.
+ * DELETE /v1/simulation/{simulationRunId}/allocation
+ */
+export const resetRunAllocation = async (simulationRunId) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${BASE_PATH}/${simulationRunId}/allocation`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error resetting run allocation:", error);
+    throw error;
+  }
+};
+
 //For creating version
 
 export const createVersion = async ({

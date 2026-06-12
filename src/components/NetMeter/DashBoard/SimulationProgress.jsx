@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import {
   fetchAlgorithms,
   fetchSimulationRunsByContainer,
+  resetRunAllocation,
   updateRunFromVersion,
 } from "services/netMeteringService";
 import { getSubstations } from "services/Substation";
@@ -109,24 +110,25 @@ export default function SimulationProgress() {
   const handleDeleteAllocation = async () => {
     if (
       !window.confirm(
-        "Delete the configured allocation engine for this version? You will be able to configure it again."
+        "Delete the configured allocation engine for this version? " +
+          "This also deletes the generated house bills and the selected " +
+          "policy, so you can configure everything again from scratch."
       )
     ) {
       return;
     }
     try {
-      await updateRunFromVersion({
-        simulation_run_id: selectedRunId,
-        simulation_algorithm_type_id: null,
-      });
+      await resetRunAllocation(selectedRunId);
       setRuns((prev) =>
         prev.map((r) =>
           r.id === selectedRunId
-            ? { ...r, simulation_algorithm_type_id: null }
+            ? { ...r, simulation_algorithm_type_id: null, status: null }
             : r
         )
       );
-      toast.success("Allocation engine removed for this version");
+      toast.success(
+        "Allocation engine, policy and house bills removed for this version"
+      );
     } catch (err) {
       console.error("Error deleting allocation engine:", err);
       toast.error("Failed to remove the allocation engine");
